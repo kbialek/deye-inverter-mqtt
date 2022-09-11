@@ -41,7 +41,7 @@ Supported metrics:
 
 
 ## Configuration
-All configuration options are controlled with enviornment variables.
+All configuration options are controlled through environment variables.
 
 * `DEYE_LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
