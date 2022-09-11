@@ -37,13 +37,16 @@ class DeyeInverterConfig():
 
 class DeyeConfig():
     def __init__(self, inverter: DeyeInverterConfig, mqtt: DeyeMqttConfig,
-        log_level = 'INFO'):
+        log_level = 'INFO',
+        data_read_inverval = 60):
         self.inverter = inverter
         self.mqtt = mqtt
         self.log_level = log_level
+        self.data_read_inverval = data_read_inverval
 
     @staticmethod
     def from_env():
         return DeyeConfig(DeyeInverterConfig.from_env(), DeyeMqttConfig.from_env(),
-            log_level=os.getenv('DEYE_LOG_LEVEL', 'INFO')
+            log_level=os.getenv('DEYE_LOG_LEVEL', 'INFO'),
+            data_read_inverval=int(os.getenv('DEYE_DATA_READ_INTERVAL', '60'))
         )

@@ -42,4 +42,4 @@ def do_task():
 
 while True:
     do_task()
-    time.sleep(10)
+    time.sleep(config.data_read_inverval)
