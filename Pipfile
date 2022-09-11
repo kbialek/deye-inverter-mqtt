@@ -4,8 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+libscrc = ">=1.8.1"
+paho-mqtt = ">=1.6.1"
 
 [dev-packages]
+
 
 [requires]
 python_version = "3.10"
