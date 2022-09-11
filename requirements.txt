@@ -1,0 +1,4 @@
+-i https://pypi.org/simple
+libscrc==1.8.1
+paho-mqtt==1.6.1
+wheel==0.37.1

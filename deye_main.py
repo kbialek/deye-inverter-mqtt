@@ -1,6 +1,5 @@
 import logging
 import sys
-import schedule
 import time
 import datetime
 
@@ -41,10 +40,6 @@ def do_task():
     mqtt_client.publish_observations(observations)
     log.info("Reading completed")
 
-# schedule.every(1).minutes.do(do_task)
-
-
 while True:
     do_task()
-    # schedule.run_pending()
     time.sleep(10)
