@@ -21,6 +21,7 @@ class DeyeConnector:
                 self.__log.warn("Could not open socket")
                 break
 
+            self.__log.debug("Request frame: %s", frame.hex())
             client_socket.sendall(req_frame)
 
             attempts = 5
@@ -32,6 +33,7 @@ class DeyeConnector:
                         data
                     except:
                         self.__log.warn("No data received")
+                    self.__log.debug("Response frame: %s", data.hex())
                     return data
                 except socket.timeout as msg:
                     self.__log.warn("Connection timeout")
