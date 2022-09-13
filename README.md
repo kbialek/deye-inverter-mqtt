@@ -43,16 +43,16 @@ Supported metrics:
 ## Configuration
 All configuration options are controlled through environment variables.
 
-* `DEYE_LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`
+* `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
-* `DEYE_MQTT_HOST`
-* `DEYE_MQTT_PORT`
-* `DEYE_MQTT_USERNAME`
-* `DEYE_MQTT_PASSWORD`
-* `DEYE_MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics
+* `MQTT_HOST`
+* `MQTT_PORT`
+* `MQTT_USERNAME`
+* `MQTT_PASSWORD`
+* `MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics
 
 
 
