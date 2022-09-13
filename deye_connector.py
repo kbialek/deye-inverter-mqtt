@@ -1,7 +1,7 @@
 import socket
 import logging
 
-from deye_config import DeyeConfig, DeyeInverterConfig
+from deye_config import DeyeConfig
 
 
 class DeyeConnector:

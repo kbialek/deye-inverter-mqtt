@@ -20,7 +20,7 @@ class DeyeMqttConfig():
         )
 
 
-class DeyeInverterConfig():
+class DeyeLoggerConfig():
     def __init__(self, serial_number: int, ip_address: str, port: int):
         self.serial_number = serial_number
         self.ip_address = ip_address
@@ -28,7 +28,7 @@ class DeyeInverterConfig():
 
     @staticmethod
     def from_env():
-        return DeyeInverterConfig(
+        return DeyeLoggerConfig(
             serial_number=int(os.getenv('DEYE_INVERTER_SERIAL_NUMBER')),
             ip_address=os.getenv('DEYE_INVERTER_IP_ADDRESS'),
             port=int(os.getenv('DEYE_INVERTER_PORT')),
@@ -36,7 +36,7 @@ class DeyeInverterConfig():
 
 
 class DeyeConfig():
-    def __init__(self, inverter: DeyeInverterConfig, mqtt: DeyeMqttConfig,
+    def __init__(self, inverter: DeyeLoggerConfig, mqtt: DeyeMqttConfig,
         log_level = 'INFO',
         data_read_inverval = 60):
         self.inverter = inverter
@@ -46,7 +46,7 @@ class DeyeConfig():
 
     @staticmethod
     def from_env():
-        return DeyeConfig(DeyeInverterConfig.from_env(), DeyeMqttConfig.from_env(),
+        return DeyeConfig(DeyeLoggerConfig.from_env(), DeyeMqttConfig.from_env(),
             log_level=os.getenv('DEYE_LOG_LEVEL', 'INFO'),
             data_read_inverval=int(os.getenv('DEYE_DATA_READ_INTERVAL', '60'))
         )

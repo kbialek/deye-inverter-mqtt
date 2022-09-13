@@ -3,7 +3,7 @@ import sys
 import time
 import datetime
 
-from deye_config import DeyeConfig, DeyeMqttConfig, DeyeInverterConfig
+from deye_config import DeyeConfig
 from deye_connector import DeyeConnector
 from deye_modbus import DeyeModbus
 from deye_sensors import sensor_list
