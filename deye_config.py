@@ -21,6 +21,13 @@ class DeyeMqttConfig():
 
 
 class DeyeLoggerConfig():
+    """
+    Logger is a device that connects the Solar Inverter with the internet.
+
+    Logger is identified by a unique serial number. It is required when communicating
+    with the device.
+    """
+
     def __init__(self, serial_number: int, ip_address: str, port: int):
         self.serial_number = serial_number
         self.ip_address = ip_address
@@ -36,10 +43,10 @@ class DeyeLoggerConfig():
 
 
 class DeyeConfig():
-    def __init__(self, inverter: DeyeLoggerConfig, mqtt: DeyeMqttConfig,
-        log_level = 'INFO',
-        data_read_inverval = 60):
-        self.inverter = inverter
+    def __init__(self, logger_config: DeyeLoggerConfig, mqtt: DeyeMqttConfig,
+                 log_level='INFO',
+                 data_read_inverval=60):
+        self.logger = logger_config
         self.mqtt = mqtt
         self.log_level = log_level
         self.data_read_inverval = data_read_inverval
@@ -47,6 +54,6 @@ class DeyeConfig():
     @staticmethod
     def from_env():
         return DeyeConfig(DeyeLoggerConfig.from_env(), DeyeMqttConfig.from_env(),
-            log_level=os.getenv('DEYE_LOG_LEVEL', 'INFO'),
-            data_read_inverval=int(os.getenv('DEYE_DATA_READ_INTERVAL', '60'))
-        )
+                          log_level=os.getenv('DEYE_LOG_LEVEL', 'INFO'),
+                          data_read_inverval=int(os.getenv('DEYE_DATA_READ_INTERVAL', '60'))
+                          )

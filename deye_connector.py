@@ -8,7 +8,7 @@ class DeyeConnector:
 
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeConnector.__name__)
-        self.config = config.inverter
+        self.config = config.logger
 
     def send_request(self, req_frame):
         for res in socket.getaddrinfo(self.config.ip_address, self.config.port, socket.AF_INET, socket.SOCK_STREAM):

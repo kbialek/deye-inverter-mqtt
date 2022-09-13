@@ -13,7 +13,7 @@ class DeyeModbus:
 
     def __init__(self, config: DeyeConfig, connector: DeyeConnector):
         self.__log = logging.getLogger(DeyeModbus.__name__)
-        self.config = config.inverter
+        self.config = config.logger
         self.connector = connector
 
     def read_registers(self, first_reg: int, last_reg: int) -> dict[int, int]:
