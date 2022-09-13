@@ -45,9 +45,9 @@ All configuration options are controlled through environment variables.
 
 * `DEYE_LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
-* `DEYE_INVERTER_SERIAL_NUMBER` - data logger serial number
-* `DEYE_INVERTER_IP_ADDRESS`
-* `DEYE_INVERTER_PORT`
+* `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
+* `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
+* `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
 * `DEYE_MQTT_HOST`
 * `DEYE_MQTT_PORT`
 * `DEYE_MQTT_USERNAME`

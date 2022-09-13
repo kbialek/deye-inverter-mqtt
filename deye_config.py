@@ -36,9 +36,9 @@ class DeyeLoggerConfig():
     @staticmethod
     def from_env():
         return DeyeLoggerConfig(
-            serial_number=int(os.getenv('DEYE_INVERTER_SERIAL_NUMBER')),
-            ip_address=os.getenv('DEYE_INVERTER_IP_ADDRESS'),
-            port=int(os.getenv('DEYE_INVERTER_PORT')),
+            serial_number=int(os.getenv('DEYE_LOGGER_SERIAL_NUMBER')),
+            ip_address=os.getenv('DEYE_LOGGER_IP_ADDRESS'),
+            port=int(os.getenv('DEYE_LOGGER_PORT')),
         )
 
 
