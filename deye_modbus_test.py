@@ -45,6 +45,21 @@ class DeyeModbusTest(unittest.TestCase):
         self.assertEqual(reg_values[2].hex(), '000a')
         self.assertEqual(reg_values[3].hex(), '000b')
 
+    @patch('deye_connector.DeyeConnector')
+    def test_write_register_0x12_to_0xa3d4(self, connector):
+        # given
+        sut = DeyeModbus(self.config, connector)
+        connector.send_request.return_value = bytearray.fromhex(
+            'a500000000000000000000000000000000000000000000000001060012a3d4000000000015')
+
+        # when
+        success = sut.write_register(0x12, 0xa3d4)
+
+        # then
+        self.assertTrue(success)
+        connector.send_request.assert_called_once_with(
+            bytearray.fromhex('a51700104500004e61bc02000000000000000000000000000001060012a3d451601a15'))
+
 
 if __name__ == '__main__':
     unittest.main()

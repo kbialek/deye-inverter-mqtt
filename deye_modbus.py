@@ -23,6 +23,13 @@ class DeyeModbus:
         modbus_resp_frame = self.__extract_modbus_response_frame(resp_frame)
         return self.__parse_modbus_read_holding_registers_response(modbus_resp_frame, first_reg, last_reg)
 
+    def write_register(self, reg_address: int, reg_value: int) -> bool:
+        modbus_frame = self.__build_modbus_write_holding_register_request_frame(reg_address, reg_value)
+        req_frame = self.__build_request_frame(modbus_frame)
+        resp_frame = self.connector.send_request(req_frame)
+        modbus_resp_frame = self.__extract_modbus_response_frame(resp_frame)
+        return self.__parse_modbus_write_holding_register_response(modbus_resp_frame, reg_address, reg_value)
+
     def __build_request_frame(self, modbus_frame):
         start = bytearray.fromhex('A5')  # start
         length = bytearray.fromhex('1700')  # datalength
@@ -69,3 +76,16 @@ class DeyeModbus:
             registers[a + first_reg] = frame[p1:p2]
             a += 1
         return registers
+
+
+    def __build_modbus_write_holding_register_request_frame(self, reg_address, reg_value):
+        return bytearray.fromhex('0106{:04x}{:04x}'.format(reg_address, reg_value))
+
+    def __parse_modbus_write_holding_register_response(self, frame, reg_address, reg_value):
+        if not frame or len(frame) != 6:
+            return False
+        returned_address = int.from_bytes(frame[2:4], 'big')
+        returned_value = int.from_bytes(frame[4:6], 'big')
+        if returned_address != reg_address or returned_value != reg_value:
+            return False
+        return True
