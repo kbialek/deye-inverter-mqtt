@@ -38,7 +38,7 @@ class DeyeConnector:
                 self.__log.warn("Could not open socket")
                 break
 
-            self.__log.debug("Request frame: %s", frame.hex())
+            self.__log.debug("Request frame: %s", req_frame.hex())
             client_socket.sendall(req_frame)
 
             attempts = 5
