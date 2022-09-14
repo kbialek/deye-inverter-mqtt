@@ -43,7 +43,11 @@ def read_register(args):
     if reg_address not in registers:
         print(f"Error: register {reg_address} not read")
         sys.exit(1)
-    print(int.from_bytes(registers[reg_address], 'big'))
+    reg_bytes = registers[reg_address]
+    reg_value_int = int.from_bytes(reg_bytes, 'big')
+    low_byte = reg_bytes[1]
+    high_byte = reg_bytes[0]
+    print(f'int: {reg_value_int}, l: {low_byte}, h: {high_byte}')
 
 
 def write_register(args):
