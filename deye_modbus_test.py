@@ -26,7 +26,7 @@ class DeyeModbusTest(unittest.TestCase):
 
     def setUp(self):
         self.config = DeyeConfig(
-            logger_config=DeyeLoggerConfig(12345678, '192.168.1.1', 8899),
+            logger_config=DeyeLoggerConfig(1234567890, '192.168.1.1', 8899),
             mqtt=None
         )
 
@@ -62,12 +62,17 @@ class DeyeModbusTest(unittest.TestCase):
         self.assertEqual(reg_values[2].hex(), '000a')
         self.assertEqual(reg_values[3].hex(), '000b')
 
+        # and
+        connector.send_request.assert_called_once_with(
+            bytearray.fromhex('a5170010450000d202964902000000000000000000000000000001030002000265cb5915'))
+
+
     @patch('deye_connector.DeyeConnector')
     def test_write_register_0x12_to_0xa3d4(self, connector):
         # given
         sut = DeyeModbus(self.config, connector)
         connector.send_request.return_value = bytearray.fromhex(
-            'a500000000000000000000000000000000000000000000000001060012a3d4000000000015')
+            'a5000000000000000000000000000000000000000000000000' + '011000120001' + '000000000015')
 
         # when
         success = sut.write_register(0x12, 0xa3d4)
@@ -75,7 +80,7 @@ class DeyeModbusTest(unittest.TestCase):
         # then
         self.assertTrue(success)
         connector.send_request.assert_called_once_with(
-            bytearray.fromhex('a51700104500004e61bc02000000000000000000000000000001060012a3d451601a15'))
+            bytearray.fromhex('a51a0010450000d202964902000000000000000000000000000001100012000102a3d4dd8d2b15'))
 
 
 if __name__ == '__main__':
