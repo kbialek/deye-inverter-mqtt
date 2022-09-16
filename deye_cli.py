@@ -22,53 +22,52 @@ from deye_config import DeyeConfig
 from deye_connector import DeyeConnector
 from deye_modbus import DeyeModbus
 
-config = DeyeConfig.from_env()
 
-Log_Format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+class DeyeCli():
 
-logging.basicConfig(stream=sys.stdout, format=Log_Format, level=logging.FATAL)
+    def __init__(self, config: DeyeConfig):
+        connector = DeyeConnector(config)
+        self.__modbus = DeyeModbus(config, connector)
 
-log = logging.getLogger('main')
+    def exec_command(self, args):
+        command = args[0]
+        if command == 'r':
+            self.read_register(args[1:])
+        elif command == 'w':
+            self.write_register(args[1:])
 
-connector = DeyeConnector(config)
-modbus = DeyeModbus(config, connector)
+    def read_register(self, args):
+        reg_address = int(args[0])
+        registers = self.__modbus.read_registers(reg_address, reg_address)
+        if registers is None:
+            print("Error: no registers read")
+            sys.exit(1)
+        if reg_address not in registers:
+            print(f"Error: register {reg_address} not read")
+            sys.exit(1)
+        reg_bytes = registers[reg_address]
+        reg_value_int = int.from_bytes(reg_bytes, 'big')
+        low_byte = reg_bytes[1]
+        high_byte = reg_bytes[0]
+        print(f'int: {reg_value_int}, l: {low_byte}, h: {high_byte}')
 
-
-def read_register(args):
-    reg_address = int(args[0])
-    registers = modbus.read_registers(reg_address, reg_address)
-    if registers is None:
-        print("Error: no registers read")
-        sys.exit(1)
-    if reg_address not in registers:
-        print(f"Error: register {reg_address} not read")
-        sys.exit(1)
-    reg_bytes = registers[reg_address]
-    reg_value_int = int.from_bytes(reg_bytes, 'big')
-    low_byte = reg_bytes[1]
-    high_byte = reg_bytes[0]
-    print(f'int: {reg_value_int}, l: {low_byte}, h: {high_byte}')
-
-
-def write_register(args):
-    if len(args) < 2:
-        print("Not enough arguments")
-        sys.exit(1)
-    reg_address = int(args[0])
-    reg_value = int(args[1])
-    if modbus.write_register(reg_address, reg_value):
-        print("Ok")
-    else:
-        print("Error")
+    def write_register(self, args):
+        if len(args) < 2:
+            print("Not enough arguments")
+            sys.exit(1)
+        reg_address = int(args[0])
+        reg_value = int(args[1])
+        if self.__modbus.write_register(reg_address, reg_value):
+            print("Ok")
+        else:
+            print("Error")
 
 
 def main():
+    config = DeyeConfig.from_env()
+    cli = DeyeCli(config)
     args = sys.argv[1:]
-    command = args[0]
-    if command == 'r':
-        read_register(args[1:])
-    elif command == 'w':
-        write_register(args[1:])
+    cli.exec_command(args)
 
 
 if __name__ == "__main__":

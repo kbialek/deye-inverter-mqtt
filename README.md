@@ -1,6 +1,6 @@
 # Deye solar inverter MQTT bridge
 
-Reads Deye solar inverter metrics and posts them over MQTT.
+Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT.
 
 Tested with [Deye SUN-4K-G05](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10kg03.html) and Logger S/N 23xxxxxxxx
 

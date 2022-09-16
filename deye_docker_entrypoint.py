@@ -15,18 +15,29 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM python:3.10.7-alpine3.16 as builder
+import sys
+import logging
 
-WORKDIR /build
-RUN apk add gcc alpine-sdk linux-lts-dev
-COPY requirements.txt ./
-# Use symlink as a workaround for pip crashes during non x64 platform builds
-RUN ln -s /bin/uname /usr/local/bin/uname \
-    && pip install --no-cache-dir --target . -r requirements.txt
+from deye_cli import main as cli_main
+from deye_daemon import main as daemon_main
+from deye_config import DeyeConfig
 
-FROM python:3.10.7-alpine3.16
-WORKDIR /opt/deye_inverter_mqtt
-ADD *.py ./
-COPY --from=builder /build/ ./
+config = DeyeConfig.from_env()
 
-ENTRYPOINT [ "python", "./deye_docker_entrypoint.py" ]
+log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+logging.basicConfig(stream=sys.stdout, format=log_format, level=logging.getLevelName(config.log_level))
+
+log = logging.getLogger('main')
+
+
+def main():
+    args = sys.argv[1:]
+    if len(args) > 0:
+        cli_main()
+    else:
+        daemon_main()
+
+
+if __name__ == "__main__":
+    main()
