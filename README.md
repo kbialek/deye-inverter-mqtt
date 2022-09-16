@@ -54,5 +54,22 @@ All configuration options are controlled through environment variables.
 * `MQTT_PASSWORD`
 * `MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics
 
+## Reading and writing raw register values
+The tool allows reading and writing raw register values directly in the terminal.
+
+**USE AT YOUR OWN RISK!** Be sure to know what you are doing. Writing invalid values may damage the inverter.
+By using this tool you accept this risk and you take full responsiblity for the consequences.
+
+* To read register value execute:
+    ```
+    docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt r <reg_address>
+    ```
+    where `<reg_address>` is register address (decimal)
+
+* To write register value execute:
+    ```
+    docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt w <reg_address> <reg_value>
+    ```
+    where `<reg_address>` is register address (decimal), and <reg_value> is a value to set (decimal)
 
 
