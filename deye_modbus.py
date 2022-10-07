@@ -90,11 +90,12 @@ class DeyeModbus:
         reg_count = last_reg - first_reg + 1
         return bytearray.fromhex('0103{:04x}{:04x}'.format(first_reg, reg_count))
 
-    def __parse_modbus_read_holding_registers_response(self, frame, first_reg, last_reg):
+    def __parse_modbus_read_holding_registers_response(self, frame, first_reg, last_reg) -> dict:
         reg_count = last_reg - first_reg + 1;
-        if not frame or len(frame) != 2 + 1 + reg_count * 2:
-            return None
         registers = {}
+        if not frame or len(frame) != 2 + 1 + reg_count * 2:
+            self.__log.error("Modbus frame is not valid or empty")
+            return registers
         a = 0
         while a < reg_count:
             p1 = 3 + (a*2)
