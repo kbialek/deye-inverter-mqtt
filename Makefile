@@ -22,8 +22,10 @@ docker-run:
 
 docker-push:
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
+	@docker buildx create --use
 	@docker buildx build \
 		--platform linux/amd64,linux/arm/v7 \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:latest \
 		.
+	@docker buildx rm --all-inactive --force
