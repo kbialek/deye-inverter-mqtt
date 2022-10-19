@@ -35,7 +35,7 @@ class DeyeModbusTest(unittest.TestCase):
         # given
         sut = DeyeModbus(self.config, connector)
         connector.send_request.return_value = bytearray.fromhex(
-            'a5000000000000000000000000000000000000000000000000010301000a000000000015')
+            'a5000000000000000000000000000000000000000000000000010301000ac84300000015')
 
         # when
         reg_values = sut.read_registers(1, 1)
@@ -50,7 +50,7 @@ class DeyeModbusTest(unittest.TestCase):
         # given
         sut = DeyeModbus(self.config, connector)
         connector.send_request.return_value = bytearray.fromhex(
-            'a5000000000000000000000000000000000000000000000000010302000a000b000000000015')
+            'a5000000000000000000000000000000000000000000000000010302000a000b13f600000015')
 
         # when
         reg_values = sut.read_registers(2, 3)
@@ -72,7 +72,7 @@ class DeyeModbusTest(unittest.TestCase):
         # given
         sut = DeyeModbus(self.config, connector)
         connector.send_request.return_value = bytearray.fromhex(
-            'a5000000000000000000000000000000000000000000000000' + '011000120001' + '000000000015')
+            'a5000000000000000000000000000000000000000000000000' + '011000120001a1cc' + '0015')
 
         # when
         success = sut.write_register(0x12, 0xa3d4)
@@ -81,6 +81,40 @@ class DeyeModbusTest(unittest.TestCase):
         self.assertTrue(success)
         connector.send_request.assert_called_once_with(
             bytearray.fromhex('a51a0010450000d202964902000000000000000000000000000001100012000102a3d4dd8d2b15'))
+
+    @patch('deye_connector.DeyeConnector')
+    def test_read_register_SUN_10K_SG04LP3_EU_part1(self, connector):
+        # given
+        sut = DeyeModbus(self.config, connector)
+        connector.send_request.return_value = bytearray.fromhex(
+            'a53b0010150007482ee38d020121d0060091010000403e486301032800ffffff160a12162420ffffffffffffffffffffffffffffffffffff0001ffff0001ffff000003e81fa45115')
+
+        # when
+        reg_values = sut.read_registers(0x3c, 0x4f)
+
+        # then
+        self.assertEqual(len(reg_values), 20)
+        self.assertTrue(0x3c in reg_values)
+        self.assertTrue(0x4f in reg_values)
+        self.assertEqual(reg_values[0x3c].hex(), '00ff')
+        self.assertEqual(reg_values[0x4f].hex(), '03e8')
+
+    @patch('deye_connector.DeyeConnector')
+    def test_read_register_SUN_10K_SG04LP3_EU_part2(self, connector):
+        # given
+        sut = DeyeModbus(self.config, connector)
+        connector.send_request.return_value = bytearray.fromhex(
+            'a5330010150008482ee38d020122d0060091010000403e486301032000010000ffffffffffff0001ffffffffffffffffffff0000ffff0011ffffffff3a005715')
+
+        # when
+        reg_values = sut.read_registers(0x50, 0x5f)
+
+        # then
+        self.assertEqual(len(reg_values), 16)
+        self.assertTrue(0x50 in reg_values)
+        self.assertTrue(0x5f in reg_values)
+        self.assertEqual(reg_values[0x50].hex(), '0001')
+        self.assertEqual(reg_values[0x5f].hex(), 'ffff')
 
 
 if __name__ == '__main__':

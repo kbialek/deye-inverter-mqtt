@@ -47,7 +47,7 @@ class DeyeModbus:
         modbus_resp_frame = self.__extract_modbus_response_frame(resp_frame)
         return self.__parse_modbus_write_holding_register_response(modbus_resp_frame, reg_address, reg_value)
 
-    def __build_request_frame(self, modbus_frame):
+    def __build_request_frame(self, modbus_frame) -> bytearray:
         start = bytearray.fromhex('A5')  # start
         length = (15 + len(modbus_frame) + 2).to_bytes(2, 'little')  # datalength
         controlcode = bytearray.fromhex('1045')  # controlCode
@@ -69,7 +69,7 @@ class DeyeModbus:
 
         return frame
 
-    def __extract_modbus_response_frame(self, frame):
+    def __extract_modbus_response_frame(self, frame: bytearray) -> bytearray:
         # 29 - outer frame, 2 - modbus addr and command, 2 - modbus crc
         if not frame:
             self.__log.error("No response frame")
@@ -84,17 +84,24 @@ class DeyeModbus:
             self.__log.error("Response frame has invalid ending byte")
             return None
 
-        return frame[25:-6]
+        return frame[25:-2]
 
     def __build_modbus_read_holding_registers_request_frame(self, first_reg, last_reg):
         reg_count = last_reg - first_reg + 1
         return bytearray.fromhex('0103{:04x}{:04x}'.format(first_reg, reg_count))
 
-    def __parse_modbus_read_holding_registers_response(self, frame, first_reg, last_reg) -> dict:
-        reg_count = last_reg - first_reg + 1;
+    def __parse_modbus_read_holding_registers_response(self, frame: bytearray, first_reg: int, last_reg: int) -> dict:
+        reg_count = last_reg - first_reg + 1
         registers = {}
-        if not frame or len(frame) != 2 + 1 + reg_count * 2:
-            self.__log.error("Modbus frame is not valid or empty")
+        expected_frame_data_len = 2 + 1 + reg_count * 2
+        if not frame or len(frame) < expected_frame_data_len + 2: # 2 bytes for crc
+            self.__log.error("Modbus frame is too short or empty")
+            return registers
+        actual_crc = int.from_bytes(frame[expected_frame_data_len:expected_frame_data_len+2], 'little')
+        expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
+        if actual_crc != expected_crc:
+            self.__log.error("Modbus frame crc is not valid. Expected {:04x}, got {:04x}".format(
+                expected_crc, actual_crc))
             return registers
         a = 0
         while a < reg_count:
@@ -104,20 +111,28 @@ class DeyeModbus:
             a += 1
         return registers
 
-
     def __build_modbus_write_holding_register_request_frame(self, reg_address, reg_value):
         return bytearray.fromhex('0110{:04x}000102{:04x}'.format(reg_address, reg_value))
 
     def __parse_modbus_write_holding_register_response(self, frame, reg_address, reg_value):
+        expected_frame_data_len = 6
+        expected_frame_len = 6 + 2 # 2 bytes for crc
         if not frame:
             self.__log.error("Modbus response frame is empty")
             return False
-        elif len(frame) != 6:
-            self.__log.error(f"Wrong response frame length. Expected 6, got {len(frame)}")
+        elif len(frame) != expected_frame_len: 
+            self.__log.error(f"Wrong response frame length. Expected at least {expected_frame_len} bytes, got {len(frame)}")
+            return False
+        actual_crc = int.from_bytes(frame[expected_frame_data_len:expected_frame_data_len+2], 'little')
+        expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
+        if actual_crc != expected_crc:
+            self.__log.error("Modbus frame crc is not valid. Expected {:04x}, got {:04x}".format(
+                expected_crc, actual_crc))
             return False
         returned_address = int.from_bytes(frame[2:4], 'big')
         returned_count = int.from_bytes(frame[4:6], 'big')
         if returned_address != reg_address or returned_count != 1:
-            self.__log.error(f"Returned address does not match sent value. Expected {reg_address}, got {returned_address}")
+            self.__log.error(
+                f"Returned address does not match sent value. Expected {reg_address}, got {returned_address}")
             return False
         return True
