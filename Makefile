@@ -1,4 +1,5 @@
 GITHUB_USER = kbialek
+VERSION = 2022.10.1
 
 # Gets Github personal token from Bitwarden vault
 get_github_token = \
@@ -15,7 +16,7 @@ docker-build-local:
 	@docker buildx build \
 		--platform linux/amd64 \
 		--output type=docker \
-		-t deye-inverter-mqtt .
+		-t deye-inverter-mqtt:$(VERSION) .
 
 docker-run:
 	@docker run --rm --env-file config.env deye-inverter-mqtt
@@ -26,6 +27,6 @@ docker-push:
 	@docker buildx build \
 		--platform linux/amd64,linux/arm/v7 \
 		--push \
-		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:latest \
+		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
 		.
 	@docker buildx rm --all-inactive --force
