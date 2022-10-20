@@ -1,5 +1,5 @@
 GITHUB_USER = kbialek
-VERSION = 2022.10.1
+VERSION = 2022.10.2
 
 # Gets Github personal token from Bitwarden vault
 get_github_token = \
