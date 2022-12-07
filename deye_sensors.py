@@ -54,6 +54,18 @@ pv2_current_sensor = SingleRegisterSensor("PV2 Current", 0x70, 0.1, mqtt_topic_s
 pv2_power_sensor = ComputedPowerSensor("PV2 Power", pv2_voltage_sensor,
                                        pv2_current_sensor, mqtt_topic_suffix='dc/pv2/power')
 
+# DC PV3
+pv3_voltage_sensor = SingleRegisterSensor("PV3 Voltage", 0x71, 0.1, mqtt_topic_suffix='dc/pv3/voltage')
+pv3_current_sensor = SingleRegisterSensor("PV3 Current", 0x72, 0.1, mqtt_topic_suffix='dc/pv3/current')
+pv3_power_sensor = ComputedPowerSensor("PV3 Power", pv3_voltage_sensor,
+                                       pv3_current_sensor, mqtt_topic_suffix='dc/pv3/power')
+
+# DC PV4
+pv4_voltage_sensor = SingleRegisterSensor("PV4 Voltage", 0x73, 0.1, mqtt_topic_suffix='dc/pv4/voltage')
+pv4_current_sensor = SingleRegisterSensor("PV4 Current", 0x74, 0.1, mqtt_topic_suffix='dc/pv4/current')
+pv4_power_sensor = ComputedPowerSensor("PV4 Power", pv4_voltage_sensor,
+                                       pv4_current_sensor, mqtt_topic_suffix='dc/pv4/power')
+
 # Power sensors
 operating_power_sensor = SingleRegisterSensor("Operating Power", 0x50, 0.1, mqtt_topic_suffix='operating_power')
 dc_power_sensor = SingleRegisterSensor("DC Total Power", 0x52, 0.1, mqtt_topic_suffix='dc/total_power')
@@ -85,6 +97,12 @@ sensor_list = [
     pv2_voltage_sensor,
     pv2_current_sensor,
     pv2_power_sensor,
+    pv3_voltage_sensor,
+    pv3_current_sensor,
+    pv3_power_sensor,
+    pv4_voltage_sensor,
+    pv4_current_sensor,
+    pv4_power_sensor,
     dc_power_sensor,
     operating_power_sensor,
     ac_apparent_power_sensor,
