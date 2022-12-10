@@ -41,7 +41,7 @@ class DeyeDaemon():
         self.__log.info("Reading start")
         regs = self.modbus.read_registers(0x3c, 0x4f) \
             | self.modbus.read_registers(0x50, 0x5f) \
-            | self.modbus.read_registers(0x6d, 0x70)
+            | self.modbus.read_registers(0x6d, 0x74)
         timestamp = datetime.datetime.now()
         observations = []
         for sensor in sensor_list:

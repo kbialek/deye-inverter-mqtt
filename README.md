@@ -2,7 +2,9 @@
 
 Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT.
 
-Tested with [Deye SUN-4K-G05](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10kg03.html) and Logger S/N 23xxxxxxxx
+Tested with:
+* [Deye SUN-4K-G05](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10kg03.html) and Logger S/N 23xxxxxxxx
+* [Deye SUN1300G3](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html) and Logger S/N 41xxxxxxxx
 
 Supported metrics:
 
@@ -28,6 +30,10 @@ Supported metrics:
 |DC PV1 current|0x6e|`dc/pv1/current`|A|
 |DC PV2 voltage|0x6f|`dc/pv2/voltage`|V|
 |DC PV2 current|0x70|`dc/pv2/current`|A|
+|DC PV3 voltage|0x71|`dc/pv3/voltage`|V|
+|DC PV3 current|0x72|`dc/pv3/current`|A|
+|DC PV4 voltage|0x73|`dc/pv4/voltage`|V|
+|DC PV4 current|0x74|`dc/pv4/current`|A|
 
 
 ## Installation
