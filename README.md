@@ -12,6 +12,13 @@ Supported metrics:
 |---|:-:|---|:-:|
 |Production today|0x3c|`day_energy`|kWh|
 |Uptime|0x3e|`uptime`|minutes|
+|Total Production (Active)|0x3F&0x40|`total_energy`|kWh|
+|Daily Production 1|0x41|`dc/pv1/daily`|kWh|
+|Daily Production 2|0x42|`dc/pv2/daily`|kWh|
+|Daily Production 3|0x43|`dc/pv3/daily`|kWh|
+|Daily Production 4|0x44|`dc/pv4/daily`|kWh|
+|Total Production 1|0x45&0x46|`dc/pv1/total`|kWh|
+|Total Production 2|0x47&0x48|`dc/pv2/total`|kWh|
 |AC Phase 1 voltage|0x49|`ac/l1/voltage`|V|
 |AC Phase 2 voltage|0x4a|`ac/l2/voltage`|V|
 |AC Phase 3 voltage|0x4b|`ac/l3/voltage`|V|
@@ -22,7 +29,7 @@ Supported metrics:
 |Operating power|0x50|`operating_power`|W|
 |DC total power|0x52|`dc/total_power`|W|
 |AC apparent power|0x54|`ac/apparent_power`|W|
-|AC active power|0x56|`ac/active_power`|W|
+|AC active power|0x56&0x57|`ac/active_power`|W|
 |AC reactive power|0x58|`ac/reactive_power`|W|
 |Radiator temperature|0x5a|`radiator_temp`|C|
 |IGBT temperature|0x5b|`igbt_temp`|C|
