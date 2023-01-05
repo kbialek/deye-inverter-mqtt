@@ -88,9 +88,9 @@ By using this tool you accept this risk and you take full responsiblity for the 
         1. Fill in `config.env` file
         1. Execute `make run`
     1. Option 2 - Build a new docker image locally (for amd64 architecture)
-        1. `make docker-build-local`
+        1. Execute `make docker-build-local`
         1. Fill in `config.env` file    
-        1. `make docker-run`
+        1. Execute `make docker-run`
 1. To run the tests use `make test`
     
 
