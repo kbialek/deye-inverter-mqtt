@@ -14,10 +14,10 @@ Supported metrics:
 |Production today|0x3c|`day_energy`|kWh|
 |Uptime|0x3e|`uptime`|minutes|
 |Total Production (Active)|0x3F&0x40|`total_energy`|kWh|
-|Daily Production 1|0x41|`dc/pv1/daily`|kWh|
-|Daily Production 2|0x42|`dc/pv2/daily`|kWh|
-|Daily Production 3|0x43|`dc/pv3/daily`|kWh|
-|Daily Production 4|0x44|`dc/pv4/daily`|kWh|
+|Daily Production 1|0x41|`dc/pv1/day_energy`|kWh|
+|Daily Production 2|0x42|`dc/pv2/day_energy`|kWh|
+|Daily Production 3|0x43|`dc/pv3/day_energy`|kWh|
+|Daily Production 4|0x44|`dc/pv4/day_energy`|kWh|
 |Total Production 1|0x45&0x46|`dc/pv1/total`|kWh|
 |Total Production 2|0x47&0x48|`dc/pv2/total`|kWh|
 |AC Phase 1 voltage|0x49|`ac/l1/voltage`|V|
