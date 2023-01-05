@@ -79,9 +79,11 @@ class DoubleRegisterSensor(Sensor):
         self.offset = offset
 
     def read_value(self, registers: dict[int, int]):
-        if self.reg_address in registers:
-            low_word = registers[self.reg_address]
-            high_word = registers[self.reg_address + 1]
+        low_word_reg_address = self.reg_address
+        high_word_reg_address = self.reg_address + 1
+        if low_word_reg_address in registers and high_word_reg_address in registers:
+            low_word = registers[low_word_reg_address]
+            high_word = registers[high_word_reg_address]
             return (int.from_bytes(high_word, 'big') * 65536 + int.from_bytes(low_word, 'big')) * self.factor + self.offset
         else:
             return None
