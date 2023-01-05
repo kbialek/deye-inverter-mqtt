@@ -18,8 +18,8 @@ Supported metrics:
 |Daily Production 2|0x42|`dc/pv2/day_energy`|kWh|
 |Daily Production 3|0x43|`dc/pv3/day_energy`|kWh|
 |Daily Production 4|0x44|`dc/pv4/day_energy`|kWh|
-|Total Production 1|0x45&0x46|`dc/pv1/total`|kWh|
-|Total Production 2|0x47&0x48|`dc/pv2/total`|kWh|
+|Total Production 1|0x45&0x46|`dc/pv1/total_energy`|kWh|
+|Total Production 2|0x47&0x48|`dc/pv2/total_energy`|kWh|
 |AC Phase 1 voltage|0x49|`ac/l1/voltage`|V|
 |AC Phase 2 voltage|0x4a|`ac/l2/voltage`|V|
 |AC Phase 3 voltage|0x4b|`ac/l3/voltage`|V|
