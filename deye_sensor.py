@@ -46,7 +46,7 @@ class Sensor():
 
 class SingleRegisterSensor(Sensor):
     """
-    Solar inverter sensor with value stored in a single Modbus register.
+    Solar inverter sensor with value stored as 32-bit integer in a single Modbus register.
     """
 
     def __init__(
@@ -67,7 +67,7 @@ class SingleRegisterSensor(Sensor):
 
 class DoubleRegisterSensor(Sensor):
     """
-    Solar inverter sensor with value stored in a double Modbus register.
+    Solar inverter sensor with value stored as 64-bit integer in two Modbus registers.
     """
 
     def __init__(
@@ -80,9 +80,9 @@ class DoubleRegisterSensor(Sensor):
 
     def read_value(self, registers: dict[int, int]):
         if self.reg_address in registers:
-            reg_value1 = registers[self.reg_address]
-            reg_value2 = registers[self.reg_address+1]
-            return (int.from_bytes(reg_value2, 'big') * 65536 + int.from_bytes(reg_value1, 'big')) * self.factor + self.offset
+            low_word = registers[self.reg_address]
+            high_word = registers[self.reg_address + 1]
+            return (int.from_bytes(high_word, 'big') * 65536 + int.from_bytes(low_word, 'big')) * self.factor + self.offset
         else:
             return None
 
