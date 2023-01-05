@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from deye_sensor import SingleRegisterSensor, ComputedPowerSensor
+from deye_sensor import SingleRegisterSensor, ComputedPowerSensor, DoubleRegisterSensor
 
 # AC Phase 1
 phase1_voltage_sensor = SingleRegisterSensor("Phase1 Voltage", 0x49, 0.1, mqtt_topic_suffix='ac/l1/voltage')
