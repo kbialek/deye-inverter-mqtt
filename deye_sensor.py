@@ -64,8 +64,8 @@ class SingleRegisterSensor(Sensor):
         else:
             return None
 
-        
-class  DoubleRegisterSensor(Sensor):
+
+class DoubleRegisterSensor(Sensor):
     """
     Solar inverter sensor with value stored in a double Modbus register.
     """
@@ -86,7 +86,7 @@ class  DoubleRegisterSensor(Sensor):
         else:
             return None
 
-        
+
 class ComputedPowerSensor(Sensor):
     """
     Electric Power sensor with value computed as multiplication of valures reag by voltage and current sensors.
@@ -106,4 +106,3 @@ class ComputedPowerSensor(Sensor):
             return voltage * current
         else:
             return None
-
