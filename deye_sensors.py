@@ -18,22 +18,28 @@
 from deye_sensor import SingleRegisterSensor, ComputedPowerSensor
 
 # AC Phase 1
-phase1_voltage_sensor = SingleRegisterSensor("Phase1 Voltage", 0x49, 0.1, mqtt_topic_suffix='ac/l1/voltage')
-phase1_current_sensor = SingleRegisterSensor("Phase1 Current", 0x4c, 0.1, mqtt_topic_suffix='ac/l1/current')
+phase1_voltage_sensor = SingleRegisterSensor(
+    "Phase1 Voltage", 0x49, 0.1, mqtt_topic_suffix='ac/l1/voltage', groups=['string'])
+phase1_current_sensor = SingleRegisterSensor(
+    "Phase1 Current", 0x4c, 0.1, mqtt_topic_suffix='ac/l1/current', groups=['string'])
 phase1_power_sensor = ComputedPowerSensor("Phase1 Power", phase1_voltage_sensor,
-                                          phase1_current_sensor, mqtt_topic_suffix='ac/l1/power')
+                                          phase1_current_sensor, mqtt_topic_suffix='ac/l1/power', groups=['string'])
 
 # AC Phase 2
-phase2_voltage_sensor = SingleRegisterSensor("Phase2 Voltage", 0x4a, 0.1, mqtt_topic_suffix='ac/l2/voltage')
-phase2_current_sensor = SingleRegisterSensor("Phase2 Current", 0x4d, 0.1, mqtt_topic_suffix='ac/l2/current')
+phase2_voltage_sensor = SingleRegisterSensor(
+    "Phase2 Voltage", 0x4a, 0.1, mqtt_topic_suffix='ac/l2/voltage', groups=['string'])
+phase2_current_sensor = SingleRegisterSensor(
+    "Phase2 Current", 0x4d, 0.1, mqtt_topic_suffix='ac/l2/current', groups=['string'])
 phase2_power_sensor = ComputedPowerSensor("Phase2 Power", phase2_voltage_sensor,
-                                          phase2_current_sensor, mqtt_topic_suffix='ac/l2/power')
+                                          phase2_current_sensor, mqtt_topic_suffix='ac/l2/power', groups=['string'])
 
 # AC Phase 3
-phase3_voltage_sensor = SingleRegisterSensor("Phase3 Voltage", 0x4b, 0.1, mqtt_topic_suffix='ac/l3/voltage')
-phase3_current_sensor = SingleRegisterSensor("Phase3 Current", 0x4e, 0.1, mqtt_topic_suffix='ac/l3/current')
+phase3_voltage_sensor = SingleRegisterSensor(
+    "Phase3 Voltage", 0x4b, 0.1, mqtt_topic_suffix='ac/l3/voltage', groups=['string'])
+phase3_current_sensor = SingleRegisterSensor(
+    "Phase3 Current", 0x4e, 0.1, mqtt_topic_suffix='ac/l3/current', groups=['string'])
 phase3_power_sensor = ComputedPowerSensor("Phase3 Power", phase3_voltage_sensor,
-                                          phase3_current_sensor, mqtt_topic_suffix='ac/l3/power')
+                                          phase3_current_sensor, mqtt_topic_suffix='ac/l3/power', groups=['string'])
 
 # AC Freq
 ac_freq_sensor = SingleRegisterSensor("AC Freq", 0x4f, 0.01, mqtt_topic_suffix='ac/freq')
@@ -67,11 +73,11 @@ pv4_power_sensor = ComputedPowerSensor("PV4 Power", pv4_voltage_sensor,
                                        pv4_current_sensor, mqtt_topic_suffix='dc/pv4/power')
 
 # Power sensors
-operating_power_sensor = SingleRegisterSensor("Operating Power", 0x50, 0.1, mqtt_topic_suffix='operating_power')
-dc_power_sensor = SingleRegisterSensor("DC Total Power", 0x52, 0.1, mqtt_topic_suffix='dc/total_power')
-ac_apparent_power_sensor = SingleRegisterSensor("AC Apparent Power", 0x54, 0.1, mqtt_topic_suffix='ac/apparent_power')
-ac_active_power_sensor = SingleRegisterSensor("AC Active Power", 0x56, 0.1, mqtt_topic_suffix='ac/active_power')
-ac_reactive_power_sensor = SingleRegisterSensor("AC Reactive Power", 0x58, 0.1, mqtt_topic_suffix='ac/reactive_power')
+operating_power_sensor = SingleRegisterSensor("Operating Power", 0x50, 0.1, mqtt_topic_suffix='operating_power', groups=['string', 'micro'])
+dc_power_sensor = SingleRegisterSensor("DC Total Power", 0x52, 0.1, mqtt_topic_suffix='dc/total_power', groups=['string', 'micro'])
+ac_apparent_power_sensor = SingleRegisterSensor("AC Apparent Power", 0x54, 0.1, mqtt_topic_suffix='ac/apparent_power', groups=['string', 'micro'])
+ac_active_power_sensor = SingleRegisterSensor("AC Active Power", 0x56, 0.1, mqtt_topic_suffix='ac/active_power', groups=['string', 'micro'])
+ac_reactive_power_sensor = SingleRegisterSensor("AC Reactive Power", 0x58, 0.1, mqtt_topic_suffix='ac/reactive_power', groups=['string', 'micro'])
 
 # Temperature sensors
 radiator_temp_sensor = SingleRegisterSensor("Radiator temperature", 0x5a, 0.1,
