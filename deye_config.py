@@ -62,15 +62,18 @@ class DeyeLoggerConfig():
 class DeyeConfig():
     def __init__(self, logger_config: DeyeLoggerConfig, mqtt: DeyeMqttConfig,
                  log_level='INFO',
-                 data_read_inverval=60):
+                 data_read_inverval=60,
+                 metric_groups=[]):
         self.logger = logger_config
         self.mqtt = mqtt
         self.log_level = log_level
         self.data_read_inverval = data_read_inverval
+        self.metric_groups = metric_groups
 
     @staticmethod
     def from_env():
         return DeyeConfig(DeyeLoggerConfig.from_env(), DeyeMqttConfig.from_env(),
                           log_level=os.getenv('LOG_LEVEL', 'INFO'),
-                          data_read_inverval=int(os.getenv('DEYE_DATA_READ_INTERVAL', '60'))
+                          data_read_inverval=int(os.getenv('DEYE_DATA_READ_INTERVAL', '60')),
+                          metric_groups=set([p.strip() for p in os.getenv('DEYE_METRIC_GROUPS', '').split(',')])
                           )

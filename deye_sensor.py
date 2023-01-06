@@ -25,10 +25,11 @@ class Sensor():
     This is an abstract class. Method 'read_value' must be provided by the extending subclass. 
     """
 
-    def __init__(self, name: str, mqtt_topic_suffix='', print_format='{:s}'):
+    def __init__(self, name: str, mqtt_topic_suffix='', print_format='{:s}', groups=[]):
         self.name = name
         self.mqtt_topic_suffix = mqtt_topic_suffix
         self.print_format = print_format
+        self.groups = groups
 
     @abstractmethod
     def read_value(self, registers: dict[int, int]):
@@ -43,6 +44,13 @@ class Sensor():
         """
         return self.print_format.format(value)
 
+    def in_any_group(self, active_groups: set[str]) -> bool:
+        """
+        Checks if this sensor is included in at least one of the given active_groups.
+        Sensor matches any group when its groups set is empty (default behavior)
+        """
+        return not self.groups or len(active_groups.intersection(self.groups)) > 0
+
 
 class SingleRegisterSensor(Sensor):
     """
@@ -51,8 +59,8 @@ class SingleRegisterSensor(Sensor):
 
     def __init__(
             self, name: str, reg_address: int, factor: float, offset: float = 0,
-            mqtt_topic_suffix='', print_format='{:0.1f}'):
-        super().__init__(name, mqtt_topic_suffix, print_format)
+            mqtt_topic_suffix='', print_format='{:0.1f}', groups=[]):
+        super().__init__(name, mqtt_topic_suffix, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
         self.offset = offset
@@ -72,8 +80,8 @@ class DoubleRegisterSensor(Sensor):
 
     def __init__(
             self, name: str, reg_address: int, factor: float, offset: float = 0,
-            mqtt_topic_suffix='', print_format='{:0.1f}'):
-        super().__init__(name, mqtt_topic_suffix, print_format)
+            mqtt_topic_suffix='', print_format='{:0.1f}', groups=[]):
+        super().__init__(name, mqtt_topic_suffix, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
         self.offset = offset
@@ -96,8 +104,8 @@ class ComputedPowerSensor(Sensor):
 
     def __init__(
             self, name: str, voltage_sensor: Sensor, current_sensor: Sensor, mqtt_topic_suffix='',
-            print_format='{:0.1f}'):
-        super().__init__(name, mqtt_topic_suffix, print_format)
+            print_format='{:0.1f}', groups=[]):
+        super().__init__(name, mqtt_topic_suffix, print_format, groups)
         self.voltage_sensor = voltage_sensor
         self.current_sensor = current_sensor
 

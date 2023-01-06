@@ -36,6 +36,7 @@ class DeyeDaemon():
         self.mqtt_client = DeyeMqttClient(config)
         connector = DeyeConnector(config)
         self.modbus = DeyeModbus(config, connector)
+        self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
 
     def do_task(self):
         self.__log.info("Reading start")
@@ -44,7 +45,7 @@ class DeyeDaemon():
             | self.modbus.read_registers(0x6d, 0x74)
         timestamp = datetime.datetime.now()
         observations = []
-        for sensor in sensor_list:
+        for sensor in self.sensors:
             value = sensor.read_value(regs)
             if value is not None:
                 observation = Observation(sensor, timestamp, value)
