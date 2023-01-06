@@ -48,7 +48,7 @@ pv1_current_sensor = SingleRegisterSensor("PV1 Current", 0x6e, 0.1, mqtt_topic_s
 pv1_power_sensor = ComputedPowerSensor("PV1 Power", pv1_voltage_sensor,
                                        pv1_current_sensor, mqtt_topic_suffix='dc/pv1/power')
 pv1_daily_sensor = SingleRegisterSensor("PV1 Production today", 0x41, 0.1, mqtt_topic_suffix='dc/pv1/day_energy')
-pv1_total_sensor = DoubleRegisterSensor("PV1 Total", 0x45, 0.1, mqtt_topic_suffix='dc/pv1/total')
+pv1_total_sensor = DoubleRegisterSensor("PV1 Total", 0x45, 0.1, mqtt_topic_suffix='dc/pv1/total_energy')
 
 # DC PV2
 pv2_voltage_sensor = SingleRegisterSensor("PV2 Voltage", 0x6f, 0.1, mqtt_topic_suffix='dc/pv2/voltage')
@@ -56,7 +56,7 @@ pv2_current_sensor = SingleRegisterSensor("PV2 Current", 0x70, 0.1, mqtt_topic_s
 pv2_power_sensor = ComputedPowerSensor("PV2 Power", pv2_voltage_sensor,
                                        pv2_current_sensor, mqtt_topic_suffix='dc/pv2/power')
 pv2_daily_sensor = SingleRegisterSensor("PV2 Production today", 0x42, 0.1, mqtt_topic_suffix='dc/pv2/day_energy')
-pv2_total_sensor = DoubleRegisterSensor("PV2 Total", 0x47, 0.1, mqtt_topic_suffix='dc/pv2/total')
+pv2_total_sensor = DoubleRegisterSensor("PV2 Total", 0x47, 0.1, mqtt_topic_suffix='dc/pv2/total_energy')
 
 # DC PV3
 pv3_voltage_sensor = SingleRegisterSensor("PV3 Voltage", 0x71, 0.1, mqtt_topic_suffix='dc/pv3/voltage')
