@@ -14,7 +14,7 @@ On the other hand, **micro** inverters use this same registers to report pv1-pv4
 Generally there are three types of inverters documented in the specification: **string**, **micro** and **hybrid**.
 In the table below you can see, that the metrics are assigned to specific groups.
 Empty value indicates a general purpose metric, that is available in all type of inverters.
-You should specify the set of groups that is appropriate for your inverter in `DEYE_SENSOR_GROUPS` environment variable,
+You should specify the set of groups that is appropriate for your inverter in `DEYE_METRIC_GROUPS` environment variable,
 otherwise only general purpose metrics will be reported over mqtt. Typically you should set it to either **string** or **micro**. 
 Additional groups may be added in the future.
 
@@ -70,7 +70,7 @@ All configuration options are controlled through environment variables.
 
 * `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
-* `DEYE_SENSOR_GROUPS` - a comma delimited set of:
+* `DEYE_METRIC_GROUPS` - a comma delimited set of:
     * `string` - set when connecting to a string inverter
     * `micro` - set when connecting to a micro inverter
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
