@@ -19,11 +19,11 @@ from deye_sensor import SingleRegisterSensor, ComputedPowerSensor, DoubleRegiste
 
 # AC Phase 1
 phase1_voltage_sensor = SingleRegisterSensor(
-    "Phase1 Voltage", 0x49, 0.1, mqtt_topic_suffix='ac/l1/voltage', groups=['string'])
+    "Phase1 Voltage", 0x49, 0.1, mqtt_topic_suffix='ac/l1/voltage', groups=['string', 'micro'])
 phase1_current_sensor = SingleRegisterSensor(
-    "Phase1 Current", 0x4c, 0.1, mqtt_topic_suffix='ac/l1/current', groups=['string'])
+    "Phase1 Current", 0x4c, 0.1, mqtt_topic_suffix='ac/l1/current', groups=['string', 'micro'])
 phase1_power_sensor = ComputedPowerSensor("Phase1 Power", phase1_voltage_sensor,
-                                          phase1_current_sensor, mqtt_topic_suffix='ac/l1/power', groups=['string'])
+                                          phase1_current_sensor, mqtt_topic_suffix='ac/l1/power', groups=['string', 'micro'])
 
 # AC Phase 2
 phase2_voltage_sensor = SingleRegisterSensor(

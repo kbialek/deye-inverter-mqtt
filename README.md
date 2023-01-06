@@ -31,10 +31,10 @@ Additional groups may be added in the future.
 |Total Production 2|0x47 - 0x48|`dc/pv2/total_energy`|kWh|micro|
 |Total Production 3|0x4a - 0x4b|`dc/pv3/total_energy`|kWh|micro|
 |Total Production 4|0x4d - 0x4e|`dc/pv4/total_energy`|kWh|micro|
-|AC Phase 1 voltage|0x49|`ac/l1/voltage`|V|string|
+|AC Phase 1 voltage|0x49|`ac/l1/voltage`|V|string, micro|
 |AC Phase 2 voltage|0x4a|`ac/l2/voltage`|V|string|
 |AC Phase 3 voltage|0x4b|`ac/l3/voltage`|V|string|
-|AC Phase 1 current|0x4c|`ac/l1/current`|A|string|
+|AC Phase 1 current|0x4c|`ac/l1/current`|A|string, micro|
 |AC Phase 2 current|0x4d|`ac/l2/current`|A|string|
 |AC Phase 3 current|0x4e|`ac/l3/current`|A|string|
 |AC Frequency|0x4f|`ac/freq`|Hz||
