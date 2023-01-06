@@ -80,8 +80,8 @@ class DoubleRegisterSensor(Sensor):
 
     def __init__(
             self, name: str, reg_address: int, factor: float, offset: float = 0,
-            mqtt_topic_suffix='', print_format='{:0.1f}'):
-        super().__init__(name, mqtt_topic_suffix, print_format)
+            mqtt_topic_suffix='', print_format='{:0.1f}', groups=[]):
+        super().__init__(name, mqtt_topic_suffix, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
         self.offset = offset
