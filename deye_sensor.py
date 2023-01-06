@@ -46,7 +46,7 @@ class Sensor():
 
 class SingleRegisterSensor(Sensor):
     """
-    Solar inverter sensor with value stored in a single Modbus register.
+    Solar inverter sensor with value stored as 32-bit integer in a single Modbus register.
     """
 
     def __init__(
@@ -61,6 +61,30 @@ class SingleRegisterSensor(Sensor):
         if self.reg_address in registers:
             reg_value = registers[self.reg_address]
             return int.from_bytes(reg_value, 'big') * self.factor + self.offset
+        else:
+            return None
+
+
+class DoubleRegisterSensor(Sensor):
+    """
+    Solar inverter sensor with value stored as 64-bit integer in two Modbus registers.
+    """
+
+    def __init__(
+            self, name: str, reg_address: int, factor: float, offset: float = 0,
+            mqtt_topic_suffix='', print_format='{:0.1f}'):
+        super().__init__(name, mqtt_topic_suffix, print_format)
+        self.reg_address = reg_address
+        self.factor = factor
+        self.offset = offset
+
+    def read_value(self, registers: dict[int, int]):
+        low_word_reg_address = self.reg_address
+        high_word_reg_address = self.reg_address + 1
+        if low_word_reg_address in registers and high_word_reg_address in registers:
+            low_word = registers[low_word_reg_address]
+            high_word = registers[high_word_reg_address]
+            return (int.from_bytes(high_word, 'big') * 65536 + int.from_bytes(low_word, 'big')) * self.factor + self.offset
         else:
             return None
 
@@ -84,4 +108,3 @@ class ComputedPowerSensor(Sensor):
             return voltage * current
         else:
             return None
-
