@@ -15,6 +15,9 @@ get_github_token = \
 test:
 	python -m unittest discover -p "*_test.py"
 
+test-mqtt:
+	python -m unittest "deye_mqtt_inttest.py"
+
 run:
 	@bash -c "$$(cat config.env | xargs) python deye_docker_entrypoint.py"
 

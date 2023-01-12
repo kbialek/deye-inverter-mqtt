@@ -113,6 +113,9 @@ By using this tool you accept this risk and you take full responsiblity for the 
         1. Execute `make docker-build-local`
         1. Fill in `config.env` file    
         1. Execute `make docker-run`
-1. To run the tests use `make test`
+1. To run the tests use:
+    1. `make test`
+    1. `make test-mqtt` - requires mosquitto MQTT broker binary
+
     
 

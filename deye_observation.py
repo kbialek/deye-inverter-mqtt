@@ -16,13 +16,14 @@
 # under the License.
 
 from deye_sensor import Sensor
+from datetime import datetime
 
 class Observation():
     """
     Models Solar Inverter sensor reading.
     """
 
-    def __init__(self, sensor: Sensor, timestamp, value):
+    def __init__(self, sensor: Sensor, timestamp: datetime, value):
         self.sensor = sensor
         self.timestamp = timestamp
         self.value = value
