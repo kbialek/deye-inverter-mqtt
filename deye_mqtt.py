@@ -39,7 +39,7 @@ class DeyeMqttClient():
                 mqtt_topic = f'{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}'
                 value = observation.value_as_str()
                 self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
-                info = self.__mqtt_client.publish(mqtt_topic, value)
+                info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
                 info.wait_for_publish(self.__mqtt_timeout)
         except ValueError as e:
             self.__log.error("MQTT outgoing queue is full", str(e))
