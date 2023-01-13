@@ -29,6 +29,7 @@ class DeyeMqttClient():
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
         self.__mqtt_client = paho.Client("deye_inverter")
+        self.__mqtt_client.enable_logger()
         self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
         self.__config = config.mqtt
         self.__mqtt_timeout = 3 # seconds
@@ -47,17 +48,20 @@ class DeyeMqttClient():
             self.__log.error("Unknown MQTT publishing error", str(e))
 
     def publish_observation(self, observation: Observation):
-        self.__mqtt_client.connect(self.__config.host, self.__config.port)
-        if observation.sensor.mqtt_topic_suffix:
-            self.__do_publish(observation)
-        self.__mqtt_client.disconnect()
+        self.publish_observations([observation])
 
     def publish_observations(self, observations: List[Observation]):
         try:
             self.__mqtt_client.connect(self.__config.host, self.__config.port)
+            self.__mqtt_client.loop_start()
             for observation in observations:
                 if observation.sensor.mqtt_topic_suffix:
                     self.__do_publish(observation)
-            self.__mqtt_client.disconnect()
         except OSError as e:
             self.__log.error("MQTT connection error %s", str(e))
+        finally:
+            try:
+                self.__mqtt_client.loop_stop()
+                self.__mqtt_client.disconnect()
+            except:
+                pass

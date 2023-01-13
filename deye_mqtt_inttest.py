@@ -27,6 +27,11 @@ from deye_sensors import dc_power_sensor
 from deye_mqtt import DeyeMqttClient
 from deye_config import DeyeConfig, DeyeMqttConfig
 
+import sys
+import logging
+
+log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+logging.basicConfig(stream=sys.stdout, format=log_format, level=logging.DEBUG)
 
 class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
