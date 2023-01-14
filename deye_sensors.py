@@ -147,6 +147,7 @@ sensor_list = [
     pv4_daily_sensor,
     pv4_total_sensor,
     string_dc_power_sensor,
+    micro_dc_power_sensor,
     operating_power_sensor,
     ac_apparent_power_sensor,
     ac_active_power_sensor,
