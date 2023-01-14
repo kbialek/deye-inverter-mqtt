@@ -64,4 +64,4 @@ class DeyeMqttClient():
                 self.__mqtt_client.loop_stop()
                 self.__mqtt_client.disconnect()
             except:
-                pass
+                self.__log.error("MQTT disconnect error %s", str(e))
