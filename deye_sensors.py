@@ -98,11 +98,11 @@ micro_dc_power_sensor = ComputedSumSensor(
     "DC Total Power", [pv1_power_sensor, pv2_power_sensor, pv3_power_sensor, pv4_power_sensor],
     mqtt_topic_suffix='dc/total_power', groups=['micro'])
 ac_apparent_power_sensor = SingleRegisterSensor(
-    "AC Apparent Power", 0x54, 0.1, mqtt_topic_suffix='ac/apparent_power', groups=['string', 'micro'])
+    "AC Apparent Power", 0x54, 0.1, mqtt_topic_suffix='ac/apparent_power', groups=['string'])
 ac_active_power_sensor = DoubleRegisterSensor(
     "AC Active Power", 0x56, 0.1, mqtt_topic_suffix='ac/active_power', groups=['string', 'micro'])
 ac_reactive_power_sensor = SingleRegisterSensor(
-    "AC Reactive Power", 0x58, 0.1, mqtt_topic_suffix='ac/reactive_power', groups=['string', 'micro'])
+    "AC Reactive Power", 0x58, 0.1, mqtt_topic_suffix='ac/reactive_power', groups=['string'])
 production_total_sensor = DoubleRegisterSensor(
     "Production Total", 0x3f, 0.1, mqtt_topic_suffix='total_energy', groups=['string', 'micro'])
 

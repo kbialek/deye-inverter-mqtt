@@ -44,9 +44,9 @@ Additional groups may be added in the future.
 |Operating power|0x50|`operating_power`|W|string, micro|
 |DC total power|0x52|`dc/total_power`|W|string|
 |DC total power|computed|`dc/total_power`|W|micro|
-|AC apparent power|0x54|`ac/apparent_power`|W|string, micro|
+|AC apparent power|0x54|`ac/apparent_power`|W|string|
 |AC active power|0x56 - 0x57|`ac/active_power`|W|string, micro|
-|AC reactive power|0x58|`ac/reactive_power`|W|string, micro|
+|AC reactive power|0x58|`ac/reactive_power`|W|string|
 |Radiator temperature|0x5a|`radiator_temp`|C||
 |IGBT temperature|0x5b|`igbt_temp`|C||
 |DC PV1 voltage|0x6d|`dc/pv1/voltage`|V||
