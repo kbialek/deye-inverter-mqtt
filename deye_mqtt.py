@@ -29,23 +29,39 @@ class DeyeMqttClient():
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
         self.__mqtt_client = paho.Client("deye_inverter")
+        self.__mqtt_client.enable_logger()
         self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
         self.__config = config.mqtt
+        self.__mqtt_timeout = 3 # seconds
+
+    def __do_publish(self, observation: Observation):
+        try:
+            if observation.sensor.mqtt_topic_suffix:
+                mqtt_topic = f'{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}'
+                value = observation.value_as_str()
+                self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
+                info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
+                info.wait_for_publish(self.__mqtt_timeout)
+        except ValueError as e:
+            self.__log.error("MQTT outgoing queue is full", str(e))
+        except RuntimeError as e:
+            self.__log.error("Unknown MQTT publishing error", str(e))
 
     def publish_observation(self, observation: Observation):
-        self.__mqtt_client.connect(self.__config.host, self.__config.port)
-        if observation.sensor.mqtt_topic_suffix:
-            mqtt_topic = f'{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}'
-            self.__mqtt_client.publish(mqtt_topic, observation.value_as_str())
-        self.__mqtt_client.disconnect()
+        self.publish_observations([observation])
 
     def publish_observations(self, observations: List[Observation]):
         try:
             self.__mqtt_client.connect(self.__config.host, self.__config.port)
+            self.__mqtt_client.loop_start()
             for observation in observations:
                 if observation.sensor.mqtt_topic_suffix:
-                    mqtt_topic = f'{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}'
-                    self.__mqtt_client.publish(mqtt_topic, observation.value_as_str())
-            self.__mqtt_client.disconnect()
+                    self.__do_publish(observation)
         except OSError as e:
             self.__log.error("MQTT connection error %s", str(e))
+        finally:
+            try:
+                self.__mqtt_client.loop_stop()
+                self.__mqtt_client.disconnect()
+            except:
+                self.__log.error("MQTT disconnect error %s", str(e))
