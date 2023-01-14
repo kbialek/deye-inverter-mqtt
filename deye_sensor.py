@@ -99,7 +99,7 @@ class DoubleRegisterSensor(Sensor):
 
 class ComputedPowerSensor(Sensor):
     """
-    Electric Power sensor with value computed as multiplication of valures reag by voltage and current sensors.
+    Electric Power sensor with value computed as multiplication of values read by voltage and current sensors.
     """
 
     def __init__(
@@ -116,3 +116,23 @@ class ComputedPowerSensor(Sensor):
             return voltage * current
         else:
             return None
+
+class ComputedSumSensor(Sensor):
+    """
+    Computes a sum of values read by given list of sensors.
+    """
+
+    def __init__(
+            self, name: str, sensors: list[Sensor], mqtt_topic_suffix='',
+            print_format='{:0.1f}', groups=[]):
+        super().__init__(name, mqtt_topic_suffix, print_format, groups)
+        self.sensors = sensors
+
+    def read_value(self, registers: dict[int, int]):
+        result = 0
+        sensor_values = [s.read_value(registers) for s in self.sensors]
+        for value in sensor_values:
+            if value is None:
+                return None
+            result += value
+        return result
