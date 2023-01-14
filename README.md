@@ -48,7 +48,7 @@ Additional groups may be added in the future.
 |AC active power|0x56 - 0x57|`ac/active_power`|W|string, micro|
 |AC reactive power|0x58|`ac/reactive_power`|W|string|
 |Radiator temperature|0x5a|`radiator_temp`|C||
-|IGBT temperature|0x5b|`igbt_temp`|C||
+|IGBT temperature|0x5b|`igbt_temp`|C|string|
 |DC PV1 voltage|0x6d|`dc/pv1/voltage`|V||
 |DC PV1 current|0x6e|`dc/pv1/current`|A||
 |DC PV1 power|computed|`dc/pv1/power`|W||

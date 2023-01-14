@@ -109,7 +109,8 @@ production_total_sensor = DoubleRegisterSensor(
 # Temperature sensors
 radiator_temp_sensor = SingleRegisterSensor("Radiator temperature", 0x5a, 0.1,
                                             offset=-100, mqtt_topic_suffix='radiator_temp')
-igbt_temp_sensor = SingleRegisterSensor("IGBT temperature", 0x5b, 0.1, offset=-100, mqtt_topic_suffix='igbt_temp')
+igbt_temp_sensor = SingleRegisterSensor("IGBT temperature", 0x5b, 0.1, offset=-100,
+                                        mqtt_topic_suffix='igbt_temp', groups=['string'])
 
 sensor_list = [
     production_today_sensor,
