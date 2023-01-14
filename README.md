@@ -37,6 +37,9 @@ Additional groups may be added in the future.
 |AC Phase 1 current|0x4c|`ac/l1/current`|A|string, micro|
 |AC Phase 2 current|0x4d|`ac/l2/current`|A|string|
 |AC Phase 3 current|0x4e|`ac/l3/current`|A|string|
+|AC Phase 1 power|computed|`ac/l1/power`|W|string, micro|
+|AC Phase 2 power|computed|`ac/l2/power`|W|string|
+|AC Phase 3 power|computed|`ac/l3/power`|W|string|
 |AC Frequency|0x4f|`ac/freq`|Hz||
 |Operating power|0x50|`operating_power`|W|string, micro|
 |DC total power|0x52|`dc/total_power`|W|string|
