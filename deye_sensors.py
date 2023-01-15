@@ -93,7 +93,7 @@ pv4_total_sensor = DoubleRegisterSensor(
 operating_power_sensor = SingleRegisterSensor(
     "Operating Power", 0x50, 0.1, mqtt_topic_suffix='operating_power', groups=['string', 'micro'])
 string_dc_power_sensor = SingleRegisterSensor(
-    "DC Total Power", 0x52, 0.1, mqtt_topic_suffix='dc/total_power', groups=['string', 'micro'])
+    "DC Total Power", 0x52, 0.1, mqtt_topic_suffix='dc/total_power', groups=['string'])
 micro_dc_power_sensor = ComputedSumSensor(
     "DC Total Power", [pv1_power_sensor, pv2_power_sensor, pv3_power_sensor, pv4_power_sensor],
     mqtt_topic_suffix='dc/total_power', groups=['micro'])
