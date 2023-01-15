@@ -23,7 +23,7 @@ from datetime import datetime
 import paho.mqtt.client as paho
 
 from deye_observation import Observation
-from deye_sensors import dc_power_sensor
+from deye_sensors import string_dc_power_sensor
 from deye_mqtt import DeyeMqttClient
 from deye_config import DeyeConfig, DeyeMqttConfig
 
@@ -62,10 +62,10 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # and
         timestamp = datetime.now()
-        observation = Observation(dc_power_sensor, timestamp, 1.2)
+        observation = Observation(string_dc_power_sensor, timestamp, 1.2)
 
         # and
-        self.test_mqtt_client.subscribe(f'deye/{dc_power_sensor.mqtt_topic_suffix}')
+        self.test_mqtt_client.subscribe(f'deye/{string_dc_power_sensor.mqtt_topic_suffix}')
 
         # when
         self.test_mqtt_client.loop_start()

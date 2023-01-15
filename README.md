@@ -37,23 +37,30 @@ Additional groups may be added in the future.
 |AC Phase 1 current|0x4c|`ac/l1/current`|A|string, micro|
 |AC Phase 2 current|0x4d|`ac/l2/current`|A|string|
 |AC Phase 3 current|0x4e|`ac/l3/current`|A|string|
+|AC Phase 1 power|computed|`ac/l1/power`|W|string, micro|
+|AC Phase 2 power|computed|`ac/l2/power`|W|string|
+|AC Phase 3 power|computed|`ac/l3/power`|W|string|
 |AC Frequency|0x4f|`ac/freq`|Hz||
 |Operating power|0x50|`operating_power`|W|string, micro|
-|DC total power|0x52|`dc/total_power`|W|string, micro|
-|AC apparent power|0x54|`ac/apparent_power`|W|string, micro|
+|DC total power|0x52|`dc/total_power`|W|string|
+|DC total power|computed|`dc/total_power`|W|micro|
+|AC apparent power|0x54|`ac/apparent_power`|W|string|
 |AC active power|0x56 - 0x57|`ac/active_power`|W|string, micro|
-|AC reactive power|0x58|`ac/reactive_power`|W|string, micro|
+|AC reactive power|0x58|`ac/reactive_power`|W|string|
 |Radiator temperature|0x5a|`radiator_temp`|C||
-|IGBT temperature|0x5b|`igbt_temp`|C||
+|IGBT temperature|0x5b|`igbt_temp`|C|string|
 |DC PV1 voltage|0x6d|`dc/pv1/voltage`|V||
 |DC PV1 current|0x6e|`dc/pv1/current`|A||
+|DC PV1 power|computed|`dc/pv1/power`|W||
 |DC PV2 voltage|0x6f|`dc/pv2/voltage`|V||
 |DC PV2 current|0x70|`dc/pv2/current`|A||
+|DC PV2 power|computed|`dc/pv2/power`|W||
 |DC PV3 voltage|0x71|`dc/pv3/voltage`|V||
 |DC PV3 current|0x72|`dc/pv3/current`|A||
+|DC PV3 power|computed|`dc/pv3/power`|W||
 |DC PV4 voltage|0x73|`dc/pv4/voltage`|V||
 |DC PV4 current|0x74|`dc/pv4/current`|A||
-
+|DC PV4 power|computed|`dc/pv4/power`|W||
 
 ## Installation
 1. Copy `config.env.example` as `config.env`
