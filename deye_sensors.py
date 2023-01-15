@@ -107,8 +107,10 @@ production_total_sensor = DoubleRegisterSensor(
     "Production Total", 0x3f, 0.1, mqtt_topic_suffix='total_energy', groups=['string', 'micro'])
 
 # Temperature sensors
-radiator_temp_sensor = SingleRegisterSensor("Radiator temperature", 0x5a, 0.1,
-                                            offset=-100, mqtt_topic_suffix='radiator_temp')
+string_radiator_temp_sensor = SingleRegisterSensor("Radiator temperature", 0x5a, 0.1,
+                                            offset=-100, mqtt_topic_suffix='radiator_temp', groups=['string'])
+micro_radiator_temp_sensor = SingleRegisterSensor("Radiator temperature", 0x5a, 0.01,
+                                            offset=-10, mqtt_topic_suffix='radiator_temp', groups=['micro'])
 igbt_temp_sensor = SingleRegisterSensor("IGBT temperature", 0x5b, 0.1, offset=-100,
                                         mqtt_topic_suffix='igbt_temp', groups=['string'])
 
@@ -152,6 +154,7 @@ sensor_list = [
     ac_apparent_power_sensor,
     ac_active_power_sensor,
     ac_reactive_power_sensor,
-    radiator_temp_sensor,
+    string_radiator_temp_sensor,
+    micro_radiator_temp_sensor,
     igbt_temp_sensor
 ]
