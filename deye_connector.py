@@ -35,7 +35,7 @@ class DeyeConnector:
                 client_socket.settimeout(10)
                 client_socket.connect(sockadress)
             except socket.error as msg:
-                self.__log.warn("Could not open socket")
+                self.__log.warn("Could not open socket on IP %s", self.config.ip_address)
                 break
 
             self.__log.debug("Request frame: %s", req_frame.hex())
