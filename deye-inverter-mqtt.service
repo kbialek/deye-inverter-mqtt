@@ -1,0 +1,18 @@
+[Unit]
+Description=Deye Inverter ModBus to MQTT
+After=network.target
+
+[Service]
+Type=simple
+# Put in Directory where your files are located
+WorkingDirectory=/usr/local/share/deye-inverter-mqtt/
+SyslogIdentifier=deye-inverter-mqtt.py
+#StandardOutput=syslog
+#StandardError=syslog
+#ExecStart=bash -c "$(cat config.env | xargs) python deye_docker_entrypoint.py"
+ExecStart=/usr/local/share/deye-inverter-mqtt/service.sh
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target
