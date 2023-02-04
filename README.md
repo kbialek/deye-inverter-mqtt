@@ -6,6 +6,10 @@ Tested with:
 * [Deye SUN-4K-G05](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10kg03.html) and Logger S/N 23xxxxxxxx
 * [Deye SUN1300G3](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html) and Logger S/N 41xxxxxxxx
 * [Deye SUN600G3](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html) and Device S/N 41xxxxxxxx
+* Bosswerk mi600 (Rebrand of Deye SUN600G3) and Logger S/N 410xxxxxxx
+* Bosswerk mi300.1 (Rebrand of Deye) and Logger S/N 415xxxxxxx
+
+To make Bosswerk mi600 and mi300 ready to be read, additional hints at the end of this page
 
 ## Supported metrics
 The meaning of certain registers depends on the inverter type. 
@@ -124,5 +128,16 @@ By using this tool you accept this risk and you take full responsiblity for the 
     1. `make test`
     1. `make test-mqtt` - requires mosquitto MQTT broker binary
 
+## Hints for Bosswerk mi600 / mi300 to make them available for reading
+1. Open the hidden Menu of the inverter with http://<IP>/config_hide.html with Chrome (easiest with chrome)
+2. Mark the IP-Adress Field under "Internal Server parameters setting"
+    This Field normally has the AP-Adress 10.10.100.254 and is unable to edit
+3. Click right Mousebutton and investigate Field
+4. Delete the Text disabled="" from html-code
+5. Click right Mousebutton oder Element in HTML and Force Status ":active"
+6. Change IP to your internal inverter IP address
+7. Click Save AND DON'T REBOOT
+8. Wait some seconds and open http://<IP>/config_hide.html again to see if the changes had been saved. If not start again with 1
+9. If IP is changed, you can restart the inverter, changes will be permanent
     
 
