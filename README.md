@@ -7,7 +7,7 @@ Tested with:
 * [Deye SUN1300G3](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html) and Logger S/N 41xxxxxxxx
 * [Deye SUN600G3](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html) and Device S/N 41xxxxxxxx
 * Bosswerk mi600 (Rebrand of Deye SUN600G3) and Logger S/N 410xxxxxxx
-* Bosswerk mi300.1 (Rebrand of Deye) and Logger S/N 415xxxxxxx
+* Bosswerk mi300.1 (Rebrand of Deye) and Logger S/N 411xxxxxx and 415xxxxxxx
 
 To make Bosswerk mi600 and mi300 ready to be read, additional hints at the end of this page
 
