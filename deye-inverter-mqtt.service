@@ -9,8 +9,8 @@ WorkingDirectory=/usr/local/share/deye-inverter-mqtt/
 SyslogIdentifier=deye-inverter-mqtt.py
 #StandardOutput=syslog
 #StandardError=syslog
-#ExecStart=bash -c "$(cat config.env | xargs) python deye_docker_entrypoint.py"
-ExecStart=/usr/local/share/deye-inverter-mqtt/service.sh
+EnvironmentFile=etc/deye-inverter-mqtt/config.env"
+ExecStart=/usr/bin/python3 deye_docker_entrypoint.py
 Restart=on-failure
 RestartSec=30s
 
