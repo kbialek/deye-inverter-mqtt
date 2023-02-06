@@ -74,6 +74,9 @@ class DeyeModbus:
         if not frame:
             self.__log.error("No response frame")
             return None
+        elif len(frame) == 29:
+            self.__parse_response_error_code(frame)
+            return None
         elif len(frame) < (29 + 4):
             self.__log.error("Response frame is too short")
             return None
@@ -94,7 +97,7 @@ class DeyeModbus:
         reg_count = last_reg - first_reg + 1
         registers = {}
         expected_frame_data_len = 2 + 1 + reg_count * 2
-        if not frame or len(frame) < expected_frame_data_len + 2: # 2 bytes for crc
+        if not frame or len(frame) < expected_frame_data_len + 2:  # 2 bytes for crc
             self.__log.error("Modbus frame is too short or empty")
             return registers
         actual_crc = int.from_bytes(frame[expected_frame_data_len:expected_frame_data_len+2], 'little')
@@ -116,12 +119,13 @@ class DeyeModbus:
 
     def __parse_modbus_write_holding_register_response(self, frame, reg_address, reg_value):
         expected_frame_data_len = 6
-        expected_frame_len = 6 + 2 # 2 bytes for crc
+        expected_frame_len = 6 + 2  # 2 bytes for crc
         if not frame:
             self.__log.error("Modbus response frame is empty")
             return False
-        elif len(frame) != expected_frame_len: 
-            self.__log.error(f"Wrong response frame length. Expected at least {expected_frame_len} bytes, got {len(frame)}")
+        elif len(frame) != expected_frame_len:
+            self.__log.error(
+                f"Wrong response frame length. Expected at least {expected_frame_len} bytes, got {len(frame)}")
             return False
         actual_crc = int.from_bytes(frame[expected_frame_data_len:expected_frame_data_len+2], 'little')
         expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
@@ -136,3 +140,14 @@ class DeyeModbus:
                 f"Returned address does not match sent value. Expected {reg_address}, got {returned_address}")
             return False
         return True
+
+    def __parse_response_error_code(self, frame):
+        error_frame = frame[25:-2]
+        error_code = error_frame[0]
+        if error_code == 0x05:
+            self.__log.error("Modbus device address does not match.")
+        elif error_code == 0x06:
+            self.__log.error("Logger Serial Number does not match. Check your configuration file.")
+        else:
+            self.__log.error("Unknown response error code. Error frame: %s", error_frame.hex())
+
