@@ -53,8 +53,10 @@ class DeyeConnector:
                     self.__log.debug("Response frame: %s", data.hex())
                     return data
                 except socket.timeout as msg:
-                    self.__log.warn("Connection timeout")
+                    self.__log.debug("Connection timeout")
                 except Exception as e:
                     self.__log.warn("Connection error", e.message)
+
+            self.__log.warn("Too many connection timeouts")
 
         return bytearray()
