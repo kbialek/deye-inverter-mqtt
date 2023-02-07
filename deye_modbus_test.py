@@ -66,7 +66,6 @@ class DeyeModbusTest(unittest.TestCase):
         connector.send_request.assert_called_once_with(
             bytearray.fromhex('a5170010450000d202964902000000000000000000000000000001030002000265cb5915'))
 
-
     @patch('deye_connector.DeyeConnector')
     def test_write_register_0x12_to_0xa3d4(self, connector):
         # given
@@ -115,6 +114,52 @@ class DeyeModbusTest(unittest.TestCase):
         self.assertTrue(0x5f in reg_values)
         self.assertEqual(reg_values[0x50].hex(), '0001')
         self.assertEqual(reg_values[0x5f].hex(), 'ffff')
+
+    @patch('deye_connector.DeyeConnector')
+    def test_incorrect_inverter_serial_number(self, connector):
+        # given
+        sut = DeyeModbus(self.config, connector)
+        connector.send_request.return_value = bytearray.fromhex(
+            'a51000101500c9c22576f80201032d0000790800007106d6630600bd15')
+
+        # when
+        with self.assertLogs() as captured:
+            sut.read_registers(0x50, 0x5f)
+
+        # then
+        self.assertEqual(len(captured.records), 2)
+        self.assertEqual(captured.records[0].getMessage(),
+                         "Logger Serial Number does not match. Check your configuration file.")
+
+    @patch('deye_connector.DeyeConnector')
+    def test_incorrect_modbus_address(self, connector):
+        # given
+        sut = DeyeModbus(self.config, connector)
+        connector.send_request.return_value = bytearray.fromhex(
+            'a51000101500c9c22576f80201032d0000790800007106d6630500bd15')
+
+        # when
+        with self.assertLogs() as captured:
+            sut.read_registers(0x50, 0x5f)
+
+        # then
+        self.assertEqual(len(captured.records), 2)
+        self.assertEqual(captured.records[0].getMessage(), "Modbus device address does not match.")
+
+    @patch('deye_connector.DeyeConnector')
+    def test_unknown_error_code(self, connector):
+        # given
+        sut = DeyeModbus(self.config, connector)
+        connector.send_request.return_value = bytearray.fromhex(
+            'a51000101500c9c22576f80201032d0000790800007106d6630100bd15')
+
+        # when
+        with self.assertLogs() as captured:
+            sut.read_registers(0x50, 0x5f)
+
+        # then
+        self.assertEqual(len(captured.records), 2)
+        self.assertEqual(captured.records[0].getMessage(), "Unknown response error code. Error frame: 0100")
 
 
 if __name__ == '__main__':
