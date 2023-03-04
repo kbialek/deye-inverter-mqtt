@@ -28,11 +28,20 @@ class DeyeMqttClient():
 
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
-        self.__mqtt_client = paho.Client("deye_inverter")
+        self.__mqtt_client = paho.Client(
+            client_id=f'deye-inverter-{config.logger.serial_number}', reconnect_on_failure=True)
         self.__mqtt_client.enable_logger()
         self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
+        status_topic = f'{config.mqtt.topic_prefix}/{config.mqtt.availability_topic}'
+        self.__mqtt_client.will_set(status_topic, 'offline', retain=True, qos=1)
+        self.__mqtt_client.connect(config.mqtt.host, config.mqtt.port, keepalive=60)
+        self.__mqtt_client.loop_start()
+        self.__mqtt_client.publish(status_topic, 'online', retain=True, qos=1)
         self.__config = config.mqtt
-        self.__mqtt_timeout = 3 # seconds
+        self.__mqtt_timeout = 3  # seconds
+
+    def disconnect(self):
+        self.__mqtt_client.disconnect()
 
     def __do_publish(self, observation: Observation):
         try:
@@ -52,16 +61,8 @@ class DeyeMqttClient():
 
     def publish_observations(self, observations: List[Observation]):
         try:
-            self.__mqtt_client.connect(self.__config.host, self.__config.port)
-            self.__mqtt_client.loop_start()
             for observation in observations:
                 if observation.sensor.mqtt_topic_suffix:
                     self.__do_publish(observation)
         except OSError as e:
             self.__log.error("MQTT connection error %s", str(e))
-        finally:
-            try:
-                self.__mqtt_client.loop_stop()
-                self.__mqtt_client.disconnect()
-            except:
-                self.__log.error("MQTT disconnect error %s", str(e))
