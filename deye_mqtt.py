@@ -28,7 +28,7 @@ class DeyeMqttClient():
 
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
-        self.__mqtt_client = paho.Client(client_id="deye_inverter", reconnect_on_failure=True)
+        self.__mqtt_client = paho.Client(client_id=f'deye-inverter-{config.logger.serial_number}', reconnect_on_failure=True)
         self.__mqtt_client.enable_logger()
         self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
         status_topic = f'{config.mqtt.topic_prefix}/status'
