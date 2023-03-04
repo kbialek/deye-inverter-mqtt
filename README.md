@@ -62,6 +62,15 @@ Additional groups may be added in the future.
 |DC PV4 current|0x74|`dc/pv4/current`|A||
 |DC PV4 power|computed|`dc/pv4/power`|W||
 
+### Additional MQTT topics
+#### Availability topic
+Reports deye-inverter-mqtt service status (not the inverter status):
+* `online` - when the service is connected to the MQTT broker
+* `offline` - when the service is disconnected from the MQTT broker
+
+The default topic name is `status` and can be changed in the configuration.
+
+
 ## Installation
 1. Copy `config.env.example` as `config.env`
 2. Fill in values in `config.env`
@@ -88,6 +97,7 @@ All configuration options are controlled through environment variables.
 * `MQTT_USERNAME`
 * `MQTT_PASSWORD`
 * `MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics
+* `MQTT_AVAILIBILITY_TOPIC` - mqtt availability topic, defaults to `status`
 
 ## Reading and writing raw register values
 The tool allows reading and writing raw register values directly in the terminal.
