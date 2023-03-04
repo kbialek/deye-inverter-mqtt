@@ -25,7 +25,7 @@ import paho.mqtt.client as paho
 from deye_observation import Observation
 from deye_sensors import string_dc_power_sensor
 from deye_mqtt import DeyeMqttClient
-from deye_config import DeyeConfig, DeyeMqttConfig
+from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig
 
 import sys
 import logging
@@ -53,7 +53,7 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
     def setUp(self):
         self.received_messages = []
         self.config = DeyeConfig(
-            logger_config=None,
+            logger_config=DeyeLoggerConfig('123456', '192.168.0.1', 9090),
             mqtt=DeyeMqttConfig('localhost', self.mqtt_broker_port, '', '', 'deye')
         )
         self.test_mqtt_client = paho.Client("test_client")
