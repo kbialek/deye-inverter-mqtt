@@ -33,20 +33,30 @@ import logging
 log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(stream=sys.stdout, format=log_format, level=logging.DEBUG)
 
+
 class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
+    mqtt_broker_port = 9883
+
+    def __start_broker(self):
+        self.mosquitto_pid = os.spawnl(os.P_NOWAIT, '/usr/sbin/mosquitto',
+                                       '/usr/sbin/mosquitto', '-p', str(self.mqtt_broker_port))
+        time.sleep(2)
+
+    def __stop_broker(self):
+        os.kill(self.mosquitto_pid, 9)
+        time.sleep(2)
+
+    def __connect_test_client(self):
+        self.test_mqtt_client.connect('localhost', port=self.mqtt_broker_port)
+
     def setUp(self):
-        mqtt_broker_port = 9883
+        self.received_messages = []
         self.config = DeyeConfig(
             logger_config=None,
-            mqtt=DeyeMqttConfig('localhost', mqtt_broker_port, '', '', 'deye')
+            mqtt=DeyeMqttConfig('localhost', self.mqtt_broker_port, '', '', 'deye')
         )
-        self.mosquitto_pid = os.spawnl(os.P_NOWAIT, '/usr/sbin/mosquitto',
-                                       '/usr/sbin/mosquitto', '-p', str(mqtt_broker_port))
-        time.sleep(2)
         self.test_mqtt_client = paho.Client("test_client")
-        self.test_mqtt_client.connect('localhost', port=mqtt_broker_port)
-        self.received_messages = []
 
         def on_message(client, userdata, msg):
             self.received_messages.append(msg)
@@ -54,10 +64,14 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
     def tearDown(self):
         self.test_mqtt_client.disconnect()
-        os.kill(self.mosquitto_pid, 9)
+        self.__stop_broker()
 
     def test_publish_message(self):
         # given
+        self.__start_broker()
+        self.__connect_test_client()
+
+        # and
         mqtt = DeyeMqttClient(self.config)
 
         # and
@@ -72,13 +86,52 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         mqtt.publish_observation(observation)
         self.test_mqtt_client.loop_stop()
 
+        # and
+        mqtt.disconnect()
+
         # then
         self.assertEqual(len(self.received_messages), 1)
-        
+
         # and
         received_message = self.received_messages[0]
         self.assertEqual(received_message.topic, 'deye/dc/total_power')
         self.assertEqual(received_message.payload, b'1.2')
+
+    def test_reconnect_on_broker_restart(self):
+        # given
+        self.__start_broker()
+
+        # and: connect
+        mqtt = DeyeMqttClient(self.config)
+
+        # and: restart broker
+        self.__stop_broker()
+        self.__start_broker()
+
+        # and
+        timestamp = datetime.now()
+        observation = Observation(string_dc_power_sensor, timestamp, 1.2)
+
+        # and
+        self.__connect_test_client()
+        self.test_mqtt_client.subscribe(f'deye/{string_dc_power_sensor.mqtt_topic_suffix}')
+
+        # when
+        self.test_mqtt_client.loop_start()
+        mqtt.publish_observation(observation)
+        self.test_mqtt_client.loop_stop()
+
+        # and
+        mqtt.disconnect()
+
+        # then
+        self.assertEqual(len(self.received_messages), 1)
+
+        # and
+        received_message = self.received_messages[0]
+        self.assertEqual(received_message.topic, 'deye/dc/total_power')
+        self.assertEqual(received_message.payload, b'1.2')
+
 
 if __name__ == '__main__':
     unittest.main()

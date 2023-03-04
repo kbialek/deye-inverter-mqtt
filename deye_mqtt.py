@@ -28,13 +28,16 @@ class DeyeMqttClient():
 
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
-        self.__mqtt_client = paho.Client("deye_inverter")
+        self.__mqtt_client = paho.Client(client_id="deye_inverter", reconnect_on_failure=True)
         self.__mqtt_client.enable_logger()
         self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
         self.__mqtt_client.connect(config.mqtt.host, config.mqtt.port)
         self.__mqtt_client.loop_start()
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
+
+    def disconnect(self):
+        self.__mqtt_client.disconnect()
 
     def __do_publish(self, observation: Observation):
         try:
