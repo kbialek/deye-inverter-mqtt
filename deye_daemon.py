@@ -23,7 +23,7 @@ import datetime
 from deye_config import DeyeConfig
 from deye_connector import DeyeConnector
 from deye_modbus import DeyeModbus
-from deye_sensors import sensor_list
+from deye_sensors import sensor_list, sensor_register_ranges
 from deye_mqtt import DeyeMqttClient
 from deye_observation import Observation
 
@@ -37,12 +37,14 @@ class DeyeDaemon():
         connector = DeyeConnector(config)
         self.modbus = DeyeModbus(config, connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
+        self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
 
     def do_task(self):
         self.__log.info("Reading start")
-        regs = self.modbus.read_registers(0x3c, 0x4f) \
-            | self.modbus.read_registers(0x50, 0x5f) \
-            | self.modbus.read_registers(0x6d, 0x74)
+        regs = {}
+        for reg_range in self.reg_ranges:
+            self.__log.info(f"Reading registers [{reg_range}]")
+            regs |= self.modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
         self.mqtt_client.publish_logger_status(len(regs) > 0)
         observations = self.__get_observations_from_reg_values(regs)
         self.mqtt_client.publish_observations(observations)

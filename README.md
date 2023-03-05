@@ -13,16 +13,15 @@ For example, **string** inverters use registers 0x46 - 0x4e to report AC phase v
 On the other hand, **micro** inverters use this same registers to report pv1-pv4 cumulative energy.
 Generally there are three types of inverters documented in the specification: **string**, **micro** and **hybrid**.
 In the table below you can see, that the metrics are assigned to specific groups.
-Empty value indicates a general purpose metric, that is available in all type of inverters.
-You should specify the set of groups that is appropriate for your inverter in `DEYE_METRIC_GROUPS` environment variable,
-otherwise only general purpose metrics will be reported over mqtt. Typically you should set it to either **string** or **micro**. 
+You should specify the set of groups that is appropriate for your inverter in `DEYE_METRIC_GROUPS` environment variable.
+Typically you should set it to either **string** or **micro**. 
 Additional groups may be added in the future.
 
 |Metric|Modbus address|MQTT topic suffix|Unit|Groups|
 |---|:-:|---|:-:|---|
-|Production today|0x3c|`day_energy`|kWh||
-|Uptime|0x3e|`uptime`|minutes||
-|Total Production (Active)|0x3F - 0x40|`total_energy`|kWh||
+|Production today|0x3c|`day_energy`|kWh|string, micro|
+|Uptime|0x3e|`uptime`|minutes|string, micro|
+|Total Production (Active)|0x3F - 0x40|`total_energy`|kWh|string, micro|
 |Daily Production 1|0x41|`dc/pv1/day_energy`|kWh|micro|
 |Daily Production 2|0x42|`dc/pv2/day_energy`|kWh|micro|
 |Daily Production 3|0x43|`dc/pv3/day_energy`|kWh|micro|
@@ -40,7 +39,7 @@ Additional groups may be added in the future.
 |AC Phase 1 power|computed|`ac/l1/power`|W|string, micro|
 |AC Phase 2 power|computed|`ac/l2/power`|W|string|
 |AC Phase 3 power|computed|`ac/l3/power`|W|string|
-|AC Frequency|0x4f|`ac/freq`|Hz||
+|AC Frequency|0x4f|`ac/freq`|Hz|string, micro|
 |Operating power|0x50|`operating_power`|W|string, micro|
 |DC total power|0x52|`dc/total_power`|W|string|
 |DC total power|computed|`dc/total_power`|W|micro|
@@ -49,18 +48,18 @@ Additional groups may be added in the future.
 |AC reactive power|0x58|`ac/reactive_power`|W|string|
 |Radiator temperature|0x5a|`radiator_temp`|C|string, micro|
 |IGBT temperature|0x5b|`igbt_temp`|C|string|
-|DC PV1 voltage|0x6d|`dc/pv1/voltage`|V||
-|DC PV1 current|0x6e|`dc/pv1/current`|A||
-|DC PV1 power|computed|`dc/pv1/power`|W||
-|DC PV2 voltage|0x6f|`dc/pv2/voltage`|V||
-|DC PV2 current|0x70|`dc/pv2/current`|A||
-|DC PV2 power|computed|`dc/pv2/power`|W||
-|DC PV3 voltage|0x71|`dc/pv3/voltage`|V||
-|DC PV3 current|0x72|`dc/pv3/current`|A||
-|DC PV3 power|computed|`dc/pv3/power`|W||
-|DC PV4 voltage|0x73|`dc/pv4/voltage`|V||
-|DC PV4 current|0x74|`dc/pv4/current`|A||
-|DC PV4 power|computed|`dc/pv4/power`|W||
+|DC PV1 voltage|0x6d|`dc/pv1/voltage`|V|string, micro|
+|DC PV1 current|0x6e|`dc/pv1/current`|A|string, micro|
+|DC PV1 power|computed|`dc/pv1/power`|W|string, micro|
+|DC PV2 voltage|0x6f|`dc/pv2/voltage`|V|string, micro|
+|DC PV2 current|0x70|`dc/pv2/current`|A|string, micro|
+|DC PV2 power|computed|`dc/pv2/power`|W|string, micro|
+|DC PV3 voltage|0x71|`dc/pv3/voltage`|V|string, micro|
+|DC PV3 current|0x72|`dc/pv3/current`|A|string, micro|
+|DC PV3 power|computed|`dc/pv3/power`|W|string, micro|
+|DC PV4 voltage|0x73|`dc/pv4/voltage`|V|string, micro|
+|DC PV4 current|0x74|`dc/pv4/current`|A|string, micro|
+|DC PV4 power|computed|`dc/pv4/power`|W|string, micro|
 
 ### Additional MQTT topics
 #### **Availability topic**
