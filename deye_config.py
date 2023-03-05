@@ -20,13 +20,15 @@ import os
 
 class DeyeMqttConfig():
     def __init__(self, host: str, port: int, username: str, password: str, topic_prefix: str,
-                 availability_topic: str = 'status'):
+                 availability_topic: str = 'status',
+                 logger_status_topic: str = 'logger_status'):
         self.host = host
         self.port = port
         self.username = username
         self.password = password
         self.topic_prefix = topic_prefix
         self.availability_topic = availability_topic
+        self.logger_status_topic = logger_status_topic
 
     @staticmethod
     def from_env():
@@ -36,7 +38,8 @@ class DeyeMqttConfig():
             username=os.getenv('MQTT_USERNAME'),
             password=os.getenv('MQTT_PASSWORD'),
             topic_prefix=os.getenv('MQTT_TOPIC_PREFIX'),
-            availability_topic=os.getenv('MQTT_AVAILIBILITY_TOPIC', 'status')
+            availability_topic=os.getenv('MQTT_AVAILIBILITY_TOPIC', 'status'),
+            logger_status_topic=os.getenv('MQTT_LOGGER_STATUS_TOPIC', 'logger_status')
         )
 
 

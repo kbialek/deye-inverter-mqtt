@@ -43,26 +43,36 @@ class DeyeMqttClient():
     def disconnect(self):
         self.__mqtt_client.disconnect()
 
-    def __do_publish(self, observation: Observation):
+    def __do_publish(self, mqtt_topic: str, value: str):
         try:
-            if observation.sensor.mqtt_topic_suffix:
-                mqtt_topic = f'{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}'
-                value = observation.value_as_str()
-                self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
-                info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
-                info.wait_for_publish(self.__mqtt_timeout)
+            self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
+            info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
+            info.wait_for_publish(self.__mqtt_timeout)
         except ValueError as e:
             self.__log.error("MQTT outgoing queue is full", str(e))
         except RuntimeError as e:
             self.__log.error("Unknown MQTT publishing error", str(e))
 
     def publish_observation(self, observation: Observation):
-        self.publish_observations([observation])
+        if observation.sensor.mqtt_topic_suffix:
+            mqtt_topic = f'{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}'
+            value = observation.value_as_str()
+            self.__do_publish(mqtt_topic, value)
 
     def publish_observations(self, observations: List[Observation]):
         try:
             for observation in observations:
                 if observation.sensor.mqtt_topic_suffix:
-                    self.__do_publish(observation)
+                    self.publish_observation(observation)
         except OSError as e:
             self.__log.error("MQTT connection error %s", str(e))
+
+    def publish_logger_status(self, is_online: bool):
+        try:
+            mqtt_topic = f'{self.__config.topic_prefix}/{self.__config.logger_status_topic}'
+            value = 'online' if is_online else 'offline'
+            self.__do_publish(mqtt_topic, value)
+            self.__log.info("Logger is %s", value)
+        except OSError as e:
+            self.__log.error("MQTT connection error %s", str(e))
+

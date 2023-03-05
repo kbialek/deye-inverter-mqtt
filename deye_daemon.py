@@ -29,7 +29,7 @@ from deye_observation import Observation
 
 
 class DeyeDaemon():
-    
+
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeDaemon.__name__)
         self.__config = config
@@ -43,6 +43,12 @@ class DeyeDaemon():
         regs = self.modbus.read_registers(0x3c, 0x4f) \
             | self.modbus.read_registers(0x50, 0x5f) \
             | self.modbus.read_registers(0x6d, 0x74)
+        self.mqtt_client.publish_logger_status(len(regs) > 0)
+        observations = self.__get_observations_from_reg_values(regs)
+        self.mqtt_client.publish_observations(observations)
+        self.__log.info("Reading completed")
+
+    def __get_observations_from_reg_values(self, regs: dict[int, int]):
         timestamp = datetime.datetime.now()
         observations = []
         for sensor in self.sensors:
@@ -51,9 +57,8 @@ class DeyeDaemon():
                 observation = Observation(sensor, timestamp, value)
                 observations.append(observation)
                 self.__log.debug(f'{observation.sensor.name}: {observation.value_as_str()}')
+        return observations
 
-        self.mqtt_client.publish_observations(observations)
-        self.__log.info("Reading completed")
 
 def main():
     config = DeyeConfig.from_env()
