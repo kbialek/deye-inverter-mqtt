@@ -29,6 +29,7 @@ class Sensor():
         self.name = name
         self.mqtt_topic_suffix = mqtt_topic_suffix
         self.print_format = print_format
+        assert len(groups) > 0, f'Sensor {name} must belong to at least one group'
         self.groups = groups
 
     @abstractmethod
@@ -117,6 +118,7 @@ class ComputedPowerSensor(Sensor):
         else:
             return None
 
+
 class ComputedSumSensor(Sensor):
     """
     Computes a sum of values read by given list of sensors.
@@ -136,3 +138,23 @@ class ComputedSumSensor(Sensor):
                 return None
             result += value
         return result
+
+
+class SensorRegisterRange:
+    """
+    Declares a Modbus register range that must be read to provide values for sensors within a metrics group
+    """
+
+    def __init__(self, group: str, first_reg_address: int, last_reg_address: int):
+        self.group = group
+        self.first_reg_address = first_reg_address
+        self.last_reg_address = last_reg_address
+
+    def in_any_group(self, active_groups: set[str]) -> bool:
+        """
+        Checks if this range is included in at least one of the given active_groups.
+        """
+        return self.group in active_groups
+
+    def __str__(self):
+        return 'metrics group: {}, range: {:04x}-{:04x}'.format(self.group, self.first_reg_address, self.last_reg_address)
