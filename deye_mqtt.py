@@ -69,7 +69,7 @@ class DeyeMqttClient():
 
     def publish_logger_status(self, is_online: bool):
         try:
-            mqtt_topic = f'{self.__config.topic_prefix}/logger_status'
+            mqtt_topic = f'{self.__config.topic_prefix}/{self.__config.logger_status_topic}'
             value = 'online' if is_online else 'offline'
             self.__do_publish(mqtt_topic, value)
             self.__log.info("Logger is %s", value)
