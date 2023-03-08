@@ -26,6 +26,8 @@ from deye_modbus import DeyeModbus
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_mqtt import DeyeMqttClient
 from deye_observation import Observation
+from deye_events import DeyeEvent, DeyeLoggerStatusEvent, DeyeObservationEvent
+from deye_mqtt_publisher import DeyeMqttPublisher
 
 
 class DeyeDaemon():
@@ -33,11 +35,14 @@ class DeyeDaemon():
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeDaemon.__name__)
         self.__config = config
-        self.mqtt_client = DeyeMqttClient(config)
+        mqtt_client = DeyeMqttClient(config)
         connector = DeyeConnector(config)
         self.modbus = DeyeModbus(config, connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
+        self.processors = [
+            DeyeMqttPublisher(mqtt_client)
+        ]
 
     def do_task(self):
         self.__log.info("Reading start")
@@ -45,21 +50,23 @@ class DeyeDaemon():
         for reg_range in self.reg_ranges:
             self.__log.info(f"Reading registers [{reg_range}]")
             regs |= self.modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
-        self.mqtt_client.publish_logger_status(len(regs) > 0)
-        observations = self.__get_observations_from_reg_values(regs)
-        self.mqtt_client.publish_observations(observations)
+        events: list[DeyeEvent] = []
+        events.append(DeyeLoggerStatusEvent(len(regs) > 0))
+        events += self.__get_observations_from_reg_values(regs)
+        for processor in self.processors:
+            processor.process(events)
         self.__log.info("Reading completed")
 
-    def __get_observations_from_reg_values(self, regs: dict[int, int]):
+    def __get_observations_from_reg_values(self, regs: dict[int, int]) -> list[DeyeObservationEvent]:
         timestamp = datetime.datetime.now()
-        observations = []
+        events = []
         for sensor in self.sensors:
             value = sensor.read_value(regs)
             if value is not None:
                 observation = Observation(sensor, timestamp, value)
-                observations.append(observation)
+                events.append(DeyeObservationEvent(observation))
                 self.__log.debug(f'{observation.sensor.name}: {observation.value_as_str()}')
-        return observations
+        return events
 
 
 def main():
