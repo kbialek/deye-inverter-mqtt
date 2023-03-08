@@ -52,6 +52,8 @@ class DeyeMqttClient():
             self.__log.error("MQTT outgoing queue is full", str(e))
         except RuntimeError as e:
             self.__log.error("Unknown MQTT publishing error", str(e))
+        except OSError as e:
+            self.__log.error("MQTT connection error %s", str(e))
 
     def publish_observation(self, observation: Observation):
         if observation.sensor.mqtt_topic_suffix:
@@ -60,19 +62,12 @@ class DeyeMqttClient():
             self.__do_publish(mqtt_topic, value)
 
     def publish_observations(self, observations: List[Observation]):
-        try:
-            for observation in observations:
-                if observation.sensor.mqtt_topic_suffix:
-                    self.publish_observation(observation)
-        except OSError as e:
-            self.__log.error("MQTT connection error %s", str(e))
+        for observation in observations:
+            if observation.sensor.mqtt_topic_suffix:
+                self.publish_observation(observation)
 
     def publish_logger_status(self, is_online: bool):
-        try:
-            mqtt_topic = f'{self.__config.topic_prefix}/{self.__config.logger_status_topic}'
-            value = 'online' if is_online else 'offline'
-            self.__do_publish(mqtt_topic, value)
-            self.__log.info("Logger is %s", value)
-        except OSError as e:
-            self.__log.error("MQTT connection error %s", str(e))
-
+        mqtt_topic = f'{self.__config.topic_prefix}/{self.__config.logger_status_topic}'
+        value = 'online' if is_online else 'offline'
+        self.__do_publish(mqtt_topic, value)
+        self.__log.info("Logger is %s", value)
