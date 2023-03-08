@@ -33,7 +33,7 @@ class DeyeMqttPublisher(DeyeEventProcessor):
     def process(self, events: list[DeyeEvent]):
         for event in events:
             if isinstance(event, DeyeObservationEvent):
-                self.__mqtt_client.publish_observations(event.observation)
+                self.__mqtt_client.publish_observation(event.observation)
             elif isinstance(event, DeyeLoggerStatusEvent):
                 self.__mqtt_client.publish_logger_status(event.online)
             else:
