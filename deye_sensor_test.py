@@ -22,7 +22,7 @@ from deye_sensor import Sensor, ComputedSumSensor
 class TestSensor(Sensor):
 
     def __init__(self, name, value):
-        super().__init__(name)
+        super().__init__(name, groups=['string'])
         self.value = value
 
     def read_value(self, registers):
@@ -37,7 +37,7 @@ class DeyeSensorTest(unittest.TestCase):
         test_sensor2 = TestSensor("ts2", 2.2)
 
         # and
-        sut = ComputedSumSensor('sum', [test_sensor1, test_sensor2])
+        sut = ComputedSumSensor('sum', [test_sensor1, test_sensor2], groups=['string'])
 
         # when
         result = sut.read_value([])
@@ -51,7 +51,7 @@ class DeyeSensorTest(unittest.TestCase):
         test_sensor2 = TestSensor("ts2", None)
 
         # and
-        sut = ComputedSumSensor('sum', [test_sensor1, test_sensor2])
+        sut = ComputedSumSensor('sum', [test_sensor1, test_sensor2], groups=['string'])
 
         # when
         result = sut.read_value([])
