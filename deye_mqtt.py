@@ -49,9 +49,9 @@ class DeyeMqttClient():
             info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
             info.wait_for_publish(self.__mqtt_timeout)
         except ValueError as e:
-            self.__log.error("MQTT outgoing queue is full", str(e))
+            self.__log.error("MQTT outgoing queue is full: %s", str(e))
         except RuntimeError as e:
-            self.__log.error("Unknown MQTT publishing error", str(e))
+            self.__log.error("Unknown MQTT publishing error: %s", str(e))
         except OSError as e:
             self.__log.error("MQTT connection error %s", str(e))
 
