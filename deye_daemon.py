@@ -28,6 +28,7 @@ from deye_mqtt import DeyeMqttClient
 from deye_observation import Observation
 from deye_events import DeyeEvent, DeyeLoggerStatusEvent, DeyeObservationEvent
 from deye_mqtt_publisher import DeyeMqttPublisher
+from deye_set_time_processor import DeyeSetTimeProcessor
 
 
 class DeyeDaemon():
@@ -40,9 +41,14 @@ class DeyeDaemon():
         self.modbus = DeyeModbus(config, connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
-        self.processors = [
-            DeyeMqttPublisher(mqtt_client)
+        all_processors = [
+            DeyeMqttPublisher(mqtt_client),
+            DeyeSetTimeProcessor(self.modbus)
         ]
+        self.processors = [
+            p for p in all_processors if p.get_id() in config.active_processors
+        ]
+        self.__log.info("Active processors [{}]".format(','.join([p.get_id() for p in self.processors])))
 
     def do_task(self):
         self.__log.info("Reading start")

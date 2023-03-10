@@ -33,6 +33,9 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
         self.__modbus = modbus
         self.__last_status = False
 
+    def get_id(self):
+        return 'set_time'
+
     def process(self, events: list[DeyeEvent]):
         logger_status_events: list[DeyeLoggerStatusEvent] = [
             event for event in events if isinstance(event, DeyeLoggerStatusEvent)
