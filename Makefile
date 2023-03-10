@@ -36,7 +36,7 @@ docker-build-local: docker-build-linux/amd64
 docker-run:
 	@docker run --rm --env-file config.env deye-inverter-mqtt
 
-docker-push:
+docker-push: test
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
 	@docker buildx create --use
 	@docker buildx build \
