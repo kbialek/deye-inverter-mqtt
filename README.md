@@ -76,6 +76,12 @@ Reports solar inverter's logger connectivity status
 
 The default topic name is `logger_status` and can be changed in the configuration.
 
+## Additional features
+### Automatically set logger/inverter time
+Monitors current logger status and sets the time at the logger/inverter once the connection to it can be established.
+This is useful in a setup where the inverter has no access to the public internet, or is cut off from the Solarman cloud services. 
+This feature is disabled by default and must be activated by setting `DEYE_FEATURE_SET_TIME` in the config file.
+
 ## Installation
 1. Copy `config.env.example` as `config.env`
 2. Fill in values in `config.env`
@@ -97,10 +103,12 @@ All configuration options are controlled through environment variables.
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
-* `MQTT_HOST`
-* `MQTT_PORT`
-* `MQTT_USERNAME`
-* `MQTT_PASSWORD`
+* `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
+* `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
+* `MQTT_HOST` - MQTT Broker IP address
+* `MQTT_PORT` - MQTT Broker port, typically 1883
+* `MQTT_USERNAME` - MQTT Broker username for authentication 
+* `MQTT_PASSWORD` - MQTT Broker password for authentication
 * `MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics
 * `MQTT_AVAILIBILITY_TOPIC` - mqtt availability topic, defaults to `status`
 * `MQTT_LOGGER_STATUS_TOPIC` - logger connectivity status topic, defaults to `logger_status`
