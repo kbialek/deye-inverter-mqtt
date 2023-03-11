@@ -41,11 +41,14 @@ class DeyeModbus:
         return self.__parse_modbus_read_holding_registers_response(modbus_resp_frame, first_reg, last_reg)
 
     def write_register(self, reg_address: int, reg_value: int) -> bool:
-        modbus_frame = self.__build_modbus_write_holding_register_request_frame(reg_address, reg_value)
+        return self.write_registers(reg_address, [reg_value])
+
+    def write_registers(self, reg_address: int, reg_values: list[int]) -> bool:
+        modbus_frame = self.__build_modbus_write_holding_register_request_frame(reg_address, reg_values)
         req_frame = self.__build_request_frame(modbus_frame)
         resp_frame = self.connector.send_request(req_frame)
         modbus_resp_frame = self.__extract_modbus_response_frame(resp_frame)
-        return self.__parse_modbus_write_holding_register_response(modbus_resp_frame, reg_address, reg_value)
+        return self.__parse_modbus_write_holding_register_response(modbus_resp_frame, reg_address, reg_values)
 
     def __build_request_frame(self, modbus_frame) -> bytearray:
         start = bytearray.fromhex('A5')  # start
@@ -114,10 +117,15 @@ class DeyeModbus:
             a += 1
         return registers
 
-    def __build_modbus_write_holding_register_request_frame(self, reg_address, reg_value):
-        return bytearray.fromhex('0110{:04x}000102{:04x}'.format(reg_address, reg_value))
+    def __build_modbus_write_holding_register_request_frame(self, reg_address: int, reg_values: list[int]):
+        return bytearray.fromhex('0110{:04x}{:04x}{:02x}{}'.format(
+            reg_address,
+            len(reg_values),
+            len(reg_values) * 2,
+            ''.join(['{:04x}'.format(v) for v in reg_values])
+        ))
 
-    def __parse_modbus_write_holding_register_response(self, frame, reg_address, reg_value):
+    def __parse_modbus_write_holding_register_response(self, frame, reg_address: int, reg_values: list[int]):
         expected_frame_data_len = 6
         expected_frame_len = 6 + 2  # 2 bytes for crc
         if not frame:
@@ -135,9 +143,13 @@ class DeyeModbus:
             return False
         returned_address = int.from_bytes(frame[2:4], 'big')
         returned_count = int.from_bytes(frame[4:6], 'big')
-        if returned_address != reg_address or returned_count != 1:
+        if returned_address != reg_address:
             self.__log.error(
                 f"Returned address does not match sent value. Expected {reg_address}, got {returned_address}")
+            return False
+        if returned_count != len(reg_values):
+            self.__log.error(
+                f"Returned register count does not match sent value. Expected {len(reg_values)}, got {returned_count}")
             return False
         return True
 
@@ -150,4 +162,3 @@ class DeyeModbus:
             self.__log.error("Logger Serial Number does not match. Check your configuration file.")
         else:
             self.__log.error("Unknown response error code. Error frame: %s", error_frame.hex())
-
