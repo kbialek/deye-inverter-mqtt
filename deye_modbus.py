@@ -123,7 +123,7 @@ class DeyeModbus:
         if not frame:
             self.__log.error("Modbus response frame is empty")
             return False
-        elif len(frame) != expected_frame_len:
+        elif len(frame) < expected_frame_len:
             self.__log.error(
                 f"Wrong response frame length. Expected at least {expected_frame_len} bytes, got {len(frame)}")
             return False
