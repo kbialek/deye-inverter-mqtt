@@ -49,7 +49,7 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
     def __set_time(self):
         now = datetime.now()
         # year and month
-        self.__modbus.write_register(22, 256 * now.year + now.month)
+        self.__modbus.write_register(22, 256 * (now.year % 100) + now.month)
         # day and hour
         self.__modbus.write_register(23, 256 * now.day + now.hour)
         # minute and seconds
