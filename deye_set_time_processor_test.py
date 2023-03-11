@@ -33,9 +33,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         processor.process([DeyeLoggerStatusEvent(True)])
 
         # then
-        modbus.write_register.assert_any_call(22, unittest.mock.ANY)
-        modbus.write_register.assert_any_call(23, unittest.mock.ANY)
-        modbus.write_register.assert_any_call(24, unittest.mock.ANY)
+        modbus.write_registers.assert_any_call(22, unittest.mock.ANY)
 
     @patch('deye_modbus.DeyeModbus')
     def test_dont_set_time_when_logger_is_already_online(self, modbus):

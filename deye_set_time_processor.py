@@ -48,10 +48,12 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
 
     def __set_time(self):
         now = datetime.now()
-        # year and month
-        self.__modbus.write_register(22, 256 * (now.year % 100) + now.month)
-        # day and hour
-        self.__modbus.write_register(23, 256 * now.day + now.hour)
-        # minute and seconds
-        self.__modbus.write_register(24, 256 * now.minute + now.second)
+        self.__modbus.write_registers(22, [
+            # year and month
+            256 * (now.year % 100) + now.month,
+            # day and hour
+            256 * now.day + now.hour,
+            # minute and seconds
+            256 * now.minute + now.second
+        ])
         self.__log.info(f'Logger time set to {now}')
