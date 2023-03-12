@@ -25,7 +25,7 @@ from deye_events import DeyeLoggerStatusEvent
 class DeyeSetTimeProcessorTest(unittest.TestCase):
 
     @patch('deye_modbus.DeyeModbus')
-    def test_set_time_when_logger_is_becoming_online(self, modbus):
+    def test_set_time__when_logger_is_becoming_online(self, modbus):
         # given
         processor = DeyeSetTimeProcessor(modbus)
 
@@ -35,8 +35,11 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         # then
         modbus.write_registers.assert_any_call(22, unittest.mock.ANY)
 
+        # and
+        self.assertTrue(processor.last_status)
+
     @patch('deye_modbus.DeyeModbus')
-    def test_dont_set_time_when_logger_is_already_online(self, modbus):
+    def test_dont_set_time__when_logger_is_already_online(self, modbus):
         # given
         processor = DeyeSetTimeProcessor(modbus)
 
@@ -49,3 +52,23 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
 
         # then
         modbus.write_register.assert_not_called()
+
+        # and
+        self.assertTrue(processor.last_status)
+
+    @patch('deye_modbus.DeyeModbus')
+    def test_keep_stored_status_set_to_offline__when_modbus_write_fails(self, modbus):
+        # given
+        processor = DeyeSetTimeProcessor(modbus)
+
+        # and
+        modbus.write_registers.return_value = False
+
+        # when
+        processor.process([DeyeLoggerStatusEvent(True)])
+
+        # then
+        modbus.write_registers.assert_any_call(22, unittest.mock.ANY)
+
+        # and
+        self.assertFalse(processor.last_status)
