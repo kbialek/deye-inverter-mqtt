@@ -85,8 +85,8 @@ The default topic name is `logger_status` and can be changed in the configuratio
     docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt
     ```
 
-## Installation troubleshooting
-### Docker container fails to start with error message: `PermissionError: [Errno 1] Operation not permitted`
+### Installation troubleshooting
+#### Docker container fails to start with error message: `PermissionError: [Errno 1] Operation not permitted`
 
 It can happen on debian buster based linux distributions, including raspbian.
 
