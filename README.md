@@ -84,13 +84,26 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
 
 ## Installation
 1. Copy `config.env.example` as `config.env`
-2. Fill in values in `config.env`
+2. Fill in values in `config.env`, see [Configuration](#configuration) for more details
 3. Run the container
 
     ```
     docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt
     ```
 
+## Installation troubleshooting
+### Docker container fails to start with error message: `PermissionError: [Errno 1] Operation not permitted`
+
+It can happen on debian buster based linux distributions, including raspbian.
+
+Solution: Install `libseccomp2` from the backports
+
+```bash
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC 648ACFD622F3D138
+echo "deb http://deb.debian.org/debian buster-backports main" | sudo tee -a /etc/apt/sources.list.d/buster-backports.list
+sudo apt update
+sudo apt install -t buster-backports libseccomp2
+```
 
 ## Configuration
 All configuration options are controlled through environment variables.
