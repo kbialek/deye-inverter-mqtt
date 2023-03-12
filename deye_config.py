@@ -69,17 +69,33 @@ class DeyeConfig():
     def __init__(self, logger_config: DeyeLoggerConfig, mqtt: DeyeMqttConfig,
                  log_level='INFO',
                  data_read_inverval=60,
-                 metric_groups=[]):
+                 metric_groups=[],
+                 active_processors=[]):
         self.logger = logger_config
         self.mqtt = mqtt
         self.log_level = log_level
         self.data_read_inverval = data_read_inverval
         self.metric_groups = metric_groups
+        self.active_processors = active_processors
 
     @staticmethod
     def from_env():
         return DeyeConfig(DeyeLoggerConfig.from_env(), DeyeMqttConfig.from_env(),
                           log_level=os.getenv('LOG_LEVEL', 'INFO'),
                           data_read_inverval=int(os.getenv('DEYE_DATA_READ_INTERVAL', '60')),
-                          metric_groups=set([p.strip() for p in os.getenv('DEYE_METRIC_GROUPS', '').split(',')])
+                          metric_groups=DeyeConfig.__read_item_set(os.getenv('DEYE_METRIC_GROUPS', '')),
+                          active_processors=DeyeConfig.__read_active_processors()
                           )
+
+    @staticmethod
+    def __read_item_set(value: str) -> set[str]:
+        return set([p.strip() for p in value.split(',')])
+
+    @staticmethod
+    def __read_active_processors():
+        active_processors = []
+        if os.getenv('DEYE_FEATURE_MQTT_PUBLISHER', 'true') == 'true':
+            active_processors.append('mqtt_publisher')
+        if os.getenv('DEYE_FEATURE_SET_TIME', 'false') == 'true':
+            active_processors.append('set_time')
+        return active_processors

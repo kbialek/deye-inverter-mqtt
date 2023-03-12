@@ -30,6 +30,9 @@ class DeyeMqttPublisher(DeyeEventProcessor):
         self.__log = logging.getLogger(DeyeMqttPublisher.__name__)
         self.__mqtt_client = mqtt_client
 
+    def get_id(self):
+        return 'mqtt_publisher'
+
     def process(self, events: list[DeyeEvent]):
         for event in events:
             if isinstance(event, DeyeObservationEvent):
