@@ -24,7 +24,6 @@ from deye_config import DeyeConfig
 
 class DeyeModbus:
     """ Simplified Modbus over TCP implementation that works with Deye Solar inverter.
-        Supports only Modbus read-holding-registers function (0x03)
         Inspired by https://github.com/jlopez77/DeyeInverter
     """
 
@@ -34,6 +33,15 @@ class DeyeModbus:
         self.connector = connector
 
     def read_registers(self, first_reg: int, last_reg: int) -> dict[int, int]:
+        """Reads multiple modbus holding registers
+
+        Args:
+            first_reg (int): The address of the first register to read
+            last_reg (int): The address of the last register to read
+
+        Returns:
+            dict[int, int]: Map of register values, where the register address is the map key, and register value is the map value
+        """
         modbus_frame = self.__build_modbus_read_holding_registers_request_frame(first_reg, last_reg)
         req_frame = self.__build_request_frame(modbus_frame)
         resp_frame = self.connector.send_request(req_frame)
@@ -41,9 +49,29 @@ class DeyeModbus:
         return self.__parse_modbus_read_holding_registers_response(modbus_resp_frame, first_reg, last_reg)
 
     def write_register(self, reg_address: int, reg_value: int) -> bool:
+        """Write single modbus holding register
+
+        Args:
+            reg_address (int): The address of the register to write
+            reg_value (int): The value of the register to write
+
+        Returns:
+            bool: True when the write operation was successful, False otherwise
+        """
         return self.write_registers(reg_address, [reg_value])
 
     def write_registers(self, reg_address: int, reg_values: list[int]) -> bool:
+        """Write multiple modbus holding registers.
+
+
+        Args:
+            reg_address (int): The address of the first register to write
+            reg_values (list[int]): The values of the registers to write
+
+        Returns:
+            bool: True when the write operation was successful, False otherwise
+        """
+
         modbus_frame = self.__build_modbus_write_holding_register_request_frame(reg_address, reg_values)
         req_frame = self.__build_request_frame(modbus_frame)
         resp_frame = self.connector.send_request(req_frame)
