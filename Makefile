@@ -1,5 +1,5 @@
 GITHUB_USER = kbialek
-VERSION = 2023.03.1
+VERSION = 2023.03.2
 
 ARCHS = linux/amd64 linux/arm/v7 linux/arm64/v8
 
