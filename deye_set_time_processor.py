@@ -64,5 +64,5 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
         if write_status:
             self.__log.info(f'Logger time set to {now}')
         else:
-            self.__log.warning(f'Failed to set logger time')
+            self.__log.warning('Failed to set logger time')
         return write_status
