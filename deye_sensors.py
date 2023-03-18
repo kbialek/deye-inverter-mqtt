@@ -17,6 +17,8 @@
 
 from deye_sensor import SingleRegisterSensor, ComputedPowerSensor, DoubleRegisterSensor, ComputedSumSensor, SensorRegisterRange
 
+from deye_sensors_deye_sg04lp3 import deye_sg04lp3_sensors, deye_sg04lp3_register_ranges
+
 # AC Phase 1
 phase1_voltage_sensor = SingleRegisterSensor(
     "Phase1 Voltage", 0x49, 0.1, mqtt_topic_suffix='ac/l1/voltage', groups=['string', 'micro'])
@@ -167,9 +169,9 @@ sensor_list = [
     string_radiator_temp_sensor,
     micro_radiator_temp_sensor,
     igbt_temp_sensor
-]
+] + deye_sg04lp3_sensors
 
 sensor_register_ranges = [
     SensorRegisterRange(group='string', first_reg_address=0x3c, last_reg_address=0x74),
     SensorRegisterRange(group='micro', first_reg_address=0x3c, last_reg_address=0x74)
-]
+] + deye_sg04lp3_register_ranges
