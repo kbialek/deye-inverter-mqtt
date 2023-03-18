@@ -156,5 +156,16 @@ class SensorRegisterRange:
         """
         return self.group in active_groups
 
+    def is_same_range(self, other: 'SensorRegisterRange') -> bool:
+        """Checks if the other range has this same first and last reg address.
+
+        Args:
+            other (SensorRegisterRange): to check against
+
+        Returns:
+            bool: True when both ranges define this same registers addresses, False otherwise
+        """
+        return self.first_reg_address == other.first_reg_address and self.last_reg_address == other.last_reg_address
+
     def __str__(self):
         return 'metrics group: {}, range: {:04x}-{:04x}'.format(self.group, self.first_reg_address, self.last_reg_address)

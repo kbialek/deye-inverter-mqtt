@@ -23,6 +23,7 @@ import datetime
 from deye_config import DeyeConfig
 from deye_connector import DeyeConnector
 from deye_modbus import DeyeModbus
+from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_mqtt import DeyeMqttClient
 from deye_observation import Observation
@@ -41,6 +42,7 @@ class DeyeDaemon():
         self.modbus = DeyeModbus(config, connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
+        self.reg_ranges = self.__remove_duplicated_reg_ranges(self.reg_ranges)
         all_processors = [
             DeyeMqttPublisher(mqtt_client),
             DeyeSetTimeProcessor(self.modbus)
@@ -73,6 +75,13 @@ class DeyeDaemon():
                 events.append(DeyeObservationEvent(observation))
                 self.__log.debug(f'{observation.sensor.name}: {observation.value_as_str()}')
         return events
+
+    def __remove_duplicated_reg_ranges(self, reg_ranges: list[SensorRegisterRange]) -> list[SensorRegisterRange]:
+        result: list[SensorRegisterRange] = []
+        for reg_range in reg_ranges:
+            if not [r for r in result if r.is_same_range(reg_range)]:
+                result.append(reg_range)
+        return result
 
 
 def main():
