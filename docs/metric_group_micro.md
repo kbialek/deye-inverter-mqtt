@@ -30,4 +30,4 @@
 |DC Total Power|computed|`dc/total_power`|W|
 |Operating Power|80|`operating_power`|W|
 |AC Active Power|86,87|`ac/active_power`|W|
-|Radiator temperature|90|`radiator_temp`|C|
+|Radiator temperature|90|`radiator_temp`|°C|

@@ -30,5 +30,5 @@
 |AC Apparent Power|84|`ac/apparent_power`|W|
 |AC Active Power|86,87|`ac/active_power`|W|
 |AC Reactive Power|88|`ac/reactive_power`|W|
-|Radiator temperature|90|`radiator_temp`|C|
-|IGBT temperature|91|`igbt_temp`|C|
+|Radiator temperature|90|`radiator_temp`|°C|
+|IGBT temperature|91|`igbt_temp`|°C|
