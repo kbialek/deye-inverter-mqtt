@@ -10,6 +10,8 @@ def render_table(sensors: list[Sensor]):
     print('|---|:-:|---|:-:|')
     for s in sensors:
         regs = ','.join(['{:d}'.format(r) for r in s.get_registers()])
+        if not regs:
+            regs = 'computed'
         print(f"|{s.name}|{regs}|`{s.mqtt_topic_suffix}`|{s.unit}|")
 
 
