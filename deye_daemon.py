@@ -43,14 +43,20 @@ class DeyeDaemon():
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = self.__remove_duplicated_reg_ranges(self.reg_ranges)
-        all_processors = [
-            DeyeMqttPublisher(mqtt_client),
-            DeyeSetTimeProcessor(self.modbus)
-        ]
+        mqtt_publisher = DeyeMqttPublisher(mqtt_client)
+        set_time_processor = DeyeSetTimeProcessor(self.modbus)
+        all_processors = [mqtt_publisher, set_time_processor]
         self.processors = [
             p for p in all_processors if p.get_id() in config.active_processors
         ]
-        self.__log.info("Active processors [{}]".format(','.join([p.get_id() for p in self.processors])))
+        self.__log.info(
+            "Please help me build the list of compatible inverters. https://github.com/kbialek/deye-inverter-mqtt/issues/41")
+        self.__log.info(
+            'Feature "Report metrics over MQTT": {}'.format(
+                'enabled' if mqtt_publisher.get_id() in config.active_processors else 'disabled'))
+        self.__log.info(
+            'Feature "Set inverter time once online": {}'.format(
+                'enabled' if set_time_processor.get_id() in config.active_processors else 'disabled'))
 
     def do_task(self):
         self.__log.info("Reading start")
