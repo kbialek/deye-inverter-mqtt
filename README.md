@@ -70,8 +70,10 @@ All configuration options are controlled through environment variables.
 * `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
 * `DEYE_METRIC_GROUPS` - a comma delimited set of:
-    * `string` - set when connecting to a string inverter
-    * `micro` - set when connecting to a micro inverter
+    * `string` - string inverter
+    * `micro` - micro inverter
+    * `deye_sg04lp3` - sg04lp3 inverter
+    * `deye_sg04lp3_battery` - sg04lp3 battery
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
