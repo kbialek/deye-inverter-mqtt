@@ -35,6 +35,7 @@ def import_single_register_item(group_prefix: str, group_name: str, parameter_it
     if register not in topics or group_name not in groups_map:
         return None
     scale = parameter_item['scale']
+    offset = parameter_item['offset'] if 'offset' in parameter_item else None
     sensor_name = f'{group_prefix}_{group_name}_{register}'
     group_suffix = groups_map[group_name]
     if group_suffix:
@@ -42,8 +43,10 @@ def import_single_register_item(group_prefix: str, group_name: str, parameter_it
     sensor_group_name = group_prefix + group_suffix
     topic = topics[register]
     fill = ' ' * len(sensor_name)
-    code = f"""{sensor_name} = SingleRegisterSensor('{name}', {register}, {scale},
-           {fill}             mqtt_topic_suffix='{topic}',
+    offset_code = f" offset={-offset/10}," if offset else ''
+    unit = parameter_item['uom']
+    code = f"""{sensor_name} = SingleRegisterSensor('{name}', {register}, {scale},{offset_code}
+           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}',
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, register, register)
 
@@ -57,6 +60,7 @@ def import_double_register_item(group_prefix: str, group_name: str, parameter_it
     if reg_min not in topics or group_name not in groups_map:
         return None
     scale = parameter_item['scale']
+    offset = parameter_item['offset'] if 'offset' in parameter_item else None
     sensor_name = f'{group_prefix}_{group_name}_{reg_min}'
     group_suffix = groups_map[group_name]
     if group_suffix:
@@ -64,8 +68,10 @@ def import_double_register_item(group_prefix: str, group_name: str, parameter_it
     sensor_group_name = group_prefix + group_suffix
     topic = topics[reg_min]
     fill = ' ' * len(sensor_name)
-    code = f"""{sensor_name} = DoubleRegisterSensor('{name}', {reg_min}, {scale},
-           {fill}             mqtt_topic_suffix='{topic}',
+    offset_code = f" offset={-offset/10}," if offset else ''
+    unit = parameter_item['uom']
+    code = f"""{sensor_name} = DoubleRegisterSensor('{name}', {reg_min}, {scale},{offset_code}
+           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}',
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, reg_min, reg_max)
 
@@ -143,7 +149,9 @@ def main():
         data = yaml.load(definition_file, Loader=SafeLoader)
         parameter_groups = data['parameters']
         for parameter_group in parameter_groups:
-            sensors += import_parameter_group(definition_code, parameter_group, map)
+            for sensor in import_parameter_group(definition_code, parameter_group, map):
+                if not [s for s in sensors if sensor.reg_min == s.reg_min]:
+                    sensors.append(sensor) 
         requests = data['requests']
         for request in requests:
             register_ranges.append(RegisterRangeDef(request['start'], request['end']))

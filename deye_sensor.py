@@ -25,9 +25,10 @@ class Sensor():
     This is an abstract class. Method 'read_value' must be provided by the extending subclass. 
     """
 
-    def __init__(self, name: str, mqtt_topic_suffix='', print_format='{:s}', groups=[]):
+    def __init__(self, name: str, mqtt_topic_suffix='', unit='', print_format='{:s}', groups=[]):
         self.name = name
         self.mqtt_topic_suffix = mqtt_topic_suffix
+        self.unit = unit
         self.print_format = print_format
         assert len(groups) > 0, f'Sensor {name} must belong to at least one group'
         self.groups = groups
@@ -52,6 +53,11 @@ class Sensor():
         """
         return not self.groups or len(active_groups.intersection(self.groups)) > 0
 
+    @abstractmethod
+    def get_registers(self) -> list[int]:
+        """Returns the list of Modbus registers read by this sensor
+        """
+
 
 class SingleRegisterSensor(Sensor):
     """
@@ -60,8 +66,8 @@ class SingleRegisterSensor(Sensor):
 
     def __init__(
             self, name: str, reg_address: int, factor: float, offset: float = 0,
-            mqtt_topic_suffix='', print_format='{:0.1f}', groups=[]):
-        super().__init__(name, mqtt_topic_suffix, print_format, groups)
+            mqtt_topic_suffix='', unit='', print_format='{:0.1f}', groups=[]):
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
         self.offset = offset
@@ -73,6 +79,10 @@ class SingleRegisterSensor(Sensor):
         else:
             return None
 
+    @abstractmethod
+    def get_registers(self) -> list[int]:
+        return [self.reg_address]
+
 
 class DoubleRegisterSensor(Sensor):
     """
@@ -81,8 +91,8 @@ class DoubleRegisterSensor(Sensor):
 
     def __init__(
             self, name: str, reg_address: int, factor: float, offset: float = 0,
-            mqtt_topic_suffix='', print_format='{:0.1f}', groups=[]):
-        super().__init__(name, mqtt_topic_suffix, print_format, groups)
+            mqtt_topic_suffix='', unit='', print_format='{:0.1f}', groups=[]):
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
         self.offset = offset
@@ -97,6 +107,10 @@ class DoubleRegisterSensor(Sensor):
         else:
             return None
 
+    @abstractmethod
+    def get_registers(self) -> list[int]:
+        return [self.reg_address, self.reg_address+1]
+
 
 class ComputedPowerSensor(Sensor):
     """
@@ -105,8 +119,8 @@ class ComputedPowerSensor(Sensor):
 
     def __init__(
             self, name: str, voltage_sensor: Sensor, current_sensor: Sensor, mqtt_topic_suffix='',
-            print_format='{:0.1f}', groups=[]):
-        super().__init__(name, mqtt_topic_suffix, print_format, groups)
+            unit='', print_format='{:0.1f}', groups=[]):
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.voltage_sensor = voltage_sensor
         self.current_sensor = current_sensor
 
@@ -118,6 +132,10 @@ class ComputedPowerSensor(Sensor):
         else:
             return None
 
+    @abstractmethod
+    def get_registers(self) -> list[int]:
+        return []
+
 
 class ComputedSumSensor(Sensor):
     """
@@ -125,9 +143,9 @@ class ComputedSumSensor(Sensor):
     """
 
     def __init__(
-            self, name: str, sensors: list[Sensor], mqtt_topic_suffix='',
+            self, name: str, sensors: list[Sensor], mqtt_topic_suffix='', unit='',
             print_format='{:0.1f}', groups=[]):
-        super().__init__(name, mqtt_topic_suffix, print_format, groups)
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.sensors = sensors
 
     def read_value(self, registers: dict[int, int]):
@@ -138,6 +156,10 @@ class ComputedSumSensor(Sensor):
                 return None
             result += value
         return result
+
+    @abstractmethod
+    def get_registers(self) -> list[int]:
+        return []
 
 
 class SensorRegisterRange:
@@ -156,5 +178,17 @@ class SensorRegisterRange:
         """
         return self.group in active_groups
 
+    def is_same_range(self, other: 'SensorRegisterRange') -> bool:
+        """Checks if the other range has this same first and last reg address.
+
+        Args:
+            other (SensorRegisterRange): to check against
+
+        Returns:
+            bool: True when both ranges define this same registers addresses, False otherwise
+        """
+        return self.first_reg_address == other.first_reg_address and self.last_reg_address == other.last_reg_address
+
     def __str__(self):
-        return 'metrics group: {}, range: {:04x}-{:04x}'.format(self.group, self.first_reg_address, self.last_reg_address)
+        return 'metrics group: {}, range: {:04x}-{:04x}'.format(
+            self.group, self.first_reg_address, self.last_reg_address)
