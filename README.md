@@ -2,20 +2,15 @@
 
 Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT.
 
-Tested with:
-* [Deye SUN-4K-G05](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10kg03.html) and Logger S/N 23xxxxxxxx
-* [Deye SUN1300G3](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html) and Logger S/N 41xxxxxxxx
-* [Deye SUN600G3](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html) and Logger S/N 41xxxxxxxx
+## Supported inverters and metrics
+The meaning of certain inverter registers depends on the inverter type.
+You should choose metric group(s) that are appropriate to your inverter model.
+If your inverter is not listed below, it may still work with one of the already existing metric groups.
+Give it a try and experiment. In the worst case it won't work.
 
-## Supported metrics
-The meaning of certain registers depends on the inverter type. 
-For example, **string** inverters use registers 0x46 - 0x4e to report AC phase voltage/current.
-On the other hand, **micro** inverters use this same registers to report pv1-pv4 cumulative energy.
-Generally there are three types of inverters documented in the specification: **string**, **micro** and **hybrid**.
-In the table below you can see, that the metrics are assigned to specific groups.
-You should specify the set of groups that is appropriate for your inverter in `DEYE_METRIC_GROUPS` environment variable.
-Typically you should set it to either **string** or **micro**. 
-Additional groups may be added in the future.
+When your inverter is not supported, feel free to open an issue in this github project. Maybe, together we will find a way to add the support.
+
+When your inverter turns out to work well with an already exiting metrics group, then please be so kind, and let me know in this [issue](https://github.com/kbialek/deye-inverter-mqtt/issues/41). This will help in building the list of supported inverters below. Thanks!
 
 |Inverter model|Metric groups|
 |---|---|
