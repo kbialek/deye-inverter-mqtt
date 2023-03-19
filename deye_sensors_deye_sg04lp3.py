@@ -119,10 +119,6 @@ deye_sg04lp3_grid_524 = DoubleRegisterSensor('Total Energy Sold', 524, 0.1,
                                              mqtt_topic_suffix='ac/total_energy_sold', unit='kWh',
                                              groups=['deye_sg04lp3'])
 
-deye_sg04lp3_grid_524 = DoubleRegisterSensor('Total Grid Production', 524, 0.1,
-                                             mqtt_topic_suffix='ac/total_energy_sold', unit='kWh',
-                                             groups=['deye_sg04lp3'])
-
 deye_sg04lp3_inverter_630 = SingleRegisterSensor('Current L1', 630, 0.01,
                                                  mqtt_topic_suffix='ac/l1/current', unit='A',
                                                  groups=['deye_sg04lp3'])
@@ -177,7 +173,6 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_grid_522,
     deye_sg04lp3_grid_521,
     deye_sg04lp3_grid_524,
-    deye_sg04lp3_grid_524,
     deye_sg04lp3_inverter_630,
     deye_sg04lp3_inverter_631,
     deye_sg04lp3_inverter_632,
@@ -188,8 +183,8 @@ deye_sg04lp3_sensors = [
 ]
 
 deye_sg04lp3_register_ranges = [
-    SensorRegisterRange(group='deye_sg04lp3', first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group='deye_sg04lp3_battery', first_reg_address=514, last_reg_address=558),
+    SensorRegisterRange(group='deye_sg04lp3', first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group='deye_sg04lp3_battery', first_reg_address=586, last_reg_address=591),
     SensorRegisterRange(group='deye_sg04lp3', first_reg_address=598, last_reg_address=636),
     SensorRegisterRange(group='deye_sg04lp3', first_reg_address=672, last_reg_address=679)

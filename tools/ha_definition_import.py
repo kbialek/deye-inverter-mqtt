@@ -149,7 +149,9 @@ def main():
         data = yaml.load(definition_file, Loader=SafeLoader)
         parameter_groups = data['parameters']
         for parameter_group in parameter_groups:
-            sensors += import_parameter_group(definition_code, parameter_group, map)
+            for sensor in import_parameter_group(definition_code, parameter_group, map):
+                if not [s for s in sensors if sensor.reg_min == s.reg_min]:
+                    sensors.append(sensor) 
         requests = data['requests']
         for request in requests:
             register_ranges.append(RegisterRangeDef(request['start'], request['end']))
