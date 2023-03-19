@@ -17,49 +17,13 @@ You should specify the set of groups that is appropriate for your inverter in `D
 Typically you should set it to either **string** or **micro**. 
 Additional groups may be added in the future.
 
-|Metric|Modbus address|MQTT topic suffix|Unit|Groups|
-|---|:-:|---|:-:|---|
-|Production today|0x3c|`day_energy`|kWh|string, micro|
-|Uptime|0x3e|`uptime`|minutes|string, micro|
-|Total Production (Active)|0x3F - 0x40|`total_energy`|kWh|string, micro|
-|Daily Production 1|0x41|`dc/pv1/day_energy`|kWh|micro|
-|Daily Production 2|0x42|`dc/pv2/day_energy`|kWh|micro|
-|Daily Production 3|0x43|`dc/pv3/day_energy`|kWh|micro|
-|Daily Production 4|0x44|`dc/pv4/day_energy`|kWh|micro|
-|Total Production 1|0x45 - 0x46|`dc/pv1/total_energy`|kWh|micro|
-|Total Production 2|0x47 - 0x48|`dc/pv2/total_energy`|kWh|micro|
-|Total Production 3|0x4a - 0x4b|`dc/pv3/total_energy`|kWh|micro|
-|Total Production 4|0x4d - 0x4e|`dc/pv4/total_energy`|kWh|micro|
-|AC Phase 1 voltage|0x49|`ac/l1/voltage`|V|string, micro|
-|AC Phase 2 voltage|0x4a|`ac/l2/voltage`|V|string|
-|AC Phase 3 voltage|0x4b|`ac/l3/voltage`|V|string|
-|AC Phase 1 current|0x4c|`ac/l1/current`|A|string, micro|
-|AC Phase 2 current|0x4d|`ac/l2/current`|A|string|
-|AC Phase 3 current|0x4e|`ac/l3/current`|A|string|
-|AC Phase 1 power|computed|`ac/l1/power`|W|string, micro|
-|AC Phase 2 power|computed|`ac/l2/power`|W|string|
-|AC Phase 3 power|computed|`ac/l3/power`|W|string|
-|AC Frequency|0x4f|`ac/freq`|Hz|string, micro|
-|Operating power|0x50|`operating_power`|W|string, micro|
-|DC total power|0x52|`dc/total_power`|W|string|
-|DC total power|computed|`dc/total_power`|W|micro|
-|AC apparent power|0x54|`ac/apparent_power`|W|string|
-|AC active power|0x56 - 0x57|`ac/active_power`|W|string, micro|
-|AC reactive power|0x58|`ac/reactive_power`|W|string|
-|Radiator temperature|0x5a|`radiator_temp`|C|string, micro|
-|IGBT temperature|0x5b|`igbt_temp`|C|string|
-|DC PV1 voltage|0x6d|`dc/pv1/voltage`|V|string, micro|
-|DC PV1 current|0x6e|`dc/pv1/current`|A|string, micro|
-|DC PV1 power|computed|`dc/pv1/power`|W|string, micro|
-|DC PV2 voltage|0x6f|`dc/pv2/voltage`|V|string, micro|
-|DC PV2 current|0x70|`dc/pv2/current`|A|string, micro|
-|DC PV2 power|computed|`dc/pv2/power`|W|string, micro|
-|DC PV3 voltage|0x71|`dc/pv3/voltage`|V|string, micro|
-|DC PV3 current|0x72|`dc/pv3/current`|A|string, micro|
-|DC PV3 power|computed|`dc/pv3/power`|W|string, micro|
-|DC PV4 voltage|0x73|`dc/pv4/voltage`|V|string, micro|
-|DC PV4 current|0x74|`dc/pv4/current`|A|string, micro|
-|DC PV4 power|computed|`dc/pv4/power`|W|string, micro|
+|Inverter model|Metric groups|
+|---|---|
+|[Deye SUN-4K-G05](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10kg03.html)|[string](docs/metric_group_string.md)|
+|[Deye SUN1300G3](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)|[micro](docs/metric_group_micro.md)|
+|[Deye SUN600G3](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html)|[micro](docs/metric_group_micro.md)|
+|[SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)|[deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md)|
+
 
 ### Additional MQTT topics
 #### **Availability topic**
