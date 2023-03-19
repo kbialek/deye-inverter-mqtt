@@ -35,6 +35,7 @@ def import_single_register_item(group_prefix: str, group_name: str, parameter_it
     if register not in topics or group_name not in groups_map:
         return None
     scale = parameter_item['scale']
+    offset = parameter_item['offset'] if 'offset' in parameter_item else None
     sensor_name = f'{group_prefix}_{group_name}_{register}'
     group_suffix = groups_map[group_name]
     if group_suffix:
@@ -42,7 +43,8 @@ def import_single_register_item(group_prefix: str, group_name: str, parameter_it
     sensor_group_name = group_prefix + group_suffix
     topic = topics[register]
     fill = ' ' * len(sensor_name)
-    code = f"""{sensor_name} = SingleRegisterSensor('{name}', {register}, {scale},
+    offset_code = f" offset={-offset/10}," if offset else ''
+    code = f"""{sensor_name} = SingleRegisterSensor('{name}', {register}, {scale},{offset_code}
            {fill}             mqtt_topic_suffix='{topic}',
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, register, register)
@@ -57,6 +59,7 @@ def import_double_register_item(group_prefix: str, group_name: str, parameter_it
     if reg_min not in topics or group_name not in groups_map:
         return None
     scale = parameter_item['scale']
+    offset = parameter_item['offset'] if 'offset' in parameter_item else None
     sensor_name = f'{group_prefix}_{group_name}_{reg_min}'
     group_suffix = groups_map[group_name]
     if group_suffix:
@@ -64,7 +67,8 @@ def import_double_register_item(group_prefix: str, group_name: str, parameter_it
     sensor_group_name = group_prefix + group_suffix
     topic = topics[reg_min]
     fill = ' ' * len(sensor_name)
-    code = f"""{sensor_name} = DoubleRegisterSensor('{name}', {reg_min}, {scale},
+    offset_code = f" offset={-offset/10}," if offset else ''
+    code = f"""{sensor_name} = DoubleRegisterSensor('{name}', {reg_min}, {scale},{offset_code}
            {fill}             mqtt_topic_suffix='{topic}',
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, reg_min, reg_max)
