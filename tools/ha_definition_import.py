@@ -44,8 +44,9 @@ def import_single_register_item(group_prefix: str, group_name: str, parameter_it
     topic = topics[register]
     fill = ' ' * len(sensor_name)
     offset_code = f" offset={-offset/10}," if offset else ''
+    unit = parameter_item['uom']
     code = f"""{sensor_name} = SingleRegisterSensor('{name}', {register}, {scale},{offset_code}
-           {fill}             mqtt_topic_suffix='{topic}',
+           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}',
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, register, register)
 
@@ -68,8 +69,9 @@ def import_double_register_item(group_prefix: str, group_name: str, parameter_it
     topic = topics[reg_min]
     fill = ' ' * len(sensor_name)
     offset_code = f" offset={-offset/10}," if offset else ''
+    unit = parameter_item['uom']
     code = f"""{sensor_name} = DoubleRegisterSensor('{name}', {reg_min}, {scale},{offset_code}
-           {fill}             mqtt_topic_suffix='{topic}',
+           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}',
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, reg_min, reg_max)
 
