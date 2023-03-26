@@ -30,6 +30,7 @@ topics:
   521: ac/daily_energy_sold
   522: ac/total_energy_bought
   524: ac/total_energy_sold
+  541: ac/temp
   540: radiator_temp
 
 groups:
