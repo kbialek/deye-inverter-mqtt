@@ -147,6 +147,10 @@ deye_sg04lp3_inverter_540 = SingleRegisterSensor('DC Temperature', 540, 0.1, off
                                                  mqtt_topic_suffix='radiator_temp', unit='°C', signed=True,
                                                  groups=['deye_sg04lp3'])
 
+deye_sg04lp3_inverter_541 = SingleRegisterSensor('AC Temperature', 541, 0.1, offset=-100.0,
+                                                 mqtt_topic_suffix='ac/temperature', unit='°C',
+                                                 groups=['deye_sg04lp3'])
+
 deye_sg04lp3_sensors = [
     deye_sg04lp3_solar_672,
     deye_sg04lp3_solar_673,
@@ -179,7 +183,8 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_inverter_633,
     deye_sg04lp3_inverter_634,
     deye_sg04lp3_inverter_635,
-    deye_sg04lp3_inverter_540
+    deye_sg04lp3_inverter_540,
+    deye_sg04lp3_inverter_541
 ]
 
 deye_sg04lp3_register_ranges = [
