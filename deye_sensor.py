@@ -66,16 +66,17 @@ class SingleRegisterSensor(Sensor):
 
     def __init__(
             self, name: str, reg_address: int, factor: float, offset: float = 0,
-            mqtt_topic_suffix='', unit='', print_format='{:0.1f}', groups=[]):
+            signed=False, mqtt_topic_suffix='', unit='', print_format='{:0.1f}', groups=[]):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
         self.offset = offset
+        self.signed = signed
 
     def read_value(self, registers: dict[int, int]):
         if self.reg_address in registers:
             reg_value = registers[self.reg_address]
-            return int.from_bytes(reg_value, 'big') * self.factor + self.offset
+            return int.from_bytes(reg_value, 'big', signed=self.signed) * self.factor + self.offset
         else:
             return None
 
@@ -91,11 +92,12 @@ class DoubleRegisterSensor(Sensor):
 
     def __init__(
             self, name: str, reg_address: int, factor: float, offset: float = 0,
-            mqtt_topic_suffix='', unit='', print_format='{:0.1f}', groups=[]):
+            signed=False, mqtt_topic_suffix='', unit='', print_format='{:0.1f}', groups=[]):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
         self.offset = offset
+        self.signed = signed
 
     def read_value(self, registers: dict[int, int]):
         low_word_reg_address = self.reg_address
@@ -103,7 +105,7 @@ class DoubleRegisterSensor(Sensor):
         if low_word_reg_address in registers and high_word_reg_address in registers:
             low_word = registers[low_word_reg_address]
             high_word = registers[high_word_reg_address]
-            return (int.from_bytes(high_word, 'big') * 65536 + int.from_bytes(low_word, 'big')) * self.factor + self.offset
+            return int.from_bytes(high_word + low_word, 'big', signed=self.signed) * self.factor + self.offset
         else:
             return None
 

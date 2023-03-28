@@ -20,131 +20,131 @@
 from deye_sensor import SingleRegisterSensor, ComputedPowerSensor, DoubleRegisterSensor, ComputedSumSensor, SensorRegisterRange
 
 deye_sg04lp3_solar_672 = SingleRegisterSensor('PV1 Power', 672, 1,
-                                              mqtt_topic_suffix='dc/pv1/power', unit='W',
+                                              mqtt_topic_suffix='dc/pv1/power', unit='W', signed=False,
                                               groups=['deye_sg04lp3'])
 
 deye_sg04lp3_solar_673 = SingleRegisterSensor('PV2 Power', 673, 1,
-                                              mqtt_topic_suffix='dc/pv2/power', unit='W',
+                                              mqtt_topic_suffix='dc/pv2/power', unit='W', signed=False,
                                               groups=['deye_sg04lp3'])
 
 deye_sg04lp3_solar_676 = SingleRegisterSensor('PV1 Voltage', 676, 0.1,
-                                              mqtt_topic_suffix='dc/pv1/voltage', unit='V',
+                                              mqtt_topic_suffix='dc/pv1/voltage', unit='V', signed=False,
                                               groups=['deye_sg04lp3'])
 
 deye_sg04lp3_solar_678 = SingleRegisterSensor('PV2 Voltage', 678, 0.1,
-                                              mqtt_topic_suffix='dc/pv2/voltage', unit='V',
+                                              mqtt_topic_suffix='dc/pv2/voltage', unit='V', signed=False,
                                               groups=['deye_sg04lp3'])
 
 deye_sg04lp3_solar_677 = SingleRegisterSensor('PV1 Current', 677, 0.1,
-                                              mqtt_topic_suffix='dc/pv1/current', unit='A',
+                                              mqtt_topic_suffix='dc/pv1/current', unit='A', signed=False,
                                               groups=['deye_sg04lp3'])
 
 deye_sg04lp3_solar_679 = SingleRegisterSensor('PV2 Current', 679, 0.1,
-                                              mqtt_topic_suffix='dc/pv2/current', unit='A',
+                                              mqtt_topic_suffix='dc/pv2/current', unit='A', signed=False,
                                               groups=['deye_sg04lp3'])
 
 deye_sg04lp3_solar_529 = SingleRegisterSensor('Daily Production', 529, 0.1,
-                                              mqtt_topic_suffix='day_energy', unit='kWh',
+                                              mqtt_topic_suffix='day_energy', unit='kWh', signed=False,
                                               groups=['deye_sg04lp3'])
 
 deye_sg04lp3_solar_534 = DoubleRegisterSensor('Total Production', 534, 0.1,
-                                              mqtt_topic_suffix='total_energy', unit='kWh',
+                                              mqtt_topic_suffix='total_energy', unit='kWh', signed=False,
                                               groups=['deye_sg04lp3'])
 
 deye_sg04lp3_battery_514 = SingleRegisterSensor('Daily Battery Charge', 514, 0.1,
-                                                mqtt_topic_suffix='battery/daily_charge', unit='kWh',
+                                                mqtt_topic_suffix='battery/daily_charge', unit='kWh', signed=False,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_battery_515 = SingleRegisterSensor('Daily Battery Discharge', 515, 0.1,
-                                                mqtt_topic_suffix='battery/daily_discharge', unit='kWh',
+                                                mqtt_topic_suffix='battery/daily_discharge', unit='kWh', signed=False,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_battery_516 = DoubleRegisterSensor('Total Battery Charge', 516, 0.1,
-                                                mqtt_topic_suffix='battery/total_charge', unit='kWh',
+                                                mqtt_topic_suffix='battery/total_charge', unit='kWh', signed=False,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_battery_518 = DoubleRegisterSensor('Total Battery Discharge', 518, 0.1,
-                                                mqtt_topic_suffix='battery/total_discharge', unit='kWh',
+                                                mqtt_topic_suffix='battery/total_discharge', unit='kWh', signed=False,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_battery_590 = SingleRegisterSensor('Battery Power', 590, 1,
-                                                mqtt_topic_suffix='battery/power', unit='W',
+                                                mqtt_topic_suffix='battery/power', unit='W', signed=True,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_battery_587 = SingleRegisterSensor('Battery Voltage', 587, 0.01,
-                                                mqtt_topic_suffix='battery/voltage', unit='V',
+                                                mqtt_topic_suffix='battery/voltage', unit='V', signed=False,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_battery_588 = SingleRegisterSensor('Battery SOC', 588, 1,
-                                                mqtt_topic_suffix='battery/soc', unit='%',
+                                                mqtt_topic_suffix='battery/soc', unit='%', signed=False,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_battery_591 = SingleRegisterSensor('Battery Current', 591, 0.01,
-                                                mqtt_topic_suffix='battery/current', unit='A',
+                                                mqtt_topic_suffix='battery/current', unit='A', signed=True,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_battery_586 = SingleRegisterSensor('Battery Temperature', 586, 0.1, offset=-100.0,
-                                                mqtt_topic_suffix='battery/temperature', unit='°C',
+                                                mqtt_topic_suffix='battery/temperature', unit='°C', signed=False,
                                                 groups=['deye_sg04lp3_battery'])
 
 deye_sg04lp3_grid_625 = SingleRegisterSensor('Total Grid Power', 625, 1,
-                                             mqtt_topic_suffix='ac/total_power', unit='W',
+                                             mqtt_topic_suffix='ac/total_power', unit='W', signed=True,
                                              groups=['deye_sg04lp3'])
 
 deye_sg04lp3_grid_598 = SingleRegisterSensor('Grid Voltage L1', 598, 0.1,
-                                             mqtt_topic_suffix='ac/l1/voltage', unit='V',
+                                             mqtt_topic_suffix='ac/l1/voltage', unit='V', signed=False,
                                              groups=['deye_sg04lp3'])
 
 deye_sg04lp3_grid_599 = SingleRegisterSensor('Grid Voltage L2', 599, 0.1,
-                                             mqtt_topic_suffix='ac/l2/voltage', unit='V',
+                                             mqtt_topic_suffix='ac/l2/voltage', unit='V', signed=False,
                                              groups=['deye_sg04lp3'])
 
 deye_sg04lp3_grid_600 = SingleRegisterSensor('Grid Voltage L3', 600, 0.1,
-                                             mqtt_topic_suffix='ac/l3/voltage', unit='V',
+                                             mqtt_topic_suffix='ac/l3/voltage', unit='V', signed=False,
                                              groups=['deye_sg04lp3'])
 
 deye_sg04lp3_grid_520 = SingleRegisterSensor('Daily Energy Bought', 520, 0.1,
-                                             mqtt_topic_suffix='ac/daily_energy_bought', unit='kWh',
+                                             mqtt_topic_suffix='ac/daily_energy_bought', unit='kWh', signed=False,
                                              groups=['deye_sg04lp3'])
 
-deye_sg04lp3_grid_522 = DoubleRegisterSensor('Total Energy Bought', 522, 0.1,
-                                             mqtt_topic_suffix='ac/total_energy_bought', unit='kWh',
+deye_sg04lp3_grid_522 = SingleRegisterSensor('Total Energy Bought', 522, 0.1,
+                                             mqtt_topic_suffix='ac/total_energy_bought', unit='kWh', signed=False,
                                              groups=['deye_sg04lp3'])
 
 deye_sg04lp3_grid_521 = SingleRegisterSensor('Daily Energy Sold', 521, 0.1,
-                                             mqtt_topic_suffix='ac/daily_energy_sold', unit='kWh',
+                                             mqtt_topic_suffix='ac/daily_energy_sold', unit='kWh', signed=False,
                                              groups=['deye_sg04lp3'])
 
 deye_sg04lp3_grid_524 = DoubleRegisterSensor('Total Energy Sold', 524, 0.1,
-                                             mqtt_topic_suffix='ac/total_energy_sold', unit='kWh',
+                                             mqtt_topic_suffix='ac/total_energy_sold', unit='kWh', signed=False,
                                              groups=['deye_sg04lp3'])
 
 deye_sg04lp3_inverter_630 = SingleRegisterSensor('Current L1', 630, 0.01,
-                                                 mqtt_topic_suffix='ac/l1/current', unit='A',
+                                                 mqtt_topic_suffix='ac/l1/current', unit='A', signed=True,
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_inverter_631 = SingleRegisterSensor('Current L2', 631, 0.01,
-                                                 mqtt_topic_suffix='ac/l2/current', unit='A',
+                                                 mqtt_topic_suffix='ac/l2/current', unit='A', signed=True,
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_inverter_632 = SingleRegisterSensor('Current L3', 632, 0.01,
-                                                 mqtt_topic_suffix='ac/l3/current', unit='A',
+                                                 mqtt_topic_suffix='ac/l3/current', unit='A', signed=True,
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_inverter_633 = SingleRegisterSensor('Inverter L1 Power', 633, 1,
-                                                 mqtt_topic_suffix='ac/l1/power', unit='W',
+                                                 mqtt_topic_suffix='ac/l1/power', unit='W', signed=True,
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_inverter_634 = SingleRegisterSensor('Inverter L2 Power', 634, 1,
-                                                 mqtt_topic_suffix='ac/l2/power', unit='W',
+                                                 mqtt_topic_suffix='ac/l2/power', unit='W', signed=True,
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_inverter_635 = SingleRegisterSensor('Inverter L3 Power', 635, 1,
-                                                 mqtt_topic_suffix='ac/l3/power', unit='W',
+                                                 mqtt_topic_suffix='ac/l3/power', unit='W', signed=True,
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_inverter_540 = SingleRegisterSensor('DC Temperature', 540, 0.1, offset=-100.0,
-                                                 mqtt_topic_suffix='radiator_temp', unit='°C',
+                                                 mqtt_topic_suffix='radiator_temp', unit='°C', signed=True,
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_sensors = [
@@ -183,8 +183,8 @@ deye_sg04lp3_sensors = [
 ]
 
 deye_sg04lp3_register_ranges = [
-    SensorRegisterRange(group='deye_sg04lp3_battery', first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group='deye_sg04lp3', first_reg_address=514, last_reg_address=558),
+    SensorRegisterRange(group='deye_sg04lp3_battery', first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group='deye_sg04lp3_battery', first_reg_address=586, last_reg_address=591),
     SensorRegisterRange(group='deye_sg04lp3', first_reg_address=598, last_reg_address=636),
     SensorRegisterRange(group='deye_sg04lp3', first_reg_address=672, last_reg_address=679)

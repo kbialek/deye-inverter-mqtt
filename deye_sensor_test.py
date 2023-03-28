@@ -17,7 +17,8 @@
 
 import unittest
 from unittest.mock import patch
-from deye_sensor import Sensor, ComputedSumSensor
+from deye_sensor import Sensor, ComputedSumSensor, DoubleRegisterSensor, SingleRegisterSensor
+
 
 class TestSensor(Sensor):
 
@@ -58,6 +59,68 @@ class DeyeSensorTest(unittest.TestCase):
 
         # then
         self.assertIsNone(result)
+
+    def test_single_reg_sensor_unsigned(self):
+        # given
+        sut = SingleRegisterSensor('test', 0x00, 1, signed=False, groups=['string'])
+
+        # and
+        registers = {
+            0: bytearray.fromhex('0102')
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, 0x0102)
+
+    def test_dobule_reg_sensor_signed(self):
+        # given
+        sut = SingleRegisterSensor('test', 0x00, 1, signed=True, groups=['string'])
+
+        # and
+        registers = {
+            0: bytearray.fromhex('fffe')
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, -2)
+
+    def test_dobule_reg_sensor_unsigned(self):
+        # given
+        sut = DoubleRegisterSensor('test', 0x00, 1, signed=False, groups=['string'])
+
+        # and
+        registers = {
+            0: bytearray.fromhex('0102'),  # low word
+            1: bytearray.fromhex('0304')  # high word
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, 0x03040102)
+
+    def test_dobule_reg_sensor_signed(self):
+        # given
+        sut = DoubleRegisterSensor('test', 0x00, 1, signed=True, groups=['string'])
+
+        # and
+        registers = {
+            0: bytearray.fromhex('fffe'),  # low word
+            1: bytearray.fromhex('ffff')  # high word
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, -2)
 
 
 if __name__ == '__main__':
