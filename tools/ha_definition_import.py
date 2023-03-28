@@ -27,7 +27,7 @@ class RegisterRangeDef:
         return reg >= self.reg_min and reg <= self.reg_max
 
 
-def import_single_register_item(group_prefix: str, group_name: str, parameter_item: dict, map: dict) -> SensorDef:
+def import_single_register_item(group_prefix: str, group_name: str, parameter_item: dict, map: dict, signed: bool) -> SensorDef:
     name = parameter_item['name']
     register = parameter_item['registers'][0]
     topics = map['topics']
@@ -46,12 +46,12 @@ def import_single_register_item(group_prefix: str, group_name: str, parameter_it
     offset_code = f" offset={-offset/10}," if offset else ''
     unit = parameter_item['uom']
     code = f"""{sensor_name} = SingleRegisterSensor('{name}', {register}, {scale},{offset_code}
-           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}',
+           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}', signed={signed},
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, register, register)
 
 
-def import_double_register_item(group_prefix: str, group_name: str, parameter_item: dict, map: dict) -> SensorDef:
+def import_double_register_item(group_prefix: str, group_name: str, parameter_item: dict, map: dict, signed: bool) -> SensorDef:
     name = parameter_item['name']
     reg_min = parameter_item['registers'][0]
     reg_max = parameter_item['registers'][1]
@@ -71,17 +71,18 @@ def import_double_register_item(group_prefix: str, group_name: str, parameter_it
     offset_code = f" offset={-offset/10}," if offset else ''
     unit = parameter_item['uom']
     code = f"""{sensor_name} = DoubleRegisterSensor('{name}', {reg_min}, {scale},{offset_code}
-           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}',
+           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}', signed={signed},
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, reg_min, reg_max)
 
 
 def import_parameter_item(group_prefix: str, group_name: str, parameter_item: dict, topics_map: dict) -> SensorDef:
     registers_count = len(parameter_item['registers'])
-    if registers_count == 1:
-        return import_single_register_item(group_prefix, group_name, parameter_item, topics_map)
-    elif registers_count == 2:
-        return import_double_register_item(group_prefix, group_name, parameter_item, topics_map)
+    rule = parameter_item['rule']
+    if rule == 1 or rule == 2:
+        return import_single_register_item(group_prefix, group_name, parameter_item, topics_map, rule == 2)
+    elif rule == 3 or rule == 4:
+        return import_double_register_item(group_prefix, group_name, parameter_item, topics_map, rule == 4)
     else:
         print(f'Unsupported register count {registers_count}')
         return None
