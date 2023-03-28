@@ -13,7 +13,7 @@
 |Grid Voltage L2|599|`ac/l2/voltage`|V|
 |Grid Voltage L3|600|`ac/l3/voltage`|V|
 |Daily Energy Bought|520|`ac/daily_energy_bought`|kWh|
-|Total Energy Bought|522|`ac/total_energy_bought`|kWh|
+|Total Energy Bought|522,523|`ac/total_energy_bought`|kWh|
 |Daily Energy Sold|521|`ac/daily_energy_sold`|kWh|
 |Total Energy Sold|524,525|`ac/total_energy_sold`|kWh|
 |Current L1|630|`ac/l1/current`|A|
