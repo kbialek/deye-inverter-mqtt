@@ -23,3 +23,4 @@
 |Inverter L2 Power|634|`ac/l2/power`|W|
 |Inverter L3 Power|635|`ac/l3/power`|W|
 |DC Temperature|540|`radiator_temp`|°C|
+|AC Temperature|541|`ac/temperature`|°C|

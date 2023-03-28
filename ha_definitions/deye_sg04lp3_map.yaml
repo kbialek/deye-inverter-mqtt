@@ -31,6 +31,7 @@ topics:
   522: ac/total_energy_bought
   524: ac/total_energy_sold
   540: radiator_temp
+  541: ac/temperature
 
 groups:
   solar: ''
