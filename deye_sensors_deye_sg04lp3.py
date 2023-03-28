@@ -107,7 +107,7 @@ deye_sg04lp3_grid_520 = SingleRegisterSensor('Daily Energy Bought', 520, 0.1,
                                              mqtt_topic_suffix='ac/daily_energy_bought', unit='kWh', signed=False,
                                              groups=['deye_sg04lp3'])
 
-deye_sg04lp3_grid_522 = SingleRegisterSensor('Total Energy Bought', 522, 0.1,
+deye_sg04lp3_grid_522 = DoubleRegisterSensor('Total Energy Bought', 522, 0.1,
                                              mqtt_topic_suffix='ac/total_energy_bought', unit='kWh', signed=False,
                                              groups=['deye_sg04lp3'])
 
@@ -148,7 +148,7 @@ deye_sg04lp3_inverter_540 = SingleRegisterSensor('DC Temperature', 540, 0.1, off
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_inverter_541 = SingleRegisterSensor('AC Temperature', 541, 0.1, offset=-100.0,
-                                                 mqtt_topic_suffix='ac/temperature', unit='°C',
+                                                 mqtt_topic_suffix='ac/temperature', unit='°C', signed=True,
                                                  groups=['deye_sg04lp3'])
 
 deye_sg04lp3_sensors = [

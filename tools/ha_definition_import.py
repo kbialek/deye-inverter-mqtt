@@ -79,9 +79,9 @@ def import_double_register_item(group_prefix: str, group_name: str, parameter_it
 def import_parameter_item(group_prefix: str, group_name: str, parameter_item: dict, topics_map: dict) -> SensorDef:
     registers_count = len(parameter_item['registers'])
     rule = parameter_item['rule']
-    if rule == 1 or rule == 2:
+    if registers_count == 1:
         return import_single_register_item(group_prefix, group_name, parameter_item, topics_map, rule == 2)
-    elif rule == 3 or rule == 4:
+    elif registers_count == 2:
         return import_double_register_item(group_prefix, group_name, parameter_item, topics_map, rule == 4)
     else:
         print(f'Unsupported register count {registers_count}')
