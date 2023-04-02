@@ -50,7 +50,7 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
 3. Run the container
 
     ```
-    docker run --rm --name deye-mqtt \
+    docker run --name deye-mqtt \
         --env-file config.env \
         --restart=unless-stopped \
         ghcr.io/kbialek/deye-inverter-mqtt
