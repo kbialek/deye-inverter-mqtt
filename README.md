@@ -50,7 +50,15 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
 3. Run the container
 
     ```
-    docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt
+    docker run --rm --name deye-mqtt \
+        --env-file config.env \
+        --restart=unless-stopped \
+        ghcr.io/kbialek/deye-inverter-mqtt
+    ```
+    * `--restart=unless-stopped` will make docker to restart the container on host reboot
+4. Stop the container
+    ```
+    docker stop deye-mqtt
     ```
 
 ### Installation troubleshooting
