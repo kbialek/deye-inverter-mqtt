@@ -18,8 +18,9 @@
 FROM python:3.10.10-alpine3.16 as builder
 
 WORKDIR /build
-RUN apk add gcc alpine-sdk 
+RUN apk add gcc alpine-sdk
 COPY requirements.txt ./
+RUN pip install --no-cache-dir --target . -r requirements.txt
 
 FROM python:3.10.10-alpine3.16
 WORKDIR /opt/deye_inverter_mqtt
