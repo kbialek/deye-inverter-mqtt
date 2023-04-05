@@ -15,13 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM python:3.10.7-alpine3.16 as builder
+FROM python:3.10.10-alpine3.16 as builder
 
 WORKDIR /build
 RUN apk add gcc alpine-sdk 
 COPY requirements.txt ./
 
-FROM python:3.10.7-alpine3.16
+FROM python:3.10.10-alpine3.16
 WORKDIR /opt/deye_inverter_mqtt
 ADD *.py ./
 COPY --from=builder /build/ ./
