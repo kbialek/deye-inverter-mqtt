@@ -1,7 +1,7 @@
 GITHUB_USER = kbialek
 VERSION = 2023.03.4
 
-ARCHS = linux/amd64 linux/arm/v7 linux/arm64/v8
+ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
 
 null =
 space = $(null) $(null)
