@@ -47,6 +47,16 @@ docker-push: test
 		.
 	@docker buildx rm --all-inactive --force
 
+docker-push-beta: test
+	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
+	@docker buildx create --use
+	@docker buildx build \
+		--platform $(subst $(space),$(comma),$(ARCHS)) \
+		--push \
+		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
+		.
+	@docker buildx rm --all-inactive --force
+
 METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:
