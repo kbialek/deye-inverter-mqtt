@@ -57,9 +57,10 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
     ```
     * `-d` will detach the container, so it will run in the background
     * `--restart=unless-stopped` will make docker to restart the container on host reboot
-4. Stop the container
+4. Stop and remove the container
     ```
     docker stop deye-mqtt
+    docker rm -v deye-mqtt
     ```
 
 ### Installation troubleshooting
