@@ -32,13 +32,23 @@ class DeyeMqttClient():
             client_id=f'deye-inverter-{config.logger.serial_number}', reconnect_on_failure=True)
         self.__mqtt_client.enable_logger()
         self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
-        status_topic = f'{config.mqtt.topic_prefix}/{config.mqtt.availability_topic}'
-        self.__mqtt_client.will_set(status_topic, 'offline', retain=True, qos=1)
-        self.__mqtt_client.connect(config.mqtt.host, config.mqtt.port, keepalive=60)
-        self.__mqtt_client.loop_start()
-        self.__mqtt_client.publish(status_topic, 'online', retain=True, qos=1)
+        self.__status_topic = f'{config.mqtt.topic_prefix}/{config.mqtt.availability_topic}'
+        self.__mqtt_client.will_set(self.__status_topic, 'offline', retain=True, qos=1)
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
+
+    def connect(self) -> bool:
+        try:
+            self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
+            self.__mqtt_client.loop_start()
+            self.__mqtt_client.publish(self.__status_topic, 'online', retain=True, qos=1)
+            self.__log.info("Successfully connected to MQTT Broker located at %s:%d",
+                            self.__config.host, self.__config.port)
+            return True
+        except ConnectionRefusedError:
+            self.__log.error("Failed to connect to MQTT Broker located at %s:%d",
+                             self.__config.host, self.__config.port)
+            return False
 
     def disconnect(self):
         self.__mqtt_client.disconnect()
