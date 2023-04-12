@@ -37,7 +37,10 @@ class DeyeDaemon():
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeDaemon.__name__)
         self.__config = config
+        self.__log.info(
+            "Please help me build the list of compatible inverters. https://github.com/kbialek/deye-inverter-mqtt/issues/41")
         mqtt_client = DeyeMqttClient(config)
+        mqtt_client.connect()
         connector = DeyeConnector(config)
         self.modbus = DeyeModbus(config, connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
@@ -49,8 +52,6 @@ class DeyeDaemon():
         self.processors = [
             p for p in all_processors if p.get_id() in config.active_processors
         ]
-        self.__log.info(
-            "Please help me build the list of compatible inverters. https://github.com/kbialek/deye-inverter-mqtt/issues/41")
         self.__log.info(
             'Feature "Report metrics over MQTT": {}'.format(
                 'enabled' if mqtt_publisher.get_id() in config.active_processors else 'disabled'))

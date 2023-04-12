@@ -73,6 +73,7 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # and
         mqtt = DeyeMqttClient(self.config)
+        mqtt.connect()
 
         # and
         timestamp = datetime.now()
@@ -103,6 +104,7 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # and: connect
         mqtt = DeyeMqttClient(self.config)
+        mqtt.connect()
 
         # and: restart broker
         self.__stop_broker()
