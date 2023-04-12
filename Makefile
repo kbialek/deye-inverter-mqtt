@@ -1,7 +1,7 @@
 GITHUB_USER = kbialek
 VERSION = 2023.03.4
 
-ARCHS = linux/amd64 linux/arm/v7 linux/arm64/v8
+ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
 
 null =
 space = $(null) $(null)
@@ -44,6 +44,16 @@ docker-push: test
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:latest \
+		.
+	@docker buildx rm --all-inactive --force
+
+docker-push-beta: test
+	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
+	@docker buildx create --use
+	@docker buildx build \
+		--platform $(subst $(space),$(comma),$(ARCHS)) \
+		--push \
+		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
 		.
 	@docker buildx rm --all-inactive --force
 
