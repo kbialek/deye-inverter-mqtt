@@ -47,7 +47,9 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
 ## Installation
 1. Copy `config.env.example` as `config.env`
 2. Fill in values in `config.env`, see [Configuration](#configuration) for more details
-3. Run the container
+
+### Option 1: Using Docker directly
+1. Run the container
 
     ```
     docker run -d --name deye-mqtt \
@@ -57,10 +59,23 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
     ```
     * `-d` will detach the container, so it will run in the background
     * `--restart=unless-stopped` will make docker to restart the container on host reboot
-4. Stop and remove the container
+2. Stop and remove the container
     ```
     docker stop deye-mqtt
     docker rm -v deye-mqtt
+    ```
+
+### Option 2: Using Docker Compose
+1. Create or modify your own `docker-compose.yaml` file. Here is [a working example](docker-compose.yaml)
+2. Run the container
+
+    ```
+    docker compose -f <path-to-docker-compose.yaml> up -d
+    ```
+    * replace `<path-to-docker-compose.yaml>` with path to your `docker-compose.yaml` 
+3. Stop and remove the container
+    ```
+    docker compose -f <path-to-docker-compose.yaml> down -v
     ```
 
 ### Installation troubleshooting
