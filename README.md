@@ -14,13 +14,17 @@ When your inverter turns out to work well with an already exiting metrics group,
 
 |Inverter model|Metric groups|
 |---|---|
-|[Deye SUN-4K-G05](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10kg03.html)|[string](docs/metric_group_string.md)|
-|[Deye SUN300G3](https://www.deyeinverter.com/product/microinverter-1/sun300-500g3eu230.html)|[micro](docs/metric_group_micro.md)|
-|[Deye SUN600G3](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html)|[micro](docs/metric_group_micro.md)|
-|[Deye SUN1300G3](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)|[micro](docs/metric_group_micro.md)|
-|[Deye SUN1600G3](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)|[micro](docs/metric_group_micro.md)|
-|[Bosswerk MI600](https://www.bosswerk.de/wp-content/uploads/2021/12/Datenblatt_Bosswerk_MI6001.pdf)|[micro](docs/metric_group_micro.md)|
+|[Deye SUN-4/5/6/7/8/10/12K-G05-P](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10-12kg05p-412kw-three-phase-2-mppt.html)|[string](docs/metric_group_string.md)|
+|[Deye SUN300/500G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun300-500g3eu230.html)|[micro](docs/metric_group_micro.md)|
+|[Deye SUN600/800/1000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html)|[micro](docs/metric_group_micro.md)|
+|[Deye SUN1300-2000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)|[micro](docs/metric_group_micro.md)|
 |[Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)|[deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md)|
+
+Rebranded models
+|Inverter model|Metric groups|
+|---|---|
+|[Bosswerk MI600](https://www.bosswerk.de/wp-content/uploads/2021/12/Datenblatt_Bosswerk_MI6001.pdf)|[micro](docs/metric_group_micro.md)|
+|[Fuji Solar FU-SUN-4/5/6/7/8/10/12K-G05](https://fuji-solar.com/product/fu-sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt)|[string](docs/metric_group_string.md)|
 
 
 ### Additional MQTT topics
