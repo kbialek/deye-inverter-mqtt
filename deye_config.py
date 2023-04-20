@@ -35,7 +35,7 @@ class DeyeMqttTlsConfig():
     @staticmethod
     def from_env():
         return DeyeMqttTlsConfig(
-            enabled=os.getenv('MQTT_TLS_ENABLED') == 'true',
+            enabled=os.getenv('MQTT_TLS_ENABLED', 'false') == 'true',
             ca_cert_path=os.getenv('MQTT_TLS_CA_CERT_PATH', 'certs/ca.crt'),
             client_cert_path=os.getenv('MQTT_TLS_CLIENT_CERT_PATH', 'certs/client.crt'),
             client_key_path=os.getenv('MQTT_TLS_CLIENT_KEY_PATH', 'certs/client.key'),

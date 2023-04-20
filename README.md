@@ -118,6 +118,10 @@ All configuration options are controlled through environment variables.
 * `MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics
 * `MQTT_AVAILIBILITY_TOPIC` - mqtt availability topic, defaults to `status`
 * `MQTT_LOGGER_STATUS_TOPIC` - logger connectivity status topic, defaults to `logger_status`
+* `MQTT_TLS_ENABLED` - enables TLS encryption for the communication with the broker, defaults to `false`
+* `MQTT_TLS_CA_CERT_PATH` - CA certificate location
+* `MQTT_TLS_CLIENT_CERT_PATH` - Client certificate location
+* `MQTT_TLS_CLIENT_KEY_PATH` - Client private key location
 
 ## Reading and writing raw register values
 The tool allows reading and writing raw register values directly in the terminal.
