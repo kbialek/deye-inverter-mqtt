@@ -1,0 +1,1 @@
+Mosquitto MQTT broker configuration used to run the broker in the integration tests

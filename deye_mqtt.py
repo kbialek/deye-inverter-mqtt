@@ -31,7 +31,14 @@ class DeyeMqttClient():
         self.__mqtt_client = paho.Client(
             client_id=f'deye-inverter-{config.logger.serial_number}', reconnect_on_failure=True)
         self.__mqtt_client.enable_logger()
-        self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
+        if config.mqtt.tls.enabled:
+            self.__mqtt_client.tls_set(
+                ca_certs=config.mqtt.tls.ca_cert_path,
+                certfile=config.mqtt.tls.client_cert_path,
+                keyfile=config.mqtt.tls.client_key_path
+            )
+        if config.mqtt.username and config.mqtt.password:
+            self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
         self.__status_topic = f'{config.mqtt.topic_prefix}/{config.mqtt.availability_topic}'
         self.__mqtt_client.will_set(self.__status_topic, 'offline', retain=True, qos=1)
         self.__config = config.mqtt

@@ -1,0 +1,5 @@
+user test_client
+topic readwrite deye/#
+
+user deye
+topic readwrite deye/#

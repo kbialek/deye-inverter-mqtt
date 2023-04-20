@@ -16,12 +16,36 @@
 # under the License.
 
 import os
+import ssl
 
+
+class DeyeMqttTlsConfig():
+    def __init__(self,
+                 enabled: bool = False,
+                 ca_cert_path: str = None,
+                 client_cert_path: str = None,
+                 client_key_path: str = None,
+                 tls_version = ssl.PROTOCOL_TLSv1_2):
+        self.enabled = enabled
+        self.ca_cert_path = ca_cert_path
+        self.client_cert_path = client_cert_path
+        self.client_key_path = client_key_path
+        ssl.TLSVersion
+
+    @staticmethod
+    def from_env():
+        return DeyeMqttTlsConfig(
+            enabled=os.getenv('MQTT_TLS_ENABLED') == 'true',
+            ca_cert_path=os.getenv('MQTT_TLS_CA_CERT_PATH', 'certs/ca.crt'),
+            client_cert_path=os.getenv('MQTT_TLS_CLIENT_CERT_PATH', 'certs/client.crt'),
+            client_key_path=os.getenv('MQTT_TLS_CLIENT_KEY_PATH', 'certs/client.key'),
+        )
 
 class DeyeMqttConfig():
     def __init__(self, host: str, port: int, username: str, password: str, topic_prefix: str,
                  availability_topic: str = 'status',
-                 logger_status_topic: str = 'logger_status'):
+                 logger_status_topic: str = 'logger_status',
+                 tls=DeyeMqttTlsConfig()):
         self.host = host
         self.port = port
         self.username = username
@@ -29,6 +53,7 @@ class DeyeMqttConfig():
         self.topic_prefix = topic_prefix
         self.availability_topic = availability_topic
         self.logger_status_topic = logger_status_topic
+        self.tls = tls
 
     @staticmethod
     def from_env():
@@ -39,7 +64,8 @@ class DeyeMqttConfig():
             password=os.getenv('MQTT_PASSWORD'),
             topic_prefix=os.getenv('MQTT_TOPIC_PREFIX'),
             availability_topic=os.getenv('MQTT_AVAILIBILITY_TOPIC', 'status'),
-            logger_status_topic=os.getenv('MQTT_LOGGER_STATUS_TOPIC', 'logger_status')
+            logger_status_topic=os.getenv('MQTT_LOGGER_STATUS_TOPIC', 'logger_status'),
+            tls=DeyeMqttTlsConfig.from_env()
         )
 
 

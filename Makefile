@@ -16,7 +16,10 @@ test:
 	python -m unittest discover -p "*_test.py"
 
 test-mqtt:
-	python -m unittest "deye_mqtt_inttest.py"
+	@mkdir -p certs
+	@tools/setup_certs.sh
+	-@python -m unittest "deye_mqtt_inttest.py"
+	@rm certs/* && rmdir certs
 
 run:
 	@bash -c "$$(cat config.env | xargs) python deye_docker_entrypoint.py"
