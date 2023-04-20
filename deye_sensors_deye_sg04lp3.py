@@ -103,6 +103,30 @@ deye_sg04lp3_grid_600 = SingleRegisterSensor('Grid Voltage L3', 600, 0.1,
                                              mqtt_topic_suffix='ac/l3/voltage', unit='V', signed=False,
                                              groups=['deye_sg04lp3'])
 
+deye_sg04lp3_grid_604 = SingleRegisterSensor('Internal CT L1 Power', 604, 1,
+                                             mqtt_topic_suffix='ac/l1/ct/internal', unit='W', signed=True,
+                                             groups=['deye_sg04lp3'])
+
+deye_sg04lp3_grid_605 = SingleRegisterSensor('Internal CT L2 Power', 605, 1,
+                                             mqtt_topic_suffix='ac/l2/ct/internal', unit='W', signed=True,
+                                             groups=['deye_sg04lp3'])
+
+deye_sg04lp3_grid_606 = SingleRegisterSensor('Internal CT L3 Power', 606, 1,
+                                             mqtt_topic_suffix='ac/l3/ct/internal', unit='W', signed=True,
+                                             groups=['deye_sg04lp3'])
+
+deye_sg04lp3_grid_616 = SingleRegisterSensor('External CT L1 Power', 616, 1,
+                                             mqtt_topic_suffix='ac/l1/ct/external', unit='W', signed=True,
+                                             groups=['deye_sg04lp3'])
+
+deye_sg04lp3_grid_617 = SingleRegisterSensor('External CT L2 Power', 617, 1,
+                                             mqtt_topic_suffix='ac/l2/ct/external', unit='W', signed=True,
+                                             groups=['deye_sg04lp3'])
+
+deye_sg04lp3_grid_618 = SingleRegisterSensor('External CT L3 Power', 618, 1,
+                                             mqtt_topic_suffix='ac/l3/ct/external', unit='W', signed=True,
+                                             groups=['deye_sg04lp3'])
+
 deye_sg04lp3_grid_520 = SingleRegisterSensor('Daily Energy Bought', 520, 0.1,
                                              mqtt_topic_suffix='ac/daily_energy_bought', unit='kWh', signed=False,
                                              groups=['deye_sg04lp3'])
@@ -173,6 +197,12 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_grid_598,
     deye_sg04lp3_grid_599,
     deye_sg04lp3_grid_600,
+    deye_sg04lp3_grid_604,
+    deye_sg04lp3_grid_605,
+    deye_sg04lp3_grid_606,
+    deye_sg04lp3_grid_616,
+    deye_sg04lp3_grid_617,
+    deye_sg04lp3_grid_618,
     deye_sg04lp3_grid_520,
     deye_sg04lp3_grid_522,
     deye_sg04lp3_grid_521,

@@ -32,6 +32,12 @@ topics:
   524: ac/total_energy_sold
   540: radiator_temp
   541: ac/temperature
+  616: ac/l1/ct/external
+  604: ac/l1/ct/internal
+  617: ac/l2/ct/external
+  605: ac/l2/ct/internal
+  618: ac/l3/ct/external
+  606: ac/l3/ct/internal
 
 groups:
   solar: ''
