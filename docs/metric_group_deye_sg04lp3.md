@@ -12,6 +12,12 @@
 |Grid Voltage L1|598|`ac/l1/voltage`|V|
 |Grid Voltage L2|599|`ac/l2/voltage`|V|
 |Grid Voltage L3|600|`ac/l3/voltage`|V|
+|Internal CT L1 Power|604|`ac/l1/ct/internal`|W|
+|Internal CT L2 Power|605|`ac/l2/ct/internal`|W|
+|Internal CT L3 Power|606|`ac/l3/ct/internal`|W|
+|External CT L1 Power|616|`ac/l1/ct/external`|W|
+|External CT L2 Power|617|`ac/l2/ct/external`|W|
+|External CT L3 Power|618|`ac/l3/ct/external`|W|
 |Daily Energy Bought|520|`ac/daily_energy_bought`|kWh|
 |Total Energy Bought|522,523|`ac/total_energy_bought`|kWh|
 |Daily Energy Sold|521|`ac/daily_energy_sold`|kWh|
