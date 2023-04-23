@@ -46,12 +46,12 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
     def __start_broker_with_tls(self):
         self.mosquitto_pid = os.spawnl(os.P_NOWAIT, '/usr/sbin/mosquitto',
                                        '/usr/sbin/mosquitto', '-p', str(self.mqtt_broker_port),
-                                       '-c', 'mosquitto/mosquitto.conf')
+                                       '-c', 'mosquitto/mosquitto-tls.conf')
         time.sleep(2)
 
     def __stop_broker(self):
         os.kill(self.mosquitto_pid, 9)
-        time.sleep(2)
+        time.sleep(5)
 
     def __connect_test_client(self):
         self.test_mqtt_client.connect('localhost', port=self.mqtt_broker_port)
