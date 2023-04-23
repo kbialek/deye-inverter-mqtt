@@ -12,19 +12,19 @@ When your inverter is not supported, feel free to open an issue in this github p
 
 When your inverter turns out to work well with an already exiting metrics group, then please be so kind, and let me know in this [issue](https://github.com/kbialek/deye-inverter-mqtt/issues/41). This will help in building the list of supported inverters below. Thanks!
 
-|Inverter model|Metric groups|
-|---|---|
-|[Deye SUN-4/5/6/7/8/10/12K-G05-P](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10-12kg05p-412kw-three-phase-2-mppt.html)|[string](docs/metric_group_string.md)|
-|[Deye SUN300/500G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun300-500g3eu230.html)|[micro](docs/metric_group_micro.md)|
-|[Deye SUN600/800/1000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html)|[micro](docs/metric_group_micro.md)|
-|[Deye SUN1300-2000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)|[micro](docs/metric_group_micro.md)|
-|[Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)|[deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md)|
+| Inverter model                                                                                                                                                            | Metric groups                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| [Deye SUN-4/5/6/7/8/10/12K-G05-P](https://www.deyeinverter.com/product/three-phase-string-inverter/sun4-5-6-7-8-10-12kg05p-412kw-three-phase-2-mppt.html)                 | [string](docs/metric_group_string.md)                                                                                |
+| [Deye SUN300/500G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun300-500g3eu230.html)                                                            | [micro](docs/metric_group_micro.md)                                                                                  |
+| [Deye SUN600/800/1000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html) | [micro](docs/metric_group_micro.md)                                                                                  |
+| [Deye SUN1300-2000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)                                                         | [micro](docs/metric_group_micro.md)                                                                                  |
+| [Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                         | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md) |
 
 Rebranded models
-|Inverter model|Metric groups|
-|---|---|
-|[Bosswerk MI600](https://www.bosswerk.de/wp-content/uploads/2021/12/Datenblatt_Bosswerk_MI6001.pdf)|[micro](docs/metric_group_micro.md)|
-|[Fuji Solar FU-SUN-4/5/6/7/8/10/12K-G05](https://fuji-solar.com/product/fu-sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt)|[string](docs/metric_group_string.md)|
+| Inverter model                                                                                                                 | Metric groups                         |
+| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
+| [Bosswerk MI600](https://www.bosswerk.de/wp-content/uploads/2021/12/Datenblatt_Bosswerk_MI6001.pdf)                            | [micro](docs/metric_group_micro.md)   |
+| [Fuji Solar FU-SUN-4/5/6/7/8/10/12K-G05](https://fuji-solar.com/product/fu-sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt) | [string](docs/metric_group_string.md) |
 
 
 ### Additional MQTT topics
@@ -95,6 +95,21 @@ echo "deb http://deb.debian.org/debian buster-backports main" | sudo tee -a /etc
 sudo apt update
 sudo apt install -t buster-backports libseccomp2
 ```
+
+#### Network connectivity issues
+
+These problems typically manifest with timeout errors. 
+
+The first thing to check is, if given network address is reachable from within the docker container.
+In order to do this run the following commands:
+1. Login to your docker host
+2. Start the container in shell mode: `docker run --rm -ti --entrypoint /bin/sh ghcr.io/kbialek/deye-inverter-mqtt`
+3. Install `telnet` by running `apk update && apk add busybox-extras`
+4. Check connectivity: `telnet <ip> <port>`
+   1. Substitute `<ip>` and `<port>` with appropriate values
+5. You should see either:
+   1. `Connected to <ip>` - connection works fine. The next step is to enable DEBUG logs in `config.env` and open a github issue
+   2. `telnet: can't connect to remote host (<ip>): Connection refused` - The next step is: fix your network configuration
 
 ## Configuration
 All configuration options are controlled through environment variables.
