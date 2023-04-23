@@ -12,12 +12,23 @@ get_github_token = \
 	$(shell bw --session "$$(bw-read-session)" get item aa3dab0a-6c68-49d1-8a4d-193f37d3a5fc |\
 		jq -r '.fields[] | select(.name=="token") | .value')
 
+gen-tls-certs:
+	@mkdir -p certs
+	@tools/setup_certs.sh
+
+mosquitto-start:
+	@mosquitto -c mosquitto/mosquitto.conf -d
+
+mosquitto-start-tls:
+	@mosquitto -c mosquitto/mosquitto-tls.conf -d
+
+mosquitto-stop:
+	@pkill mosquitto
+
 test:
 	python -m unittest discover -p "*_test.py"
 
-test-mqtt:
-	@mkdir -p certs
-	@tools/setup_certs.sh
+test-mqtt: gen-tls-certs
 	-@python -m unittest "deye_mqtt_inttest.py"
 	@rm certs/* && rmdir certs
 
@@ -37,7 +48,19 @@ $(ARCHS:%=docker-build-%): docker-build-%:
 docker-build-local: docker-build-linux/amd64
 
 docker-run:
-	@docker run --rm --env-file config.env deye-inverter-mqtt
+	@docker run --rm \
+		--net host \
+		--env-file config.env \
+		--volume ./certs:/opt/deye_inverter_mqtt/certs:ro \
+		deye-inverter-mqtt
+
+docker-shell:
+	@docker run --rm \
+		--net host \
+		--env-file config.env \
+		--volume ./certs:/opt/deye_inverter_mqtt/certs:ro \
+		--entrypoint /bin/sh -ti \
+		deye-inverter-mqtt
 
 docker-push: test
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin

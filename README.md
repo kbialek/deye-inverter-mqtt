@@ -82,6 +82,24 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
     docker compose -f <path-to-docker-compose.yaml> down -v
     ```
 
+### Connecting to MQTT Broker over TLS
+1. Put certificates and client private key in a folder of your choice. The following files are required.
+   1. `ca.crt`
+   2. `client.crt`
+   3. `client.key`
+   
+   Check configuration section if you want to use alternative file names.
+2. Mount certificates folder in a docker container by adding `--volume` option to the command as follows:
+   ```
+   --volume <certs_folder>:/opt/deye_inverter_mqtt/certs:ro
+   ```
+    * replace `<certs_folder>` with the certificates folder location of your choice
+3. Enable TLS in the configuration.
+    ```
+    MQTT_TLS_ENABLED=true
+    ```
+4. Start the container
+
 ### Installation troubleshooting
 #### Docker container fails to start with error message: `PermissionError: [Errno 1] Operation not permitted`
 

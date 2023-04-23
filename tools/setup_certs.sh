@@ -23,7 +23,7 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
            -CAcreateserial -out server.crt -days 365
 
 
-for client in test_client deye; do
+for client in test_client deye client; do
 
     # Generate client private key
     openssl genrsa -out $client.key 2048
