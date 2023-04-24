@@ -68,6 +68,10 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
     docker stop deye-mqtt
     docker rm -v deye-mqtt
     ```
+3. Inspect the logs
+    ```
+    docker logs deye-mqtt
+    ```
 
 ### Option 2: Using Docker Compose
 1. Create or modify your own `docker-compose.yaml` file. Here is [a working example](docker-compose.yaml)
