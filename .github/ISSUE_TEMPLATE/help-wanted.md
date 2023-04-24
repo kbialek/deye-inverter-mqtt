@@ -1,6 +1,6 @@
 ---
-name: Help wanted template
-about: Describe your problem
+name: Help wanted
+about: Describe your problem, so I try to help you
 title: ''
 labels: help wanted
 assignees: ''
