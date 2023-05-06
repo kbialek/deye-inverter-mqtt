@@ -19,6 +19,7 @@ import logging
 
 from deye_events import DeyeEvent, DeyeEventProcessor, DeyeObservationEvent, DeyeLoggerStatusEvent
 from deye_mqtt import DeyeMqttClient
+from deye_config import DeyeConfig
 
 
 class DeyeMqttPublisher(DeyeEventProcessor):
@@ -26,8 +27,10 @@ class DeyeMqttPublisher(DeyeEventProcessor):
     Publishes events over MQTT.
     """
 
-    def __init__(self, mqtt_client: DeyeMqttClient):
+    def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttPublisher.__name__)
+        mqtt_client = DeyeMqttClient(config)
+        mqtt_client.connect()
         self.__mqtt_client = mqtt_client
 
     def get_id(self):
