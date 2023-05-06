@@ -25,7 +25,6 @@ from deye_connector import DeyeConnector
 from deye_modbus import DeyeModbus
 from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
-from deye_mqtt import DeyeMqttClient
 from deye_observation import Observation
 from deye_events import DeyeEvent, DeyeLoggerStatusEvent, DeyeObservationEvent
 from deye_mqtt_publisher import DeyeMqttPublisher
@@ -39,19 +38,19 @@ class DeyeDaemon():
         self.__config = config
         self.__log.info(
             "Please help me build the list of compatible inverters. https://github.com/kbialek/deye-inverter-mqtt/issues/41")
-        mqtt_client = DeyeMqttClient(config)
-        mqtt_client.connect()
         connector = DeyeConnector(config)
         self.modbus = DeyeModbus(config, connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = self.__remove_duplicated_reg_ranges(self.reg_ranges)
-        mqtt_publisher = DeyeMqttPublisher(mqtt_client)
+        mqtt_publisher = DeyeMqttPublisher(config)
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         all_processors = [mqtt_publisher, set_time_processor]
         self.processors = [
             p for p in all_processors if p.get_id() in config.active_processors
         ]
+        for p in self.processors:
+            p.initialize()
         self.__log.info(
             'Feature "Report metrics over MQTT": {}'.format(
                 'enabled' if mqtt_publisher.get_id() in config.active_processors else 'disabled'))
