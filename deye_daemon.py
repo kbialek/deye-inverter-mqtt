@@ -49,6 +49,8 @@ class DeyeDaemon():
         self.processors = [
             p for p in all_processors if p.get_id() in config.active_processors
         ]
+        for p in self.processors:
+            p.initialize()
         self.__log.info(
             'Feature "Report metrics over MQTT": {}'.format(
                 'enabled' if mqtt_publisher.get_id() in config.active_processors else 'disabled'))
