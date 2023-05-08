@@ -19,27 +19,27 @@ from deye_sensor import SingleRegisterSensor, ComputedPowerSensor, DoubleRegiste
 
 # CT1
 ct1_voltage_sensor = SingleRegisterSensor(
-    "CT1 Voltage", 0x01, 0.1, mqtt_topic_suffix=ac/ct1/voltage, unit=V, groups=[igen_dtsd422])
+    "CT1 Voltage", 0x01, 0.1, mqtt_topic_suffix="ac/ct1/voltage", unit="V", groups=["igen_dtsd422"])
 
 # CT2
 ct2_voltage_sensor = SingleRegisterSensor(
-    "CT2 Voltage", 0x02, 0.1, mqtt_topic_suffix=ac/ct2/voltage, unit=V, groups=[igen_dtsd422])
+    "CT2 Voltage", 0x02, 0.1, mqtt_topic_suffix="ac/ct2/voltage", unit="V", groups=["igen_dtsd422"])
 
 # CT3
 ct3_voltage_sensor = SingleRegisterSensor(
-    "CT3 Voltage", 0x03, 0.1, mqtt_topic_suffix=ac/ct3/voltage, unit=V, groups=[igen_dtsd422])
+    "CT3 Voltage", 0x03, 0.1, mqtt_topic_suffix="ac/ct3/voltage", unit="V", groups=["igen_dtsd422"])
 
 # CT4
 ct4_voltage_sensor = SingleRegisterSensor(
-    "CT4 Voltage", 0x1001, 0.1, mqtt_topic_suffix=ac/ct4/voltage, unit=V, groups=[igen_dtsd422])
+    "CT4 Voltage", 0x1001, 0.1, mqtt_topic_suffix="ac/ct4/voltage", unit="V", groups=["igen_dtsd422"])
 
 # CT5
 ct5_voltage_sensor = SingleRegisterSensor(
-    "CT4 Voltage", 0x1002, 0.1, mqtt_topic_suffix=ac/ct5/voltage, unit=V, groups=[igen_dtsd422])
+    "CT5 Voltage", 0x1002, 0.1, mqtt_topic_suffix="ac/ct5/voltage", unit="V", groups=["igen_dtsd422"])
 
 # CT6
 ct6_voltage_sensor = SingleRegisterSensor(
-    "CT4 Voltage", 0x1003, 0.1, mqtt_topic_suffix=ac/ct6/voltage, unit=V, groups=[igen_dtsd422])
+    "CT6 Voltage", 0x1003, 0.1, mqtt_topic_suffix="ac/ct6/voltage", unit="V", groups=["igen_dtsd422"])
 
 
 igen_dtsd422_sensors = [
@@ -52,6 +52,6 @@ igen_dtsd422_sensors = [
 ]
 
 igen_dtsd422_register_ranges = [
-    SensorRegisterRange(group=igen_dtsd422_ct123, first_reg_address=0x01, last_reg_address=0x03),
-    SensorRegisterRange(group=igen_dtsd422_ct456, first_reg_address=0x1001, last_reg_address=0x1003),
+    SensorRegisterRange(group="igen_dtsd422", first_reg_address=0x01, last_reg_address=0x03),
+    SensorRegisterRange(group="igen_dtsd422", first_reg_address=0x1001, last_reg_address=0x1003),
 ]
