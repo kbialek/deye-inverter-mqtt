@@ -17,7 +17,14 @@
 
 import unittest
 from unittest.mock import patch
-from deye_sensor import Sensor, ComputedSumSensor, DoubleRegisterSensor, SingleRegisterSensor
+from deye_sensor import (
+    Sensor,
+    ComputedSumSensor,
+    DoubleRegisterSensor,
+    SingleRegisterSensor,
+    SignedMagnitudeSingleRegisterSensor,
+    SignedMagnitudeDoubleRegisterSensor,
+)
 
 
 class TestSensor(Sensor):
@@ -75,7 +82,7 @@ class DeyeSensorTest(unittest.TestCase):
         # then
         self.assertEqual(result, 0x0102)
 
-    def test_dobule_reg_sensor_signed(self):
+    def test_double_reg_sensor_signed(self):
         # given
         sut = SingleRegisterSensor('test', 0x00, 1, signed=True, groups=['string'])
 
@@ -90,7 +97,7 @@ class DeyeSensorTest(unittest.TestCase):
         # then
         self.assertEqual(result, -2)
 
-    def test_dobule_reg_sensor_unsigned(self):
+    def test_double_reg_sensor_unsigned(self):
         # given
         sut = DoubleRegisterSensor('test', 0x00, 1, signed=False, groups=['string'])
 
@@ -106,7 +113,7 @@ class DeyeSensorTest(unittest.TestCase):
         # then
         self.assertEqual(result, 0x03040102)
 
-    def test_dobule_reg_sensor_signed(self):
+    def test_double_reg_sensor_signed(self):
         # given
         sut = DoubleRegisterSensor('test', 0x00, 1, signed=True, groups=['string'])
 
@@ -121,6 +128,68 @@ class DeyeSensorTest(unittest.TestCase):
 
         # then
         self.assertEqual(result, -2)
+
+    def test_signed_magnitude_single_register_signed(self):
+        # given
+        sut = SignedMagnitudeSingleRegisterSensor('test', 0x00, 1, groups=['igen_dtsd422'])
+
+        # and
+        registers = {
+            0: bytearray.fromhex('8310')
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, -784)
+
+    def test_signed_magnitude_single_register_unsigned(self):
+        # given
+        sut = SignedMagnitudeSingleRegisterSensor('test', 0x00, 1, groups=['igen_dtsd422'])
+
+        # and
+        registers = {
+            0: bytearray.fromhex('0310')
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, 784)
+
+    def test_signed_magnitude_double_register_signed(self):
+        # given
+        sut = SignedMagnitudeDoubleRegisterSensor('test', 0x00, 1, groups=['igen_dtsd422'])
+
+        # and
+        registers = {
+            0: bytearray.fromhex('8000'),  # high word
+            1: bytearray.fromhex('0101')  # low word
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, -257)
+
+    def test_signed_magnitude_double_register_unsigned(self):
+        # given
+        sut = SignedMagnitudeDoubleRegisterSensor('test', 0x00, 1, groups=['igen_dtsd422'])
+
+        # and
+        registers = {
+            0: bytearray.fromhex('0000'),  # high word
+            1: bytearray.fromhex('0101')  # low word
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, 257)
 
 
 if __name__ == '__main__':

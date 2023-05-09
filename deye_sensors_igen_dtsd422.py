@@ -17,31 +17,29 @@
 
 from deye_sensor import (
     SingleRegisterSensor,
-    ComputedPowerSensor,
     DoubleRegisterSensor,
-    ComputedSumSensor,
+    SignedMagnitudeSingleRegisterSensor,
+    SignedMagnitudeDoubleRegisterSensor,
     SensorRegisterRange,
 )
 
 #
-# Initial IGEN DTSD-422-D3 support.
+# IGEN DTSD-422-D3 support.
 #
 # Todo:
 # * Daily Values for Positive and Negative energy are missing, can't find them.
 # * Need to verify data is still read correctly when double reg values exceed one
 #   register
-# * There are some more informational registers, e.g. Manufacturing Date, serial etc. which
-#   we're ignoring for now. Maybe add?
 #
 
 
-class SingleDirectionRegisterSensor(SingleRegisterSensor):
+class SignedMagnitudeSingleRegisterSensor(SingleRegisterSensor):
     """
     Power meter sensor with value stored as 10-bit integer in a single Modbus register and the first byte
     indicating power direction.
     """
 
-    def read_value(self, registers: dict[int, int]):
+    def read_value(self, registers: dict[int, bytearray]):
         if self.reg_address in registers:
             reg_value = (
                 int.from_bytes(registers[self.reg_address], "big", signed=False)
@@ -56,14 +54,14 @@ class SingleDirectionRegisterSensor(SingleRegisterSensor):
             return None
 
 
-class DoubleDirectionRegisterSensor(DoubleRegisterSensor):
+class SignedMagnitudeDoubleRegisterSensor(DoubleRegisterSensor):
     """
     Power meter sensor with value stored as 32-bit integer in two Modbus registers and the energy flow direction
     stored in the first Modbus register. High and Low words are swapped compared to the normal DoubleRegisterSensor.
     Highest bit gives energy direction.
     """
 
-    def read_value(self, registers: dict[int, int]):
+    def read_value(self, registers: dict[int, bytearray]):
         high_word_reg_address = self.reg_address
         low_word_reg_address = self.reg_address + 1
         if low_word_reg_address in registers and high_word_reg_address in registers:
