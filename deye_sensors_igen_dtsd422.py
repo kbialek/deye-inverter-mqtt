@@ -28,7 +28,6 @@ from deye_sensor import (
 #
 # Todo:
 # * Daily Values for Positive and Negative energy are missing, can't find them.
-# * Is the direction calculation handled correctly? Or is something wrong here?
 # * Need to verify data is still read correctly when double reg values exceed one
 #   register
 # * There are some more informational registers, e.g. Manufacturing Date, serial etc. which
@@ -45,19 +44,11 @@ class SingleDirectionRegisterSensor(SingleRegisterSensor):
     def read_value(self, registers: dict[int, int]):
         if self.reg_address in registers:
             reg_value = (
-                int.from_bytes(registers[self.reg_address], "big", signed=self.signed)
+                int.from_bytes(registers[self.reg_address], "big", signed=False)
                 & 0x7FFF
             )
             # If highest bit is set, we've got a negative value
-            if bool(
-                (
-                    int.from_bytes(
-                        registers[self.reg_address], "big", signed=self.signed
-                    )
-                    & 0x8000
-                )
-                >> 15
-            ):
+            if bool(registers[self.reg_address][0] & 0x80):
                 return -1 * reg_value * self.factor + self.offset
             else:
                 return reg_value * self.factor + self.offset
@@ -79,17 +70,10 @@ class DoubleDirectionRegisterSensor(DoubleRegisterSensor):
             low_word = registers[low_word_reg_address]
             high_word = registers[high_word_reg_address]
             reg_value = (
-                int.from_bytes(high_word + low_word, "big", signed=self.signed)
-                & 0x7FFFFFFF
+                int.from_bytes(high_word + low_word, "big", signed=False) & 0x7FFFFFFF
             )
             # If highest bit is set, we've got a negative value
-            if bool(
-                (
-                    int.from_bytes(high_word + low_word, "big", signed=self.signed)
-                    & 0x80000000
-                )
-                >> 31
-            ):
+            if bool(registers[self.reg_address][0] & 0x80):
                 return -1 * reg_value * self.factor + self.offset
             else:
                 return reg_value * self.factor + self.offset
