@@ -41,7 +41,7 @@ ct1_voltage_sensor = SingleRegisterSensor(
     unit="V",
     groups=["igen_dtsd422"],
 )
-ct1_current_sensor = DoubleDirectionRegisterSensor(
+ct1_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Current CT1",
     0x07,
     0.001,
@@ -50,7 +50,7 @@ ct1_current_sensor = DoubleDirectionRegisterSensor(
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct1_active_power_sensor = DoubleDirectionRegisterSensor(
+ct1_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Active Power CT1",
     0x0F,
     1,
@@ -58,7 +58,7 @@ ct1_active_power_sensor = DoubleDirectionRegisterSensor(
     unit="W",
     groups=["igen_dtsd422"],
 )
-ct1_reactive_power_sensor = DoubleDirectionRegisterSensor(
+ct1_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Reactive Power CT1",
     0x17,
     1,
@@ -66,7 +66,7 @@ ct1_reactive_power_sensor = DoubleDirectionRegisterSensor(
     unit="Var",
     groups=["igen_dtsd422"],
 )
-ct1_apparent_power_sensor = DoubleDirectionRegisterSensor(
+ct1_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Apparent Power CT1",
     0x1F,
     1,
@@ -74,7 +74,7 @@ ct1_apparent_power_sensor = DoubleDirectionRegisterSensor(
     unit="VA",
     groups=["igen_dtsd422"],
 )
-ct1_power_factor_sensor = SingleDirectionRegisterSensor(
+ct1_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor CT1",
     0x26,
     0.001,
@@ -109,7 +109,7 @@ ct2_voltage_sensor = SingleRegisterSensor(
     unit="V",
     groups=["igen_dtsd422"],
 )
-ct2_current_sensor = DoubleDirectionRegisterSensor(
+ct2_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Current CT2",
     0x09,
     0.001,
@@ -118,7 +118,7 @@ ct2_current_sensor = DoubleDirectionRegisterSensor(
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct2_active_power_sensor = DoubleDirectionRegisterSensor(
+ct2_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Active Power CT2",
     0x11,
     1,
@@ -126,7 +126,7 @@ ct2_active_power_sensor = DoubleDirectionRegisterSensor(
     unit="W",
     groups=["igen_dtsd422"],
 )
-ct2_reactive_power_sensor = DoubleDirectionRegisterSensor(
+ct2_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Reactive Power CT2",
     0x19,
     1,
@@ -134,7 +134,7 @@ ct2_reactive_power_sensor = DoubleDirectionRegisterSensor(
     unit="Var",
     groups=["igen_dtsd422"],
 )
-ct2_apparent_power_sensor = DoubleDirectionRegisterSensor(
+ct2_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Apparent Power CT2",
     0x21,
     1,
@@ -142,7 +142,7 @@ ct2_apparent_power_sensor = DoubleDirectionRegisterSensor(
     unit="VA",
     groups=["igen_dtsd422"],
 )
-ct2_power_factor_sensor = SingleDirectionRegisterSensor(
+ct2_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor CT2",
     0x27,
     0.001,
@@ -177,7 +177,7 @@ ct3_voltage_sensor = SingleRegisterSensor(
     unit="V",
     groups=["igen_dtsd422"],
 )
-ct3_current_sensor = DoubleDirectionRegisterSensor(
+ct3_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Current CT3",
     0x0B,
     0.001,
@@ -186,7 +186,7 @@ ct3_current_sensor = DoubleDirectionRegisterSensor(
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct3_active_power_sensor = DoubleDirectionRegisterSensor(
+ct3_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Active Power CT3",
     0x13,
     1,
@@ -194,7 +194,7 @@ ct3_active_power_sensor = DoubleDirectionRegisterSensor(
     unit="W",
     groups=["igen_dtsd422"],
 )
-ct3_reactive_power_sensor = DoubleDirectionRegisterSensor(
+ct3_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Reactive Power CT3",
     0x1B,
     1,
@@ -202,7 +202,7 @@ ct3_reactive_power_sensor = DoubleDirectionRegisterSensor(
     unit="Var",
     groups=["igen_dtsd422"],
 )
-ct3_apparent_power_sensor = DoubleDirectionRegisterSensor(
+ct3_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Apparent Power CT3",
     0x23,
     1,
@@ -210,7 +210,7 @@ ct3_apparent_power_sensor = DoubleDirectionRegisterSensor(
     unit="VA",
     groups=["igen_dtsd422"],
 )
-ct3_power_factor_sensor = SingleDirectionRegisterSensor(
+ct3_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor CT3",
     0x28,
     0.001,
@@ -245,7 +245,7 @@ ct4_voltage_sensor = SingleRegisterSensor(
     unit="V",
     groups=["igen_dtsd422"],
 )
-ct4_current_sensor = DoubleDirectionRegisterSensor(
+ct4_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Current CT4",
     0x1007,
     0.001,
@@ -254,7 +254,7 @@ ct4_current_sensor = DoubleDirectionRegisterSensor(
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct4_active_power_sensor = DoubleDirectionRegisterSensor(
+ct4_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Active Power CT4",
     0x100F,
     1,
@@ -262,7 +262,7 @@ ct4_active_power_sensor = DoubleDirectionRegisterSensor(
     unit="W",
     groups=["igen_dtsd422"],
 )
-ct4_reactive_power_sensor = DoubleDirectionRegisterSensor(
+ct4_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Reactive Power CT4",
     0x1017,
     1,
@@ -270,7 +270,7 @@ ct4_reactive_power_sensor = DoubleDirectionRegisterSensor(
     unit="Var",
     groups=["igen_dtsd422"],
 )
-ct4_apparent_power_sensor = DoubleDirectionRegisterSensor(
+ct4_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Apparent Power CT4",
     0x101F,
     1,
@@ -278,7 +278,7 @@ ct4_apparent_power_sensor = DoubleDirectionRegisterSensor(
     unit="VA",
     groups=["igen_dtsd422"],
 )
-ct4_power_factor_sensor = SingleDirectionRegisterSensor(
+ct4_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor CT4",
     0x1026,
     0.001,
@@ -313,7 +313,7 @@ ct5_voltage_sensor = SingleRegisterSensor(
     unit="V",
     groups=["igen_dtsd422"],
 )
-ct5_current_sensor = DoubleDirectionRegisterSensor(
+ct5_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Current CT5",
     0x1009,
     0.001,
@@ -322,7 +322,7 @@ ct5_current_sensor = DoubleDirectionRegisterSensor(
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct5_active_power_sensor = DoubleDirectionRegisterSensor(
+ct5_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Active Power CT5",
     0x1011,
     1,
@@ -330,7 +330,7 @@ ct5_active_power_sensor = DoubleDirectionRegisterSensor(
     unit="W",
     groups=["igen_dtsd422"],
 )
-ct5_reactive_power_sensor = DoubleDirectionRegisterSensor(
+ct5_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Reactive Power CT5",
     0x1019,
     1,
@@ -338,7 +338,7 @@ ct5_reactive_power_sensor = DoubleDirectionRegisterSensor(
     unit="Var",
     groups=["igen_dtsd422"],
 )
-ct5_apparent_power_sensor = DoubleDirectionRegisterSensor(
+ct5_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Apparent Power CT5",
     0x1021,
     1,
@@ -346,7 +346,7 @@ ct5_apparent_power_sensor = DoubleDirectionRegisterSensor(
     unit="VA",
     groups=["igen_dtsd422"],
 )
-ct5_power_factor_sensor = SingleDirectionRegisterSensor(
+ct5_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor CT5",
     0x1027,
     0.001,
@@ -381,7 +381,7 @@ ct6_voltage_sensor = SingleRegisterSensor(
     unit="V",
     groups=["igen_dtsd422"],
 )
-ct6_current_sensor = DoubleDirectionRegisterSensor(
+ct6_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Current CT6",
     0x100B,
     0.001,
@@ -390,7 +390,7 @@ ct6_current_sensor = DoubleDirectionRegisterSensor(
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct6_active_power_sensor = DoubleDirectionRegisterSensor(
+ct6_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Active Power CT6",
     0x1013,
     1,
@@ -398,7 +398,7 @@ ct6_active_power_sensor = DoubleDirectionRegisterSensor(
     unit="W",
     groups=["igen_dtsd422"],
 )
-ct6_reactive_power_sensor = DoubleDirectionRegisterSensor(
+ct6_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Reactive Power CT6",
     0x101B,
     1,
@@ -406,7 +406,7 @@ ct6_reactive_power_sensor = DoubleDirectionRegisterSensor(
     unit="Var",
     groups=["igen_dtsd422"],
 )
-ct6_apparent_power_sensor = DoubleDirectionRegisterSensor(
+ct6_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Apparent Power CT6",
     0x1023,
     1,
@@ -414,7 +414,7 @@ ct6_apparent_power_sensor = DoubleDirectionRegisterSensor(
     unit="VA",
     groups=["igen_dtsd422"],
 )
-ct6_power_factor_sensor = SingleDirectionRegisterSensor(
+ct6_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor CT6",
     0x1028,
     0.001,
@@ -441,7 +441,7 @@ ct6_total_negative_energy = SingleRegisterSensor(
 )
 
 # Total
-total_active_power_sensor = DoubleDirectionRegisterSensor(
+total_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Total Active Power",
     0x0D,
     1,
@@ -449,7 +449,7 @@ total_active_power_sensor = DoubleDirectionRegisterSensor(
     unit="W",
     groups=["igen_dtsd422"],
 )
-total_active_power2_sensor = DoubleDirectionRegisterSensor(
+total_active_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Total Active Power 2",
     0x100D,
     1,
@@ -457,7 +457,7 @@ total_active_power2_sensor = DoubleDirectionRegisterSensor(
     unit="W",
     groups=["igen_dtsd422"],
 )
-total_reactive_power_sensor = DoubleDirectionRegisterSensor(
+total_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Total Reactive Power",
     0x15,
     1,
@@ -465,7 +465,7 @@ total_reactive_power_sensor = DoubleDirectionRegisterSensor(
     unit="Var",
     groups=["igen_dtsd422"],
 )
-total_reactive_power2_sensor = DoubleDirectionRegisterSensor(
+total_reactive_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Total Reactive Power 2",
     0x1015,
     1,
@@ -473,7 +473,7 @@ total_reactive_power2_sensor = DoubleDirectionRegisterSensor(
     unit="Var",
     groups=["igen_dtsd422"],
 )
-total_apparent_power_sensor = DoubleDirectionRegisterSensor(
+total_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Total Apparent Power",
     0x1D,
     1,
@@ -481,7 +481,7 @@ total_apparent_power_sensor = DoubleDirectionRegisterSensor(
     unit="VA",
     groups=["igen_dtsd422"],
 )
-total_apparent_power2_sensor = DoubleDirectionRegisterSensor(
+total_apparent_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
     "Total Apparent Power 2",
     0x101D,
     1,
@@ -523,14 +523,14 @@ total_negative_energy2_sensor = SingleRegisterSensor(
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-total_power_factor_sensor = SingleDirectionRegisterSensor(
+total_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor",
     0x25,
     0.001,
     mqtt_topic_suffix="total/power_factor",
     groups=["igen_dtsd422"],
 )
-total_power_factor2_sensor = SingleDirectionRegisterSensor(
+total_power_factor2_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor 2",
     0x1025,
     0.001,
