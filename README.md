@@ -129,7 +129,7 @@ All configuration options are controlled through environment variables.
     * `micro` - micro inverter
     * `deye_sg04lp3` - sg04lp3 inverter
     * `deye_sg04lp3_battery` - sg04lp3 battery
-    * `igen_dtsd422`- stsd422 smart meter
+    * `igen_dtsd422`- dtsd422 smart meter
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
