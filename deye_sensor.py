@@ -34,7 +34,7 @@ class Sensor():
         self.groups = groups
 
     @abstractmethod
-    def read_value(self, registers: dict[int, int]):
+    def read_value(self, registers: dict[int, bytearray]):
         """
         Reads sensor value from Modbus registers
         """
@@ -73,7 +73,7 @@ class SingleRegisterSensor(Sensor):
         self.offset = offset
         self.signed = signed
 
-    def read_value(self, registers: dict[int, int]):
+    def read_value(self, registers: dict[int, bytearray]):
         if self.reg_address in registers:
             reg_value = registers[self.reg_address]
             return int.from_bytes(reg_value, 'big', signed=self.signed) * self.factor + self.offset
@@ -99,7 +99,7 @@ class DoubleRegisterSensor(Sensor):
         self.offset = offset
         self.signed = signed
 
-    def read_value(self, registers: dict[int, int]):
+    def read_value(self, registers: dict[int, bytearray]):
         low_word_reg_address = self.reg_address
         high_word_reg_address = self.reg_address + 1
         if low_word_reg_address in registers and high_word_reg_address in registers:
@@ -126,7 +126,7 @@ class ComputedPowerSensor(Sensor):
         self.voltage_sensor = voltage_sensor
         self.current_sensor = current_sensor
 
-    def read_value(self, registers: dict[int, int]):
+    def read_value(self, registers: dict[int, bytearray]):
         voltage = self.voltage_sensor.read_value(registers)
         current = self.current_sensor.read_value(registers)
         if voltage is not None and current is not None:
@@ -150,7 +150,7 @@ class ComputedSumSensor(Sensor):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.sensors = sensors
 
-    def read_value(self, registers: dict[int, int]):
+    def read_value(self, registers: dict[int, bytearray]):
         result = 0
         sensor_values = [s.read_value(registers) for s in self.sensors]
         for value in sensor_values:

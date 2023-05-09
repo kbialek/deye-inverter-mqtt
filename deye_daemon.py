@@ -71,7 +71,7 @@ class DeyeDaemon():
             processor.process(events)
         self.__log.info("Reading completed")
 
-    def __get_observations_from_reg_values(self, regs: dict[int, int]) -> list[DeyeObservationEvent]:
+    def __get_observations_from_reg_values(self, regs: dict[int, bytearray]) -> list[DeyeObservationEvent]:
         timestamp = datetime.datetime.now()
         events = []
         for sensor in self.sensors:
