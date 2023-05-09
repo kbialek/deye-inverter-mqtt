@@ -151,6 +151,7 @@ ct1_total_positive_energy = SingleRegisterSensor(
     0x3F,
     0.01,
     mqtt_topic_suffix="ct1/total_positive_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -159,6 +160,7 @@ ct1_total_negative_energy = SingleRegisterSensor(
     0x49,
     0.01,
     mqtt_topic_suffix="ct1/total_negative_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -217,6 +219,7 @@ ct2_total_positive_energy = SingleRegisterSensor(
     0x53,
     0.01,
     mqtt_topic_suffix="ct2/total_positive_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -225,6 +228,7 @@ ct2_total_negative_energy = SingleRegisterSensor(
     0x5D,
     0.01,
     mqtt_topic_suffix="ct2/total_negative_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -283,6 +287,7 @@ ct3_total_positive_energy = SingleRegisterSensor(
     0x67,
     0.01,
     mqtt_topic_suffix="ct3/total_positive_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -291,6 +296,7 @@ ct3_total_negative_energy = SingleRegisterSensor(
     0x71,
     0.01,
     mqtt_topic_suffix="ct3/total_negative_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -349,6 +355,7 @@ ct4_total_positive_energy = SingleRegisterSensor(
     0x103F,
     0.01,
     mqtt_topic_suffix="ct4/total_positive_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -357,6 +364,7 @@ ct4_total_negative_energy = SingleRegisterSensor(
     0x1049,
     0.01,
     mqtt_topic_suffix="ct4/total_negative_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -415,6 +423,7 @@ ct5_total_positive_energy = SingleRegisterSensor(
     0x1053,
     0.01,
     mqtt_topic_suffix="ct5/total_positive_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -423,6 +432,7 @@ ct5_total_negative_energy = SingleRegisterSensor(
     0x105D,
     0.01,
     mqtt_topic_suffix="ct5/total_negative_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -481,6 +491,7 @@ ct6_total_positive_energy = SingleRegisterSensor(
     0x1067,
     0.01,
     mqtt_topic_suffix="ct6/total_positive_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -489,6 +500,7 @@ ct6_total_negative_energy = SingleRegisterSensor(
     0x1071,
     0.01,
     mqtt_topic_suffix="ct6/total_negative_energy",
+    unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
