@@ -116,8 +116,8 @@ class DoubleRegisterSensor(Sensor):
 
 class SignedMagnitudeSingleRegisterSensor(SingleRegisterSensor):
     """
-    Power meter sensor with value stored as 10-bit integer in a single Modbus register and the first byte
-    indicating power direction.
+    Reads single Modbus register as signed, fixed point 15-bits long value.
+    The most significant bit encodes the sign.
     """
 
     def read_value(self, registers: dict[int, bytearray]):
@@ -137,9 +137,8 @@ class SignedMagnitudeSingleRegisterSensor(SingleRegisterSensor):
 
 class SignedMagnitudeDoubleRegisterSensor(DoubleRegisterSensor):
     """
-    Power meter sensor with value stored as 32-bit integer in two Modbus registers and the energy flow direction
-    stored in the first Modbus register. High and Low words are swapped compared to the normal DoubleRegisterSensor.
-    Highest bit gives energy direction.
+    Reads double Modbus registers as signed, fixed point 31-bits long value.
+    The most significant bit encodes the sign.
     """
 
     def read_value(self, registers: dict[int, bytearray]):
