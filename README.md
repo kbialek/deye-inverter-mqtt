@@ -20,6 +20,10 @@ When your inverter turns out to work well with an already exiting metrics group,
 | [Deye SUN1300-2000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)                                                         | [micro](docs/metric_group_micro.md)                                                                                  |
 | [Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                         | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md) |
 
+| Meter model                                                         | Metric groups                                     |
+| ------------------------------------------------------------------- | ------------------------------------------------- |
+| [IGEN DTSD422-D3](https://www.solarmanpv.com/products/smart-meter/) | [igen_dtsd422](docs/metric_group_igen_dtsd422.md) |
+
 Rebranded models
 | Inverter model                                                                                                                 | Metric groups                         |
 | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
@@ -125,6 +129,7 @@ All configuration options are controlled through environment variables.
     * `micro` - micro inverter
     * `deye_sg04lp3` - sg04lp3 inverter
     * `deye_sg04lp3_battery` - sg04lp3 battery
+    * `igen_dtsd422`- dtsd422 smart meter
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899

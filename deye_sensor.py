@@ -114,6 +114,51 @@ class DoubleRegisterSensor(Sensor):
         return [self.reg_address, self.reg_address+1]
 
 
+class SignedMagnitudeSingleRegisterSensor(SingleRegisterSensor):
+    """
+    Reads single Modbus register as signed, fixed point 15-bits long value.
+    The most significant bit encodes the sign.
+    """
+
+    def read_value(self, registers: dict[int, bytearray]):
+        if self.reg_address in registers:
+            reg_value = (
+                int.from_bytes(registers[self.reg_address], "big", signed=False)
+                & 0x7FFF
+            )
+            # If highest bit is set, we've got a negative value
+            if bool(registers[self.reg_address][0] & 0x80):
+                return -1 * reg_value * self.factor + self.offset
+            else:
+                return reg_value * self.factor + self.offset
+        else:
+            return None
+
+
+class SignedMagnitudeDoubleRegisterSensor(DoubleRegisterSensor):
+    """
+    Reads double Modbus registers as signed, fixed point 31-bits long value.
+    The most significant bit encodes the sign.
+    """
+
+    def read_value(self, registers: dict[int, bytearray]):
+        high_word_reg_address = self.reg_address
+        low_word_reg_address = self.reg_address + 1
+        if low_word_reg_address in registers and high_word_reg_address in registers:
+            low_word = registers[low_word_reg_address]
+            high_word = registers[high_word_reg_address]
+            reg_value = (
+                int.from_bytes(high_word + low_word, "big", signed=False) & 0x7FFFFFFF
+            )
+            # If highest bit is set, we've got a negative value
+            if bool(registers[self.reg_address][0] & 0x80):
+                return -1 * reg_value * self.factor + self.offset
+            else:
+                return reg_value * self.factor + self.offset
+        else:
+            return None
+
+
 class ComputedPowerSensor(Sensor):
     """
     Electric Power sensor with value computed as multiplication of values read by voltage and current sensors.

@@ -57,7 +57,7 @@ docker-push-beta: test
 		.
 	@docker buildx rm --all-inactive --force
 
-METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery
+METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery igen_dtsd422
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:
 	@mkdir -p docs
