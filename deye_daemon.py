@@ -16,7 +16,8 @@
 # under the License.
 
 import logging
-import sys
+import signal
+import threading
 import time
 import datetime
 
@@ -90,12 +91,29 @@ class DeyeDaemon():
         return result
 
 
+class setInterval :
+    def __init__(self,interval,action) :
+        self.interval=interval
+        self.action=action
+        self.stopEvent=threading.Event()
+        thread=threading.Thread(target=self.__setInterval)
+        thread.start()
+
+    def __setInterval(self) :
+        nextTime=time.time()+self.interval
+        while not self.stopEvent.wait(nextTime-time.time()) :
+            nextTime+=self.interval
+            self.action()
+
+    def cancel(self, _signum, _frame):
+        self.stopEvent.set()
+
 def main():
     config = DeyeConfig.from_env()
     daemon = DeyeDaemon(config)
-    while True:
-        daemon.do_task()
-        time.sleep(config.data_read_inverval)
+    time_loop = setInterval(config.data_read_inverval,daemon.do_task)
+    signal.signal(signal.SIGINT, time_loop.cancel)
+    signal.signal(signal.SIGTERM, time_loop.cancel)
 
 
 if __name__ == "__main__":
