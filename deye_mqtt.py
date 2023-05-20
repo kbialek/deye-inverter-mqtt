@@ -15,8 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 import logging
+import ssl
+from typing import List
 
 import paho.mqtt.client as paho
 
@@ -32,11 +33,15 @@ class DeyeMqttClient():
             client_id=f'deye-inverter-{config.logger.serial_number}', reconnect_on_failure=True)
         self.__mqtt_client.enable_logger()
         if config.mqtt.tls.enabled:
-            self.__mqtt_client.tls_set(
-                ca_certs=config.mqtt.tls.ca_cert_path,
-                certfile=config.mqtt.tls.client_cert_path,
-                keyfile=config.mqtt.tls.client_key_path
-            )
+            if config.mqtt.tls.insecure:
+                self.__mqtt_client.tls_set(cert_reqs=ssl.CERT_NONE)
+                self.__mqtt_client.tls_insecure_set(True)
+            else:
+                self.__mqtt_client.tls_set(
+                    ca_certs=config.mqtt.tls.ca_cert_path,
+                    certfile=config.mqtt.tls.client_cert_path,
+                    keyfile=config.mqtt.tls.client_key_path
+                )
         if config.mqtt.username and config.mqtt.password:
             self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
         self.__status_topic = f'{config.mqtt.topic_prefix}/{config.mqtt.availability_topic}'
