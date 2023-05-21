@@ -19,7 +19,7 @@ test-mqtt:
 	python -m unittest "deye_mqtt_inttest.py"
 
 run:
-	@bash -c "$$(cat config.env | xargs) python deye_docker_entrypoint.py"
+	@bash -c "set -a; source config.env; python deye_docker_entrypoint.py"
 
 $(ARCHS:%=docker-build-%): docker-build-%:
 	@docker buildx create --use
