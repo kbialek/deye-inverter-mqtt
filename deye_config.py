@@ -67,7 +67,7 @@ class DeyeMqttConfig():
             username=os.getenv('MQTT_USERNAME'),
             password=os.getenv('MQTT_PASSWORD'),
             topic_prefix=os.getenv('MQTT_TOPIC_PREFIX', 'deye'),
-            availability_topic=os.getenv('MQTT_AVAILIBILITY_TOPIC', 'status'),
+            availability_topic=os.getenv('MQTT_AVAILABILITY_TOPIC', 'status'),
             logger_status_topic=os.getenv('MQTT_LOGGER_STATUS_TOPIC', 'logger_status'),
             tls=DeyeMqttTlsConfig.from_env()
         )
