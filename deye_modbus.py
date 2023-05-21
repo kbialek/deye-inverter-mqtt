@@ -32,7 +32,7 @@ class DeyeModbus:
         self.config = config.logger
         self.connector = connector
 
-    def read_registers(self, first_reg: int, last_reg: int) -> dict[int, int]:
+    def read_registers(self, first_reg: int, last_reg: int) -> dict[int, bytearray]:
         """Reads multiple modbus holding registers
 
         Args:
@@ -40,7 +40,7 @@ class DeyeModbus:
             last_reg (int): The address of the last register to read
 
         Returns:
-            dict[int, int]: Map of register values, where the register address is the map key, and register value is the map value
+            dict[int, bytearray]: Map of register values, where the register address is the map key, and register value is the map value
         """
         modbus_frame = self.__build_modbus_read_holding_registers_request_frame(first_reg, last_reg)
         req_frame = self.__build_request_frame(modbus_frame)
@@ -124,7 +124,7 @@ class DeyeModbus:
         reg_count = last_reg - first_reg + 1
         return bytearray.fromhex('0103{:04x}{:04x}'.format(first_reg, reg_count))
 
-    def __parse_modbus_read_holding_registers_response(self, frame: bytearray, first_reg: int, last_reg: int) -> dict:
+    def __parse_modbus_read_holding_registers_response(self, frame: bytearray, first_reg: int, last_reg: int) -> dict[int, bytearray]:
         reg_count = last_reg - first_reg + 1
         registers = {}
         expected_frame_data_len = 2 + 1 + reg_count * 2

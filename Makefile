@@ -1,5 +1,5 @@
 GITHUB_USER = kbialek
-VERSION = 2023.04.1
+VERSION = 2023.05.2
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
 
@@ -33,7 +33,7 @@ test-mqtt: gen-tls-certs
 	@rm certs/* && rmdir certs
 
 run:
-	@bash -c "$$(cat config.env | xargs) python deye_docker_entrypoint.py"
+	@bash -c "set -a; source config.env; python deye_docker_entrypoint.py"
 
 $(ARCHS:%=docker-build-%): docker-build-%:
 	@docker buildx create --use
@@ -83,7 +83,7 @@ docker-push-beta: test
 		.
 	@docker buildx rm --all-inactive --force
 
-METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery
+METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery igen_dtsd422
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:
 	@mkdir -p docs
