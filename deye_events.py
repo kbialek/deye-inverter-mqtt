@@ -51,6 +51,12 @@ class DeyeEventProcessor:
     Processors "do something" with the events collected from the inverter.
     """
 
+    def initialize(self):
+        """
+        Initializes processor dependencies
+        """
+        pass
+
     @abstractmethod
     def get_id(self):
         """

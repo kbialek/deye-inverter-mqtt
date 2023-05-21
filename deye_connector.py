@@ -56,7 +56,9 @@ class DeyeConnector:
                     self.__log.debug("Connection timeout")
                     if attempts == 0:
                         self.__log.warn("Too many connection timeouts")
+                except OSError as e:
+                    self.__log.warn("Connection error: %s", e.strerror)
                 except Exception as e:
-                    self.__log.warn("Connection error", e.message)
+                    self.__log.exception("Unknown connection error", e)
 
         return bytearray()

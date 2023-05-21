@@ -52,7 +52,7 @@ class DeyeMqttClient():
             self.__log.info("Successfully connected to MQTT Broker located at %s:%d",
                             self.__config.host, self.__config.port)
             return True
-        except ConnectionRefusedError:
+        except (ConnectionRefusedError, OSError):
             self.__log.error("Failed to connect to MQTT Broker located at %s:%d",
                              self.__config.host, self.__config.port)
             return False
