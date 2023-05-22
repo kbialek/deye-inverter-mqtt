@@ -1,4 +1,4 @@
-DEFINITIONS = deye_sg04lp3
+DEFINITIONS = deye_sg04lp3 deye_hybrid
 
 DOWNLOAD_TARGETS = $(addprefix download-, $(DEFINITIONS))
 IMPORT_TARGETS = $(addprefix import-, $(DEFINITIONS))

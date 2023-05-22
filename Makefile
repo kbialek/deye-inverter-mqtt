@@ -1,5 +1,5 @@
 GITHUB_USER = kbialek
-VERSION = 2023.05.2
+VERSION = 2023.05.3
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
 
@@ -83,7 +83,7 @@ docker-push-beta: test
 		.
 	@docker buildx rm --all-inactive --force
 
-METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery igen_dtsd422
+METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery igen_dtsd422 deye_hybrid deye_hybrid_battery
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:
 	@mkdir -p docs

@@ -19,6 +19,7 @@ When your inverter turns out to work well with an already exiting metrics group,
 | [Deye SUN600/800/1000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html) | [micro](docs/metric_group_micro.md)                                                                                  |
 | [Deye SUN1300-2000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)                                                         | [micro](docs/metric_group_micro.md)                                                                                  |
 | [Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                         | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md) |
+| [SUN-5/6K-SG01LP1-US SUN-7.6/8K-SG01LP1-US/EU](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                         | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md) |
 
 | Meter model                                                         | Metric groups                                     |
 | ------------------------------------------------------------------- | ------------------------------------------------- |
@@ -145,6 +146,8 @@ All configuration options are controlled through environment variables.
 * `DEYE_METRIC_GROUPS` - a comma delimited set of:
     * `string` - string inverter
     * `micro` - micro inverter
+    * `deye_hybrid` - hybrid inverter
+    * `deye_hybrid_battery` - hybrid inverter battery
     * `deye_sg04lp3` - sg04lp3 inverter
     * `deye_sg04lp3_battery` - sg04lp3 battery
     * `igen_dtsd422`- dtsd422 smart meter

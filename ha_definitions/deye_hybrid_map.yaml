@@ -1,0 +1,45 @@
+topics:
+  186: dc/pv1/power
+  187: dc/pv2/power
+  109: dc/pv1/voltage
+  111: dc/pv2/voltage
+  110: dc/pv1/current
+  112: dc/pv2/current
+  108: day_energy
+  96: total_energy
+  166: micro_inverter_power
+  70: battery/daily_charge
+  71: battery/daily_discharge
+  72: battery/total_charge
+  74: battery/total_discharge
+  189: battery/status
+  190: battery/power
+  183: battery/voltage
+  184: battery/soc
+  191: battery/current
+  182: battery/temperature
+  169: ac/total_power
+  175: ac/total_power
+  150: ac/l1/voltage
+  151: ac/l2/voltage
+  164: ac/l1/current
+  165: ac/l2/current
+  173: ac/l1/power
+  174: ac/l2/power
+  76: ac/daily_energy_bought
+  77: ac/daily_energy_sold
+  78: ac/total_energy_bought
+  81: ac/total_energy_sold
+  192: ac/frequency
+  90: radiator_temp
+  91: ac/temperature
+  170: ac/l1/ct/external
+  167: ac/l1/ct/internal
+  171: ac/l2/ct/external
+  168: ac/l2/ct/internal
+groups:
+  solar: ''
+  grid: ''
+  inverter: ''
+  battery: battery
+

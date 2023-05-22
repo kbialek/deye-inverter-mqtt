@@ -19,6 +19,7 @@ from deye_sensor import SingleRegisterSensor, ComputedPowerSensor, DoubleRegiste
 
 from deye_sensors_deye_sg04lp3 import deye_sg04lp3_sensors, deye_sg04lp3_register_ranges
 from deye_sensors_igen_dtsd422 import igen_dtsd422_sensors, igen_dtsd422_register_ranges
+from deye_sensors_deye_hybrid import deye_hybrid_sensors, deye_hybrid_register_ranges
 
 # AC Phase 1
 phase1_voltage_sensor = SingleRegisterSensor(
@@ -177,9 +178,9 @@ sensor_list = [
     string_radiator_temp_sensor,
     micro_radiator_temp_sensor,
     igbt_temp_sensor
-] + deye_sg04lp3_sensors + igen_dtsd422_sensors
+] + deye_sg04lp3_sensors + igen_dtsd422_sensors + deye_hybrid_sensors
 
 sensor_register_ranges = [
     SensorRegisterRange(group='string', first_reg_address=0x3c, last_reg_address=0x74),
     SensorRegisterRange(group='micro', first_reg_address=0x3c, last_reg_address=0x74)
-] + deye_sg04lp3_register_ranges + igen_dtsd422_register_ranges
+] + deye_sg04lp3_register_ranges + igen_dtsd422_register_ranges + deye_hybrid_register_ranges
