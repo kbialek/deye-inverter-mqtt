@@ -140,7 +140,7 @@ In order to do this run the following commands:
 ## Configuration
 All configuration options are controlled through environment variables.
 
-* `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`
+* `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`, defaults to `INFO`
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
 * `DEYE_METRIC_GROUPS` - a comma delimited set of:
     * `string` - string inverter
@@ -154,22 +154,24 @@ All configuration options are controlled through environment variables.
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
 * `MQTT_HOST` - MQTT Broker IP address
-* `MQTT_PORT` - MQTT Broker port, typically 1883
-* `MQTT_USERNAME` - MQTT Broker username for authentication 
-* `MQTT_PASSWORD` - MQTT Broker password for authentication
-* `MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics
-* `MQTT_AVAILIBILITY_TOPIC` - mqtt availability topic, defaults to `status`
+* `MQTT_PORT` - MQTT Broker port, , defaults to `1883`
+* `MQTT_USERNAME` - MQTT Broker username for authentication, defaults to `None`
+* `MQTT_PASSWORD` - MQTT Broker password for authentication, defaults to `None`
+* `MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics, defaults to `deye`
+* `MQTT_AVAILABILITY_TOPIC` - mqtt availability topic, defaults to `status`
 * `MQTT_LOGGER_STATUS_TOPIC` - logger connectivity status topic, defaults to `logger_status`
 * `MQTT_TLS_ENABLED` - enables TLS encryption for the communication with the broker, defaults to `false`
-* `MQTT_TLS_CA_CERT_PATH` - CA certificate location
-* `MQTT_TLS_CLIENT_CERT_PATH` - Client certificate location
-* `MQTT_TLS_CLIENT_KEY_PATH` - Client private key location
+* `MQTT_TLS_INSECURE` - Set to true in order to skip server certificate verification, defaults to `false`
+* `MQTT_TLS_CA_CERT_PATH` - CA certificate location to be used instead of the system certification authority, defaults to `None`
+* `MQTT_TLS_CLIENT_CERT_PATH` - Client certificate location for TLS based authentication, defaults to `None`
+* `MQTT_TLS_CLIENT_KEY_PATH` - Client private key location for TLS based authentication, defaults to `None`
+
 
 ## Reading and writing raw register values
 The tool allows reading and writing raw register values directly in the terminal.
 
 **USE AT YOUR OWN RISK!** Be sure to know what you are doing. Writing invalid values may damage the inverter.
-By using this tool you accept this risk and you take full responsiblity for the consequences.
+By using this tool you accept this risk and you take full responsibility for the consequences.
 
 * To read register value execute:
     ```
