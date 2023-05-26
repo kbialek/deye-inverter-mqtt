@@ -15,30 +15,30 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import datetime
 import logging
 import signal
 import threading
 import time
-import datetime
 
 from deye_config import DeyeConfig
 from deye_connector import DeyeConnector
+from deye_events import DeyeEvent, DeyeLoggerStatusEvent, DeyeObservationEvent
 from deye_modbus import DeyeModbus
+from deye_mqtt_publisher import DeyeMqttPublisher
+from deye_observation import Observation
 from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
-from deye_observation import Observation
-from deye_events import DeyeEvent, DeyeLoggerStatusEvent, DeyeObservationEvent
-from deye_mqtt_publisher import DeyeMqttPublisher
 from deye_set_time_processor import DeyeSetTimeProcessor
 
 
-class DeyeDaemon():
-
+class DeyeDaemon:
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeDaemon.__name__)
         self.__config = config
         self.__log.info(
-            "Please help me build the list of compatible inverters. https://github.com/kbialek/deye-inverter-mqtt/issues/41")
+            "Please help me build the list of compatible inverters. https://github.com/kbialek/deye-inverter-mqtt/issues/41"
+        )
         connector = DeyeConnector(config)
         self.modbus = DeyeModbus(config, connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
@@ -47,17 +47,19 @@ class DeyeDaemon():
         mqtt_publisher = DeyeMqttPublisher(config)
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         all_processors = [mqtt_publisher, set_time_processor]
-        self.processors = [
-            p for p in all_processors if p.get_id() in config.active_processors
-        ]
+        self.processors = [p for p in all_processors if p.get_id() in config.active_processors]
         for p in self.processors:
             p.initialize()
         self.__log.info(
             'Feature "Report metrics over MQTT": {}'.format(
-                'enabled' if mqtt_publisher.get_id() in config.active_processors else 'disabled'))
+                "enabled" if mqtt_publisher.get_id() in config.active_processors else "disabled"
+            )
+        )
         self.__log.info(
             'Feature "Set inverter time once online": {}'.format(
-                'enabled' if set_time_processor.get_id() in config.active_processors else 'disabled'))
+                "enabled" if set_time_processor.get_id() in config.active_processors else "disabled"
+            )
+        )
 
     def do_task(self):
         self.__log.info("Reading start")
@@ -80,7 +82,7 @@ class DeyeDaemon():
             if value is not None:
                 observation = Observation(sensor, timestamp, value)
                 events.append(DeyeObservationEvent(observation))
-                self.__log.debug(f'{observation.sensor.name}: {observation.value_as_str()}')
+                self.__log.debug(f"{observation.sensor.name}: {observation.value_as_str()}")
         return events
 
     def __remove_duplicated_reg_ranges(self, reg_ranges: list[SensorRegisterRange]) -> list[SensorRegisterRange]:
@@ -91,27 +93,33 @@ class DeyeDaemon():
         return result
 
 
-class setInterval :
-    def __init__(self,interval,action) :
-        self.interval=interval
-        self.action=action
-        self.stopEvent=threading.Event()
-        thread=threading.Thread(target=self.__setInterval)
+class IntervalRunner:
+    def __init__(self, interval, action):
+        self.__log = logging.getLogger(DeyeDaemon.__name__)
+        self.interval = interval
+        self.action = action
+        self.stopEvent = threading.Event()
+        thread = threading.Thread(target=self.__setInterval)
+        self.__log.debug("Start to execute the daemon at intervals of %s seconds", self.interval)
         thread.start()
 
-    def __setInterval(self) :
-        nextTime=time.time()+self.interval
-        while not self.stopEvent.wait(nextTime-time.time()) :
-            nextTime+=self.interval
-            self.action()
+    def __setInterval(self):
+        nextTime = time.time() + self.interval
+        while not self.stopEvent.wait(nextTime - time.time()):
+            nextTime += self.interval
+            try:
+                self.action()
+            except Exception as e:
+                self.__log.exception("Unexpected error during daemon execution")
 
     def cancel(self, _signum, _frame):
         self.stopEvent.set()
 
+
 def main():
     config = DeyeConfig.from_env()
     daemon = DeyeDaemon(config)
-    time_loop = setInterval(config.data_read_inverval,daemon.do_task)
+    time_loop = IntervalRunner(config.data_read_inverval, daemon.do_task)
     signal.signal(signal.SIGINT, time_loop.cancel)
     signal.signal(signal.SIGTERM, time_loop.cancel)
 
