@@ -109,7 +109,7 @@ class IntervalRunner:
             nextTime += self.interval
             try:
                 self.action()
-            except Exception as e:
+            except Exception:
                 self.__log.exception("Unexpected error during daemon execution")
 
     def cancel(self, _signum, _frame):
