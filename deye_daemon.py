@@ -99,18 +99,23 @@ class IntervalRunner:
         self.interval = interval
         self.action = action
         self.stopEvent = threading.Event()
-        thread = threading.Thread(target=self.__setInterval)
+        thread = threading.Thread(target=self.__handler)
         self.__log.debug("Start to execute the daemon at intervals of %s seconds", self.interval)
         thread.start()
 
-    def __setInterval(self):
+    def __handler(self):
+        self.__invoke_action()
         nextTime = time.time() + self.interval
         while not self.stopEvent.wait(nextTime - time.time()):
             nextTime += self.interval
-            try:
-                self.action()
-            except Exception:
-                self.__log.exception("Unexpected error during daemon execution")
+            self.__invoke_action()
+
+    def __invoke_action(self):
+        try:
+            self.action()
+        except Exception:
+            self.__log.exception("Unexpected error during daemon execution")
+
 
     def cancel(self, _signum, _frame):
         self.stopEvent.set()
