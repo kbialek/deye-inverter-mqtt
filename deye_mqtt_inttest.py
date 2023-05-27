@@ -25,7 +25,7 @@ import paho.mqtt.client as paho
 from deye_observation import Observation
 from deye_sensors import string_dc_power_sensor
 from deye_mqtt import DeyeMqttClient
-from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig
+from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig, DeyeMqttTlsConfig
 
 import sys
 import logging
@@ -43,11 +43,25 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
                                        '/usr/sbin/mosquitto', '-p', str(self.mqtt_broker_port))
         time.sleep(2)
 
-    def __stop_broker(self):
-        os.kill(self.mosquitto_pid, 9)
+    def __start_broker_with_tls(self):
+        self.mosquitto_pid = os.spawnl(os.P_NOWAIT, '/usr/sbin/mosquitto',
+                                       '/usr/sbin/mosquitto', '-p', str(self.mqtt_broker_port),
+                                       '-c', 'mosquitto/mosquitto-tls.conf')
         time.sleep(2)
 
+    def __stop_broker(self):
+        os.kill(self.mosquitto_pid, 9)
+        time.sleep(5)
+
     def __connect_test_client(self):
+        self.test_mqtt_client.connect('localhost', port=self.mqtt_broker_port)
+
+    def __connect_test_client_with_tls(self):
+        self.test_mqtt_client.tls_set(
+            ca_certs='certs/ca.crt',
+            certfile='certs/test_client.crt',
+            keyfile='certs/test_client.key'
+        )
         self.test_mqtt_client.connect('localhost', port=self.mqtt_broker_port)
 
     def setUp(self):
@@ -55,6 +69,15 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         self.config = DeyeConfig(
             logger_config=DeyeLoggerConfig('123456', '192.168.0.1', 9090),
             mqtt=DeyeMqttConfig('localhost', self.mqtt_broker_port, '', '', 'deye')
+        )
+        self.config_with_tls = DeyeConfig(
+            logger_config=DeyeLoggerConfig('123456', '192.168.0.1', 9090),
+            mqtt=DeyeMqttConfig('localhost', self.mqtt_broker_port, '', '', 'deye',
+            tls=DeyeMqttTlsConfig(enabled=True, 
+                ca_cert_path='certs/ca.crt',
+                client_cert_path='certs/deye.crt',
+                client_key_path='certs/deye.key'
+            ))
         )
         self.test_mqtt_client = paho.Client("test_client")
 
@@ -116,6 +139,38 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # and
         self.__connect_test_client()
+        self.test_mqtt_client.subscribe(f'deye/{string_dc_power_sensor.mqtt_topic_suffix}')
+
+        # when
+        self.test_mqtt_client.loop_start()
+        mqtt.publish_observation(observation)
+        self.test_mqtt_client.loop_stop()
+
+        # and
+        mqtt.disconnect()
+
+        # then
+        self.assertEqual(len(self.received_messages), 1)
+
+        # and
+        received_message = self.received_messages[0]
+        self.assertEqual(received_message.topic, 'deye/dc/total_power')
+        self.assertEqual(received_message.payload, b'1.2')
+
+    def test_publish_message_with_tls(self):
+        # given
+        self.__start_broker_with_tls()
+        self.__connect_test_client_with_tls()
+
+        # and
+        mqtt = DeyeMqttClient(self.config_with_tls)
+        mqtt.connect()
+
+        # and
+        timestamp = datetime.now()
+        observation = Observation(string_dc_power_sensor, timestamp, 1.2)
+
+        # and
         self.test_mqtt_client.subscribe(f'deye/{string_dc_power_sensor.mqtt_topic_suffix}')
 
         # when

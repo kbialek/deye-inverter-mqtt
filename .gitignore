@@ -1,5 +1,6 @@
 config.env
 config.json.default
+certs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

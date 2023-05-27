@@ -16,12 +16,40 @@
 # under the License.
 
 import os
+import ssl
 
+
+class DeyeMqttTlsConfig():
+    def __init__(self,
+                 enabled: bool = False,
+                 ca_cert_path: str | None = None,
+                 client_cert_path: str | None = None,
+                 client_key_path: str | None = None,
+                 tls_version = ssl.PROTOCOL_TLSv1_2,
+                 insecure = False,
+                 ):
+        self.enabled = enabled
+        self.ca_cert_path = ca_cert_path
+        self.client_cert_path = client_cert_path
+        self.client_key_path = client_key_path
+        ssl.TLSVersion = tls_version
+        self.insecure = insecure
+
+    @staticmethod
+    def from_env():
+        return DeyeMqttTlsConfig(
+            enabled=os.getenv('MQTT_TLS_ENABLED', 'false') == 'true',
+            ca_cert_path=os.getenv('MQTT_TLS_CA_CERT_PATH', None),
+            client_cert_path=os.getenv('MQTT_TLS_CLIENT_CERT_PATH', None),
+            client_key_path=os.getenv('MQTT_TLS_CLIENT_KEY_PATH',  None),
+            insecure=os.getenv('MQTT_TLS_INSECURE', 'false') == 'true',
+        )
 
 class DeyeMqttConfig():
-    def __init__(self, host: str, port: int, username: str, password: str, topic_prefix: str,
+    def __init__(self, host: str, port: int, username: str|None, password: str|None, topic_prefix: str,
                  availability_topic: str = 'status',
-                 logger_status_topic: str = 'logger_status'):
+                 logger_status_topic: str = 'logger_status',
+                 tls=DeyeMqttTlsConfig()):
         self.host = host
         self.port = port
         self.username = username
@@ -29,17 +57,19 @@ class DeyeMqttConfig():
         self.topic_prefix = topic_prefix
         self.availability_topic = availability_topic
         self.logger_status_topic = logger_status_topic
+        self.tls = tls
 
     @staticmethod
     def from_env():
         return DeyeMqttConfig(
             host=os.getenv('MQTT_HOST'),
-            port=int(os.getenv('MQTT_PORT')),
+            port=int(os.getenv('MQTT_PORT', '1883')),
             username=os.getenv('MQTT_USERNAME'),
             password=os.getenv('MQTT_PASSWORD'),
-            topic_prefix=os.getenv('MQTT_TOPIC_PREFIX'),
-            availability_topic=os.getenv('MQTT_AVAILIBILITY_TOPIC', 'status'),
-            logger_status_topic=os.getenv('MQTT_LOGGER_STATUS_TOPIC', 'logger_status')
+            topic_prefix=os.getenv('MQTT_TOPIC_PREFIX', 'deye'),
+            availability_topic=os.getenv('MQTT_AVAILABILITY_TOPIC', 'status'),
+            logger_status_topic=os.getenv('MQTT_LOGGER_STATUS_TOPIC', 'logger_status'),
+            tls=DeyeMqttTlsConfig.from_env()
         )
 
 
