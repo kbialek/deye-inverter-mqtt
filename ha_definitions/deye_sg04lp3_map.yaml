@@ -38,10 +38,21 @@ topics:
   605: ac/l2/ct/internal
   618: ac/l3/ct/external
   606: ac/l3/ct/internal
+  650: ac/ups/l1/power
+  651: ac/ups/l2/power
+  652: ac/ups/l3/power
+  653: ac/ups/total_power
+  644: ac/ups/l1/voltage
+  645: ac/ups/l2/voltage
+  646: ac/ups/l3/voltage
+  526: ac/ups/daily_energy
+  527: ac/ups/total_energy
+
 
 groups:
   solar: ''
   grid: ''
   inverter: ''
   battery: battery
+  upload: ups
 
