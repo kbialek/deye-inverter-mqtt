@@ -18,7 +18,7 @@ When your inverter turns out to work well with an already exiting metrics group,
 | [Deye SUN300/500G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun300-500g3eu230.html)                                                            | [micro](docs/metric_group_micro.md)                                                                                  |
 | [Deye SUN600/800/1000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html) | [micro](docs/metric_group_micro.md)                                                                                  |
 | [Deye SUN1300-2000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)                                                         | [micro](docs/metric_group_micro.md)                                                                                  |
-| [Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                         | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md) |
+| [Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                         | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md) |
 | [Deye SUN-5/6K-SG01LP1-US](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                         | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md) |
 | [Deye SUN-7.6/8K-SG01LP1-US/EU](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                         | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md) |
 
@@ -151,6 +151,7 @@ All configuration options are controlled through environment variables.
     * `deye_hybrid_battery` - hybrid inverter battery
     * `deye_sg04lp3` - sg04lp3 inverter
     * `deye_sg04lp3_battery` - sg04lp3 battery
+    * `deye_sg04lp3_ups` - sg04lp3 ups
     * `igen_dtsd422`- dtsd422 smart meter
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
