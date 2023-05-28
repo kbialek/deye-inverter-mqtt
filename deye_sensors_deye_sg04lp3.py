@@ -143,6 +143,42 @@ deye_sg04lp3_grid_524 = DoubleRegisterSensor('Total Energy Sold', 524, 0.1,
                                              mqtt_topic_suffix='ac/total_energy_sold', unit='kWh', signed=False,
                                              groups=['deye_sg04lp3'])
 
+deye_sg04lp3_upload_653 = SingleRegisterSensor('Total Load Power', 653, 1,
+                                               mqtt_topic_suffix='ac/ups/total_power', unit='W', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
+deye_sg04lp3_upload_650 = SingleRegisterSensor('Load L1 Power', 650, 1,
+                                               mqtt_topic_suffix='ac/ups/l1/power', unit='W', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
+deye_sg04lp3_upload_651 = SingleRegisterSensor('Load L2 Power', 651, 1,
+                                               mqtt_topic_suffix='ac/ups/l2/power', unit='W', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
+deye_sg04lp3_upload_652 = SingleRegisterSensor('Load L3 Power', 652, 1,
+                                               mqtt_topic_suffix='ac/ups/l3/power', unit='W', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
+deye_sg04lp3_upload_644 = SingleRegisterSensor('Load Voltage L1', 644, 0.1,
+                                               mqtt_topic_suffix='ac/ups/l1/voltage', unit='V', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
+deye_sg04lp3_upload_645 = SingleRegisterSensor('Load Voltage L2', 645, 0.1,
+                                               mqtt_topic_suffix='ac/ups/l2/voltage', unit='V', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
+deye_sg04lp3_upload_646 = SingleRegisterSensor('Load Voltage L3', 646, 0.1,
+                                               mqtt_topic_suffix='ac/ups/l3/voltage', unit='V', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
+deye_sg04lp3_upload_526 = SingleRegisterSensor('Daily Load Consumption', 526, 0.1,
+                                               mqtt_topic_suffix='ac/ups/daily_energy', unit='kWh', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
+deye_sg04lp3_upload_527 = DoubleRegisterSensor('Total Load Consumption', 527, 0.1,
+                                               mqtt_topic_suffix='ac/ups/total_energy', unit='kWh', signed=False,
+                                               groups=['deye_sg04lp3_ups'])
+
 deye_sg04lp3_inverter_630 = SingleRegisterSensor('Current L1', 630, 0.01,
                                                  mqtt_topic_suffix='ac/l1/current', unit='A', signed=True,
                                                  groups=['deye_sg04lp3'])
@@ -207,6 +243,15 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_grid_522,
     deye_sg04lp3_grid_521,
     deye_sg04lp3_grid_524,
+    deye_sg04lp3_upload_653,
+    deye_sg04lp3_upload_650,
+    deye_sg04lp3_upload_651,
+    deye_sg04lp3_upload_652,
+    deye_sg04lp3_upload_644,
+    deye_sg04lp3_upload_645,
+    deye_sg04lp3_upload_646,
+    deye_sg04lp3_upload_526,
+    deye_sg04lp3_upload_527,
     deye_sg04lp3_inverter_630,
     deye_sg04lp3_inverter_631,
     deye_sg04lp3_inverter_632,
@@ -218,10 +263,12 @@ deye_sg04lp3_sensors = [
 ]
 
 deye_sg04lp3_register_ranges = [
+    SensorRegisterRange(group='deye_sg04lp3_ups', first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group='deye_sg04lp3', first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group='deye_sg04lp3_battery', first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group='deye_sg04lp3_battery', first_reg_address=586, last_reg_address=591),
     SensorRegisterRange(group='deye_sg04lp3', first_reg_address=598, last_reg_address=636),
+    SensorRegisterRange(group='deye_sg04lp3_ups', first_reg_address=644, last_reg_address=653),
     SensorRegisterRange(group='deye_sg04lp3', first_reg_address=672, last_reg_address=679)
 ]
 
