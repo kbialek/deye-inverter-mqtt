@@ -118,7 +118,7 @@ class DeyeModbus:
     def __extract_modbus_response_frame(self, frame: bytes) -> bytes | None:
         # 29 - outer frame, 2 - modbus addr and command, 2 - modbus crc
         if not frame:
-            # Error was already logged in `send_reqest()` function
+            # Error was already logged in `send_request()` function
             return None
         if len(frame) == 29:
             self.__parse_response_error_code(frame)

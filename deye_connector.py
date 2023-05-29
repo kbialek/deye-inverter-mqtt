@@ -34,8 +34,8 @@ class DeyeConnector:
                 client_socket = socket.socket(family, socktype, proto)
                 client_socket.settimeout(10)
                 client_socket.connect(sockadress)
-            except socket.error:
-                self.__log.error("Could not open socket on IP %s", self.config.ip_address)
+            except OSError as e:
+                self.__log.error("Could not open socket on IP %s: %s", self.config.ip_address, e.strerror)
                 break
 
             self.__log.debug("Request frame: %s", req_frame.hex())
@@ -49,8 +49,7 @@ class DeyeConnector:
                     if data:
                         self.__log.debug("Response frame: %s", data.hex())
                         return data
-                    self.__log.error("No data received")
-                    break
+                    self.__log.warning("No data received")
                 except socket.timeout:
                     self.__log.debug("Connection timeout")
                     if attempts == 0:
