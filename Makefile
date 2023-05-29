@@ -90,3 +90,28 @@ $(GENERATE_DOCS_TARGETS): generate-docs-%:
 	@cd tools && python metric_group_doc_gen.py --group-name=$* > ../docs/metric_group_$*.md
 
 generate-all-docs: $(GENERATE_DOCS_TARGETS)
+
+py-setup:
+	pyenv install 3.10
+	pyenv local 3.10
+	poetry env use 3.10
+
+py-install-dependencies:
+	poetry lock
+	poetry install --with dev
+
+py-export-requirements:
+	poetry export -f requirements.txt --output requirements.txt
+
+py-show-dependencies:
+	poetry show
+
+py-show-dependencies-outdated:
+	poetry show -o
+
+py-update-dependencies:
+	poetry update
+
+py-check-code:
+	black src/
+	flake8 src/
