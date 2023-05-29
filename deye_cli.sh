@@ -1,4 +1,4 @@
 #!/bin/bash
 
 set -a; source config.env; set +a
-python deye_cli.py "$@"
+python src/deye_cli.py "$@"
