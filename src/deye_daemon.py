@@ -116,7 +116,6 @@ class IntervalRunner:
         except Exception:
             self.__log.exception("Unexpected error during daemon execution")
 
-
     def cancel(self, _signum, _frame):
         self.stopEvent.set()
 

@@ -18,7 +18,8 @@
 from deye_sensor import Sensor
 from datetime import datetime
 
-class Observation():
+
+class Observation:
     """
     Models Solar Inverter sensor reading.
     """
@@ -30,5 +31,3 @@ class Observation():
 
     def value_as_str(self):
         return self.sensor.format_value(self.value)
-
-

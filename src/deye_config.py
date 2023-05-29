@@ -19,15 +19,16 @@ import os
 import ssl
 
 
-class DeyeMqttTlsConfig():
-    def __init__(self,
-                 enabled: bool = False,
-                 ca_cert_path: str | None = None,
-                 client_cert_path: str | None = None,
-                 client_key_path: str | None = None,
-                 tls_version = ssl.PROTOCOL_TLSv1_2,
-                 insecure = False,
-                 ):
+class DeyeMqttTlsConfig:
+    def __init__(
+        self,
+        enabled: bool = False,
+        ca_cert_path: str | None = None,
+        client_cert_path: str | None = None,
+        client_key_path: str | None = None,
+        tls_version=ssl.PROTOCOL_TLSv1_2,
+        insecure=False,
+    ):
         self.enabled = enabled
         self.ca_cert_path = ca_cert_path
         self.client_cert_path = client_cert_path
@@ -38,18 +39,26 @@ class DeyeMqttTlsConfig():
     @staticmethod
     def from_env():
         return DeyeMqttTlsConfig(
-            enabled=os.getenv('MQTT_TLS_ENABLED', 'false') == 'true',
-            ca_cert_path=os.getenv('MQTT_TLS_CA_CERT_PATH', None),
-            client_cert_path=os.getenv('MQTT_TLS_CLIENT_CERT_PATH', None),
-            client_key_path=os.getenv('MQTT_TLS_CLIENT_KEY_PATH',  None),
-            insecure=os.getenv('MQTT_TLS_INSECURE', 'false') == 'true',
+            enabled=os.getenv("MQTT_TLS_ENABLED", "false") == "true",
+            ca_cert_path=os.getenv("MQTT_TLS_CA_CERT_PATH", None),
+            client_cert_path=os.getenv("MQTT_TLS_CLIENT_CERT_PATH", None),
+            client_key_path=os.getenv("MQTT_TLS_CLIENT_KEY_PATH", None),
+            insecure=os.getenv("MQTT_TLS_INSECURE", "false") == "true",
         )
 
-class DeyeMqttConfig():
-    def __init__(self, host: str, port: int, username: str|None, password: str|None, topic_prefix: str,
-                 availability_topic: str = 'status',
-                 logger_status_topic: str = 'logger_status',
-                 tls=DeyeMqttTlsConfig()):
+
+class DeyeMqttConfig:
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        username: str | None,
+        password: str | None,
+        topic_prefix: str,
+        availability_topic: str = "status",
+        logger_status_topic: str = "logger_status",
+        tls=DeyeMqttTlsConfig(),
+    ):
         self.host = host
         self.port = port
         self.username = username
@@ -62,18 +71,18 @@ class DeyeMqttConfig():
     @staticmethod
     def from_env():
         return DeyeMqttConfig(
-            host=os.getenv('MQTT_HOST'),
-            port=int(os.getenv('MQTT_PORT', '1883')),
-            username=os.getenv('MQTT_USERNAME'),
-            password=os.getenv('MQTT_PASSWORD'),
-            topic_prefix=os.getenv('MQTT_TOPIC_PREFIX', 'deye'),
-            availability_topic=os.getenv('MQTT_AVAILABILITY_TOPIC', 'status'),
-            logger_status_topic=os.getenv('MQTT_LOGGER_STATUS_TOPIC', 'logger_status'),
-            tls=DeyeMqttTlsConfig.from_env()
+            host=os.getenv("MQTT_HOST"),
+            port=int(os.getenv("MQTT_PORT", "1883")),
+            username=os.getenv("MQTT_USERNAME"),
+            password=os.getenv("MQTT_PASSWORD"),
+            topic_prefix=os.getenv("MQTT_TOPIC_PREFIX", "deye"),
+            availability_topic=os.getenv("MQTT_AVAILABILITY_TOPIC", "status"),
+            logger_status_topic=os.getenv("MQTT_LOGGER_STATUS_TOPIC", "logger_status"),
+            tls=DeyeMqttTlsConfig.from_env(),
         )
 
 
-class DeyeLoggerConfig():
+class DeyeLoggerConfig:
     """
     Logger is a device that connects the Solar Inverter with the internet.
 
@@ -89,18 +98,22 @@ class DeyeLoggerConfig():
     @staticmethod
     def from_env():
         return DeyeLoggerConfig(
-            serial_number=int(os.getenv('DEYE_LOGGER_SERIAL_NUMBER')),
-            ip_address=os.getenv('DEYE_LOGGER_IP_ADDRESS'),
-            port=int(os.getenv('DEYE_LOGGER_PORT')),
+            serial_number=int(os.getenv("DEYE_LOGGER_SERIAL_NUMBER")),
+            ip_address=os.getenv("DEYE_LOGGER_IP_ADDRESS"),
+            port=int(os.getenv("DEYE_LOGGER_PORT")),
         )
 
 
-class DeyeConfig():
-    def __init__(self, logger_config: DeyeLoggerConfig, mqtt: DeyeMqttConfig,
-                 log_level='INFO',
-                 data_read_inverval=60,
-                 metric_groups=[],
-                 active_processors=[]):
+class DeyeConfig:
+    def __init__(
+        self,
+        logger_config: DeyeLoggerConfig,
+        mqtt: DeyeMqttConfig,
+        log_level="INFO",
+        data_read_inverval=60,
+        metric_groups=[],
+        active_processors=[],
+    ):
         self.logger = logger_config
         self.mqtt = mqtt
         self.log_level = log_level
@@ -110,22 +123,24 @@ class DeyeConfig():
 
     @staticmethod
     def from_env():
-        return DeyeConfig(DeyeLoggerConfig.from_env(), DeyeMqttConfig.from_env(),
-                          log_level=os.getenv('LOG_LEVEL', 'INFO'),
-                          data_read_inverval=int(os.getenv('DEYE_DATA_READ_INTERVAL', '60')),
-                          metric_groups=DeyeConfig.__read_item_set(os.getenv('DEYE_METRIC_GROUPS', '')),
-                          active_processors=DeyeConfig.__read_active_processors()
-                          )
+        return DeyeConfig(
+            DeyeLoggerConfig.from_env(),
+            DeyeMqttConfig.from_env(),
+            log_level=os.getenv("LOG_LEVEL", "INFO"),
+            data_read_inverval=int(os.getenv("DEYE_DATA_READ_INTERVAL", "60")),
+            metric_groups=DeyeConfig.__read_item_set(os.getenv("DEYE_METRIC_GROUPS", "")),
+            active_processors=DeyeConfig.__read_active_processors(),
+        )
 
     @staticmethod
     def __read_item_set(value: str) -> set[str]:
-        return set([p.strip() for p in value.split(',')])
+        return set([p.strip() for p in value.split(",")])
 
     @staticmethod
     def __read_active_processors():
         active_processors = []
-        if os.getenv('DEYE_FEATURE_MQTT_PUBLISHER', 'true') == 'true':
-            active_processors.append('mqtt_publisher')
-        if os.getenv('DEYE_FEATURE_SET_TIME', 'false') == 'true':
-            active_processors.append('set_time')
+        if os.getenv("DEYE_FEATURE_MQTT_PUBLISHER", "true") == "true":
+            active_processors.append("mqtt_publisher")
+        if os.getenv("DEYE_FEATURE_SET_TIME", "false") == "true":
+            active_processors.append("set_time")
         return active_processors

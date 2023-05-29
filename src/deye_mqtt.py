@@ -25,12 +25,12 @@ from deye_config import DeyeConfig
 from deye_observation import Observation
 
 
-class DeyeMqttClient():
-
+class DeyeMqttClient:
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
         self.__mqtt_client = paho.Client(
-            client_id=f'deye-inverter-{config.logger.serial_number}', reconnect_on_failure=True)
+            client_id=f"deye-inverter-{config.logger.serial_number}", reconnect_on_failure=True
+        )
         self.__mqtt_client.enable_logger()
         if config.mqtt.tls.enabled:
             if config.mqtt.tls.insecure:
@@ -43,13 +43,13 @@ class DeyeMqttClient():
                 self.__mqtt_client.tls_set(
                     ca_certs=config.mqtt.tls.ca_cert_path,
                     certfile=config.mqtt.tls.client_cert_path,
-                    keyfile=config.mqtt.tls.client_key_path
+                    keyfile=config.mqtt.tls.client_key_path,
                 )
                 self.__log.info("Enabled TLS encryption for MQTT Broker connection with certificate verification")
         if config.mqtt.username and config.mqtt.password:
             self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
-        self.__status_topic = f'{config.mqtt.topic_prefix}/{config.mqtt.availability_topic}'
-        self.__mqtt_client.will_set(self.__status_topic, 'offline', retain=True, qos=1)
+        self.__status_topic = f"{config.mqtt.topic_prefix}/{config.mqtt.availability_topic}"
+        self.__mqtt_client.will_set(self.__status_topic, "offline", retain=True, qos=1)
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
 
@@ -57,13 +57,15 @@ class DeyeMqttClient():
         try:
             self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
             self.__mqtt_client.loop_start()
-            self.__mqtt_client.publish(self.__status_topic, 'online', retain=True, qos=1)
-            self.__log.info("Successfully connected to MQTT Broker located at %s:%d",
-                            self.__config.host, self.__config.port)
+            self.__mqtt_client.publish(self.__status_topic, "online", retain=True, qos=1)
+            self.__log.info(
+                "Successfully connected to MQTT Broker located at %s:%d", self.__config.host, self.__config.port
+            )
             return True
         except (ConnectionRefusedError, OSError):
-            self.__log.error("Failed to connect to MQTT Broker located at %s:%d",
-                             self.__config.host, self.__config.port)
+            self.__log.error(
+                "Failed to connect to MQTT Broker located at %s:%d", self.__config.host, self.__config.port
+            )
             return False
 
     def disconnect(self):
@@ -83,7 +85,7 @@ class DeyeMqttClient():
 
     def publish_observation(self, observation: Observation):
         if observation.sensor.mqtt_topic_suffix:
-            mqtt_topic = f'{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}'
+            mqtt_topic = f"{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}"
             value = observation.value_as_str()
             self.__do_publish(mqtt_topic, value)
 
@@ -93,7 +95,7 @@ class DeyeMqttClient():
                 self.publish_observation(observation)
 
     def publish_logger_status(self, is_online: bool):
-        mqtt_topic = f'{self.__config.topic_prefix}/{self.__config.logger_status_topic}'
-        value = 'online' if is_online else 'offline'
+        mqtt_topic = f"{self.__config.topic_prefix}/{self.__config.logger_status_topic}"
+        value = "online" if is_online else "offline"
         self.__do_publish(mqtt_topic, value)
         self.__log.info("Logger is %s", value)

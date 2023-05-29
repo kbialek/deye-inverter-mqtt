@@ -28,9 +28,8 @@ from deye_sensor import (
 
 
 class TestSensor(Sensor):
-
     def __init__(self, name, value):
-        super().__init__(name, groups=['string'])
+        super().__init__(name, groups=["string"])
         self.value = value
 
     def read_value(self, registers):
@@ -38,14 +37,13 @@ class TestSensor(Sensor):
 
 
 class DeyeSensorTest(unittest.TestCase):
-
     def test_sum_sensor_returns_sum_when_all_inputs_are_given(self):
         # given
         test_sensor1 = TestSensor("ts1", 1.1)
         test_sensor2 = TestSensor("ts2", 2.2)
 
         # and
-        sut = ComputedSumSensor('sum', [test_sensor1, test_sensor2], groups=['string'])
+        sut = ComputedSumSensor("sum", [test_sensor1, test_sensor2], groups=["string"])
 
         # when
         result = sut.read_value([])
@@ -59,7 +57,7 @@ class DeyeSensorTest(unittest.TestCase):
         test_sensor2 = TestSensor("ts2", None)
 
         # and
-        sut = ComputedSumSensor('sum', [test_sensor1, test_sensor2], groups=['string'])
+        sut = ComputedSumSensor("sum", [test_sensor1, test_sensor2], groups=["string"])
 
         # when
         result = sut.read_value([])
@@ -69,12 +67,10 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_single_reg_sensor_unsigned(self):
         # given
-        sut = SingleRegisterSensor('test', 0x00, 1, signed=False, groups=['string'])
+        sut = SingleRegisterSensor("test", 0x00, 1, signed=False, groups=["string"])
 
         # and
-        registers = {
-            0: bytearray.fromhex('0102')
-        }
+        registers = {0: bytearray.fromhex("0102")}
 
         # when
         result = sut.read_value(registers)
@@ -84,12 +80,10 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_double_reg_sensor_signed(self):
         # given
-        sut = SingleRegisterSensor('test', 0x00, 1, signed=True, groups=['string'])
+        sut = SingleRegisterSensor("test", 0x00, 1, signed=True, groups=["string"])
 
         # and
-        registers = {
-            0: bytearray.fromhex('fffe')
-        }
+        registers = {0: bytearray.fromhex("fffe")}
 
         # when
         result = sut.read_value(registers)
@@ -99,13 +93,10 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_double_reg_sensor_unsigned(self):
         # given
-        sut = DoubleRegisterSensor('test', 0x00, 1, signed=False, groups=['string'])
+        sut = DoubleRegisterSensor("test", 0x00, 1, signed=False, groups=["string"])
 
         # and
-        registers = {
-            0: bytearray.fromhex('0102'),  # low word
-            1: bytearray.fromhex('0304')  # high word
-        }
+        registers = {0: bytearray.fromhex("0102"), 1: bytearray.fromhex("0304")}  # low word  # high word
 
         # when
         result = sut.read_value(registers)
@@ -115,13 +106,10 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_double_reg_sensor_signed(self):
         # given
-        sut = DoubleRegisterSensor('test', 0x00, 1, signed=True, groups=['string'])
+        sut = DoubleRegisterSensor("test", 0x00, 1, signed=True, groups=["string"])
 
         # and
-        registers = {
-            0: bytearray.fromhex('fffe'),  # low word
-            1: bytearray.fromhex('ffff')  # high word
-        }
+        registers = {0: bytearray.fromhex("fffe"), 1: bytearray.fromhex("ffff")}  # low word  # high word
 
         # when
         result = sut.read_value(registers)
@@ -131,12 +119,10 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_signed_magnitude_single_register_signed(self):
         # given
-        sut = SignedMagnitudeSingleRegisterSensor('test', 0x00, 1, groups=['igen_dtsd422'])
+        sut = SignedMagnitudeSingleRegisterSensor("test", 0x00, 1, groups=["igen_dtsd422"])
 
         # and
-        registers = {
-            0: bytearray.fromhex('8310')
-        }
+        registers = {0: bytearray.fromhex("8310")}
 
         # when
         result = sut.read_value(registers)
@@ -146,12 +132,10 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_signed_magnitude_single_register_unsigned(self):
         # given
-        sut = SignedMagnitudeSingleRegisterSensor('test', 0x00, 1, groups=['igen_dtsd422'])
+        sut = SignedMagnitudeSingleRegisterSensor("test", 0x00, 1, groups=["igen_dtsd422"])
 
         # and
-        registers = {
-            0: bytearray.fromhex('0310')
-        }
+        registers = {0: bytearray.fromhex("0310")}
 
         # when
         result = sut.read_value(registers)
@@ -161,13 +145,10 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_signed_magnitude_double_register_signed(self):
         # given
-        sut = SignedMagnitudeDoubleRegisterSensor('test', 0x00, 1, groups=['igen_dtsd422'])
+        sut = SignedMagnitudeDoubleRegisterSensor("test", 0x00, 1, groups=["igen_dtsd422"])
 
         # and
-        registers = {
-            0: bytearray.fromhex('8000'),  # high word
-            1: bytearray.fromhex('0101')  # low word
-        }
+        registers = {0: bytearray.fromhex("8000"), 1: bytearray.fromhex("0101")}  # high word  # low word
 
         # when
         result = sut.read_value(registers)
@@ -177,13 +158,10 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_signed_magnitude_double_register_unsigned(self):
         # given
-        sut = SignedMagnitudeDoubleRegisterSensor('test', 0x00, 1, groups=['igen_dtsd422'])
+        sut = SignedMagnitudeDoubleRegisterSensor("test", 0x00, 1, groups=["igen_dtsd422"])
 
         # and
-        registers = {
-            0: bytearray.fromhex('0000'),  # high word
-            1: bytearray.fromhex('0101')  # low word
-        }
+        registers = {0: bytearray.fromhex("0000"), 1: bytearray.fromhex("0101")}  # high word  # low word
 
         # when
         result = sut.read_value(registers)
@@ -192,5 +170,5 @@ class DeyeSensorTest(unittest.TestCase):
         self.assertEqual(result, 257)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

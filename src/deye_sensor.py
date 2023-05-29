@@ -18,19 +18,19 @@
 from abc import abstractmethod
 
 
-class Sensor():
+class Sensor:
     """
     Models solar inverter sensor.
 
-    This is an abstract class. Method 'read_value' must be provided by the extending subclass. 
+    This is an abstract class. Method 'read_value' must be provided by the extending subclass.
     """
 
-    def __init__(self, name: str, mqtt_topic_suffix='', unit='', print_format='{:s}', groups=[]):
+    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:s}", groups=[]):
         self.name = name
         self.mqtt_topic_suffix = mqtt_topic_suffix
         self.unit = unit
         self.print_format = print_format
-        assert len(groups) > 0, f'Sensor {name} must belong to at least one group'
+        assert len(groups) > 0, f"Sensor {name} must belong to at least one group"
         self.groups = groups
 
     @abstractmethod
@@ -55,8 +55,7 @@ class Sensor():
 
     @abstractmethod
     def get_registers(self) -> list[int]:
-        """Returns the list of Modbus registers read by this sensor
-        """
+        """Returns the list of Modbus registers read by this sensor"""
 
 
 class SingleRegisterSensor(Sensor):
@@ -65,8 +64,17 @@ class SingleRegisterSensor(Sensor):
     """
 
     def __init__(
-            self, name: str, reg_address: int, factor: float, offset: float = 0,
-            signed=False, mqtt_topic_suffix='', unit='', print_format='{:0.1f}', groups=[]):
+        self,
+        name: str,
+        reg_address: int,
+        factor: float,
+        offset: float = 0,
+        signed=False,
+        mqtt_topic_suffix="",
+        unit="",
+        print_format="{:0.1f}",
+        groups=[],
+    ):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
@@ -76,7 +84,7 @@ class SingleRegisterSensor(Sensor):
     def read_value(self, registers: dict[int, bytearray]):
         if self.reg_address in registers:
             reg_value = registers[self.reg_address]
-            return int.from_bytes(reg_value, 'big', signed=self.signed) * self.factor + self.offset
+            return int.from_bytes(reg_value, "big", signed=self.signed) * self.factor + self.offset
         else:
             return None
 
@@ -91,8 +99,17 @@ class DoubleRegisterSensor(Sensor):
     """
 
     def __init__(
-            self, name: str, reg_address: int, factor: float, offset: float = 0,
-            signed=False, mqtt_topic_suffix='', unit='', print_format='{:0.1f}', groups=[]):
+        self,
+        name: str,
+        reg_address: int,
+        factor: float,
+        offset: float = 0,
+        signed=False,
+        mqtt_topic_suffix="",
+        unit="",
+        print_format="{:0.1f}",
+        groups=[],
+    ):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
@@ -105,13 +122,13 @@ class DoubleRegisterSensor(Sensor):
         if low_word_reg_address in registers and high_word_reg_address in registers:
             low_word = registers[low_word_reg_address]
             high_word = registers[high_word_reg_address]
-            return int.from_bytes(high_word + low_word, 'big', signed=self.signed) * self.factor + self.offset
+            return int.from_bytes(high_word + low_word, "big", signed=self.signed) * self.factor + self.offset
         else:
             return None
 
     @abstractmethod
     def get_registers(self) -> list[int]:
-        return [self.reg_address, self.reg_address+1]
+        return [self.reg_address, self.reg_address + 1]
 
 
 class SignedMagnitudeSingleRegisterSensor(SingleRegisterSensor):
@@ -122,10 +139,7 @@ class SignedMagnitudeSingleRegisterSensor(SingleRegisterSensor):
 
     def read_value(self, registers: dict[int, bytearray]):
         if self.reg_address in registers:
-            reg_value = (
-                int.from_bytes(registers[self.reg_address], "big", signed=False)
-                & 0x7FFF
-            )
+            reg_value = int.from_bytes(registers[self.reg_address], "big", signed=False) & 0x7FFF
             # If highest bit is set, we've got a negative value
             if bool(registers[self.reg_address][0] & 0x80):
                 return -1 * reg_value * self.factor + self.offset
@@ -147,9 +161,7 @@ class SignedMagnitudeDoubleRegisterSensor(DoubleRegisterSensor):
         if low_word_reg_address in registers and high_word_reg_address in registers:
             low_word = registers[low_word_reg_address]
             high_word = registers[high_word_reg_address]
-            reg_value = (
-                int.from_bytes(high_word + low_word, "big", signed=False) & 0x7FFFFFFF
-            )
+            reg_value = int.from_bytes(high_word + low_word, "big", signed=False) & 0x7FFFFFFF
             # If highest bit is set, we've got a negative value
             if bool(registers[self.reg_address][0] & 0x80):
                 return -1 * reg_value * self.factor + self.offset
@@ -165,8 +177,15 @@ class ComputedPowerSensor(Sensor):
     """
 
     def __init__(
-            self, name: str, voltage_sensor: Sensor, current_sensor: Sensor, mqtt_topic_suffix='',
-            unit='', print_format='{:0.1f}', groups=[]):
+        self,
+        name: str,
+        voltage_sensor: Sensor,
+        current_sensor: Sensor,
+        mqtt_topic_suffix="",
+        unit="",
+        print_format="{:0.1f}",
+        groups=[],
+    ):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.voltage_sensor = voltage_sensor
         self.current_sensor = current_sensor
@@ -190,8 +209,8 @@ class ComputedSumSensor(Sensor):
     """
 
     def __init__(
-            self, name: str, sensors: list[Sensor], mqtt_topic_suffix='', unit='',
-            print_format='{:0.1f}', groups=[]):
+        self, name: str, sensors: list[Sensor], mqtt_topic_suffix="", unit="", print_format="{:0.1f}", groups=[]
+    ):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.sensors = sensors
 
@@ -225,7 +244,7 @@ class SensorRegisterRange:
         """
         return self.group in active_groups
 
-    def is_same_range(self, other: 'SensorRegisterRange') -> bool:
+    def is_same_range(self, other: "SensorRegisterRange") -> bool:
         """Checks if the other range has this same first and last reg address.
 
         Args:
@@ -237,5 +256,6 @@ class SensorRegisterRange:
         return self.first_reg_address == other.first_reg_address and self.last_reg_address == other.last_reg_address
 
     def __str__(self):
-        return 'metrics group: {}, range: {:04x}-{:04x}'.format(
-            self.group, self.first_reg_address, self.last_reg_address)
+        return "metrics group: {}, range: {:04x}-{:04x}".format(
+            self.group, self.first_reg_address, self.last_reg_address
+        )
