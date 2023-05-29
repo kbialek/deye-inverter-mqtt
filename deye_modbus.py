@@ -115,7 +115,7 @@ class DeyeModbus:
 
         return frame
 
-    def __extract_modbus_response_frame(self, frame: bytes) -> bytes | None:
+    def __extract_modbus_response_frame(self, frame: bytes | None) -> bytes | None:
         # 29 - outer frame, 2 - modbus addr and command, 2 - modbus crc
         if not frame:
             # Error was already logged in `send_request()` function
@@ -145,8 +145,8 @@ class DeyeModbus:
         reg_count = last_reg - first_reg + 1
         registers = {}
         expected_frame_data_len = 2 + 1 + reg_count * 2
-        if not frame or len(frame) < expected_frame_data_len + 2:  # 2 bytes for crc
-            self.__log.error("Modbus frame is too short or empty")
+        if len(frame) < expected_frame_data_len + 2:  # 2 bytes for crc
+            self.__log.error("Modbus frame is too short")
             return registers
         actual_crc = int.from_bytes(frame[expected_frame_data_len : expected_frame_data_len + 2], "little")
         expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])

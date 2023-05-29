@@ -22,12 +22,11 @@ from deye_config import DeyeConfig
 
 
 class DeyeConnector:
-
     def __init__(self, config: DeyeConfig) -> None:
         self.__log = logging.getLogger(DeyeConnector.__name__)
         self.config = config.logger
 
-    def send_request(self, req_frame) -> bytes:
+    def send_request(self, req_frame) -> bytes | None:
         for res in socket.getaddrinfo(self.config.ip_address, self.config.port, socket.AF_INET, socket.SOCK_STREAM):
             family, socktype, proto, canonname, sockadress = res
             try:
@@ -36,13 +35,13 @@ class DeyeConnector:
                 client_socket.connect(sockadress)
             except OSError as e:
                 self.__log.error("Could not open socket on IP %s: %s", self.config.ip_address, e.strerror)
-                break
+                return
 
             self.__log.debug("Request frame: %s", req_frame.hex())
             client_socket.sendall(req_frame)
 
             attempts = 5
-            while (attempts > 0):
+            while attempts > 0:
                 attempts = attempts - 1
                 try:
                     data = client_socket.recv(1024)
@@ -51,12 +50,14 @@ class DeyeConnector:
                         return data
                     self.__log.warning("No data received")
                 except socket.timeout:
-                    self.__log.debug("Connection timeout")
+                    self.__log.debug("Connection response timeout")
                     if attempts == 0:
                         self.__log.warning("Too many connection timeouts")
                 except OSError as e:
-                    self.__log.warning("Connection error: %s", e.strerror)
+                    self.__log.error("Connection error: %s", e.strerror)
+                    return
                 except Exception:
                     self.__log.exception("Unknown connection error")
+                    return
 
-        return bytes()
+        return
