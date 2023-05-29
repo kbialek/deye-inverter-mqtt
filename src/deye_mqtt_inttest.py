@@ -18,7 +18,6 @@
 import unittest
 import os
 import time
-from unittest.mock import patch
 from datetime import datetime
 import paho.mqtt.client as paho
 

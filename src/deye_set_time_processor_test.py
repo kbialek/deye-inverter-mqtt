@@ -18,7 +18,6 @@
 import unittest
 from unittest.mock import patch
 
-from deye_modbus import DeyeModbus
 from deye_set_time_processor import DeyeSetTimeProcessor
 from deye_events import DeyeLoggerStatusEvent
 

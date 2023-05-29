@@ -16,7 +16,6 @@
 # under the License.
 
 import unittest
-from unittest.mock import patch
 from deye_sensor import (
     Sensor,
     ComputedSumSensor,
@@ -78,7 +77,7 @@ class DeyeSensorTest(unittest.TestCase):
         # then
         self.assertEqual(result, 0x0102)
 
-    def test_double_reg_sensor_signed(self):
+    def test_single_reg_sensor_signed(self):
         # given
         sut = SingleRegisterSensor("test", 0x00, 1, signed=True, groups=["string"])
 
