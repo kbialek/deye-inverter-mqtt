@@ -26,10 +26,10 @@ mosquitto-stop:
 	@pkill mosquitto
 
 test:
-	python -m unittest discover -p "*_test.py"
+	pytest -v
 
 test-mqtt: gen-tls-certs
-	-@python -m unittest "deye_mqtt_inttest.py"
+	-@pytest -v tests/deye_mqtt_inttest.py
 	@rm certs/* && rmdir certs
 
 run:

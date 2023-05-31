@@ -26,7 +26,7 @@ from deye_sensor import (
 )
 
 
-class TestSensor(Sensor):
+class FakeSensor(Sensor):
     def __init__(self, name, value):
         super().__init__(name, groups=["string"])
         self.value = value
@@ -38,8 +38,8 @@ class TestSensor(Sensor):
 class DeyeSensorTest(unittest.TestCase):
     def test_sum_sensor_returns_sum_when_all_inputs_are_given(self):
         # given
-        test_sensor1 = TestSensor("ts1", 1.1)
-        test_sensor2 = TestSensor("ts2", 2.2)
+        test_sensor1 = FakeSensor("ts1", 1.1)
+        test_sensor2 = FakeSensor("ts2", 2.2)
 
         # and
         sut = ComputedSumSensor("sum", [test_sensor1, test_sensor2], groups=["string"])
@@ -52,8 +52,8 @@ class DeyeSensorTest(unittest.TestCase):
 
     def test_sum_sensor_returns_none_when_any_input_is_none(self):
         # given
-        test_sensor1 = TestSensor("ts1", 1.1)
-        test_sensor2 = TestSensor("ts2", None)
+        test_sensor1 = FakeSensor("ts1", 1.1)
+        test_sensor2 = FakeSensor("ts2", None)
 
         # and
         sut = ComputedSumSensor("sum", [test_sensor1, test_sensor2], groups=["string"])

@@ -11,6 +11,9 @@ python = "^3.10"
 libscrc = "1.8.1"
 paho-mqtt = "1.6.1"
 
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.2"
+
 [tool.poetry.group.dev.dependencies]
 black = { version = "^23.1.0", extras = ["d"] }
 flake8 = "^6.0.0"
@@ -26,3 +29,6 @@ max-line-length = 120
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "src"
