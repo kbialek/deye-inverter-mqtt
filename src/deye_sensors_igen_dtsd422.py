@@ -17,7 +17,6 @@
 
 from deye_sensor import (
     SingleRegisterSensor,
-    DoubleRegisterSensor,
     SignedMagnitudeSingleRegisterSensor,
     SignedMagnitudeDoubleRegisterSensor,
     SensorRegisterRange,
