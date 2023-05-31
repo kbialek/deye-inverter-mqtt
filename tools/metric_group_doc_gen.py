@@ -1,5 +1,5 @@
 import sys
-sys.path.append('..')
+sys.path.append('../src')
 
 from deye_sensor import Sensor
 from deye_sensors import sensor_list
