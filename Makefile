@@ -36,14 +36,14 @@ run:
 	@bash -c "set -a; source config.env; python deye_docker_entrypoint.py"
 
 $(ARCHS:%=docker-build-%): docker-build-%:
-	@docker buildx create --use
+	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
 		--platform $* \
 		--output type=docker \
 		-t deye-inverter-mqtt:$(VERSION) \
 		-t deye-inverter-mqtt:latest \
 		.
-	@docker buildx rm --all-inactive --force
+	@docker buildx rm deye-docker-build
 
 docker-build-local: docker-build-linux/amd64
 
