@@ -35,7 +35,7 @@ test-mqtt: gen-tls-certs
 run:
 	@bash -c "set -a; source config.env; python deye_docker_entrypoint.py"
 
-$(ARCHS:%=docker-build-%): docker-build-%:
+$(ARCHS:%=docker-build-%): docker-build-%: py-export-requirements
 	@docker buildx create --use
 	@docker buildx build \
 		--platform $* \
@@ -62,7 +62,7 @@ docker-shell:
 		--entrypoint /bin/sh -ti \
 		deye-inverter-mqtt
 
-docker-push: test
+docker-push: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
 	@docker buildx create --use
 	@docker buildx build \
@@ -73,7 +73,7 @@ docker-push: test
 		.
 	@docker buildx rm --all-inactive --force
 
-docker-push-beta: test
+docker-push-beta: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
 	@docker buildx create --use
 	@docker buildx build \
