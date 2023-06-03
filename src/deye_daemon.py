@@ -32,6 +32,7 @@ from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
 from deye_mqtt_subscriber import DeyeMqttSubscriber
 from deye_mqtt import DeyeMqttClient
+from deye_stdout_publisher import DeyeStdoutPublisher
 
 
 class DeyeDaemon:
@@ -53,7 +54,8 @@ class DeyeDaemon:
         DeyeMqttSubscriber.create(config, mqtt_client, self.modbus)
 
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
-        all_processors = [mqtt_publisher, set_time_processor]
+        stdout_publisher = DeyeStdoutPublisher(config)
+        all_processors = [mqtt_publisher, set_time_processor, stdout_publisher]
         self.processors = [p for p in all_processors if p.get_id() in config.active_processors]
         for p in self.processors:
             p.initialize()
@@ -66,6 +68,11 @@ class DeyeDaemon:
         self.__log.info(
             'Feature "Set inverter time once online": {}'.format(
                 "enabled" if set_time_processor.get_id() in config.active_processors else "disabled"
+            )
+        )
+        self.__log.info(
+            'Feature "Report metrics on STDOUT": {}'.format(
+                "enabled" if stdout_publisher.get_id() in config.active_processors else "disabled"
             )
         )
 

@@ -152,6 +152,8 @@ class DeyeConfig:
             active_processors.append("mqtt_publisher")
         if os.getenv("DEYE_FEATURE_SET_TIME", "false") == "true":
             active_processors.append("set_time")
+        if os.getenv("DEYE_FEATURE_STDOUT_PUBLISHER", "false") == "true":
+            active_processors.append("stdout_publisher")
         return active_processors
 
     @staticmethod
