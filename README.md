@@ -169,6 +169,7 @@ All configuration options are controlled through environment variables.
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
+* `DEYE_FEATURE_STDOUT_PUBLISHER` - controls, if the service will publish metrics on stdout, defaults to `false`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
 * `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
 * `MQTT_HOST` - MQTT Broker IP address
@@ -202,6 +203,15 @@ By using this tool you accept this risk and you take full responsibility for the
     docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt w <reg_address> <reg_value>
     ```
     where `<reg_address>` is register address (decimal), and <reg_value> is a value to set (decimal)
+
+## Using the stdout publisher
+
+Enabling this with `DEYE_FEATURE_STDOUT_PUBLISHER` will dump all collected
+metrics in json on stdout. This can be used e.g. in combination with other
+tools to process and push the metrics into various different systems other than
+mqtt.
+
+You can read more about an example usage in combination with telegraf [here](./docs/telegraf.md).
 
 ## Development
 Read [CONTRIBUTING.md](./CONTRIBUTING.md)
