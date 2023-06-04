@@ -113,6 +113,9 @@ py-show-dependencies-outdated:
 py-update-dependencies:
 	poetry update
 
-py-check-code:
+py-code-format:
 	black src/
+	black tests/
+
+py-check-code:
 	flake8 src/

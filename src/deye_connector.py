@@ -15,6 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+# flake8: _noqa
+
 import socket
 import logging
 

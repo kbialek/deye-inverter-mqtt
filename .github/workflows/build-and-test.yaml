@@ -20,6 +20,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
+      - name: Static code analysis
+        run: |
+          make py-check-code
       - name: Test with pytest
         run: |
           make test
