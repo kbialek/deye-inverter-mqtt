@@ -102,6 +102,7 @@ py-install-dependencies:
 
 py-export-requirements:
 	poetry export -f requirements.txt --output requirements.txt
+	poetry export -f requirements.txt --only dev --output requirements-dev.txt
 
 py-show-dependencies:
 	poetry show
