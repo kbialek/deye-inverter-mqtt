@@ -15,6 +15,7 @@ paho-mqtt = "1.6.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
+coverage = { version = "*", extras = ["toml"] }
 black = { version = "^23.1.0", extras = ["d"] }
 flake8 = "^6.0.0"
 Flake8-pyproject = "^1.2.3"
@@ -26,6 +27,10 @@ line-length = 120
 [tool.flake8]
 max-line-length = 120
 ignore = ['E203', 'W503']
+
+[tool.coverage.run]
+branch = true
+relative_files = true
 
 [build-system]
 requires = ["poetry-core"]

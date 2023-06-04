@@ -26,7 +26,10 @@ mosquitto-stop:
 	@pkill mosquitto
 
 test:
-	pytest -v
+	@pytest -v --cov --cov-report=xml
+
+test-coverage: test
+	@coverage report --skip-empty --no-skip-covered --sort=Cover
 
 test-mqtt: gen-tls-certs
 	-@pytest -v tests/deye_mqtt_inttest.py
