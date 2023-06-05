@@ -36,7 +36,7 @@ test-mqtt: gen-tls-certs
 	@rm certs/* && rmdir certs
 
 run:
-	@bash -c "set -a; source config.env; python deye_docker_entrypoint.py"
+	@bash -c "set -a; source config.env; python src/deye_docker_entrypoint.py"
 
 $(ARCHS:%=docker-build-%): docker-build-%: py-export-requirements
 	@docker buildx create --use --name deye-docker-build
