@@ -12,4 +12,4 @@ $(DOWNLOAD_TARGETS): download-%:
 $(IMPORT_TARGETS): import-%:
 	python ../tools/ha_definition_import.py \
 		--definition-code $* \
-		--sensors-file ../deye_sensors_$*.py
+		--sensors-file ../src/deye_sensors_$*.py

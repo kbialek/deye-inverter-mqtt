@@ -28,7 +28,7 @@ log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 logging.basicConfig(stream=sys.stdout, format=log_format, level=logging.getLevelName(config.log_level))
 
-log = logging.getLogger('main')
+log = logging.getLogger("main")
 
 
 def main():

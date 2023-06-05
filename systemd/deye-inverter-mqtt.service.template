@@ -6,7 +6,7 @@ After=network.target
 Type=exec
 User=deyeuser
 WorkingDirectory=/path/to/deye-inverter-mqtt/
-ExecStart=/path/to/deye-inverter-mqtt/venv/bin/python deye_docker_entrypoint.py
+ExecStart=/path/to/deye-inverter-mqtt/venv/bin/python src/deye_docker_entrypoint.py
 Restart=always
 EnvironmentFile=/path/to/deye-inverter-mqtt/config.env
 

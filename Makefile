@@ -1,5 +1,5 @@
 GITHUB_USER = kbialek
-VERSION = 2023.05.4
+VERSION = $(shell poetry version -s)
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
 
@@ -26,16 +26,19 @@ mosquitto-stop:
 	@pkill mosquitto
 
 test:
-	python -m unittest discover -p "*_test.py"
+	@pytest -v --cov --cov-report=xml
+
+test-coverage: test
+	@coverage report --skip-empty --no-skip-covered --sort=Cover
 
 test-mqtt: gen-tls-certs
-	-@python -m unittest "deye_mqtt_inttest.py"
+	-@pytest -v tests/deye_mqtt_inttest.py
 	@rm certs/* && rmdir certs
 
 run:
 	@bash -c "set -a; source config.env; python deye_docker_entrypoint.py"
 
-$(ARCHS:%=docker-build-%): docker-build-%:
+$(ARCHS:%=docker-build-%): docker-build-%: py-export-requirements
 	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
 		--platform $* \
@@ -62,7 +65,7 @@ docker-shell:
 		--entrypoint /bin/sh -ti \
 		deye-inverter-mqtt
 
-docker-push: test
+docker-push: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
 	@docker buildx create --use
 	@docker buildx build \
@@ -73,7 +76,7 @@ docker-push: test
 		.
 	@docker buildx rm --all-inactive --force
 
-docker-push-beta: test
+docker-push-beta: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
 	@docker buildx create --use
 	@docker buildx build \
@@ -90,3 +93,32 @@ $(GENERATE_DOCS_TARGETS): generate-docs-%:
 	@cd tools && python metric_group_doc_gen.py --group-name=$* > ../docs/metric_group_$*.md
 
 generate-all-docs: $(GENERATE_DOCS_TARGETS)
+
+py-setup:
+	pyenv install 3.10
+	pyenv local 3.10
+	poetry env use 3.10
+
+py-install-dependencies:
+	poetry lock
+	poetry install --with dev
+
+py-export-requirements:
+	poetry export -f requirements.txt --output requirements.txt
+	poetry export -f requirements.txt --only dev --output requirements-dev.txt
+
+py-show-dependencies:
+	poetry show
+
+py-show-dependencies-outdated:
+	poetry show -o
+
+py-update-dependencies:
+	poetry update
+
+py-code-format:
+	black src/
+	black tests/
+
+py-check-code:
+	flake8 src/
