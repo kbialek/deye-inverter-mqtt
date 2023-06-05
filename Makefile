@@ -39,6 +39,7 @@ run:
 	@bash -c "set -a; source config.env; python src/deye_docker_entrypoint.py"
 
 $(ARCHS:%=docker-build-%): docker-build-%: py-export-requirements
+	-@docker buildx rm deye-docker-build
 	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
 		--platform $* \
@@ -67,24 +68,26 @@ docker-shell:
 
 docker-push: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
-	@docker buildx create --use
+	-@docker buildx rm deye-docker-build
+	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
 		--platform $(subst $(space),$(comma),$(ARCHS)) \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:latest \
 		.
-	@docker buildx rm --all-inactive --force
+	@docker buildx rm deye-docker-build
 
 docker-push-beta: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
-	@docker buildx create --use
+	-@docker buildx rm deye-docker-build
+	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
 		--platform $(subst $(space),$(comma),$(ARCHS)) \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
 		.
-	@docker buildx rm --all-inactive --force
+	@docker buildx rm deye-docker-build
 
 METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery deye_sg04lp3_ups igen_dtsd422 deye_hybrid deye_hybrid_battery
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
