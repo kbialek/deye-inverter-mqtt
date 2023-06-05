@@ -15,6 +15,10 @@ make py-install-dependencies
 poetry shell
 ```
 
+## Git hooks
+This project uses pre-commit git hook to automatically format and lint the code.
+Commited code must have zero linting issues.
+
 # Working with the code
 ## Testing and running locally
 ```

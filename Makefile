@@ -94,7 +94,13 @@ $(GENERATE_DOCS_TARGETS): generate-docs-%:
 
 generate-all-docs: $(GENERATE_DOCS_TARGETS)
 
-py-setup:
+git-install-hooks:
+	@cp tools/git/pre-commit .git/hooks/
+
+git-uninstall-hooks:
+	@rm .git/hooks/pre-commit
+
+py-setup: git-install-hooks
 	pyenv install 3.10
 	pyenv local 3.10
 	poetry env use 3.10
@@ -117,8 +123,8 @@ py-update-dependencies:
 	poetry update
 
 py-code-format:
-	black src/
-	black tests/
+	poetry run black src/
+	poetry run black tests/
 
 py-check-code:
-	flake8 src/
+	poetry run flake8 src/
