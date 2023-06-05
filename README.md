@@ -143,6 +143,7 @@ In order to do this run the following commands:
 All configuration options are controlled through environment variables.
 
 * `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`, defaults to `INFO`
+* `LOG_STREAM` - log destination stream, can be any of `STDOUT`, `STDERR`, defaults to `STDOUT`
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
 * `DEYE_METRIC_GROUPS` - a comma delimited set of:
     * `string` - string inverter
