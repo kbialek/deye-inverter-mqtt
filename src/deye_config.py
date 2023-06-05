@@ -18,8 +18,9 @@
 import os
 import ssl
 
-LOG_DEST_STDOUT = 'STDOUT'
-LOG_DEST_STDERR = 'STDERR'
+LOG_DEST_STDOUT = "STDOUT"
+LOG_DEST_STDERR = "STDERR"
+
 
 class DeyeMqttTlsConfig:
     def __init__(
