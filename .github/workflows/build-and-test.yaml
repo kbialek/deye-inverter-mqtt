@@ -1,9 +1,9 @@
-name: Python package
+name: Code quality check
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
-  build:
+  code-quality-check:
 
     runs-on: ubuntu-latest
 
