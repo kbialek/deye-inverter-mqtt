@@ -30,8 +30,8 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
     Publishes events on STDOUT
     """
 
-    __mqtt_topic_name_splitter = r'/|_'
-    __source_joiner = '/'
+    __mqtt_topic_name_splitter = r"/|_"
+    __source_joiner = "/"
 
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeStdoutPublisher.__name__)
@@ -56,12 +56,18 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
             else:
                 self.__log.warn(f"Unsupported event type {event.__class__}")
 
-        print(json.dumps({
-            'serial':  str(self.__config.logger.serial_number),
-            'address': self.__config.logger.ip_address,
-            'port':    self.__config.logger.port,
-            'data':    data
-        }), flush=True, file=self.__output_file)
+        print(
+            json.dumps(
+                {
+                    "serial": str(self.__config.logger.serial_number),
+                    "address": self.__config.logger.ip_address,
+                    "port": self.__config.logger.port,
+                    "data": data,
+                }
+            ),
+            flush=True,
+            file=self.__output_file,
+        )
 
     @staticmethod
     def __handle_observation(observation: Observation) -> dict[str, str | float | int]:
@@ -75,14 +81,15 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
         name, source = DeyeStdoutPublisher.__mqtt_topic_to_identity(type)
 
         data = {
-            name:        observation.value,
-            "name":      observation.sensor.name,
-            "unit":      observation.sensor.unit,
-            "groups":    ",".join(observation.sensor.groups),
-            "sensor":    observation.sensor.__class__.__name__,
+            name: observation.value,
+            "name": observation.sensor.name,
+            "unit": observation.sensor.unit,
+            "groups": ",".join(observation.sensor.groups),
+            "sensor": observation.sensor.__class__.__name__,
             "timestamp": int(observation.timestamp.timestamp()),
         }
-        if source != None : data["source"] = source
+        if source is not None:
+            data["source"] = source
 
         return data
 
