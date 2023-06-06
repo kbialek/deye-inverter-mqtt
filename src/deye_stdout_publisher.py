@@ -71,12 +71,6 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
 
     @staticmethod
     def __handle_observation(observation: Observation) -> dict[str, str | float | int]:
-        # # we ignore computed stuff, we leave that to downstream systems
-        # if "Computed" in observation.sensor.__class__.__name__:
-        #     return
-
-        # TODO: do we want to re-use `mqtt_topic_suffix` here or do we want to
-        # infere this information from the sensor's name?
         type = observation.sensor.mqtt_topic_suffix
         name, source = DeyeStdoutPublisher.__mqtt_topic_to_identity(type)
 
