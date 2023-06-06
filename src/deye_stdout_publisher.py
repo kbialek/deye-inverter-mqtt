@@ -19,6 +19,7 @@ import logging
 import json
 import re
 import sys
+import typing
 
 from deye_events import DeyeEvent, DeyeEventProcessor, DeyeObservationEvent, DeyeLoggerStatusEvent
 from deye_config import DeyeConfig
@@ -33,11 +34,10 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
     __mqtt_topic_name_splitter = r"/|_"
     __source_joiner = "/"
 
-    def __init__(self, config: DeyeConfig):
+    def __init__(self, config: DeyeConfig, dest: typing.IO = sys.stdout):
         self.__log = logging.getLogger(DeyeStdoutPublisher.__name__)
         self.__config = config
-
-        self.__output_file = sys.stdout
+        self.__dest = dest
 
     def initialize(self):
         pass
@@ -66,7 +66,7 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
                 }
             ),
             flush=True,
-            file=self.__output_file,
+            file=self.__dest,
         )
 
     @staticmethod
@@ -101,4 +101,4 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
         name = parts[-1]
         source = cls.__source_joiner.join(parts[:-1])
 
-        return name, source
+        return name, None if source == "" else source
