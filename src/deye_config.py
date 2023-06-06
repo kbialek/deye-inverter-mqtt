@@ -18,6 +18,9 @@
 import os
 import ssl
 
+LOG_DEST_STDOUT = "STDOUT"
+LOG_DEST_STDERR = "STDERR"
+
 
 class DeyeMqttTlsConfig:
     def __init__(
@@ -110,6 +113,7 @@ class DeyeConfig:
         logger_config: DeyeLoggerConfig,
         mqtt: DeyeMqttConfig,
         log_level="INFO",
+        log_stream=LOG_DEST_STDOUT,
         data_read_inverval=60,
         metric_groups=[],
         active_processors=[],
@@ -117,6 +121,7 @@ class DeyeConfig:
         self.logger = logger_config
         self.mqtt = mqtt
         self.log_level = log_level
+        self.log_stream = log_stream
         self.data_read_inverval = data_read_inverval
         self.metric_groups = metric_groups
         self.active_processors = active_processors
@@ -127,6 +132,7 @@ class DeyeConfig:
             DeyeLoggerConfig.from_env(),
             DeyeMqttConfig.from_env(),
             log_level=os.getenv("LOG_LEVEL", "INFO"),
+            log_stream=os.getenv("LOG_STREAM", LOG_DEST_STDOUT),
             data_read_inverval=int(os.getenv("DEYE_DATA_READ_INTERVAL", "60")),
             metric_groups=DeyeConfig.__read_item_set(os.getenv("DEYE_METRIC_GROUPS", "")),
             active_processors=DeyeConfig.__read_active_processors(),
