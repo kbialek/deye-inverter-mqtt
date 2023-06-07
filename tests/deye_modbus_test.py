@@ -131,7 +131,7 @@ class DeyeModbusTest(unittest.TestCase):
             sut.read_registers(0x50, 0x5F)
 
         # then
-        self.assertEqual(len(captured.records), 2)
+        self.assertEqual(len(captured.records), 1)
         self.assertEqual(
             captured.records[0].getMessage(), "Logger Serial Number does not match. Check your configuration file."
         )
