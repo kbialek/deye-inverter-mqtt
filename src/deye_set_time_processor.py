@@ -34,7 +34,7 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
         self.__last_status = False
 
     def get_id(self):
-        return 'set_time'
+        return "set_time"
 
     @property
     def last_status(self):
@@ -53,16 +53,19 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
 
     def __set_time(self) -> bool:
         now = datetime.now()
-        write_status = self.__modbus.write_registers(22, [
-            # year and month
-            256 * (now.year % 100) + now.month,
-            # day and hour
-            256 * now.day + now.hour,
-            # minute and seconds
-            256 * now.minute + now.second
-        ])
+        write_status = self.__modbus.write_registers(
+            22,
+            [
+                # year and month
+                256 * (now.year % 100) + now.month,
+                # day and hour
+                256 * now.day + now.hour,
+                # minute and seconds
+                256 * now.minute + now.second,
+            ],
+        )
         if write_status:
-            self.__log.info(f'Logger time set to {now}')
+            self.__log.info(f"Logger time set to {now}")
         else:
-            self.__log.warning('Failed to set logger time')
+            self.__log.warning("Failed to set logger time")
         return write_status

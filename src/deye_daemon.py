@@ -37,7 +37,8 @@ class DeyeDaemon:
         self.__log = logging.getLogger(DeyeDaemon.__name__)
         self.__config = config
         self.__log.info(
-            "Please help me build the list of compatible inverters. https://github.com/kbialek/deye-inverter-mqtt/issues/41"
+            "Please help me build the list of compatible inverters. "
+            "https://github.com/kbialek/deye-inverter-mqtt/issues/41"
         )
         connector = DeyeConnector(config)
         self.modbus = DeyeModbus(config, connector)
@@ -115,7 +116,6 @@ class IntervalRunner:
             self.action()
         except Exception:
             self.__log.exception("Unexpected error during daemon execution")
-
 
     def cancel(self, _signum, _frame):
         self.stopEvent.set()

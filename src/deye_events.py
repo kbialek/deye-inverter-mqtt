@@ -25,6 +25,7 @@ class DeyeEvent:
     DeyeEvent represents a piece of information collected when reading inverter registers.
     The events are processed by DeyeEventProcessor implementations
     """
+
     pass
 
 

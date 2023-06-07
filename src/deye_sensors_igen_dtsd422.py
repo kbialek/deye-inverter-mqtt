@@ -17,7 +17,6 @@
 
 from deye_sensor import (
     SingleRegisterSensor,
-    DoubleRegisterSensor,
     SignedMagnitudeSingleRegisterSensor,
     SignedMagnitudeDoubleRegisterSensor,
     SensorRegisterRange,
@@ -623,16 +622,8 @@ igen_dtsd422_sensors = [
 ]
 
 igen_dtsd422_register_ranges = [
-    SensorRegisterRange(
-        group="igen_dtsd422", first_reg_address=0x01, last_reg_address=0x64
-    ),
-    SensorRegisterRange(
-        group="igen_dtsd422", first_reg_address=0x65, last_reg_address=0xA1
-    ),
-    SensorRegisterRange(
-        group="igen_dtsd422", first_reg_address=0x1001, last_reg_address=0x1064
-    ),
-    SensorRegisterRange(
-        group="igen_dtsd422", first_reg_address=0x1065, last_reg_address=0x10A1
-    ),
+    SensorRegisterRange(group="igen_dtsd422", first_reg_address=0x01, last_reg_address=0x64),
+    SensorRegisterRange(group="igen_dtsd422", first_reg_address=0x65, last_reg_address=0xA1),
+    SensorRegisterRange(group="igen_dtsd422", first_reg_address=0x1001, last_reg_address=0x1064),
+    SensorRegisterRange(group="igen_dtsd422", first_reg_address=0x1065, last_reg_address=0x10A1),
 ]

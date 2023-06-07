@@ -18,8 +18,7 @@
 import logging
 
 from deye_config import DeyeConfig
-from deye_events import (DeyeEvent, DeyeEventProcessor, DeyeLoggerStatusEvent,
-                         DeyeObservationEvent)
+from deye_events import DeyeEvent, DeyeEventProcessor, DeyeLoggerStatusEvent, DeyeObservationEvent
 from deye_mqtt import DeyeMqttClient
 
 
@@ -38,7 +37,7 @@ class DeyeMqttPublisher(DeyeEventProcessor):
         self.__mqtt_client = mqtt_client
 
     def get_id(self):
-        return 'mqtt_publisher'
+        return "mqtt_publisher"
 
     def process(self, events: list[DeyeEvent]):
         for event in events:
@@ -47,4 +46,4 @@ class DeyeMqttPublisher(DeyeEventProcessor):
             elif isinstance(event, DeyeLoggerStatusEvent):
                 self.__mqtt_client.publish_logger_status(event.online)
             else:
-                self.__log.warning(f'Unsupported event type {event.__class__}')
+                self.__log.warning(f"Unsupported event type {event.__class__}")

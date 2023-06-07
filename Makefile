@@ -1,5 +1,5 @@
 GITHUB_USER = kbialek
-VERSION = 2023.05.4
+VERSION = $(shell poetry version -s)
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
 
@@ -26,16 +26,20 @@ mosquitto-stop:
 	@pkill mosquitto
 
 test:
-	python -m unittest discover -p "*_test.py"
+	@pytest -v --cov --cov-report=xml
+
+test-coverage: test
+	@coverage report --skip-empty --no-skip-covered --sort=Cover
 
 test-mqtt: gen-tls-certs
-	-@python -m unittest "deye_mqtt_inttest.py"
+	-@pytest -v tests/deye_mqtt_inttest.py
 	@rm certs/* && rmdir certs
 
 run:
-	@bash -c "set -a; source config.env; python deye_docker_entrypoint.py"
+	@bash -c "set -a; source config.env; python src/deye_docker_entrypoint.py"
 
-$(ARCHS:%=docker-build-%): docker-build-%:
+$(ARCHS:%=docker-build-%): docker-build-%: py-export-requirements
+	-@docker buildx rm deye-docker-build
 	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
 		--platform $* \
@@ -62,26 +66,28 @@ docker-shell:
 		--entrypoint /bin/sh -ti \
 		deye-inverter-mqtt
 
-docker-push: test
+docker-push: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
-	@docker buildx create --use
+	-@docker buildx rm deye-docker-build
+	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
 		--platform $(subst $(space),$(comma),$(ARCHS)) \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:latest \
 		.
-	@docker buildx rm --all-inactive --force
+	@docker buildx rm deye-docker-build
 
-docker-push-beta: test
+docker-push-beta: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
-	@docker buildx create --use
+	-@docker buildx rm deye-docker-build
+	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
 		--platform $(subst $(space),$(comma),$(ARCHS)) \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
 		.
-	@docker buildx rm --all-inactive --force
+	@docker buildx rm deye-docker-build
 
 METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery deye_sg04lp3_ups igen_dtsd422 deye_hybrid deye_hybrid_battery
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
@@ -90,3 +96,38 @@ $(GENERATE_DOCS_TARGETS): generate-docs-%:
 	@cd tools && python metric_group_doc_gen.py --group-name=$* > ../docs/metric_group_$*.md
 
 generate-all-docs: $(GENERATE_DOCS_TARGETS)
+
+git-install-hooks:
+	@cp tools/git/pre-commit .git/hooks/
+
+git-uninstall-hooks:
+	@rm .git/hooks/pre-commit
+
+py-setup: git-install-hooks
+	pyenv install 3.10
+	pyenv local 3.10
+	poetry env use 3.10
+
+py-install-dependencies:
+	poetry lock
+	poetry install --with dev
+
+py-export-requirements:
+	poetry export -f requirements.txt --output requirements.txt
+	poetry export -f requirements.txt --only dev --output requirements-dev.txt
+
+py-show-dependencies:
+	poetry show
+
+py-show-dependencies-outdated:
+	poetry show -o
+
+py-update-dependencies:
+	poetry update
+
+py-code-format:
+	poetry run black src/
+	poetry run black tests/
+
+py-check-code:
+	poetry run flake8 src/

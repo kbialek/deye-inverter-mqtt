@@ -41,7 +41,8 @@ class DeyeModbus:
             last_reg (int): The address of the last register to read
 
         Returns:
-            dict[int, bytearray]: Map of register values, where the register address is the map key, and register value is the map value
+            dict[int, bytearray]: Map of register values, where the register address is the map key,
+            and register value is the map value
         """
         modbus_frame = self.__build_modbus_read_holding_registers_request_frame(first_reg, last_reg)
         req_frame = self.__build_request_frame(modbus_frame)

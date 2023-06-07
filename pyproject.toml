@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "deye-inverter-mqtt"
+version = "2023.05.4"
+description = "Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT."
+authors = ["Krzysztof Białek <kbialek@users.noreply.github.com>"]
+license = "Apache License 2"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+libscrc = "1.8.1"
+paho-mqtt = "1.6.1"
+
+[tool.poetry.group.test.dependencies]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+pytest-cov = "^4.1.0"
+black = { version = "^23.1.0", extras = ["d"] }
+flake8 = "^6.0.0"
+Flake8-pyproject = "^1.2.3"
+pre-commit = "^3.2.0"
+
+[tool.black]
+line-length = 120
+
+[tool.flake8]
+max-line-length = 120
+ignore = ['E203', 'W503']
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "src"

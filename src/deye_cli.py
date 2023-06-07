@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import logging
 import sys
 
 from deye_config import DeyeConfig
@@ -23,17 +22,16 @@ from deye_connector import DeyeConnector
 from deye_modbus import DeyeModbus
 
 
-class DeyeCli():
-
+class DeyeCli:
     def __init__(self, config: DeyeConfig):
         connector = DeyeConnector(config)
         self.__modbus = DeyeModbus(config, connector)
 
     def exec_command(self, args):
         command = args[0]
-        if command == 'r':
+        if command == "r":
             self.read_register(args[1:])
-        elif command == 'w':
+        elif command == "w":
             self.write_register(args[1:])
 
     def read_register(self, args):
@@ -46,10 +44,10 @@ class DeyeCli():
             print(f"Error: register {reg_address} not read")
             sys.exit(1)
         reg_bytes = registers[reg_address]
-        reg_value_int = int.from_bytes(reg_bytes, 'big')
+        reg_value_int = int.from_bytes(reg_bytes, "big")
         low_byte = reg_bytes[1]
         high_byte = reg_bytes[0]
-        print(f'int: {reg_value_int}, l: {low_byte}, h: {high_byte}')
+        print(f"int: {reg_value_int}, l: {low_byte}, h: {high_byte}")
 
     def write_register(self, args):
         if len(args) < 2:
