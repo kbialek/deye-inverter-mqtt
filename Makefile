@@ -89,7 +89,16 @@ docker-push-beta: test py-export-requirements
 		.
 	@docker buildx rm deye-docker-build
 
-METRIC_GROUPS = string micro deye_sg04lp3 deye_sg04lp3_battery deye_sg04lp3_ups igen_dtsd422 deye_hybrid deye_hybrid_battery
+METRIC_GROUPS = \
+	string \
+	micro \
+	deye_sg04lp3 \
+	deye_sg04lp3_battery \
+	deye_sg04lp3_ups \
+	igen_dtsd422 \
+	deye_hybrid \
+	deye_hybrid_battery \
+	settings
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:
 	@mkdir -p docs
