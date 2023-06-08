@@ -169,7 +169,7 @@ All configuration options are controlled through environment variables.
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
-* `DEYE_FEATURE_STDOUT_PUBLISHER` - controls, if the service will publish metrics on stdout, defaults to `false`
+* `DEYE_FEATURE_STDOUT_PUBLISHER` - controls, if the service will [publish metrics on stdout](./docs/stdout_publisher.md), defaults to `false`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
 * `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
 * `MQTT_HOST` - MQTT Broker IP address
@@ -203,49 +203,6 @@ By using this tool you accept this risk and you take full responsibility for the
     docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt w <reg_address> <reg_value>
     ```
     where `<reg_address>` is register address (decimal), and <reg_value> is a value to set (decimal)
-
-## Using the stdout publisher
-
-Enabling this with `DEYE_FEATURE_STDOUT_PUBLISHER` will dump all collected
-metrics in json on stdout once every cycle (every `DEYE_DATA_READ_INTERVAL`
-seconds).
-This can be useful in combination with other tools to process and push the
-metrics into different systems other than mqtt.
-
-The json object has the following structure:
-```json
-{
-  "serial": "1234567890",
-  "address": "192.168.0.1",
-  "port": 8899,
-  "data": [
-    {
-      "up": 1,
-    }, {
-      "temp": 31,
-      "name": "Radiator temperature",
-      "unit": "°C",
-      "groups": "micro",
-      "sensor": "SingleRegisterSensor",
-      "source": "radiator",
-      "timestamp": 1686219130
-    }, {
-      "energy": 0.2,
-      "name": "PV1 Total",
-      "unit": "kWh",
-      "groups": "micro",
-      "sensor": "DoubleRegisterSensor",
-      "source": "dc/pv1/total",
-      "timestamp": 1686219130
-    }, {
-      ...
-    }
-  ]
-}
-```
-
-You can read more about an example usage in combination with telegraf
-[here](./docs/telegraf.md).
 
 ## Development
 Read [CONTRIBUTING.md](./CONTRIBUTING.md)

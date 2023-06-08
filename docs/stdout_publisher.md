@@ -1,49 +1,72 @@
-# Example usage with [telegraf]
+# Using the stdout publisher
 
-You can use this project in combination with [telegraf] or similar tools to get
-your inverter's data into other systems than mqtt.
+Enabling this with `DEYE_FEATURE_STDOUT_PUBLISHER` will dump all collected
+metrics in json on stdout once every cycle (every `DEYE_DATA_READ_INTERVAL`
+seconds).
+This can be useful in combination with other tools to process and push the
+metrics into different systems other than mqtt.
 
-An example usage with [telegraf] could look something like that:
+The json object has the following structure:
+```json
+{
+  "serial": "1234567890",
+  "address": "192.168.0.1",
+  "port": 8899,
+  "data": [
+    {
+      "up": 1,
+    }, {
+      "temp": 31,
+      "name": "Radiator temperature",
+      "unit": "°C",
+      "groups": "micro",
+      "sensor": "SingleRegisterSensor",
+      "source": "radiator",
+      "timestamp": 1686219130
+    }, {
+      "energy": 0.2,
+      "name": "PV1 Total",
+      "unit": "kWh",
+      "groups": "micro",
+      "sensor": "DoubleRegisterSensor",
+      "source": "dc/pv1/total",
+      "timestamp": 1686219130
+    }, {
+      ...
+    }
+  ]
+}
+```
+
+## Example usage with [telegraf]
+
+To collect the inverter metric with telegraf and then process or push them
+forward you can run `deye-inverter-mqtt` with the following configuration:
 - disable the mqtt publisher
 - enable the stdout publisher
 - ensure all logs go to stderr instead of stdout
-- run `deye-inverter-mqtt` as an `execd` plugin via telegraf
 
-This can be achived with a telegraf config file like that:
+This can be achieved with a telegraf config file like that:
 ```
 [[outputs.file]]
   files = ["stdout"]
-  # data_format = "prometheus"
   data_format = "influx"
 
 [[inputs.execd]]
-  command = ["python", "deye_docker_entrypoint.py"]
-  environment = [
-    "DEYE_LOGGER_IP_ADDRESS=192.168.0.254",
-    "DEYE_LOGGER_PORT=8899",
-    "DEYE_LOGGER_SERIAL_NUMBER=123412341234",
-    "LOG_LEVEL=INFO",
-    "LOG_STREAM=STDERR",
-    "DEYE_FEATURE_MQTT_PUBLISHER=false",
-    "DEYE_FEATURE_STDOUT_PUBLISHER=true",
-    "DEYE_FEATURE_SET_TIME=false",
-    "DEYE_METRIC_GROUPS=micro",
+  command = [
+    "docker",
+    "run",
+    "-e", "DEYE_LOGGER_IP_ADDRESS=192.168.0.254",
+    "-e", "DEYE_LOGGER_PORT=8899",
+    "-e", "DEYE_LOGGER_SERIAL_NUMBER=123412341234",
+    "-e", "LOG_LEVEL=INFO",
+    "-e", "LOG_STREAM=STDERR",
+    "-e", "DEYE_FEATURE_MQTT_PUBLISHER=false",
+    "-e", "DEYE_FEATURE_STDOUT_PUBLISHER=true",
+    "-e", "DEYE_FEATURE_SET_TIME=false",
+    "-e", "DEYE_METRIC_GROUPS=micro",
+    "ghcr.io/kbialek/deye-inverter-mqtt",
   ]
-
-  # command = [
-  #   "docker",
-  #   "run",
-  #   "-e", "DEYE_LOGGER_IP_ADDRESS=192.168.0.254",
-  #   "-e", "DEYE_LOGGER_PORT=8899",
-  #   "-e", "DEYE_LOGGER_SERIAL_NUMBER=123412341234",
-  #   "-e", "LOG_LEVEL=INFO",
-  #   "-e", "LOG_STREAM=STDERR",
-  #   "-e", "DEYE_FEATURE_MQTT_PUBLISHER=false",
-  #   "-e", "DEYE_FEATURE_STDOUT_PUBLISHER=true",
-  #   "-e", "DEYE_FEATURE_SET_TIME=false",
-  #   "-e", "DEYE_METRIC_GROUPS=micro",
-  #   "ghcr.io/kbialek/deye-inverter-mqtt",
-  # ]
 
   signal = "none"
   restart_delay = "10s"
@@ -101,6 +124,6 @@ deye,address=192.168.0.254,groups=micro,host=pfah,name=Radiator\ temperature,por
 ```
 
 Of course, the output plugin here is just an example. You can process and
-output the metrics in whatever with whatever plugins telegraf supports.
+output the metrics with whatever plugins telegraf supports.
 
 [telegraf]: https://github.com/influxdata/telegraf
