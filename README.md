@@ -207,11 +207,45 @@ By using this tool you accept this risk and you take full responsibility for the
 ## Using the stdout publisher
 
 Enabling this with `DEYE_FEATURE_STDOUT_PUBLISHER` will dump all collected
-metrics in json on stdout. This can be used e.g. in combination with other
-tools to process and push the metrics into various different systems other than
-mqtt.
+metrics in json on stdout once every cycle (every `DEYE_DATA_READ_INTERVAL`
+seconds).
+This can be useful in combination with other tools to process and push the
+metrics into different systems other than mqtt.
 
-You can read more about an example usage in combination with telegraf [here](./docs/telegraf.md).
+The json object has the following structure:
+```json
+{
+  "serial": "1234567890",
+  "address": "192.168.0.1",
+  "port": 8899,
+  "data": [
+    {
+      "up": 1,
+    }, {
+      "temp": 31,
+      "name": "Radiator temperature",
+      "unit": "°C",
+      "groups": "micro",
+      "sensor": "SingleRegisterSensor",
+      "source": "radiator",
+      "timestamp": 1686219130
+    }, {
+      "energy": 0.2,
+      "name": "PV1 Total",
+      "unit": "kWh",
+      "groups": "micro",
+      "sensor": "DoubleRegisterSensor",
+      "source": "dc/pv1/total",
+      "timestamp": 1686219130
+    }, {
+      ...
+    }
+  ]
+}
+```
+
+You can read more about an example usage in combination with telegraf
+[here](./docs/telegraf.md).
 
 ## Development
 Read [CONTRIBUTING.md](./CONTRIBUTING.md)
