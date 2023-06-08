@@ -117,6 +117,7 @@ class DeyeConfig:
         data_read_inverval=60,
         metric_groups=[],
         active_processors=[],
+        active_command_handlers=[],
     ):
         self.logger = logger_config
         self.mqtt = mqtt
@@ -125,6 +126,7 @@ class DeyeConfig:
         self.data_read_inverval = data_read_inverval
         self.metric_groups = metric_groups
         self.active_processors = active_processors
+        self.active_command_handlers = active_command_handlers
 
     @staticmethod
     def from_env():
@@ -136,6 +138,7 @@ class DeyeConfig:
             data_read_inverval=int(os.getenv("DEYE_DATA_READ_INTERVAL", "60")),
             metric_groups=DeyeConfig.__read_item_set(os.getenv("DEYE_METRIC_GROUPS", "")),
             active_processors=DeyeConfig.__read_active_processors(),
+            active_command_handlers=DeyeConfig.__read_active_command_handlers(),
         )
 
     @staticmethod
@@ -150,3 +153,9 @@ class DeyeConfig:
         if os.getenv("DEYE_FEATURE_SET_TIME", "false") == "true":
             active_processors.append("set_time")
         return active_processors
+
+    @staticmethod
+    def __read_active_command_handlers():
+        active_command_handlers = []
+        if os.getenv("DEYE_FEATURE_ACTIVE_POWER_REGULATION", "false") == "true":
+            active_command_handlers.append("active_power_regulation")
