@@ -115,9 +115,9 @@ class DeyeConfig:
         log_level="INFO",
         log_stream=LOG_DEST_STDOUT,
         data_read_inverval=60,
-        metric_groups=[],
-        active_processors=[],
-        active_command_handlers=[],
+        metric_groups: [str] = [],
+        active_processors: [str] = [],
+        active_command_handlers: [str] = [],
     ):
         self.logger = logger_config
         self.mqtt = mqtt
@@ -146,7 +146,7 @@ class DeyeConfig:
         return set([p.strip() for p in value.split(",")])
 
     @staticmethod
-    def __read_active_processors():
+    def __read_active_processors() -> [str]:
         active_processors = []
         if os.getenv("DEYE_FEATURE_MQTT_PUBLISHER", "true") == "true":
             active_processors.append("mqtt_publisher")
@@ -155,7 +155,8 @@ class DeyeConfig:
         return active_processors
 
     @staticmethod
-    def __read_active_command_handlers():
+    def __read_active_command_handlers() -> [str]:
         active_command_handlers = []
         if os.getenv("DEYE_FEATURE_ACTIVE_POWER_REGULATION", "false") == "true":
             active_command_handlers.append("active_power_regulation")
+        return active_command_handlers
