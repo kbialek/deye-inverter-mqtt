@@ -53,6 +53,14 @@ class DeyeMqttClient:
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
 
+    def subscribe(self, topic: str, callback):
+        self.__log.info("Subscribing to topic: %s", topic)
+        result, mid = self.__mqtt_client.subscribe(topic, qos=1)
+        if result != paho.MQTT_ERR_SUCCESS:
+            self.__log.error("Failed to subscribe to topic %s", topic)
+            return
+        self.__mqtt_client.message_callback_add(topic, callback)
+
     def connect(self) -> bool:
         try:
             self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
