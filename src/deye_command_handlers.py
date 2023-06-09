@@ -19,11 +19,11 @@ class DeyeCommandHandler:
 
 class DeyeActivePowerRegulationCommandHandler(DeyeCommandHandler):
     def __init__(self, modbus: DeyeModbus):
-        super().__init__("active_power_regulation", "settings/active_power_regulation", self.__handle_command)
+        super().__init__("active_power_regulation", "settings/active_power_regulation", self.handle_command)
         self.__log = logging.getLogger(DeyeActivePowerRegulationCommandHandler.__name__)
         self.__modbus = modbus
 
-    def __handle_command(self, client: Client, userdata, msg: MQTTMessage):
+    def handle_command(self, client: Client, userdata, msg: MQTTMessage):
         try:
             active_power_regulation_factor = float(msg.payload)
         except ValueError:

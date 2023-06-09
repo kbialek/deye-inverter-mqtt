@@ -8,9 +8,19 @@ from deye_command_handlers import DeyeCommandHandler, DeyeActivePowerRegulationC
 
 
 class DeyeMqttSubscriber:
-    def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus):
+    @staticmethod
+    def create(config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus) -> "DeyeMqttSubscriber":
+        command_handlers = [DeyeActivePowerRegulationCommandHandler(modbus)]
+        return DeyeMqttSubscriber(config, mqtt_client, modbus, command_handlers)
+
+    def __init__(
+        self,
+        config: DeyeConfig,
+        mqtt_client: DeyeMqttClient,
+        modbus: DeyeModbus,
+        command_handlers: [DeyeCommandHandler],
+    ):
         self.__log = logging.getLogger(DeyeMqttSubscriber.__name__)
-        command_handlers: [DeyeCommandHandler] = [DeyeActivePowerRegulationCommandHandler(modbus)]
 
         active_command_handlers = [h for h in command_handlers if h.id in config.active_command_handlers]
 

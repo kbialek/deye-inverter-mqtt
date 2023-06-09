@@ -50,7 +50,7 @@ class DeyeDaemon:
 
         mqtt_client = DeyeMqttClient(self.__config)
         mqtt_publisher = DeyeMqttPublisher(config, mqtt_client)
-        DeyeMqttSubscriber(config, mqtt_client, self.modbus)
+        DeyeMqttSubscriber.create(config, mqtt_client, self.modbus)
 
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         all_processors = [mqtt_publisher, set_time_processor]
