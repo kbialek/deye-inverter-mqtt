@@ -170,6 +170,7 @@ All configuration options are controlled through environment variables.
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
+* `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
 * `MQTT_HOST` - MQTT Broker IP address
 * `MQTT_PORT` - MQTT Broker port, , defaults to `1883`
 * `MQTT_USERNAME` - MQTT Broker username for authentication, defaults to `None`
