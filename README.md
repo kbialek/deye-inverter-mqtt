@@ -49,7 +49,14 @@ Reports solar inverter's logger connectivity status
 The default topic name is `logger_status` and can be changed in the configuration.
 
 ### Reading inverter settings
-The service can optionally read inverter settings. This feature may be useful when you dynamically modify active power regulation factor.
+The service can optionally read inverter settings. This feature may be useful when you dynamically modify active power regulation factor. Enable it by adding `settings` metric group to `DEYE_METRIC_GROUPS` env variable.
+
+### Writing inverter settings
+It is possible to modify selected inverter settings over MQTT. At the moment only active power regulation factor is supported. This feature is disabled by default.
+
+|Setting|Topic|Unit|Value range|Feature flag|
+|---|:-:|---|:-:|---|
+|active power regulation|`{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command`|%|0-120|`DEYE_FEATURE_ACTIVE_POWER_REGULATION`|
 
 ## Additional features
 ### Automatically set logger/inverter time
