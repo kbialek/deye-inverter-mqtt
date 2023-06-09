@@ -69,12 +69,12 @@ class DeyeMqttClient:
         try:
             self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
             self.__mqtt_client.loop_start()
+            while not self.__mqtt_client.is_connected():
+                time.sleep(1)
             self.__mqtt_client.publish(self.__status_topic, "online", retain=True, qos=1)
             self.__log.info(
                 "Successfully connected to MQTT Broker located at %s:%d", self.__config.host, self.__config.port
             )
-            while not self.__mqtt_client.is_connected():
-                time.sleep(1)
             return True
         except (ConnectionRefusedError, OSError):
             self.__log.error(
