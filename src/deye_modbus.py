@@ -164,9 +164,7 @@ class DeyeModbus:
             a += 1
         return registers
 
-    def __build_modbus_write_holding_register_request_frame(
-        self, reg_address: int, reg_values: list[int]
-    ) -> bytearray:
+    def __build_modbus_write_holding_register_request_frame(self, reg_address: int, reg_values: list[int]) -> bytearray:
         return bytearray.fromhex(
             "0110{:04x}{:04x}{:02x}{}".format(
                 reg_address, len(reg_values), len(reg_values) * 2, "".join(["{:04x}".format(v) for v in reg_values])
