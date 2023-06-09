@@ -24,6 +24,8 @@ import paho.mqtt.client as paho
 from deye_config import DeyeConfig
 from deye_observation import Observation
 
+import time
+
 
 class DeyeMqttClient:
     def __init__(self, config: DeyeConfig):
@@ -53,10 +55,22 @@ class DeyeMqttClient:
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
 
+    def subscribe(self, topic: str, callback):
+        self.__log.info("Subscribing to topic: %s", topic)
+        result, mid = self.__mqtt_client.subscribe(topic, qos=1)
+        if result != paho.MQTT_ERR_SUCCESS:
+            self.__log.error("Failed to subscribe to topic %s", topic)
+            return
+        self.__mqtt_client.message_callback_add(topic, callback)
+
     def connect(self) -> bool:
+        if self.__mqtt_client.is_connected():
+            return
         try:
             self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
             self.__mqtt_client.loop_start()
+            while not self.__mqtt_client.is_connected():
+                time.sleep(1)
             self.__mqtt_client.publish(self.__status_topic, "online", retain=True, qos=1)
             self.__log.info(
                 "Successfully connected to MQTT Broker located at %s:%d", self.__config.host, self.__config.port

@@ -30,6 +30,8 @@ from deye_observation import Observation
 from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
+from deye_mqtt_subscriber import DeyeMqttSubscriber
+from deye_mqtt import DeyeMqttClient
 
 
 class DeyeDaemon:
@@ -45,12 +47,17 @@ class DeyeDaemon:
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = self.__remove_duplicated_reg_ranges(self.reg_ranges)
-        mqtt_publisher = DeyeMqttPublisher(config)
+
+        mqtt_client = DeyeMqttClient(self.__config)
+        mqtt_publisher = DeyeMqttPublisher(config, mqtt_client)
+        DeyeMqttSubscriber.create(config, mqtt_client, self.modbus)
+
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         all_processors = [mqtt_publisher, set_time_processor]
         self.processors = [p for p in all_processors if p.get_id() in config.active_processors]
         for p in self.processors:
             p.initialize()
+
         self.__log.info(
             'Feature "Report metrics over MQTT": {}'.format(
                 "enabled" if mqtt_publisher.get_id() in config.active_processors else "disabled"
