@@ -15,11 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import libscrc
 import logging
 
-from deye_connector import DeyeConnector
+import libscrc
+
 from deye_config import DeyeConfig
+from deye_connector import DeyeConnector
 
 
 class DeyeModbus:
@@ -47,6 +48,8 @@ class DeyeModbus:
         req_frame = self.__build_request_frame(modbus_frame)
         resp_frame = self.connector.send_request(req_frame)
         modbus_resp_frame = self.__extract_modbus_response_frame(resp_frame)
+        if modbus_resp_frame is None:
+            return {}
         return self.__parse_modbus_read_holding_registers_response(modbus_resp_frame, first_reg, last_reg)
 
     def write_register(self, reg_address: int, reg_value: int) -> bool:
@@ -77,6 +80,8 @@ class DeyeModbus:
         req_frame = self.__build_request_frame(modbus_frame)
         resp_frame = self.connector.send_request(req_frame)
         modbus_resp_frame = self.__extract_modbus_response_frame(resp_frame)
+        if modbus_resp_frame is None:
+            return False
         return self.__parse_modbus_write_holding_register_response(modbus_resp_frame, reg_address, reg_values)
 
     def __build_request_frame(self, modbus_frame) -> bytearray:
@@ -111,38 +116,38 @@ class DeyeModbus:
 
         return frame
 
-    def __extract_modbus_response_frame(self, frame: bytearray) -> bytearray:
+    def __extract_modbus_response_frame(self, frame: bytes | None) -> bytes | None:
         # 29 - outer frame, 2 - modbus addr and command, 2 - modbus crc
         if not frame:
-            self.__log.error("No response frame")
+            # Error was already logged in `send_request()` function
             return None
-        elif len(frame) == 29:
+        if len(frame) == 29:
             self.__parse_response_error_code(frame)
             return None
-        elif len(frame) < (29 + 4):
+        if len(frame) < (29 + 4):
             self.__log.error("Response frame is too short")
             return None
-        elif frame[0] != 0xA5:
+        if frame[0] != 0xA5:
             self.__log.error("Response frame has invalid starting byte")
             return None
-        elif frame[-1] != 0x15:
+        if frame[-1] != 0x15:
             self.__log.error("Response frame has invalid ending byte")
             return None
 
         return frame[25:-2]
 
-    def __build_modbus_read_holding_registers_request_frame(self, first_reg, last_reg):
+    def __build_modbus_read_holding_registers_request_frame(self, first_reg: int, last_reg: int) -> bytearray:
         reg_count = last_reg - first_reg + 1
         return bytearray.fromhex("0103{:04x}{:04x}".format(first_reg, reg_count))
 
     def __parse_modbus_read_holding_registers_response(
-        self, frame: bytearray, first_reg: int, last_reg: int
+        self, frame: bytes, first_reg: int, last_reg: int
     ) -> dict[int, bytearray]:
         reg_count = last_reg - first_reg + 1
         registers = {}
         expected_frame_data_len = 2 + 1 + reg_count * 2
-        if not frame or len(frame) < expected_frame_data_len + 2:  # 2 bytes for crc
-            self.__log.error("Modbus frame is too short or empty")
+        if len(frame) < expected_frame_data_len + 2:  # 2 bytes for crc
+            self.__log.error("Modbus frame is too short")
             return registers
         actual_crc = int.from_bytes(frame[expected_frame_data_len : expected_frame_data_len + 2], "little")
         expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
@@ -159,20 +164,21 @@ class DeyeModbus:
             a += 1
         return registers
 
-    def __build_modbus_write_holding_register_request_frame(self, reg_address: int, reg_values: list[int]):
+    def __build_modbus_write_holding_register_request_frame(
+        self, reg_address: int, reg_values: list[int]
+    ) -> bytearray:
         return bytearray.fromhex(
             "0110{:04x}{:04x}{:02x}{}".format(
                 reg_address, len(reg_values), len(reg_values) * 2, "".join(["{:04x}".format(v) for v in reg_values])
             )
         )
 
-    def __parse_modbus_write_holding_register_response(self, frame, reg_address: int, reg_values: list[int]):
+    def __parse_modbus_write_holding_register_response(
+        self, frame: bytes, reg_address: int, reg_values: list[int]
+    ) -> bool:
         expected_frame_data_len = 6
         expected_frame_len = 6 + 2  # 2 bytes for crc
-        if not frame:
-            self.__log.error("Modbus response frame is empty")
-            return False
-        elif len(frame) < expected_frame_len:
+        if len(frame) < expected_frame_len:
             self.__log.error(
                 f"Wrong response frame length. Expected at least {expected_frame_len} bytes, got {len(frame)}"
             )
@@ -198,7 +204,7 @@ class DeyeModbus:
             return False
         return True
 
-    def __parse_response_error_code(self, frame):
+    def __parse_response_error_code(self, frame: bytes) -> None:
         error_frame = frame[25:-2]
         error_code = error_frame[0]
         if error_code == 0x05:
