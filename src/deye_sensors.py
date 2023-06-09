@@ -26,6 +26,7 @@ from deye_sensor import (
 from deye_sensors_deye_sg04lp3 import deye_sg04lp3_sensors, deye_sg04lp3_register_ranges
 from deye_sensors_igen_dtsd422 import igen_dtsd422_sensors, igen_dtsd422_register_ranges
 from deye_sensors_deye_hybrid import deye_hybrid_sensors, deye_hybrid_register_ranges
+from deye_sensors_settings import deye_settings_sensors, deye_settings_register_ranges
 
 # AC Phase 1
 phase1_voltage_sensor = SingleRegisterSensor(
@@ -262,6 +263,7 @@ sensor_list = (
     + deye_sg04lp3_sensors
     + igen_dtsd422_sensors
     + deye_hybrid_sensors
+    + deye_settings_sensors
 )
 
 sensor_register_ranges = (
@@ -272,4 +274,5 @@ sensor_register_ranges = (
     + deye_sg04lp3_register_ranges
     + igen_dtsd422_register_ranges
     + deye_hybrid_register_ranges
+    + deye_settings_register_ranges
 )
