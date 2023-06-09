@@ -20,16 +20,16 @@ The json object has the following structure:
       "name": "Radiator temperature",
       "unit": "°C",
       "groups": "micro",
-      "sensor": "SingleRegisterSensor",
-      "source": "radiator",
+      "sensor_type": "SingleRegisterSensor",
+      "sensor": "radiator",
       "timestamp": 1686219130
     }, {
       "energy": 0.2,
       "name": "PV1 Total",
       "unit": "kWh",
       "groups": "micro",
-      "sensor": "DoubleRegisterSensor",
-      "source": "dc/pv1/total",
+      "sensor_type": "DoubleRegisterSensor",
+      "sensor": "dc/pv1/total",
       "timestamp": 1686219130
     }, {
       ...
@@ -84,43 +84,43 @@ This can be achieved with a telegraf config file like that:
       path = "data"
       timestamp_key = "timestamp"
       timestamp_format = "unix"
-      tags = ["name", "groups", "sensor", "unit", "source"]
+      tags = ["name", "groups", "sensor", "unit", "sensor_type"]
 ```
 
 This would produce the following metrics in the `influx` format on stdout:
 ```
 deye,address=192.168.0.254,host=pfah,port=8899,serial=123412341234 up=1 1685867801610059060
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Production\ today,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=day,unit=kWh energy=0.1 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Production\ Total,port=8899,sensor=DoubleRegisterSensor,serial=123412341234,source=total,unit=kWh energy=5.800000000000001 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Phase1\ Voltage,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=ac/l1,unit=V voltage=235 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Phase1\ Current,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=ac/l1,unit=A current=0.2 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Phase1\ Power,port=8899,sensor=ComputedPowerSensor,serial=123412341234,source=ac/l1,unit=W power=47 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=AC\ Freq,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=ac,unit=Hz freq=50.1 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Uptime,port=8899,sensor=SingleRegisterSensor,serial=123412341234,unit=minutes uptime=0 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV1\ Voltage,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv1,unit=V voltage=29.5 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV1\ Current,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv1,unit=A current=1.3 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV1\ Power,port=8899,sensor=ComputedPowerSensor,serial=123412341234,source=dc/pv1,unit=W power=38.35 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=PV1\ Production\ today,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv1/day,unit=kWh energy=0 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=PV1\ Total,port=8899,sensor=DoubleRegisterSensor,serial=123412341234,source=dc/pv1/total,unit=kWh energy=5 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV2\ Voltage,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv2,unit=V voltage=28.900000000000002 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV2\ Current,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv2,unit=A current=0.8 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV2\ Power,port=8899,sensor=ComputedPowerSensor,serial=123412341234,source=dc/pv2,unit=W power=23.120000000000005 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=PV2\ Production\ today,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv2/day,unit=kWh energy=0 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=PV2\ Total,port=8899,sensor=DoubleRegisterSensor,serial=123412341234,source=dc/pv2/total,unit=kWh energy=0.6000000000000001 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV3\ Voltage,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv3,unit=V voltage=0 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV3\ Current,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv3,unit=A current=0 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV3\ Power,port=8899,sensor=ComputedPowerSensor,serial=123412341234,source=dc/pv3,unit=W power=0 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=PV3\ Production\ today,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv3/day,unit=kWh energy=0 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=PV3\ Total,port=8899,sensor=DoubleRegisterSensor,serial=123412341234,source=dc/pv3/total,unit=kWh energy=0 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV4\ Voltage,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv4,unit=V voltage=0 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV4\ Current,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv4,unit=A current=0 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV4\ Power,port=8899,sensor=ComputedPowerSensor,serial=123412341234,source=dc/pv4,unit=W power=0 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=PV4\ Production\ today,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=dc/pv4/day,unit=kWh energy=0 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=PV4\ Total,port=8899,sensor=DoubleRegisterSensor,serial=123412341234,source=dc/pv4/total,unit=kWh energy=0 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=DC\ Total\ Power,port=8899,sensor=ComputedSumSensor,serial=123412341234,source=dc/total,unit=W power=61.470000000000006 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Operating\ Power,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=operating,unit=W power=0 1685867801000000000
-deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=AC\ Active\ Power,port=8899,sensor=DoubleRegisterSensor,serial=123412341234,source=ac/active,unit=W power=64 1685867801000000000
-deye,address=192.168.0.254,groups=micro,host=pfah,name=Radiator\ temperature,port=8899,sensor=SingleRegisterSensor,serial=123412341234,source=radiator,unit=°C temp=26 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Production\ today,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=day,unit=kWh energy=0.1 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Production\ Total,port=8899,sensor_type=DoubleRegisterSensor,serial=123412341234,sensor=total,unit=kWh energy=5.800000000000001 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Phase1\ Voltage,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=ac/l1,unit=V voltage=235 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Phase1\ Current,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=ac/l1,unit=A current=0.2 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Phase1\ Power,port=8899,sensor_type=ComputedPowerSensor,serial=123412341234,sensor=ac/l1,unit=W power=47 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=AC\ Freq,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=ac,unit=Hz freq=50.1 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Uptime,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,unit=minutes uptime=0 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV1\ Voltage,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv1,unit=V voltage=29.5 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV1\ Current,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv1,unit=A current=1.3 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV1\ Power,port=8899,sensor_type=ComputedPowerSensor,serial=123412341234,sensor=dc/pv1,unit=W power=38.35 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=PV1\ Production\ today,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv1/day,unit=kWh energy=0 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=PV1\ Total,port=8899,sensor_type=DoubleRegisterSensor,serial=123412341234,sensor=dc/pv1/total,unit=kWh energy=5 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV2\ Voltage,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv2,unit=V voltage=28.900000000000002 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV2\ Current,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv2,unit=A current=0.8 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV2\ Power,port=8899,sensor_type=ComputedPowerSensor,serial=123412341234,sensor=dc/pv2,unit=W power=23.120000000000005 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=PV2\ Production\ today,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv2/day,unit=kWh energy=0 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=PV2\ Total,port=8899,sensor_type=DoubleRegisterSensor,serial=123412341234,sensor=dc/pv2/total,unit=kWh energy=0.6000000000000001 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV3\ Voltage,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv3,unit=V voltage=0 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV3\ Current,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv3,unit=A current=0 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV3\ Power,port=8899,sensor_type=ComputedPowerSensor,serial=123412341234,sensor=dc/pv3,unit=W power=0 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=PV3\ Production\ today,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv3/day,unit=kWh energy=0 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=PV3\ Total,port=8899,sensor_type=DoubleRegisterSensor,serial=123412341234,sensor=dc/pv3/total,unit=kWh energy=0 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV4\ Voltage,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv4,unit=V voltage=0 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV4\ Current,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv4,unit=A current=0 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=PV4\ Power,port=8899,sensor_type=ComputedPowerSensor,serial=123412341234,sensor=dc/pv4,unit=W power=0 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=PV4\ Production\ today,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=dc/pv4/day,unit=kWh energy=0 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=PV4\ Total,port=8899,sensor_type=DoubleRegisterSensor,serial=123412341234,sensor=dc/pv4/total,unit=kWh energy=0 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=DC\ Total\ Power,port=8899,sensor_type=ComputedSumSensor,serial=123412341234,sensor=dc/total,unit=W power=61.470000000000006 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=Operating\ Power,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=operating,unit=W power=0 1685867801000000000
+deye,address=192.168.0.254,groups=string\,micro,host=pfah,name=AC\ Active\ Power,port=8899,sensor_type=DoubleRegisterSensor,serial=123412341234,sensor=ac/active,unit=W power=64 1685867801000000000
+deye,address=192.168.0.254,groups=micro,host=pfah,name=Radiator\ temperature,port=8899,sensor_type=SingleRegisterSensor,serial=123412341234,sensor=radiator,unit=°C temp=26 1685867801000000000
 ```
 
 Of course, the output plugin here is just an example. You can process and

@@ -31,8 +31,8 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
     Publishes events on STDOUT
     """
 
-    __mqtt_topic_name_splitter = r"/|_"
-    __source_joiner = "/"
+    __mqtt_topic_suffix_splitter = r"/|_"
+    __sensor_joiner = "/"
 
     def __init__(self, config: DeyeConfig, dest: typing.IO = sys.stdout):
         self.__log = logging.getLogger(DeyeStdoutPublisher.__name__)
@@ -71,28 +71,29 @@ class DeyeStdoutPublisher(DeyeEventProcessor):
 
     @staticmethod
     def __handle_observation(observation: Observation) -> dict[str, str | float | int]:
-        type = observation.sensor.mqtt_topic_suffix
-        name, source = DeyeStdoutPublisher.__mqtt_topic_to_identity(type)
+        topic_suffix = observation.sensor.mqtt_topic_suffix
+        name, sensor = DeyeStdoutPublisher.__mqtt_topic_to_identity(topic_suffix)
 
         data = {
             name: observation.value,
             "name": observation.sensor.name,
             "unit": observation.sensor.unit,
             "groups": ",".join(observation.sensor.groups),
-            "sensor": observation.sensor.__class__.__name__,
+            "sensor_type": observation.sensor.__class__.__name__,
             "timestamp": int(observation.timestamp.timestamp()),
         }
-        if source is not None:
-            data["source"] = source
+        if sensor is not None:
+            data["sensor"] = sensor
 
         return data
 
     @classmethod
-    def __mqtt_topic_to_identity(cls, topic_name: str) -> tuple[str, str | None]:
-        # topic_name can be something like 'dc/pv2/total_power'
-        parts = re.split(cls.__mqtt_topic_name_splitter, topic_name)
+    def __mqtt_topic_to_identity(cls, topic_suffix: str) -> tuple[str, str | None]:
+        # topic_suffix can be something like 'dc/pv2/total_power'
+        # and will be split into "power" and "dc/pv2/total"
+        parts = re.split(cls.__mqtt_topic_suffix_splitter, topic_suffix)
 
         name = parts[-1]
-        source = cls.__source_joiner.join(parts[:-1])
+        sensor = cls.__sensor_joiner.join(parts[:-1])
 
-        return name, None if source == "" else source
+        return name, None if sensor == "" else sensor

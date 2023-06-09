@@ -139,20 +139,20 @@ class DeyeStdoutPublisherTest(unittest.TestCase):
         o1 = data[0]
         self.assertEqual(o1.pop("thisIsTheValue"), 123)
         self.assertEqual(o1.pop("name"), "some sensor")
-        self.assertEqual(o1.pop("source"), "some/topic/and/things")
+        self.assertEqual(o1.pop("sensor"), "some/topic/and/things")
         self.assertEqual(o1.pop("unit"), "some unit")
         self.assertEqual(o1.pop("groups"), "group1,group2")
-        self.assertEqual(o1.pop("sensor"), "Sensor")
+        self.assertEqual(o1.pop("sensor_type"), "Sensor")
         self.assertEqual(o1.pop("timestamp"), 42)
         self.assertEqual(len(o1), 0)
 
         o2 = data[1]
         self.assertEqual(o2.pop("thing"), "some value")
         self.assertEqual(o2.pop("name"), "some sum sensor")
-        self.assertEqual(o2.pop("source"), "the/other/topic")
+        self.assertEqual(o2.pop("sensor"), "the/other/topic")
         self.assertEqual(o2.pop("unit"), "some other unit")
         self.assertEqual(o2.pop("groups"), "some group")
-        self.assertEqual(o2.pop("sensor"), "ComputedSumSensor")
+        self.assertEqual(o2.pop("sensor_type"), "ComputedSumSensor")
         self.assertEqual(o2.pop("timestamp"), 43)
         self.assertEqual(len(o2), 0)
 
@@ -161,7 +161,7 @@ class DeyeStdoutPublisherTest(unittest.TestCase):
         self.assertEqual(o3.pop("name"), "blipp")
         self.assertEqual(o3.pop("unit"), "blupp")
         self.assertEqual(o3.pop("groups"), "blapp")
-        self.assertEqual(o3.pop("sensor"), "Sensor")
+        self.assertEqual(o3.pop("sensor_type"), "Sensor")
         self.assertEqual(o3.pop("timestamp"), 44)
         self.assertEqual(len(o3), 0)
 
