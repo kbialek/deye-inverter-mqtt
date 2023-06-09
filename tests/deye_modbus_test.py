@@ -18,8 +18,8 @@
 import unittest
 from unittest.mock import patch
 
-from deye_modbus import DeyeModbus
 from deye_config import DeyeConfig, DeyeLoggerConfig
+from deye_modbus import DeyeModbus
 
 
 class DeyeModbusTest(unittest.TestCase):
@@ -131,7 +131,7 @@ class DeyeModbusTest(unittest.TestCase):
             sut.read_registers(0x50, 0x5F)
 
         # then
-        self.assertEqual(len(captured.records), 2)
+        self.assertEqual(len(captured.records), 1)
         self.assertEqual(
             captured.records[0].getMessage(), "Logger Serial Number does not match. Check your configuration file."
         )
@@ -149,7 +149,7 @@ class DeyeModbusTest(unittest.TestCase):
             sut.read_registers(0x50, 0x5F)
 
         # then
-        self.assertEqual(len(captured.records), 2)
+        self.assertEqual(len(captured.records), 1)
         self.assertEqual(captured.records[0].getMessage(), "Modbus device address does not match.")
 
     @patch("deye_connector.DeyeConnector")
@@ -165,7 +165,7 @@ class DeyeModbusTest(unittest.TestCase):
             sut.read_registers(0x50, 0x5F)
 
         # then
-        self.assertEqual(len(captured.records), 2)
+        self.assertEqual(len(captured.records), 1)
         self.assertEqual(captured.records[0].getMessage(), "Unknown response error code. Error frame: 0100")
 
 
