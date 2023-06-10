@@ -19,6 +19,7 @@ import importlib
 import pkgutil
 import logging
 import sys
+import os
 
 from deye_config import DeyeConfig
 from deye_mqtt import DeyeMqttClient
@@ -38,6 +39,9 @@ class DeyePluginLoader:
         self.__plugins = []
 
     def load_plugins(self, plugin_context: DeyePluginContext):
+        if not os.path.isdir(self.__config.plugins_dir):
+            return
+
         sys.path.append(self.__config.plugins_dir)
         discovered_plugins = {
             name: importlib.import_module(name)
