@@ -56,6 +56,7 @@ docker-run:
 		--net host \
 		--env-file config.env \
 		--volume ./certs:/opt/deye_inverter_mqtt/certs:ro \
+		--volume ./plugins:/opt/deye_inverter_mqtt/plugins:ro \
 		deye-inverter-mqtt
 
 docker-shell:

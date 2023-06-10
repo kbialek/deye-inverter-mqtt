@@ -32,6 +32,7 @@ from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
 from deye_mqtt_subscriber import DeyeMqttSubscriber
 from deye_mqtt import DeyeMqttClient
+from deye_plugin_loader import DeyePluginLoader, DeyePluginContext
 
 
 class DeyeDaemon:
@@ -42,6 +43,7 @@ class DeyeDaemon:
             "Please help me build the list of compatible inverters. "
             "https://github.com/kbialek/deye-inverter-mqtt/issues/41"
         )
+
         connector = DeyeConnector(config)
         self.modbus = DeyeModbus(config, connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
@@ -49,12 +51,19 @@ class DeyeDaemon:
         self.reg_ranges = self.__remove_duplicated_reg_ranges(self.reg_ranges)
 
         mqtt_client = DeyeMqttClient(self.__config)
+
+        plugin_context = DeyePluginContext(config, mqtt_client)
+        plugin_loader = DeyePluginLoader(config)
+        plugin_loader.load_plugins(plugin_context)
+
         mqtt_publisher = DeyeMqttPublisher(config, mqtt_client)
         DeyeMqttSubscriber.create(config, mqtt_client, self.modbus)
 
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         all_processors = [mqtt_publisher, set_time_processor]
-        self.processors = [p for p in all_processors if p.get_id() in config.active_processors]
+        self.processors = [
+            p for p in all_processors if p.get_id() in config.active_processors
+        ] + plugin_loader.get_event_processors()
         for p in self.processors:
             p.initialize()
 
