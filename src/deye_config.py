@@ -118,6 +118,7 @@ class DeyeConfig:
         metric_groups: [str] = [],
         active_processors: [str] = [],
         active_command_handlers: [str] = [],
+        plugins_dir: str = "",
     ):
         self.logger = logger_config
         self.mqtt = mqtt
@@ -127,6 +128,7 @@ class DeyeConfig:
         self.metric_groups = metric_groups
         self.active_processors = active_processors
         self.active_command_handlers = active_command_handlers
+        self.plugins_dir = plugins_dir
 
     @staticmethod
     def from_env():
@@ -139,6 +141,7 @@ class DeyeConfig:
             metric_groups=DeyeConfig.__read_item_set(os.getenv("DEYE_METRIC_GROUPS", "")),
             active_processors=DeyeConfig.__read_active_processors(),
             active_command_handlers=DeyeConfig.__read_active_command_handlers(),
+            plugins_dir=os.getenv("PLUGINS_DIR", "plugins"),
         )
 
     @staticmethod

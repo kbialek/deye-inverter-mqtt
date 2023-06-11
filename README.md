@@ -64,6 +64,20 @@ Monitors current logger status and sets the time at the logger/inverter once the
 This is useful in a setup where the inverter has no access to the public internet, or is cut off from the Solarman cloud services. 
 This feature is disabled by default and must be activated by setting `DEYE_FEATURE_SET_TIME` in the config file.
 
+### Custom plugins
+This feature allows advanced users to extend the functionality of this project. At the moment the plugins can be used to provide custom event processors. This means, that you can now process the readings as you like. No need to rely on MQTT at all anymore.
+
+#### How to implement a plugin
+* Plugin is a Python file placed in `plugins` directory. The filename must begin with `deye_plugin_`
+* The plugin must define a `DeyePlugin` class. See `plugins/deye_plugin_sample.py` for inspiration.
+
+#### How to start the docker container with custom plugins
+
+  Mount your `plugins` dir into the container filesystem
+  ```
+  --volume ./plugins:/opt/deye_inverter_mqtt/plugins:ro
+  ```
+
 ## Installation
 1. Copy `config.env.example` as `config.env`
 2. Fill in values in `config.env`, see [Configuration](#configuration) for more details
@@ -183,6 +197,7 @@ All configuration options are controlled through environment variables.
 * `MQTT_TLS_CA_CERT_PATH` - CA certificate location to be used instead of the system certification authority, defaults to `None`
 * `MQTT_TLS_CLIENT_CERT_PATH` - Client certificate location for TLS based authentication, defaults to `None`
 * `MQTT_TLS_CLIENT_KEY_PATH` - Client private key location for TLS based authentication, defaults to `None`
+* `PLUGINS_DIR` - Path to a directory containing custom plugins extending the functionality of the service
 
 
 ## Reading and writing raw register values
