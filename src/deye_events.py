@@ -37,6 +37,15 @@ class DeyeObservationEvent(DeyeEvent):
     def __init__(self, observation: Observation):
         self.observation = observation
 
+    def __str__(self) -> str:
+        return f"{self.observation.sensor.name}: {self.observation.value_as_str()}"
+
+    def __eq__(self, other) -> bool:
+        try:
+            return self.observation.value == other.observation.value
+        except AttributeError:
+            return False
+
 
 class DeyeLoggerStatusEvent(DeyeEvent):
     """
@@ -45,6 +54,15 @@ class DeyeLoggerStatusEvent(DeyeEvent):
 
     def __init__(self, online: bool):
         self.online = online
+
+    def __str__(self) -> str:
+        return "online" if self.online else "offline"
+
+    def __eq__(self, other) -> bool:
+        return self.online == getattr(other, "online", None)
+
+    def __bool__(self) -> bool:
+        return self.online
 
 
 class DeyeEventProcessor:
