@@ -46,6 +46,7 @@ class DeyePluginLoader:
         discovered_plugins = {
             name: importlib.import_module(name)
             for finder, name, ispkg in pkgutil.iter_modules(path=[self.__config.plugins_dir])
+            if name.startswith("deye_plugin_")
         }
 
         for plugin_name in discovered_plugins:

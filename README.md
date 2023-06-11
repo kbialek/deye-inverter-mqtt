@@ -68,7 +68,7 @@ This feature is disabled by default and must be activated by setting `DEYE_FEATU
 This feature allows advanced users to extend the functionality of this project. At the moment the plugins can be used to provide custom event processors. This means, that you can now process the readings as you like. No need to rely on MQTT at all anymore.
 
 #### How to implement a plugin
-* Plugin is a Python file placed in `plugins` directory
+* Plugin is a Python file placed in `plugins` directory. The filename must begin with `deye_plugin_`
 * The plugin must define a `DeyePlugin` class. See `plugins/deye_plugin_sample.py` for inspiration.
 
 #### How to start the docker container with custom plugins
