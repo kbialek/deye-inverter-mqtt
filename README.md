@@ -78,6 +78,9 @@ This feature allows advanced users to extend the functionality of this project. 
   --volume ./plugins:/opt/deye_inverter_mqtt/plugins:ro
   ```
 
+#### List of public plugins
+* [stdout-publisher](https://github.com/hoegaarden/deye-inverter-mqtt-plugins/) by @hoegaarden
+
 ## Installation
 1. Copy `config.env.example` as `config.env`
 2. Fill in values in `config.env`, see [Configuration](#configuration) for more details
@@ -218,8 +221,12 @@ By using this tool you accept this risk and you take full responsibility for the
     ```
     where `<reg_address>` is register address (decimal), and <reg_value> is a value to set (decimal)
 
+## Other related projects and resources
+* https://github.com/StephanJoubert/home_assistant_solarman
+* https://github.com/dasrecht/deye-firmware
+* https://github.com/Hypfer/deye-microinverter-cloud-free
+* https://github.com/jedie/inverter-connect
+* https://github.com/MichaluxPL/Sofar_LSW3
+
 ## Development
 Read [CONTRIBUTING.md](./CONTRIBUTING.md)
-
-    
-
