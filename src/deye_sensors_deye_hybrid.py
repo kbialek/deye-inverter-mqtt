@@ -153,7 +153,7 @@ deye_hybrid_battery_182 = SingleRegisterSensor(
 )
 
 deye_hybrid_grid_169 = SingleRegisterSensor(
-    "Total Grid Power", 169, 1, mqtt_topic_suffix="ac/total_power", unit="W", signed=True, groups=["deye_hybrid"]
+    "Total Grid Power", 169, 1, mqtt_topic_suffix="ac/total_grid_power", unit="W", signed=True, groups=["deye_hybrid"]
 )
 
 deye_hybrid_grid_150 = SingleRegisterSensor(

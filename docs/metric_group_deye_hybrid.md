@@ -9,7 +9,7 @@
 |Daily Production|108|`day_energy`|kWh|
 |Total Production|96,97|`total_energy`|kWh|
 |Micro-inverter Power|166|`micro_inverter_power`|W|
-|Total Grid Power|169|`ac/total_power`|W|
+|Total Grid Power|169|`ac/total_grid_power`|W|
 |Grid Voltage L1|150|`ac/l1/voltage`|V|
 |Grid Voltage L2|151|`ac/l2/voltage`|V|
 |Internal CT L1 Power|167|`ac/l1/ct/internal`|W|

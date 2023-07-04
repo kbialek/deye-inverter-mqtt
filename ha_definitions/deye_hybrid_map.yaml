@@ -18,7 +18,7 @@ topics:
   184: battery/soc
   191: battery/current
   182: battery/temperature
-  169: ac/total_power
+  169: ac/total_grid_power
   175: ac/total_power
   150: ac/l1/voltage
   151: ac/l2/voltage
