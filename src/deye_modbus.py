@@ -179,7 +179,7 @@ class DeyeModbus:
             )
             return False
         actual_crc = int.from_bytes(frame[expected_frame_data_len : expected_frame_data_len + 2], "little")
-        expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
+        expected_crc = int.from_bytes(self.crc16(frame[0:expected_frame_data_len]), "little")
         if actual_crc != expected_crc:
             self.__log.error(
                 "Modbus frame crc is not valid. Expected {:04x}, got {:04x}".format(expected_crc, actual_crc)
