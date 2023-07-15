@@ -27,6 +27,11 @@ from deye_observation import Observation
 import time
 
 
+class DeyeMqttPublishError(Exception):
+    def __init__(self, message: str):
+        self.message = message
+
+
 class DeyeMqttClient:
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
@@ -92,11 +97,11 @@ class DeyeMqttClient:
             info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
             info.wait_for_publish(self.__mqtt_timeout)
         except ValueError as e:
-            self.__log.error("MQTT outgoing queue is full: %s", str(e))
+            raise DeyeMqttPublishError(f"MQTT outgoing queue is full: {str(e)}")
         except RuntimeError as e:
-            self.__log.error("Unknown MQTT publishing error: %s", str(e))
+            raise DeyeMqttPublishError(f"Unknown MQTT publishing error: {str(e)}")
         except OSError as e:
-            self.__log.error("MQTT connection error %s", str(e))
+            raise DeyeMqttPublishError(f"MQTT connection error: {str(e)}")
 
     def publish_observation(self, observation: Observation):
         if observation.sensor.mqtt_topic_suffix:
