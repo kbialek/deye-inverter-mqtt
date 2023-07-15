@@ -49,6 +49,7 @@ class DeyeMqttPublisher(DeyeEventProcessor):
                     self.__log.warning(f"Unsupported event type {event.__class__}")
             except DeyeMqttPublishError as e:
                 self.__log.error(e.message)
+                break
 
     def get_mqtt_client(self) -> DeyeMqttClient:
         return self.__mqtt_client
