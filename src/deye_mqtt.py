@@ -88,6 +88,7 @@ class DeyeMqttClient:
     def __do_publish(self, mqtt_topic: str, value: str):
         try:
             self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
+            self.connect()
             info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
             info.wait_for_publish(self.__mqtt_timeout)
         except ValueError as e:
