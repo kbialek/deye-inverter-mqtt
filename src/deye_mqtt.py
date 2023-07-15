@@ -31,7 +31,7 @@ class DeyeMqttClient:
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
         self.__mqtt_client = paho.Client(
-            client_id=f"deye-inverter-{config.logger.serial_number}-test", reconnect_on_failure=True
+            client_id=f"deye-inverter-{config.logger.serial_number}", reconnect_on_failure=True
         )
         self.__mqtt_client.enable_logger()
         if config.mqtt.tls.enabled:
