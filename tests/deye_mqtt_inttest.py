@@ -35,6 +35,7 @@ logging.basicConfig(stream=sys.stdout, format=log_format, level=logging.DEBUG)
 
 class DeyeMqttClientIntegrationTest(unittest.TestCase):
     mqtt_broker_port = 9883
+    mosquitto_pid = None
 
     def __start_broker(self):
         self.mosquitto_pid = os.spawnl(
@@ -55,7 +56,8 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         time.sleep(2)
 
     def __stop_broker(self):
-        os.kill(self.mosquitto_pid, 9)
+        if self.mosquitto_pid:
+            os.kill(self.mosquitto_pid, 9)
         time.sleep(5)
 
     def __connect_test_client(self):
@@ -142,6 +144,40 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # and: restart broker
         self.__stop_broker()
+        self.__start_broker()
+
+        # and
+        timestamp = datetime.now()
+        observation = Observation(string_dc_power_sensor, timestamp, 1.2)
+
+        # and
+        self.__connect_test_client()
+        self.test_mqtt_client.subscribe(f"deye/{string_dc_power_sensor.mqtt_topic_suffix}")
+
+        # when
+        self.test_mqtt_client.loop_start()
+        mqtt.publish_observation(observation)
+        self.test_mqtt_client.loop_stop()
+
+        # and
+        mqtt.disconnect()
+
+        # then
+        self.assertEqual(len(self.received_messages), 1)
+
+        # and
+        received_message = self.received_messages[0]
+        self.assertEqual(received_message.topic, "deye/dc/total_power")
+        self.assertEqual(received_message.payload, b"1.2")
+
+    def test_connect_on_publish(self):
+        # given: broker is stopped
+
+        # and: connect
+        mqtt = DeyeMqttClient(self.config)
+        mqtt.connect()
+
+        # and: start broker
         self.__start_broker()
 
         # and
