@@ -99,7 +99,10 @@ METRIC_GROUPS = \
 	igen_dtsd422 \
 	deye_hybrid \
 	deye_hybrid_battery \
-	settings
+	settings \
+	deye_sg01hp3 \
+	deye_sg01hp3_battery \
+	deye_sg01hp3_ups
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:
 	@mkdir -p docs
