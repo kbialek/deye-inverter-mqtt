@@ -24,7 +24,7 @@ When your inverter turns out to work well with an already exiting metrics group,
 | [Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                                            | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [settings](docs/metric_group_settings.md) |
 | [Deye SUN-5/6K-SG01LP1-US/EU](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                          | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [settings](docs/metric_group_settings.md)                                                                |
 | [Deye SUN-7.6/8K-SG01LP1-US/EU](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                        | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [settings](docs/metric_group_settings.md)                                                                |
-| [Deye SUN-25/30/40/50K-SG01HP3-EU-BM2/3/4](https://deye.com/product/sun-25-30-40-50k-sg01hp3-eu-bm2-3-4-25-50kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/) [**(experimental)**](https://github.com/kbialek/deye-inverter-mqtt/issues/110) | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [settings](docs/metric_group_settings.md) |
+| [Deye SUN-25/30/40/50K-SG01HP3-EU-BM2/3/4](https://deye.com/product/sun-25-30-40-50k-sg01hp3-eu-bm2-3-4-25-50kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/) [**(experimental)**](https://github.com/kbialek/deye-inverter-mqtt/issues/110) | [deye_sg01hp3](docs/metric_group_deye_sg01hp3.md), [deye_sg01hp3_battery](docs/metric_group_deye_sg01hp3_battery.md), [deye_sg01hp3_ups](docs/metric_group_deye_sg01hp3_ups.md), [settings](docs/metric_group_settings.md) |
 
 | Meter model                                                         | Metric groups                                     |
 | ------------------------------------------------------------------- | ------------------------------------------------- |
@@ -184,6 +184,9 @@ All configuration options are controlled through environment variables.
     * `deye_sg04lp3` - sg04lp3 inverter
     * `deye_sg04lp3_battery` - sg04lp3 battery
     * `deye_sg04lp3_ups` - sg04lp3 ups
+    * `deye_sg01hp3` - sg01hp3 inverter
+    * `deye_sg01hp3_battery` - sg01hp3 battery
+    * `deye_sg01hp3_ups` - sg01hp3 ups
     * `igen_dtsd422`- dtsd422 smart meter
     * `settings` - inverter settings
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
