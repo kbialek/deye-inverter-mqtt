@@ -30,11 +30,11 @@ deye_sg01hp3_solar_673 = SingleRegisterSensor(
 )
 
 deye_sg01hp3_solar_674 = SingleRegisterSensor(
-    "PV2 Power", 674, 10, mqtt_topic_suffix="dc/pv3/power", unit="W", signed=False, groups=["deye_sg01hp3"]
+    "PV3 Power", 674, 10, mqtt_topic_suffix="dc/pv3/power", unit="W", signed=False, groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_675 = SingleRegisterSensor(
-    "PV2 Power", 675, 10, mqtt_topic_suffix="dc/pv4/power", unit="W", signed=False, groups=["deye_sg01hp3"]
+    "PV4 Power", 675, 10, mqtt_topic_suffix="dc/pv4/power", unit="W", signed=False, groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_676 = SingleRegisterSensor(
@@ -46,11 +46,11 @@ deye_sg01hp3_solar_678 = SingleRegisterSensor(
 )
 
 deye_sg01hp3_solar_680 = SingleRegisterSensor(
-    "PV2 Voltage", 680, 0.1, mqtt_topic_suffix="dc/pv3/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "PV3 Voltage", 680, 0.1, mqtt_topic_suffix="dc/pv3/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_682 = SingleRegisterSensor(
-    "PV2 Voltage", 682, 0.1, mqtt_topic_suffix="dc/pv4/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "PV4 Voltage", 682, 0.1, mqtt_topic_suffix="dc/pv4/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_677 = SingleRegisterSensor(
@@ -62,11 +62,11 @@ deye_sg01hp3_solar_679 = SingleRegisterSensor(
 )
 
 deye_sg01hp3_solar_681 = SingleRegisterSensor(
-    "PV2 Current", 681, 0.1, mqtt_topic_suffix="dc/pv3/current", unit="A", signed=False, groups=["deye_sg01hp3"]
+    "PV3 Current", 681, 0.1, mqtt_topic_suffix="dc/pv3/current", unit="A", signed=False, groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_683 = SingleRegisterSensor(
-    "PV2 Current", 683, 0.1, mqtt_topic_suffix="dc/pv4/current", unit="A", signed=False, groups=["deye_sg01hp3"]
+    "PV4 Current", 683, 0.1, mqtt_topic_suffix="dc/pv4/current", unit="A", signed=False, groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_529 = SingleRegisterSensor(
@@ -396,8 +396,8 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_solar_674,
     deye_sg01hp3_solar_675,
     deye_sg01hp3_solar_676,
-    deye_sg01hp3_solar_678,
     deye_sg01hp3_solar_677,
+    deye_sg01hp3_solar_678,
     deye_sg01hp3_solar_679,
     deye_sg01hp3_solar_680,
     deye_sg01hp3_solar_681,
