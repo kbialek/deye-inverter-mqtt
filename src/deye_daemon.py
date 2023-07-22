@@ -23,16 +23,17 @@ import time
 
 from deye_config import DeyeConfig
 from deye_connector import DeyeConnector
-from deye_events import DeyeEvent, DeyeLoggerStatusEvent, DeyeObservationEvent
+from deye_events import (DeyeEvent, DeyeLoggerStatusEvent,
+                         DeyeObservationEvent, compare_event_list)
 from deye_modbus import DeyeModbus
+from deye_mqtt import DeyeMqttClient
 from deye_mqtt_publisher import DeyeMqttPublisher
+from deye_mqtt_subscriber import DeyeMqttSubscriber
 from deye_observation import Observation
+from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
-from deye_mqtt_subscriber import DeyeMqttSubscriber
-from deye_mqtt import DeyeMqttClient
-from deye_plugin_loader import DeyePluginLoader, DeyePluginContext
 
 
 class DeyeDaemon:
@@ -133,7 +134,11 @@ class DeyeDaemon:
         if not events[0]:  # offline
             self.__log.debug("No events received (offline)")
             return True
-        if events[1:] == self.__last_observations and self.__event_updated + self.__event_expiry > time.time():
+        # Compare list of received events with last observation, ignoring status changes
+        if (
+            compare_event_list(events, self.__last_observations, check_status=False)
+            and self.__event_updated + self.__event_expiry > time.time()
+        ):
             self.__log.debug("Event data is unchanged and hasn't expired")
             return False
         self.__log.debug("Time since previous update: %s", time.time() - self.__event_updated)

@@ -15,9 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import logging
 from abc import abstractmethod
 
 from deye_observation import Observation
+
+logger = logging.getLogger(__name__)
 
 
 class DeyeEvent:
@@ -42,9 +45,15 @@ class DeyeObservationEvent(DeyeEvent):
 
     def __eq__(self, other) -> bool:
         try:
-            return self.observation.value == other.observation.value
+            return (
+                self.observation.sensor == other.observation.sensor
+                and self.observation.value == other.observation.value
+            )
         except AttributeError:
             return False
+
+    def __hash__(self):
+        return hash((self.observation.sensor.name, self.observation.value))
 
 
 class DeyeLoggerStatusEvent(DeyeEvent):
@@ -63,6 +72,9 @@ class DeyeLoggerStatusEvent(DeyeEvent):
 
     def __bool__(self) -> bool:
         return self.online
+
+    def __hash__(self):
+        return hash(self.online)
 
 
 class DeyeEventProcessor:
@@ -86,3 +98,32 @@ class DeyeEventProcessor:
     @abstractmethod
     def process(self, events: list[DeyeEvent]):
         pass
+
+
+def events_to_str(events: list[DeyeEvent] | set[DeyeEvent]) -> str:
+    return ", ".join([str(e) for e in events])
+
+
+def compare_event_list(events_a: list[DeyeEvent], events_b: list[DeyeEvent], check_status: bool = False) -> bool:
+    """
+    Compare two lists of DeyeEvents if they are equal, ignoring the order of events
+
+    Parameters
+    ----------
+    events_a : list[DeyeEvent]
+        First list of events
+    events_b : list[DeyeEvent]
+        Second list of events
+    check_status : bool
+        If if False, ignore list entries of type DeyeLoggerStatusEvent
+
+    Returns
+    -------
+    bool
+        True if both lists are containing the same events with same values
+    """
+    set_a = {e for e in events_a if not isinstance(e, DeyeLoggerStatusEvent) or check_status}
+    set_b = {e for e in events_b if not isinstance(e, DeyeLoggerStatusEvent) or check_status}
+    logger.debug("Compare events A[%s] == B[%s]", events_to_str(set_a), events_to_str(set_b))
+
+    return set_a == set_b
