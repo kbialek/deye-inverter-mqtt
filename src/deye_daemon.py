@@ -23,8 +23,7 @@ import time
 
 from deye_config import DeyeConfig
 from deye_connector import DeyeConnector
-from deye_events import (DeyeEvent, DeyeLoggerStatusEvent,
-                         DeyeObservationEvent, compare_event_list)
+from deye_events import DeyeEvent, DeyeLoggerStatusEvent, DeyeObservationEvent, compare_event_list
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
 from deye_mqtt_publisher import DeyeMqttPublisher
@@ -92,7 +91,7 @@ class DeyeDaemon:
         events: list[DeyeEvent] = []
         events.append(DeyeLoggerStatusEvent(len(regs) > 0))
         events += self.__get_observations_from_reg_values(regs)
-        if self.__new_event(events):
+        if self.__new_event(events) or not self.__config.publish_on_change:
             for processor in self.processors:
                 processor.process(events)
         else:

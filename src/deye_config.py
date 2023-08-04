@@ -115,6 +115,7 @@ class DeyeConfig:
         log_level="INFO",
         log_stream=LOG_DEST_STDOUT,
         data_read_inverval=60,
+        publish_on_change=False,
         metric_groups: [str] = [],
         active_processors: [str] = [],
         active_command_handlers: [str] = [],
@@ -125,6 +126,7 @@ class DeyeConfig:
         self.log_level = log_level
         self.log_stream = log_stream
         self.data_read_inverval = data_read_inverval
+        self.publish_on_change = publish_on_change
         self.metric_groups = metric_groups
         self.active_processors = active_processors
         self.active_command_handlers = active_command_handlers
@@ -138,6 +140,7 @@ class DeyeConfig:
             log_level=os.getenv("LOG_LEVEL", "INFO"),
             log_stream=os.getenv("LOG_STREAM", LOG_DEST_STDOUT),
             data_read_inverval=int(os.getenv("DEYE_DATA_READ_INTERVAL", "60")),
+            publish_on_change=os.getenv("DEYE_PUBLISH_ON_CHANGE", "false") == "true",
             metric_groups=DeyeConfig.__read_item_set(os.getenv("DEYE_METRIC_GROUPS", "")),
             active_processors=DeyeConfig.__read_active_processors(),
             active_command_handlers=DeyeConfig.__read_active_command_handlers(),
