@@ -16,7 +16,7 @@
 # under the License.
 
 from deye_plugin_loader import DeyePluginContext
-from deye_events import DeyeEventProcessor, DeyeEvent, DeyeObservationEvent
+from deye_events import DeyeEventProcessor, DeyeEventList, DeyeObservationEvent
 
 
 class DeyeSamplePublisher(DeyeEventProcessor):
@@ -25,7 +25,7 @@ class DeyeSamplePublisher(DeyeEventProcessor):
     def get_id(self):
         return "sample_publisher"
 
-    def process(self, events: list[DeyeEvent]):
+    def process(self, events: DeyeEventList):
         for event in events:
             if isinstance(event, DeyeObservationEvent):
                 observation_event: DeyeObservationEvent = event

@@ -176,6 +176,7 @@ All configuration options are controlled through environment variables.
 * `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`, defaults to `INFO`
 * `LOG_STREAM` - log destination stream, can be any of `STDOUT`, `STDERR`, defaults to `STDOUT`
 * `DEYE_PUBLISH_ON_CHANGE` - when set to `true`, the event data will only be published if it has changed compared to last readings, defaults to `false`
+* `DEYE_EVENTS_EXPIRY` - when `DEYE_PUBLISH_ON_CHANGE` is `true`, this variable defines the maximum age of a valid event list in seconds, defaults to 360 seconds
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
 * `DEYE_METRIC_GROUPS` - a comma delimited set of:
     * `string` - string inverter

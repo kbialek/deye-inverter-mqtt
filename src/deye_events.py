@@ -20,8 +20,6 @@ from abc import abstractmethod
 
 from deye_observation import Observation
 
-logger = logging.getLogger(__name__)
-
 
 class DeyeEvent:
     """
@@ -68,13 +66,68 @@ class DeyeLoggerStatusEvent(DeyeEvent):
         return "online" if self.online else "offline"
 
     def __eq__(self, other) -> bool:
-        return self.online == getattr(other, "online", None)
+        return self.online == other.online
 
     def __bool__(self) -> bool:
         return self.online
 
     def __hash__(self):
         return hash(self.online)
+
+
+class DeyeEventList(list):
+    """
+    An list of Deye Events
+    """
+
+    def __init__(self, events: list[DeyeEvent] | None = None):
+        self.__log = logging.getLogger(DeyeEventList.__name__)
+        super().__init__(events if events else [])
+
+    def __str__(self) -> str:
+        return ", ".join([str(e) for e in self])
+
+    def get_status_event(self) -> DeyeLoggerStatusEvent | None:
+        """Get first status event from event list"""
+        for event in self:
+            if isinstance(event, DeyeLoggerStatusEvent):
+                return event
+        return None
+
+    def is_offline(self) -> bool:
+        """Check for the status event offline
+
+        Returns
+        -------
+        bool
+            True if status event found and is 'offline'.
+        """
+        try:
+            return not self.get_status_event().online
+        except AttributeError:
+            return False
+
+    def compare_observation_events(self, events) -> bool:
+        """
+        Compare observation events of self with other DeyeEventList, ignoring the order of events
+
+        Parameters
+        ----------
+        events : list[DeyeEvent]
+            Other list of events
+        check_status : bool
+            If if False, ignore list entries of type DeyeLoggerStatusEvent
+
+        Returns
+        -------
+        bool
+            True if both lists are containing the same events with same values
+        """
+        set_a = {e for e in self if isinstance(e, DeyeObservationEvent)}
+        set_b = {e for e in events if isinstance(e, DeyeObservationEvent)}
+        self.__log.debug("Compare events A[%s] == B[%s]", str(self), str(DeyeEventList(events)))
+        self.__log.debug("Changed events: %s", str(DeyeEventList(list(set_a - set_b))))
+        return set_a == set_b
 
 
 class DeyeEventProcessor:
@@ -96,34 +149,5 @@ class DeyeEventProcessor:
         pass
 
     @abstractmethod
-    def process(self, events: list[DeyeEvent]):
+    def process(self, events: DeyeEventList):
         pass
-
-
-def events_to_str(events: list[DeyeEvent] | set[DeyeEvent]) -> str:
-    return ", ".join([str(e) for e in events])
-
-
-def compare_event_list(events_a: list[DeyeEvent], events_b: list[DeyeEvent], check_status: bool = False) -> bool:
-    """
-    Compare two lists of DeyeEvents if they are equal, ignoring the order of events
-
-    Parameters
-    ----------
-    events_a : list[DeyeEvent]
-        First list of events
-    events_b : list[DeyeEvent]
-        Second list of events
-    check_status : bool
-        If if False, ignore list entries of type DeyeLoggerStatusEvent
-
-    Returns
-    -------
-    bool
-        True if both lists are containing the same events with same values
-    """
-    set_a = {e for e in events_a if not isinstance(e, DeyeLoggerStatusEvent) or check_status}
-    set_b = {e for e in events_b if not isinstance(e, DeyeLoggerStatusEvent) or check_status}
-    logger.debug("Compare events A[%s] == B[%s]", events_to_str(set_a), events_to_str(set_b))
-
-    return set_a == set_b
