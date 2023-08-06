@@ -36,17 +36,14 @@ class TestDeyeEventList(unittest.TestCase):
     def test_get_status_event(self):
         # Test case when no status event is present in the list
         events_list = DeyeEventList()
-        self.assertIsNone(events_list.get_status_event())
+        self.assertIsNone(events_list.get_status())
 
         # Test case when a status event is present in the list
         events_list = DeyeEventList()
         status_event = DeyeLoggerStatusEvent(online=True)
         events_list.append(status_event)
         events_list.append(DeyeObservationEvent(Observation(FakeSensor("Sensor1", 1.1), datetime.now(), 42)))
-
-        # status_event = DeyeLoggerStatusEvent(online=True)
-        # events_list = DeyeEventList([DeyeObservationEvent(Observation("Temperature", 25)), status_event])
-        self.assertEqual(events_list.get_status_event(), status_event)
+        self.assertEqual(events_list.get_status(), status_event.online)
 
     def test_is_offline(self):
         # Test case when no status event is present in the list

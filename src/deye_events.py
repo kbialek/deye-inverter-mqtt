@@ -87,11 +87,11 @@ class DeyeEventList(list):
     def __str__(self) -> str:
         return ", ".join([str(e) for e in self])
 
-    def get_status_event(self) -> DeyeLoggerStatusEvent | None:
-        """Get first status event from event list"""
+    def get_status(self) -> bool | None:
+        """Get value of first status event from event list"""
         for event in self:
             if isinstance(event, DeyeLoggerStatusEvent):
-                return event
+                return event.online
         return None
 
     def is_offline(self) -> bool:
@@ -100,14 +100,11 @@ class DeyeEventList(list):
         Returns
         -------
         bool
-            True if status event found and is 'offline'.
+            True if status event found and is 'offline' (False).
         """
-        try:
-            return not self.get_status_event().online
-        except AttributeError:
-            return False
+        return self.get_status() is False
 
-    def compare_observation_events(self, events) -> bool:
+    def compare_observation_events(self, events: "DeyeEventList") -> bool:
         """
         Compare observation events of self with other DeyeEventList, ignoring the order of events
 
@@ -115,8 +112,6 @@ class DeyeEventList(list):
         ----------
         events : list[DeyeEvent]
             Other list of events
-        check_status : bool
-            If if False, ignore list entries of type DeyeLoggerStatusEvent
 
         Returns
         -------

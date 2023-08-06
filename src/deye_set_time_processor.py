@@ -40,7 +40,7 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
         return self.__last_status
 
     def process(self, events: DeyeEventList):
-        logger_status = events.get_status_event()
+        logger_status = events.get_status()
         if logger_status is not None:
             if not self.__last_status and logger_status:
                 self.__last_status = self.__set_time()

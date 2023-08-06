@@ -93,7 +93,7 @@ class DeyeDaemon:
             for processor in self.processors:
                 processor.process(events)
         else:
-            self.__log.info("Received event data is not new or logger is offline, skipping")
+            self.__log.info("No changes found in received data, or the logger is offline, skipping")
         self.__log.info("Reading completed")
 
     def __get_observations_from_reg_values(self, regs: dict[int, bytearray]) -> list[DeyeObservationEvent]:
