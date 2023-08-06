@@ -176,7 +176,7 @@ All configuration options are controlled through environment variables.
 * `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`, defaults to `INFO`
 * `LOG_STREAM` - log destination stream, can be any of `STDOUT`, `STDERR`, defaults to `STDOUT`
 * `DEYE_PUBLISH_ON_CHANGE` - when set to `true`, the event data will only be published if it has changed compared to last readings, defaults to `false`
-* `DEYE_EVENTS_EXPIRY` - when `DEYE_PUBLISH_ON_CHANGE` is `true`, this variable defines the maximum age of a valid event list in seconds, defaults to 360 seconds
+* `DEYE_PUBLISH_ON_CHANGE_MAX_INTERVAL` - when `DEYE_PUBLISH_ON_CHANGE` is `true`, this variable defines the maximum age of a valid event list in seconds, defaults to 360 seconds
 * `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
 * `DEYE_METRIC_GROUPS` - a comma delimited set of:
     * `string` - string inverter
@@ -211,6 +211,18 @@ All configuration options are controlled through environment variables.
 * `MQTT_TLS_CLIENT_KEY_PATH` - Client private key location for TLS based authentication, defaults to `None`
 * `PLUGINS_DIR` - Path to a directory containing custom plugins extending the functionality of the service
 
+### Publish on change feature
+
+The Deye logger usually only updates the measurements only every 5 minutes, so that shorter `DEYE_DATA_READ_INTERVAL` values
+would provide duplicate readings of the same measurements. Increasing the read interval to 5 minutes is not a good solution
+since it is not known when the measurements are actually updated which could add a delay of one 5 min interval.
+
+To get the latest measurements without much delay but still avoid publishing duplicate readings, the `DEYE_PUBLISH_ON_CHANGE`
+option can be enabled. With this feature, a new logger reading is only published if any of the new values differs from the
+previous reading.
+
+For the rare case that none of the measurements may have changed between subsequent measurements, a maximum interval between
+two published messaged is configured with the variable `DEYE_PUBLISH_ON_CHANGE_MAX_INTERVAL` (default 360 seconds = 6 minutes).
 
 ## Reading and writing raw register values
 The tool allows reading and writing raw register values directly in the terminal.

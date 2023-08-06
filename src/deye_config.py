@@ -143,7 +143,7 @@ class DeyeConfig:
             log_stream=os.getenv("LOG_STREAM", LOG_DEST_STDOUT),
             data_read_inverval=int(os.getenv("DEYE_DATA_READ_INTERVAL", "60")),
             publish_on_change=os.getenv("DEYE_PUBLISH_ON_CHANGE", "false") == "true",
-            event_expiry=int(os.getenv("DEYE_EVENTS_EXPIRY", 360)),
+            event_expiry=int(os.getenv("DEYE_PUBLISH_ON_CHANGE_MAX_INTERVAL", 360)),
             metric_groups=DeyeConfig.__read_item_set(os.getenv("DEYE_METRIC_GROUPS", "")),
             active_processors=DeyeConfig.__read_active_processors(),
             active_command_handlers=DeyeConfig.__read_active_command_handlers(),
