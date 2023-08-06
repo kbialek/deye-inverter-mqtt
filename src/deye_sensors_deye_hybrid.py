@@ -28,35 +28,35 @@ from deye_sensor import (
 )
 
 deye_hybrid_solar_186 = SingleRegisterSensor(
-    "PV1 Power", 186, 1, mqtt_topic_suffix="dc/pv1/power", unit="W", signed=False, groups=["deye_hybrid"]
+    "PV1 Power", 186, 1, mqtt_topic_suffix="dc/pv1/power", unit="W", device_class='power', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_solar_187 = SingleRegisterSensor(
-    "PV2 Power", 187, 1, mqtt_topic_suffix="dc/pv2/power", unit="W", signed=False, groups=["deye_hybrid"]
+    "PV2 Power", 187, 1, mqtt_topic_suffix="dc/pv2/power", unit="W", device_class='power', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_solar_109 = SingleRegisterSensor(
-    "PV1 Voltage", 109, 0.1, mqtt_topic_suffix="dc/pv1/voltage", unit="V", signed=False, groups=["deye_hybrid"]
+    "PV1 Voltage", 109, 0.1, mqtt_topic_suffix="dc/pv1/voltage", unit="V", device_class='voltage', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_solar_111 = SingleRegisterSensor(
-    "PV2 Voltage", 111, 0.1, mqtt_topic_suffix="dc/pv2/voltage", unit="V", signed=False, groups=["deye_hybrid"]
+    "PV2 Voltage", 111, 0.1, mqtt_topic_suffix="dc/pv2/voltage", unit="V", device_class='voltage', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_solar_110 = SingleRegisterSensor(
-    "PV1 Current", 110, 0.1, mqtt_topic_suffix="dc/pv1/current", unit="A", signed=False, groups=["deye_hybrid"]
+    "PV1 Current", 110, 0.1, mqtt_topic_suffix="dc/pv1/current", unit="A", signed=False, device_class='current', groups=["deye_hybrid"]
 )
 
 deye_hybrid_solar_112 = SingleRegisterSensor(
-    "PV2 Current", 112, 0.1, mqtt_topic_suffix="dc/pv2/current", unit="A", signed=False, groups=["deye_hybrid"]
+    "PV2 Current", 112, 0.1, mqtt_topic_suffix="dc/pv2/current", unit="A", device_class='current', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_solar_108 = SingleRegisterSensor(
-    "Daily Production", 108, 0.1, mqtt_topic_suffix="day_energy", unit="kWh", signed=False, groups=["deye_hybrid"]
+    "Daily Production", 108, 0.1, mqtt_topic_suffix="day_energy", unit="kWh", device_class='energy', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_solar_96 = DoubleRegisterSensor(
-    "Total Production", 96, 0.1, mqtt_topic_suffix="total_energy", unit="kWh", signed=False, groups=["deye_hybrid"]
+    "Total Production", 96, 0.1, mqtt_topic_suffix="total_energy", unit="kWh", device_class='energy', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_solar_166 = SingleRegisterSensor(
@@ -65,6 +65,7 @@ deye_hybrid_solar_166 = SingleRegisterSensor(
     1,
     mqtt_topic_suffix="micro_inverter_power",
     unit="W",
+    device_class='power',
     signed=False,
     groups=["deye_hybrid"],
 )
@@ -75,6 +76,7 @@ deye_hybrid_battery_72 = DoubleRegisterSensor(
     0.1,
     mqtt_topic_suffix="battery/total_charge",
     unit="kWh",
+    device_class='energy',
     signed=False,
     groups=["deye_hybrid_battery"],
 )
@@ -85,6 +87,7 @@ deye_hybrid_battery_74 = DoubleRegisterSensor(
     0.1,
     mqtt_topic_suffix="battery/total_discharge",
     unit="kWh",
+    device_class='energy',
     signed=False,
     groups=["deye_hybrid_battery"],
 )
@@ -95,6 +98,7 @@ deye_hybrid_battery_70 = SingleRegisterSensor(
     0.1,
     mqtt_topic_suffix="battery/daily_charge",
     unit="kWh",
+    device_class='energy',
     signed=False,
     groups=["deye_hybrid_battery"],
 )
@@ -105,6 +109,7 @@ deye_hybrid_battery_71 = SingleRegisterSensor(
     0.1,
     mqtt_topic_suffix="battery/daily_discharge",
     unit="kWh",
+    device_class='energy',
     signed=False,
     groups=["deye_hybrid_battery"],
 )
@@ -114,7 +119,7 @@ deye_hybrid_battery_189 = SingleRegisterSensor(
 )
 
 deye_hybrid_battery_190 = SingleRegisterSensor(
-    "Battery Power", 190, 1, mqtt_topic_suffix="battery/power", unit="W", signed=True, groups=["deye_hybrid_battery"]
+    "Battery Power", 190, 1, mqtt_topic_suffix="battery/power", unit="W", device_class='power', signed=True, groups=["deye_hybrid_battery"]
 )
 
 deye_hybrid_battery_183 = SingleRegisterSensor(
@@ -123,12 +128,13 @@ deye_hybrid_battery_183 = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="battery/voltage",
     unit="V",
+    device_class='voltage',
     signed=False,
     groups=["deye_hybrid_battery"],
 )
 
 deye_hybrid_battery_184 = SingleRegisterSensor(
-    "Battery SOC", 184, 1, mqtt_topic_suffix="battery/soc", unit="%", signed=False, groups=["deye_hybrid_battery"]
+    "Battery SOC", 184, 1, mqtt_topic_suffix="battery/soc", unit="%", device_class='battery', signed=False, groups=["deye_hybrid_battery"]
 )
 
 deye_hybrid_battery_191 = SingleRegisterSensor(
@@ -137,6 +143,7 @@ deye_hybrid_battery_191 = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="battery/current",
     unit="A",
+    device_class='current',
     signed=True,
     groups=["deye_hybrid_battery"],
 )
@@ -148,36 +155,37 @@ deye_hybrid_battery_182 = SingleRegisterSensor(
     offset=-100.0,
     mqtt_topic_suffix="battery/temperature",
     unit="°C",
+    device_class='temperature',
     signed=False,
     groups=["deye_hybrid_battery"],
 )
 
 deye_hybrid_grid_169 = SingleRegisterSensor(
-    "Total Grid Power", 169, 1, mqtt_topic_suffix="ac/total_grid_power", unit="W", signed=True, groups=["deye_hybrid"]
+    "Total Grid Power", 169, 1, mqtt_topic_suffix="ac/total_grid_power", unit="W", device_class='power', signed=True, groups=["deye_hybrid"]
 )
 
 deye_hybrid_grid_150 = SingleRegisterSensor(
-    "Grid Voltage L1", 150, 0.1, mqtt_topic_suffix="ac/l1/voltage", unit="V", signed=False, groups=["deye_hybrid"]
+    "Grid Voltage L1", 150, 0.1, mqtt_topic_suffix="ac/l1/voltage", unit="V", device_class='voltage', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_grid_151 = SingleRegisterSensor(
-    "Grid Voltage L2", 151, 0.1, mqtt_topic_suffix="ac/l2/voltage", unit="V", signed=False, groups=["deye_hybrid"]
+    "Grid Voltage L2", 151, 0.1, mqtt_topic_suffix="ac/l2/voltage", unit="V", device_class='voltage', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_grid_167 = SingleRegisterSensor(
-    "Internal CT L1 Power", 167, 1, mqtt_topic_suffix="ac/l1/ct/internal", unit="W", signed=True, groups=["deye_hybrid"]
+    "Internal CT L1 Power", 167, 1, mqtt_topic_suffix="ac/l1/ct/internal", unit="W", device_class='power', signed=True, groups=["deye_hybrid"]
 )
 
 deye_hybrid_grid_168 = SingleRegisterSensor(
-    "Internal CT L2 Power", 168, 1, mqtt_topic_suffix="ac/l2/ct/internal", unit="W", signed=True, groups=["deye_hybrid"]
+    "Internal CT L2 Power", 168, 1, mqtt_topic_suffix="ac/l2/ct/internal", unit="W", device_class='power', signed=True, groups=["deye_hybrid"]
 )
 
 deye_hybrid_grid_170 = SingleRegisterSensor(
-    "External CT L1 Power", 170, 1, mqtt_topic_suffix="ac/l1/ct/external", unit="W", signed=True, groups=["deye_hybrid"]
+    "External CT L1 Power", 170, 1, mqtt_topic_suffix="ac/l1/ct/external", unit="W", device_class='power', signed=True, groups=["deye_hybrid"]
 )
 
 deye_hybrid_grid_171 = SingleRegisterSensor(
-    "External CT L2 Power", 171, 1, mqtt_topic_suffix="ac/l2/ct/external", unit="W", signed=True, groups=["deye_hybrid"]
+    "External CT L2 Power", 171, 1, mqtt_topic_suffix="ac/l2/ct/external", unit="W", device_class='power', signed=True, groups=["deye_hybrid"]
 )
 
 deye_hybrid_grid_76 = SingleRegisterSensor(
@@ -186,6 +194,7 @@ deye_hybrid_grid_76 = SingleRegisterSensor(
     0.1,
     mqtt_topic_suffix="ac/daily_energy_bought",
     unit="kWh",
+    device_class='energy',
     signed=False,
     groups=["deye_hybrid"],
 )
@@ -196,6 +205,7 @@ deye_hybrid_grid_78 = DoubleRegisterSensor(
     0.1,
     mqtt_topic_suffix="ac/total_energy_bought",
     unit="kWh",
+    device_class='energy',
     signed=False,
     groups=["deye_hybrid"],
 )
@@ -206,6 +216,7 @@ deye_hybrid_grid_77 = SingleRegisterSensor(
     0.1,
     mqtt_topic_suffix="ac/daily_energy_sold",
     unit="kWh",
+    device_class='energy',
     signed=False,
     groups=["deye_hybrid"],
 )
@@ -216,6 +227,7 @@ deye_hybrid_grid_81 = DoubleRegisterSensor(
     0.1,
     mqtt_topic_suffix="ac/total_energy_sold",
     unit="kWh",
+    device_class='energy',
     signed=False,
     groups=["deye_hybrid"],
 )
@@ -241,7 +253,7 @@ deye_hybrid_inverter_174 = SingleRegisterSensor(
 )
 
 deye_hybrid_inverter_192 = SingleRegisterSensor(
-    "Load Frequency", 192, 0.01, mqtt_topic_suffix="ac/frequency", unit="Hz", signed=False, groups=["deye_hybrid"]
+    "Load Frequency", 192, 0.01, mqtt_topic_suffix="ac/frequency", unit="Hz", device_class='frequency', signed=False, groups=["deye_hybrid"]
 )
 
 deye_hybrid_inverter_90 = SingleRegisterSensor(
@@ -251,6 +263,7 @@ deye_hybrid_inverter_90 = SingleRegisterSensor(
     offset=-100.0,
     mqtt_topic_suffix="radiator_temp",
     unit="°C",
+    device_class='temperature',
     signed=True,
     groups=["deye_hybrid"],
 )
@@ -262,6 +275,7 @@ deye_hybrid_inverter_91 = SingleRegisterSensor(
     offset=-100.0,
     mqtt_topic_suffix="ac/temperature",
     unit="°C",
+    device_class='temperature',
     signed=True,
     groups=["deye_hybrid"],
 )

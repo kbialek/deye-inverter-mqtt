@@ -45,8 +45,9 @@ def import_single_register_item(group_prefix: str, group_name: str, parameter_it
     fill = ' ' * len(sensor_name)
     offset_code = f" offset={-offset/10}," if offset else ''
     unit = parameter_item['uom']
+    device_class = parameter_item['class']
     code = f"""{sensor_name} = SingleRegisterSensor('{name}', {register}, {scale},{offset_code}
-           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}', signed={signed},
+           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}', signed={signed}, device_class='{device_class}',
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, register, register)
 
@@ -70,8 +71,9 @@ def import_double_register_item(group_prefix: str, group_name: str, parameter_it
     fill = ' ' * len(sensor_name)
     offset_code = f" offset={-offset/10}," if offset else ''
     unit = parameter_item['uom']
+    device_class = parameter_item['class']
     code = f"""{sensor_name} = DoubleRegisterSensor('{name}', {reg_min}, {scale},{offset_code}
-           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}', signed={signed},
+           {fill}             mqtt_topic_suffix='{topic}', unit='{unit}', signed={signed}, device_class='{device_class}',
            {fill}             groups=['{sensor_group_name}'])\n\n"""
     return SensorDef(sensor_name, sensor_group_name, code, reg_min, reg_max)
 
