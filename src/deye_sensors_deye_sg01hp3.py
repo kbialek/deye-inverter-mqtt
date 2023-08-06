@@ -22,59 +22,73 @@ from deye_sensor import (
 )
 
 deye_sg01hp3_solar_672 = SingleRegisterSensor(
-    "PV1 Power", 672, 10, mqtt_topic_suffix="dc/pv1/power", unit="W",  device_class='power', signed=False, groups=["deye_sg01hp3"]
+    "PV1 Power", 672, 10, mqtt_topic_suffix="dc/pv1/power", unit="W", device_class='power', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_673 = SingleRegisterSensor(
-    "PV2 Power", 673, 10, mqtt_topic_suffix="dc/pv2/power", unit="W", device_class='power', signed=False, groups=["deye_sg01hp3"]
+    "PV2 Power", 673, 10, mqtt_topic_suffix="dc/pv2/power", unit="W", device_class='power', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_674 = SingleRegisterSensor(
-    "PV3 Power", 674, 10, mqtt_topic_suffix="dc/pv3/power", unit="W", device_class='power', signed=False, groups=["deye_sg01hp3"]
+    "PV3 Power", 674, 10, mqtt_topic_suffix="dc/pv3/power", unit="W", device_class='power', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_675 = SingleRegisterSensor(
-    "PV4 Power", 675, 10, mqtt_topic_suffix="dc/pv4/power", unit="W", device_class='power', signed=False, groups=["deye_sg01hp3"]
+    "PV4 Power", 675, 10, mqtt_topic_suffix="dc/pv4/power", unit="W", device_class='power', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_676 = SingleRegisterSensor(
-    "PV1 Voltage", 676, 0.1, mqtt_topic_suffix="dc/pv1/voltage", unit="V", device_class='voltage', signed=False, groups=["deye_sg01hp3"]
+    "PV1 Voltage", 676, 0.1, mqtt_topic_suffix="dc/pv1/voltage", unit="V", device_class='voltage', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_678 = SingleRegisterSensor(
-    "PV2 Voltage", 678, 0.1, mqtt_topic_suffix="dc/pv2/voltage", unit="V", device_class='voltage', signed=False, groups=["deye_sg01hp3"]
+    "PV2 Voltage", 678, 0.1, mqtt_topic_suffix="dc/pv2/voltage", unit="V", device_class='voltage', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_680 = SingleRegisterSensor(
-    "PV3 Voltage", 680, 0.1, mqtt_topic_suffix="dc/pv3/voltage", unit="V", device_class='voltage', signed=False, groups=["deye_sg01hp3"]
+    "PV3 Voltage", 680, 0.1, mqtt_topic_suffix="dc/pv3/voltage", unit="V", device_class='voltage', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_682 = SingleRegisterSensor(
-    "PV4 Voltage", 682, 0.1, mqtt_topic_suffix="dc/pv4/voltage", unit="V", device_class='voltage', signed=False, groups=["deye_sg01hp3"]
+    "PV4 Voltage", 682, 0.1, mqtt_topic_suffix="dc/pv4/voltage", unit="V", device_class='voltage', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_677 = SingleRegisterSensor(
-    "PV1 Current", 677, 0.1, mqtt_topic_suffix="dc/pv1/current", unit="A", device_class='current', signed=False, groups=["deye_sg01hp3"]
+    "PV1 Current", 677, 0.1, mqtt_topic_suffix="dc/pv1/current", unit="A", device_class='current', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_679 = SingleRegisterSensor(
-    "PV2 Current", 679, 0.1, mqtt_topic_suffix="dc/pv2/current", unit="A",  device_class='current', signed=False, groups=["deye_sg01hp3"]
+    "PV2 Current", 679, 0.1, mqtt_topic_suffix="dc/pv2/current", unit="A", device_class='current', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_681 = SingleRegisterSensor(
-    "PV3 Current", 681, 0.1, mqtt_topic_suffix="dc/pv3/current", unit="A",  device_class='current', signed=False, groups=["deye_sg01hp3"]
+    "PV3 Current", 681, 0.1, mqtt_topic_suffix="dc/pv3/current", unit="A", device_class='current', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_683 = SingleRegisterSensor(
-    "PV4 Current", 683, 0.1, mqtt_topic_suffix="dc/pv4/current", unit="A",  device_class='current', signed=False, groups=["deye_sg01hp3"]
+    "PV4 Current", 683, 0.1, mqtt_topic_suffix="dc/pv4/current", unit="A", device_class='current', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_529 = SingleRegisterSensor(
-    "Daily Production", 529, 0.1, mqtt_topic_suffix="day_energy", unit="kWh", device_class='energy', signed=False, groups=["deye_sg01hp3"]
+    "Daily Production", 529, 0.1, mqtt_topic_suffix="day_energy", unit="kWh", device_class='energy', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_534 = DoubleRegisterSensor(
-    "Total Production", 534, 0.1, mqtt_topic_suffix="total_energy", unit="kWh", device_class='energy', signed=False, groups=["deye_sg01hp3"]
+    "Total Production", 534, 0.1, mqtt_topic_suffix="total_energy", unit="kWh", device_class='energy', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_battery_514 = SingleRegisterSensor(
@@ -118,7 +132,8 @@ deye_sg01hp3_battery_518 = DoubleRegisterSensor(
 )
 
 deye_sg01hp3_battery_590 = SingleRegisterSensor(
-    "Battery Power", 590, 10, mqtt_topic_suffix="battery/power", unit="W",  device_class='power', signed=True, groups=["deye_sg01hp3_battery"]
+    "Battery Power", 590, 10, mqtt_topic_suffix="battery/power", unit="W", device_class='power', signed=True,
+    groups=["deye_sg01hp3_battery"]
 )
 
 deye_sg01hp3_battery_587 = SingleRegisterSensor(
@@ -133,7 +148,8 @@ deye_sg01hp3_battery_587 = SingleRegisterSensor(
 )
 
 deye_sg01hp3_battery_588 = SingleRegisterSensor(
-    "Battery SOC", 588, 1, mqtt_topic_suffix="battery/soc", unit="%", device_class='battery', signed=False, groups=["deye_sg01hp3_battery"]
+    "Battery SOC", 588, 1, mqtt_topic_suffix="battery/soc", unit="%", device_class='battery', signed=False,
+    groups=["deye_sg01hp3_battery"]
 )
 
 deye_sg01hp3_battery_591 = SingleRegisterSensor(
@@ -160,19 +176,23 @@ deye_sg01hp3_battery_586 = SingleRegisterSensor(
 )
 
 deye_sg01hp3_grid_625 = SingleRegisterSensor(
-    "Total Grid Power", 625, 1, mqtt_topic_suffix="ac/total_power", unit="W",  device_class='power', signed=True, groups=["deye_sg01hp3"]
+    "Total Grid Power", 625, 1, mqtt_topic_suffix="ac/total_power", unit="W", device_class='power', signed=True,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_grid_598 = SingleRegisterSensor(
-    "Grid Voltage L1", 598, 0.1, mqtt_topic_suffix="ac/l1/voltage", unit="V",  device_class='voltage', signed=False, groups=["deye_sg01hp3"]
+    "Grid Voltage L1", 598, 0.1, mqtt_topic_suffix="ac/l1/voltage", unit="V", device_class='voltage', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_grid_599 = SingleRegisterSensor(
-    "Grid Voltage L2", 599, 0.1, mqtt_topic_suffix="ac/l2/voltage", unit="V",  device_class='voltage', signed=False, groups=["deye_sg01hp3"]
+    "Grid Voltage L2", 599, 0.1, mqtt_topic_suffix="ac/l2/voltage", unit="V", device_class='voltage', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_grid_600 = SingleRegisterSensor(
-    "Grid Voltage L3", 600, 0.1, mqtt_topic_suffix="ac/l3/voltage", unit="V",  device_class='voltage', signed=False, groups=["deye_sg01hp3"]
+    "Grid Voltage L3", 600, 0.1, mqtt_topic_suffix="ac/l3/voltage", unit="V", device_class='voltage', signed=False,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_grid_604 = SingleRegisterSensor(
@@ -291,15 +311,18 @@ deye_sg01hp3_upload_653 = SingleRegisterSensor(
 )
 
 deye_sg01hp3_upload_650 = SingleRegisterSensor(
-    "Load L1 Power", 650, 1, mqtt_topic_suffix="ac/ups/l1/power", unit="W",  device_class='power', signed=False, groups=["deye_sg01hp3_ups"]
+    "Load L1 Power", 650, 1, mqtt_topic_suffix="ac/ups/l1/power", unit="W", device_class='power', signed=False,
+    groups=["deye_sg01hp3_ups"]
 )
 
 deye_sg01hp3_upload_651 = SingleRegisterSensor(
-    "Load L2 Power", 651, 1, mqtt_topic_suffix="ac/ups/l2/power", unit="W",  device_class='power', signed=False, groups=["deye_sg01hp3_ups"]
+    "Load L2 Power", 651, 1, mqtt_topic_suffix="ac/ups/l2/power", unit="W", device_class='power', signed=False,
+    groups=["deye_sg01hp3_ups"]
 )
 
 deye_sg01hp3_upload_652 = SingleRegisterSensor(
-    "Load L3 Power", 652, 1, mqtt_topic_suffix="ac/ups/l3/power", unit="W",  device_class='power', signed=False, groups=["deye_sg01hp3_ups"]
+    "Load L3 Power", 652, 1, mqtt_topic_suffix="ac/ups/l3/power", unit="W", device_class='power', signed=False,
+    groups=["deye_sg01hp3_ups"]
 )
 
 deye_sg01hp3_upload_644 = SingleRegisterSensor(
@@ -356,27 +379,33 @@ deye_sg01hp3_upload_527 = DoubleRegisterSensor(
 )
 
 deye_sg01hp3_inverter_630 = SingleRegisterSensor(
-    "Current L1", 630, 0.01, mqtt_topic_suffix="ac/l1/current", unit="A",  device_class='current', signed=True, groups=["deye_sg01hp3"]
+    "Current L1", 630, 0.01, mqtt_topic_suffix="ac/l1/current", unit="A", device_class='current', signed=True,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_inverter_631 = SingleRegisterSensor(
-    "Current L2", 631, 0.01, mqtt_topic_suffix="ac/l2/current", unit="A",  device_class='current', signed=True, groups=["deye_sg01hp3"]
+    "Current L2", 631, 0.01, mqtt_topic_suffix="ac/l2/current", unit="A", device_class='current', signed=True,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_inverter_632 = SingleRegisterSensor(
-    "Current L3", 632, 0.01, mqtt_topic_suffix="ac/l3/current", unit="A",  device_class='current', signed=True, groups=["deye_sg01hp3"]
+    "Current L3", 632, 0.01, mqtt_topic_suffix="ac/l3/current", unit="A", device_class='current', signed=True,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_inverter_633 = SingleRegisterSensor(
-    "Inverter L1 Power", 633, 1, mqtt_topic_suffix="ac/l1/power", unit="W",  device_class='power', signed=True, groups=["deye_sg01hp3"]
+    "Inverter L1 Power", 633, 1, mqtt_topic_suffix="ac/l1/power", unit="W", device_class='power', signed=True,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_inverter_634 = SingleRegisterSensor(
-    "Inverter L2 Power", 634, 1, mqtt_topic_suffix="ac/l2/power", unit="W",  device_class='power', signed=True, groups=["deye_sg01hp3"]
+    "Inverter L2 Power", 634, 1, mqtt_topic_suffix="ac/l2/power", unit="W", device_class='power', signed=True,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_inverter_635 = SingleRegisterSensor(
-    "Inverter L3 Power", 635, 1, mqtt_topic_suffix="ac/l3/power", unit="W",  device_class='power', signed=True, groups=["deye_sg01hp3"]
+    "Inverter L3 Power", 635, 1, mqtt_topic_suffix="ac/l3/power", unit="W", device_class='power', signed=True,
+    groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_inverter_540 = SingleRegisterSensor(

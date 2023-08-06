@@ -213,9 +213,11 @@ class ComputedSumSensor(Sensor):
     """
 
     def __init__(
-        self, name: str, sensors: list[Sensor], mqtt_topic_suffix="", unit="", print_format="{:0.1f}", device_class='', groups=[]
+        self, name: str, sensors: list[Sensor], mqtt_topic_suffix="", unit="",
+        print_format="{:0.1f}", device_class='', groups=[]
     ):
-        super().__init__(name, mqtt_topic_suffix, unit, print_format, device_class, groups)
+        super().__init__(name, mqtt_topic_suffix, unit, print_format,
+                         device_class, groups)
         self.sensors = sensors
 
     def read_value(self, registers: dict[int, bytearray]):
