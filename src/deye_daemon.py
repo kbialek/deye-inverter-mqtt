@@ -23,16 +23,16 @@ import time
 
 from deye_config import DeyeConfig
 from deye_connector import DeyeConnector
-from deye_events import DeyeEvent, DeyeLoggerStatusEvent, DeyeObservationEvent
+from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent
 from deye_modbus import DeyeModbus
+from deye_mqtt import DeyeMqttClient
 from deye_mqtt_publisher import DeyeMqttPublisher
+from deye_mqtt_subscriber import DeyeMqttSubscriber
 from deye_observation import Observation
+from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
-from deye_mqtt_subscriber import DeyeMqttSubscriber
-from deye_mqtt import DeyeMqttClient
-from deye_plugin_loader import DeyePluginLoader, DeyePluginContext
 
 
 class DeyeDaemon:
@@ -77,6 +77,8 @@ class DeyeDaemon:
                 "enabled" if set_time_processor.get_id() in config.active_processors else "disabled"
             )
         )
+        self.__last_observations = DeyeEventList()
+        self.__event_updated = time.time()
 
     def do_task(self):
         self.__log.info("Reading start")
@@ -84,11 +86,14 @@ class DeyeDaemon:
         for reg_range in self.reg_ranges:
             self.__log.info(f"Reading registers [{reg_range}]")
             regs |= self.modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
-        events: list[DeyeEvent] = []
+        events = DeyeEventList()
         events.append(DeyeLoggerStatusEvent(len(regs) > 0))
         events += self.__get_observations_from_reg_values(regs)
-        for processor in self.processors:
-            processor.process(events)
+        if not self.__config.publish_on_change or self.__is_device_observation_changed(events):
+            for processor in self.processors:
+                processor.process(events)
+        else:
+            self.__log.info("No changes found in received data, or the logger is offline, skipping")
         self.__log.info("Reading completed")
 
     def __get_observations_from_reg_values(self, regs: dict[int, bytearray]) -> list[DeyeObservationEvent]:
@@ -108,6 +113,35 @@ class DeyeDaemon:
             if not [r for r in result if r.is_same_range(reg_range)]:
                 result.append(reg_range)
         return result
+
+    def __is_device_observation_changed(self, events: DeyeEventList) -> bool:
+        """Check if the received event observations have changed compared to last published
+
+        Parameters
+        ----------
+        events : list[DeyeEvent]
+            Received event list
+
+        Returns
+        -------
+        bool
+            True if received observation events are different from last published ones
+        """
+        if events.is_offline():
+            self.__log.debug("No observation events received (offline)")
+            return False
+        if events.compare_observation_events(self.__last_observations):
+            self.__log.debug("Event data is unchanged")
+            if self.__event_updated + self.__config.event_expiry > time.time():
+                self.__log.debug("Event data hasn't expired")
+                return False
+            else:
+                self.__log.info("Event data has expired")
+        self.__log.debug("Time since previous update: %s", time.time() - self.__event_updated)
+        self.__log.debug("New event data: %s", [str(e) for e in events])
+        self.__event_updated = time.time()
+        self.__last_observations = events
+        return True
 
 
 class IntervalRunner:

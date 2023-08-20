@@ -18,7 +18,7 @@
 import logging
 
 from deye_config import DeyeConfig
-from deye_events import DeyeEvent, DeyeEventProcessor, DeyeLoggerStatusEvent, DeyeObservationEvent
+from deye_events import DeyeEventList, DeyeEventProcessor, DeyeLoggerStatusEvent, DeyeObservationEvent
 from deye_mqtt import DeyeMqttClient, DeyeMqttPublishError
 
 
@@ -38,7 +38,7 @@ class DeyeMqttPublisher(DeyeEventProcessor):
     def get_id(self):
         return "mqtt_publisher"
 
-    def process(self, events: list[DeyeEvent]):
+    def process(self, events: DeyeEventList):
         for event in events:
             try:
                 if isinstance(event, DeyeObservationEvent):
