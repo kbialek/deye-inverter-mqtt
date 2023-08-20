@@ -36,13 +36,12 @@ class ahoyDTUMQTTPublisher(DeyeEventProcessor):
         "day_energy":          "ch0/YieldDay",
         "total_energy":        "ch0/YieldTotal",
         ### CONVERT 0.0 vs 249870 - ERROR Deye
-        # "uptime":            "solar/uptime",
+        # "uptime":            "uptime",
 
         "ac/l1/voltage":       "ch0/U_AC",
         "ac/l1/current":       "ch0/I_AC",
         "ac/l1/power":         "ch0/P_AC",
         "ac/freq":             "ch0/F_AC",
-        "ac/active_power":     "ch0/P_DC",
 
         "dc/pv1/voltage":      "ch1/U_DC",
         "dc/pv1/current":      "ch1/I_DC",
@@ -74,18 +73,28 @@ class ahoyDTUMQTTPublisher(DeyeEventProcessor):
 
         "dc/total_power":      "ch0/P_DC",
         "radiator_temp":       "ch0/Temp"
+        # ch0/Efficiency 95.509 --> now being calculated
+
         ### Deye parameters not provided by ahoyDTU
         # "operating_power 0.0"
+        # "ac/active_power"
         # "settings/active_power_regulation 10.0"
         # "logger_status online"
         ### ahoyDTU parameters not provided by Deye
         # ch0/Q_AC 0
         # ch0/PF_AC 1
         # ch0/ALARM_MES_ID 73
-        # ch0/Efficiency 95.509
-        # solar/total/P_AC 404.1
         # ch1/Irradiation 50.095
         # ch2/Irradiation 50.643
+        # wifi_rssi
+        # free_heap
+        # heap_frag
+
+        ## tbd
+        # total/P_AC
+        # total/YieldTotal
+        # total/YieldDay
+        # total/P_DC
     }
 
     def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient):
@@ -112,11 +121,17 @@ class ahoyDTUMQTTPublisher(DeyeEventProcessor):
 
 
     def process(self, events: list[DeyeEvent]):
-        now = datetime.now()
+        power_dc_total = 0
+        power_ac_total = 0
 
         for event in events:
             if isinstance(event, DeyeObservationEvent):
                 ahoyDTUmqttTopic = ahoyDTUMQTTPublisher.__names.get(event.observation.sensor.mqtt_topic_suffix)
+                # if(event.observation.sensor.mqtt_topic_suffix == "ac/active_power"): --> efficieny > 1
+                if(event.observation.sensor.mqtt_topic_suffix == "ac/l1/power"):
+                    power_ac_total = float(event.observation.value)
+                if(event.observation.sensor.mqtt_topic_suffix == "dc/total_power"):
+                    power_dc_total = float(event.observation.value)
                 if ahoyDTUmqttTopic is not None:
                     inverterValue=float(event.observation.value)
                     # YieldDay needs a conversion. Deye: 2.5, ahoy: 2500
@@ -136,6 +151,11 @@ class ahoyDTUMQTTPublisher(DeyeEventProcessor):
                 self.__log.info("InvStatus: {}".format("online" if event.online else "Offline"))
             else:
                 self.__log.warn(f"Unsupported event type {event.__class__}")
+
+        efficiency = (power_ac_total / power_dc_total) * 100
+        fullMQTTTopic = f"{self.__mqttTopicPrefix}/ch0/Efficiency"
+        self.__mqtt_client._DeyeMqttClient__do_publish(mqtt_topic=fullMQTTTopic,
+                                                       value=efficiency)
 
 
 class DeyePlugin:
