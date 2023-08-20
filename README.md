@@ -228,7 +228,7 @@ two published messaged is configured with the variable `DEYE_PUBLISH_ON_CHANGE_M
 The tool allows reading and writing raw register values directly in the terminal.
 
 **USE AT YOUR OWN RISK!** Be sure to know what you are doing. Writing invalid values may damage the inverter.
-By using this tool you accept this risk and you take full responsibility for the consequences.
+By using this tool you accept this risk, and you take full responsibility for the consequences.
 
 * To read register value execute:
     ```
@@ -241,6 +241,15 @@ By using this tool you accept this risk and you take full responsibility for the
     docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt w <reg_address> <reg_value>
     ```
     where `<reg_address>` is register address (decimal), and <reg_value> is a value to set (decimal)
+
+## Home Assistant integration
+
+This project currently has no integration with [Home Assistant](https://www.home-assistant.io/). You can manually configure HA to use these data,
+or you can write a plugin as described earlier in this document.
+
+For help with integration, see
+* [MQTT Client Component](https://esphome.io/components/mqtt.html)
+* [MQTT Discovery examples](https://www.home-assistant.io/integrations/mqtt/#discovery-examples)
 
 ## Other related projects and resources
 * https://github.com/StephanJoubert/home_assistant_solarman
