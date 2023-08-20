@@ -70,7 +70,7 @@ class DeyeMqttClient:
 
     def connect(self) -> bool:
         if self.__mqtt_client.is_connected():
-            return
+            return True
         try:
             self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
             self.__mqtt_client.loop_start()

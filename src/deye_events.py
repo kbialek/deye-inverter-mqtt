@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import logging
 from abc import abstractmethod
 
 from deye_observation import Observation
@@ -37,6 +38,21 @@ class DeyeObservationEvent(DeyeEvent):
     def __init__(self, observation: Observation):
         self.observation = observation
 
+    def __str__(self) -> str:
+        return f"{self.observation.sensor.name}: {self.observation.value_as_str()}"
+
+    def __eq__(self, other) -> bool:
+        try:
+            return (
+                self.observation.sensor == other.observation.sensor
+                and self.observation.value == other.observation.value
+            )
+        except AttributeError:
+            return False
+
+    def __hash__(self):
+        return hash((self.observation.sensor.name, self.observation.value))
+
 
 class DeyeLoggerStatusEvent(DeyeEvent):
     """
@@ -45,6 +61,68 @@ class DeyeLoggerStatusEvent(DeyeEvent):
 
     def __init__(self, online: bool):
         self.online = online
+
+    def __str__(self) -> str:
+        return "online" if self.online else "offline"
+
+    def __eq__(self, other) -> bool:
+        return self.online == other.online
+
+    def __bool__(self) -> bool:
+        return self.online
+
+    def __hash__(self):
+        return hash(self.online)
+
+
+class DeyeEventList(list):
+    """
+    An list of Deye Events
+    """
+
+    def __init__(self, events: list[DeyeEvent] | None = None):
+        self.__log = logging.getLogger(DeyeEventList.__name__)
+        super().__init__(events if events else [])
+
+    def __str__(self) -> str:
+        return ", ".join([str(e) for e in self])
+
+    def get_status(self) -> bool | None:
+        """Get value of first status event from event list"""
+        for event in self:
+            if isinstance(event, DeyeLoggerStatusEvent):
+                return event.online
+        return None
+
+    def is_offline(self) -> bool:
+        """Check for the status event offline
+
+        Returns
+        -------
+        bool
+            True if status event found and is 'offline' (False).
+        """
+        return self.get_status() is False
+
+    def compare_observation_events(self, events: "DeyeEventList") -> bool:
+        """
+        Compare observation events of self with other DeyeEventList, ignoring the order of events
+
+        Parameters
+        ----------
+        events : list[DeyeEvent]
+            Other list of events
+
+        Returns
+        -------
+        bool
+            True if both lists are containing the same events with same values
+        """
+        set_a = {e for e in self if isinstance(e, DeyeObservationEvent)}
+        set_b = {e for e in events if isinstance(e, DeyeObservationEvent)}
+        self.__log.debug("Compare events A[%s] == B[%s]", str(self), str(DeyeEventList(events)))
+        self.__log.debug("Changed events: %s", str(DeyeEventList(list(set_a - set_b))))
+        return set_a == set_b
 
 
 class DeyeEventProcessor:
@@ -66,5 +144,5 @@ class DeyeEventProcessor:
         pass
 
     @abstractmethod
-    def process(self, events: list[DeyeEvent]):
+    def process(self, events: DeyeEventList):
         pass
