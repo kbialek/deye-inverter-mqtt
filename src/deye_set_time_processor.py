@@ -16,10 +16,9 @@
 # under the License.
 
 import logging
-
 from datetime import datetime
 
-from deye_events import DeyeEvent, DeyeEventProcessor, DeyeLoggerStatusEvent
+from deye_events import DeyeEventList, DeyeEventProcessor
 from deye_modbus import DeyeModbus
 
 
@@ -40,12 +39,9 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
     def last_status(self):
         return self.__last_status
 
-    def process(self, events: list[DeyeEvent]):
-        logger_status_events: list[DeyeLoggerStatusEvent] = [
-            event for event in events if isinstance(event, DeyeLoggerStatusEvent)
-        ]
-        if logger_status_events:
-            logger_status = logger_status_events[0].online
+    def process(self, events: DeyeEventList):
+        logger_status = events.get_status()
+        if logger_status is not None:
             if not self.__last_status and logger_status:
                 self.__last_status = self.__set_time()
             else:

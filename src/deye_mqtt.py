@@ -69,8 +69,8 @@ class DeyeMqttClient:
         self._mqtt_client.message_callback_add(topic, callback)
 
     def connect(self) -> bool:
-        if self._mqtt_client.is_connected():
-            return
+        if self.__mqtt_client.is_connected():
+            return True
         try:
             self._mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
             self._mqtt_client.loop_start()
