@@ -3,6 +3,9 @@
 Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT.
 
 ## Supported inverters and metrics
+
+**WARNING: Logger firmware version 2.x is currently not supported. Do not upgrade your logger firmware to this version if you want to keep this service working for you.**
+
 The meaning of certain inverter registers depends on the inverter type.
 You should choose metric group(s) that are appropriate to your inverter model.
 If your inverter is not listed below, it may still work with one of the already existing metric groups.
