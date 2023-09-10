@@ -28,7 +28,6 @@ class DeyeAtConnector(DeyeConnector):
         self.__log = logging.getLogger(DeyeAtConnector.__name__)
         self.config = config.logger
         self.__reachable = True
-        self.__log.info("Hello")
 
     def __create_socket(self) -> socket.socket | None:
         try:
