@@ -22,7 +22,7 @@ import threading
 import time
 
 from deye_config import DeyeConfig
-from deye_connector import DeyeConnector
+from deye_connector_factory import DeyeConnectorFactory
 from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
@@ -44,8 +44,8 @@ class DeyeDaemon:
             "https://github.com/kbialek/deye-inverter-mqtt/issues/41"
         )
 
-        connector = DeyeConnector(config)
-        self.modbus = DeyeModbus(config, connector)
+        connector = DeyeConnectorFactory(config).create_connector()
+        self.modbus = DeyeModbus(connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
         self.reg_ranges = self.__remove_duplicated_reg_ranges(self.reg_ranges)

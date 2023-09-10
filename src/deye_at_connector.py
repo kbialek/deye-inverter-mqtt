@@ -20,9 +20,10 @@ import socket
 import time
 
 from deye_config import DeyeConfig
+from deye_connector import DeyeConnector
 
 
-class DeyeAtConnector:
+class DeyeAtConnector(DeyeConnector):
     def __init__(self, config: DeyeConfig) -> None:
         self.__log = logging.getLogger(DeyeAtConnector.__name__)
         self.config = config.logger

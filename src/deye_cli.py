@@ -18,14 +18,14 @@
 import sys
 
 from deye_config import DeyeConfig
-from deye_connector import DeyeConnector
+from deye_connector_factory import DeyeConnectorFactory
 from deye_modbus import DeyeModbus
 
 
 class DeyeCli:
     def __init__(self, config: DeyeConfig):
-        connector = DeyeConnector(config)
-        self.__modbus = DeyeModbus(config, connector)
+        connector = DeyeConnectorFactory(config).create_connector()
+        self.__modbus = DeyeModbus(connector)
 
     def exec_command(self, args):
         command = args[0]

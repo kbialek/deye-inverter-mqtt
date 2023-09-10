@@ -15,10 +15,20 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from abc import abstractmethod
+import logging
+
+from deye_at_connector import DeyeAtConnector
+from deye_config import DeyeConfig
+from deye_connector import DeyeConnector
+from deye_tcp_connector import DeyeTcpConnector
+from deye_modbus_tcp import DeyeModbusTcp
 
 
-class DeyeConnector:
-    @abstractmethod
-    def send_request(self, req_frame) -> bytes | None:
-        pass
+class DeyeConnectorFactory:
+    def __init__(self, config: DeyeConfig):
+        self.__log = logging.getLogger(DeyeConnectorFactory.__name__)
+        self.__config = config
+
+    def create_connector(self) -> DeyeConnector:
+        DeyeModbusTcp(self.__config, DeyeTcpConnector(self.__config))
+        return DeyeAtConnector(self.__config)

@@ -23,7 +23,7 @@ from deye_daemon import main as daemon_main
 from deye_config import DeyeConfig, LOG_DEST_STDOUT, LOG_DEST_STDERR
 
 
-def setupLogging(config):
+def setupLogging(config: DeyeConfig):
     log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
     supported_log_streams = {
