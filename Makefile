@@ -35,6 +35,9 @@ test-mqtt: gen-tls-certs
 	-@pytest -v tests/deye_mqtt_inttest.py
 	@rm certs/* && rmdir certs
 
+test-at-connector:
+	@bash -c "set -a; source config.env; pytest -v --log-cli-level=DEBUG tests/deye_at_connector_inttest.py"
+
 run:
 	@bash -c "set -a; source config.env; python src/deye_docker_entrypoint.py"
 
