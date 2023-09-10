@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM python:3.10.10-alpine3.16 as builder
+FROM python:3.10.13-alpine3.18 as builder
 
 WORKDIR /build
 RUN apk add gcc alpine-sdk
