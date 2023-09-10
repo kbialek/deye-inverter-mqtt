@@ -30,5 +30,12 @@ class DeyeConnectorFactory:
         self.__config = config
 
     def create_connector(self) -> DeyeConnector:
-        DeyeModbusTcp(self.__config, DeyeTcpConnector(self.__config))
-        return DeyeAtConnector(self.__config)
+        protocol = self.__config.logger.protocol
+        if protocol == "tcp":
+            self.__log.info("Creating Modbus/TCP Logger connector")
+            return DeyeModbusTcp(self.__config, DeyeTcpConnector(self.__config))
+        elif protocol == "at":
+            self.__log.info("Creating Modbus/AT Logger connector")
+            return DeyeAtConnector(self.__config)
+        else:
+            raise Exception(f"Unsupported logger protocol {protocol}")

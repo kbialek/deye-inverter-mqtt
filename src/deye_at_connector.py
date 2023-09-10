@@ -48,7 +48,7 @@ class DeyeAtConnector(DeyeConnector):
 
     def __send_at_command(self, client_socket: socket, at_command: str) -> None:
         self.__log.debug("Sending AT command: %s", at_command)
-        client_socket.sendto(at_command, (self.config.ip_address, 48899))  # self.config.port
+        client_socket.sendto(at_command, (self.config.ip_address, self.config.port))
         time.sleep(0.1)
 
     def __receive_at_response(self, client_socket: socket) -> str:
