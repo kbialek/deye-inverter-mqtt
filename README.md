@@ -264,6 +264,7 @@ For help with integration, see
 * https://github.com/Hypfer/deye-microinverter-cloud-free
 * https://github.com/jedie/inverter-connect
 * https://github.com/MichaluxPL/Sofar_LSW3
+* https://github.com/s10l/deye-logger-at-cmd
 
 ## Development
 Read [CONTRIBUTING.md](./CONTRIBUTING.md)
