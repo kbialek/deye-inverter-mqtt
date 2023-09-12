@@ -26,7 +26,7 @@ mosquitto-stop:
 	@pkill mosquitto
 
 test:
-	@pytest -v --cov --cov-report=xml
+	@pytest -v --cov --cov-report=xml --log-cli-level=DEBUG
 
 test-coverage: test
 	@coverage report --skip-empty --no-skip-covered --sort=Cover
