@@ -89,8 +89,9 @@ This feature allows advanced users to extend the functionality of this project. 
 ## Installation
 The communication with the logger can be performed using either Modbus/TCP or Modbus/AT protocol.
 This project has been started with Modbus/TCP protocol support and it's still the default one.
-However, logger firmware versions 2.x does not seem to expose Modbus/TCP interface anymore, hence Modbus/AT protocol support has been implemented.
-Please note, that Modbus/TCP uses tcp/ip, while Modbus/AT uses udp/ip communication.
+However, logger firmware versions 2.x does not seem to expose Modbus/TCP interface anymore, hence Modbus/AT protocol support has been implemented. Use `DEYE_LOGGER_PROTOCOL` environment variable to select
+the communication protocol.
+Please note, that Modbus/TCP uses tcp/ip, while Modbus/AT uses udp/ip communication. 
 
 1. Copy `config.env.example` as `config.env`
 2. Fill in values in `config.env`, see [Configuration](#configuration) for more details
