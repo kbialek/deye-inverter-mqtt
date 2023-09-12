@@ -173,7 +173,7 @@ class DeyeLoggerConfig:
         return DeyeLoggerConfig(
             serial_number=DeyeEnv.integer("DEYE_LOGGER_SERIAL_NUMBER"),
             ip_address=DeyeEnv.string("DEYE_LOGGER_IP_ADDRESS"),
-            port=DeyeEnv.integer("DEYE_LOGGER_PORT"),
+            port=DeyeEnv.integer("DEYE_LOGGER_PORT", 0),
             protocol=DeyeEnv.string("DEYE_LOGGER_PROTOCOL", "tcp"),
         )
 
