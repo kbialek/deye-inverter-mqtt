@@ -36,6 +36,7 @@ class TestDeyeDaemon(unittest.TestCase):
     def test_no_last_observation(self):
         # Create the DeyeDaemon instance with a mock configuration
         config_mock = MagicMock()
+        config_mock.logger.protocol = "tcp"
         daemon = DeyeDaemon(config_mock)
         daemon._DeyeDaemon__config.event_expiry = 360
         # Create some sample events for the test
@@ -48,6 +49,7 @@ class TestDeyeDaemon(unittest.TestCase):
     def test_is_device_offline(self):
         # Create the DeyeDaemon instance with a mock configuration
         config_mock = MagicMock()
+        config_mock.logger.protocol = "tcp"
         daemon = DeyeDaemon(config_mock)
         daemon._DeyeDaemon__config.event_expiry = 360
         # Create some sample events for the test
@@ -63,6 +65,7 @@ class TestDeyeDaemon(unittest.TestCase):
     def test_is_evenets_unchanged(self, time):
         # Create the DeyeDaemon instance with a mock configuration
         config_mock = MagicMock()
+        config_mock.logger.protocol = "tcp"
         daemon = DeyeDaemon(config_mock)
         daemon._DeyeDaemon__config.event_expiry = 360
         # Create some sample events for the test
@@ -85,6 +88,7 @@ class TestDeyeDaemon(unittest.TestCase):
     def test_is_events_unchanged_expired(self, time):
         # Create the DeyeDaemon instance with a mock configuration
         config_mock = MagicMock()
+        config_mock.logger.protocol = "tcp"
         daemon = DeyeDaemon(config_mock)
         daemon._DeyeDaemon__config.event_expiry = 360
         # Create some sample events for the test
@@ -105,6 +109,7 @@ class TestDeyeDaemon(unittest.TestCase):
     def test_is_events_changed(self):
         # Create the DeyeDaemon instance with a mock configuration
         config_mock = MagicMock()
+        config_mock.logger.protocol = "tcp"
         daemon = DeyeDaemon(config_mock)
         daemon._DeyeDaemon__config.event_expiry = 360
         # Create some sample events for the test

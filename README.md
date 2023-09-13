@@ -4,8 +4,6 @@ Reads Deye solar inverter metrics using Modbus over TCP and publishes them over 
 
 ## Supported inverters and metrics
 
-**WARNING: Logger firmware version 2.x is currently not supported. Do not upgrade your logger firmware to this version if you want to keep this service working for you.**
-
 The meaning of certain inverter registers depends on the inverter type.
 You should choose metric group(s) that are appropriate to your inverter model.
 If your inverter is not listed below, it may still work with one of the already existing metric groups.
@@ -89,6 +87,12 @@ This feature allows advanced users to extend the functionality of this project. 
 * [stdout-publisher](https://github.com/hoegaarden/deye-inverter-mqtt-plugins/) by @hoegaarden
 
 ## Installation
+The communication with the logger can be performed using either Modbus/TCP or Modbus/AT protocol.
+This project has been started with Modbus/TCP protocol support and it's still the default one.
+However, logger firmware versions 2.x does not seem to expose Modbus/TCP interface anymore, hence Modbus/AT protocol support has been implemented. Use `DEYE_LOGGER_PROTOCOL` environment variable to select
+the communication protocol.
+Please note, that Modbus/TCP uses tcp/ip, while Modbus/AT uses udp/ip communication. 
+
 1. Copy `config.env.example` as `config.env`
 2. Fill in values in `config.env`, see [Configuration](#configuration) for more details
 
@@ -196,7 +200,8 @@ All configuration options are controlled through environment variables.
     * `settings` - inverter settings
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
-* `DEYE_LOGGER_PORT` - inverter data logger communication port, typically 8899
+* `DEYE_LOGGER_PORT` - inverter data logger communication port, optional, defaults to 8899 for Modbus/TCP, and 48899 for Modbus/AT
+* `DEYE_LOGGER_PROTOCOL` - inverter communication protocol, optional, either `tcp` for Modbus/TCP, or `at` for Modbus/AT, defaults to `tcp`
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
 * `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
@@ -260,6 +265,7 @@ For help with integration, see
 * https://github.com/Hypfer/deye-microinverter-cloud-free
 * https://github.com/jedie/inverter-connect
 * https://github.com/MichaluxPL/Sofar_LSW3
+* https://github.com/s10l/deye-logger-at-cmd
 
 ## Development
 Read [CONTRIBUTING.md](./CONTRIBUTING.md)

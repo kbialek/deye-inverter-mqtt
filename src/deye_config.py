@@ -155,17 +155,26 @@ class DeyeLoggerConfig:
     with the device.
     """
 
-    def __init__(self, serial_number: int, ip_address: str, port: int):
+    def __init__(self, serial_number: int, ip_address: str, port: int, protocol: str = "tcp"):
         self.serial_number = serial_number
         self.ip_address = ip_address
-        self.port = port
+        if protocol not in ["tcp", "at"]:
+            raise Exception(f"Unsupported protocol {protocol}")
+        self.protocol = protocol
+        if port == 0 and protocol == "tcp":
+            self.port = 8899
+        elif port == 0 and protocol == "at":
+            self.port = 48899
+        else:
+            self.port = port
 
     @staticmethod
     def from_env():
         return DeyeLoggerConfig(
             serial_number=DeyeEnv.integer("DEYE_LOGGER_SERIAL_NUMBER"),
             ip_address=DeyeEnv.string("DEYE_LOGGER_IP_ADDRESS"),
-            port=DeyeEnv.integer("DEYE_LOGGER_PORT"),
+            port=DeyeEnv.integer("DEYE_LOGGER_PORT", 0),
+            protocol=DeyeEnv.string("DEYE_LOGGER_PROTOCOL", "tcp"),
         )
 
 

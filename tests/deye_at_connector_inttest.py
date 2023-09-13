@@ -15,16 +15,20 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM python:3.10.13-alpine3.18 as builder
+import unittest
+import os
+import time
 
-WORKDIR /build
-RUN apk add gcc alpine-sdk
-COPY requirements.txt ./
-RUN pip install --no-cache-dir --target . -r requirements.txt
+from deye_config import DeyeConfig
+from deye_at_connector import DeyeAtConnector
 
-FROM python:3.10.13-alpine3.18
-WORKDIR /opt/deye_inverter_mqtt
-ADD src/*.py ./
-COPY --from=builder /build/ ./
 
-ENTRYPOINT [ "python", "./deye_docker_entrypoint.py" ]
+class DeyeAtConnectorIntegrationTest(unittest.TestCase):
+    def test_connectivity(self):
+        # given
+        deye_config = DeyeConfig.from_env()
+
+        deye_at_connector = DeyeAtConnector(deye_config)
+
+        # when
+        deye_at_connector.send_request(bytearray.fromhex("0103002800010402"))
