@@ -169,6 +169,25 @@ class DeyeModbusTest(unittest.TestCase):
         self.assertEqual(len(captured.records), 1)
         self.assertEqual(captured.records[0].getMessage(), "Unknown response error code. Error frame: 0100")
 
+    @patch("deye_connector.DeyeConnector")
+    def test_at_protocol_detected(self, connector):
+        # given
+        sut = DeyeModbus(DeyeModbusTcp(self.config, connector))
+        connector.send_request.return_value = bytearray.fromhex(
+            "41542b595a434d505645523d4d57335f3136555f353430365f322e33322d44310d0a0d0a"
+        )
+
+        # when
+        with self.assertLogs() as captured:
+            sut.read_registers(0x50, 0x5F)
+
+        # then
+        self.assertEqual(len(captured.records), 1)
+        self.assertEqual(
+            captured.records[0].getMessage(),
+            "AT response detected. Try switching to 'AT' protocol. Set 'DEYE_LOGGER_PROTOCOL=at' and remove DEYE_LOGGER_PORT from your config",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

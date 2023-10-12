@@ -73,6 +73,12 @@ class DeyeModbusTcp:
         if len(frame) == 29:
             self.__parse_response_error_code(frame)
             return None
+        if frame[0:3] == b"AT+":
+            self.__log.error(
+                "AT response detected. Try switching to 'AT' protocol. "
+                "Set 'DEYE_LOGGER_PROTOCOL=at' and remove DEYE_LOGGER_PORT from your config"
+            )
+            return None
         if len(frame) < (29 + 4):
             self.__log.error("Response frame is too short")
             return None
