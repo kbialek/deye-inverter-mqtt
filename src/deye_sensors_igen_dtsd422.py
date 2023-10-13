@@ -37,7 +37,7 @@ ct1_voltage_sensor = SingleRegisterSensor(
     0x01,
     0.1,
     mqtt_topic_suffix="ct1/voltage",
-    unit="V",
+    unit="V", device_class='voltage',
     groups=["igen_dtsd422"],
 )
 ct1_current_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -45,7 +45,7 @@ ct1_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x07,
     0.001,
     mqtt_topic_suffix="ct1/current",
-    unit="A",
+    unit="A", device_class='current',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -54,7 +54,7 @@ ct1_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x0F,
     1,
     mqtt_topic_suffix="ct1/active_power",
-    unit="W",
+    unit="W", device_class='power',
     groups=["igen_dtsd422"],
 )
 ct1_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -62,7 +62,8 @@ ct1_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x17,
     1,
     mqtt_topic_suffix="ct1/reactive_power",
-    unit="Var",
+    unit="var",
+    device_class='reactive_power',
     groups=["igen_dtsd422"],
 )
 ct1_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -71,6 +72,7 @@ ct1_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     1,
     mqtt_topic_suffix="ct1/apparent_power",
     unit="VA",
+    device_class='apparent_power',
     groups=["igen_dtsd422"],
 )
 ct1_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
@@ -78,6 +80,7 @@ ct1_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     0x26,
     0.001,
     mqtt_topic_suffix="ct1/power_factor",
+    device_class='power_factor',
     groups=["igen_dtsd422"],
 )
 ct1_total_positive_energy = SingleRegisterSensor(
@@ -86,6 +89,7 @@ ct1_total_positive_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct1/total_positive_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -95,6 +99,7 @@ ct1_total_negative_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct1/total_negative_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -105,7 +110,7 @@ ct2_voltage_sensor = SingleRegisterSensor(
     0x02,
     0.1,
     mqtt_topic_suffix="ct2/voltage",
-    unit="V",
+    unit="V", device_class='voltage',
     groups=["igen_dtsd422"],
 )
 ct2_current_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -113,7 +118,7 @@ ct2_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x09,
     0.001,
     mqtt_topic_suffix="ct2/current",
-    unit="A",
+    unit="A", device_class='current',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -122,7 +127,7 @@ ct2_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x11,
     1,
     mqtt_topic_suffix="ct2/active_power",
-    unit="W",
+    unit="W", device_class='power',
     groups=["igen_dtsd422"],
 )
 ct2_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -130,7 +135,8 @@ ct2_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x19,
     1,
     mqtt_topic_suffix="ct2/reactive_power",
-    unit="Var",
+    unit="var",
+    device_class='reactive_power',
     groups=["igen_dtsd422"],
 )
 ct2_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -139,6 +145,7 @@ ct2_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     1,
     mqtt_topic_suffix="ct2/apparent_power",
     unit="VA",
+    device_class='apparent_power',
     groups=["igen_dtsd422"],
 )
 ct2_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
@@ -146,6 +153,7 @@ ct2_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     0x27,
     0.001,
     mqtt_topic_suffix="ct2/power_factor",
+    device_class='power_factor',
     groups=["igen_dtsd422"],
 )
 ct2_total_positive_energy = SingleRegisterSensor(
@@ -154,6 +162,7 @@ ct2_total_positive_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct2/total_positive_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -163,6 +172,7 @@ ct2_total_negative_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct2/total_negative_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -173,7 +183,7 @@ ct3_voltage_sensor = SingleRegisterSensor(
     0x03,
     0.1,
     mqtt_topic_suffix="ct3/voltage",
-    unit="V",
+    unit="V", device_class='voltage',
     groups=["igen_dtsd422"],
 )
 ct3_current_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -181,7 +191,7 @@ ct3_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x0B,
     0.001,
     mqtt_topic_suffix="ct3/current",
-    unit="A",
+    unit="A", device_class='current',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -190,7 +200,7 @@ ct3_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x13,
     1,
     mqtt_topic_suffix="ct3/active_power",
-    unit="W",
+    unit="W", device_class='power',
     groups=["igen_dtsd422"],
 )
 ct3_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -198,7 +208,8 @@ ct3_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x1B,
     1,
     mqtt_topic_suffix="ct3/reactive_power",
-    unit="Var",
+    unit="var",
+    device_class='reactive_power',
     groups=["igen_dtsd422"],
 )
 ct3_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -207,6 +218,7 @@ ct3_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     1,
     mqtt_topic_suffix="ct3/apparent_power",
     unit="VA",
+    device_class='apparent_power',
     groups=["igen_dtsd422"],
 )
 ct3_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
@@ -214,6 +226,7 @@ ct3_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     0x28,
     0.001,
     mqtt_topic_suffix="ct3/power_factor",
+    device_class='power_factor',
     groups=["igen_dtsd422"],
 )
 ct3_total_positive_energy = SingleRegisterSensor(
@@ -222,6 +235,7 @@ ct3_total_positive_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct3/total_positive_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -231,6 +245,7 @@ ct3_total_negative_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct3/total_negative_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -241,7 +256,7 @@ ct4_voltage_sensor = SingleRegisterSensor(
     0x1001,
     0.1,
     mqtt_topic_suffix="ct4/voltage",
-    unit="V",
+    unit="V", device_class='voltage',
     groups=["igen_dtsd422"],
 )
 ct4_current_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -249,7 +264,7 @@ ct4_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x1007,
     0.001,
     mqtt_topic_suffix="ct4/current",
-    unit="A",
+    unit="A", device_class='current',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -258,7 +273,7 @@ ct4_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x100F,
     1,
     mqtt_topic_suffix="ct4/active_power",
-    unit="W",
+    unit="W", device_class='power',
     groups=["igen_dtsd422"],
 )
 ct4_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -266,7 +281,8 @@ ct4_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x1017,
     1,
     mqtt_topic_suffix="ct4/reactive_power",
-    unit="Var",
+    unit="var",
+    device_class='reactive_power',
     groups=["igen_dtsd422"],
 )
 ct4_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -275,6 +291,7 @@ ct4_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     1,
     mqtt_topic_suffix="ct4/apparent_power",
     unit="VA",
+    device_class='apparent_power',
     groups=["igen_dtsd422"],
 )
 ct4_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
@@ -282,6 +299,7 @@ ct4_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     0x1026,
     0.001,
     mqtt_topic_suffix="ct4/power_factor",
+    device_class='power_factor',
     groups=["igen_dtsd422"],
 )
 ct4_total_positive_energy = SingleRegisterSensor(
@@ -290,6 +308,7 @@ ct4_total_positive_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct4/total_positive_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -299,6 +318,7 @@ ct4_total_negative_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct4/total_negative_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -309,7 +329,7 @@ ct5_voltage_sensor = SingleRegisterSensor(
     0x1002,
     0.1,
     mqtt_topic_suffix="ct5/voltage",
-    unit="V",
+    unit="V", device_class='voltage',
     groups=["igen_dtsd422"],
 )
 ct5_current_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -317,7 +337,7 @@ ct5_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x1009,
     0.001,
     mqtt_topic_suffix="ct5/current",
-    unit="A",
+    unit="A", device_class='current',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -326,7 +346,7 @@ ct5_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x1011,
     1,
     mqtt_topic_suffix="ct5/active_power",
-    unit="W",
+    unit="W", device_class='power',
     groups=["igen_dtsd422"],
 )
 ct5_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -334,7 +354,8 @@ ct5_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x1019,
     1,
     mqtt_topic_suffix="ct5/reactive_power",
-    unit="Var",
+    unit="var",
+    device_class='reactive_power',
     groups=["igen_dtsd422"],
 )
 ct5_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -343,6 +364,7 @@ ct5_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     1,
     mqtt_topic_suffix="ct5/apparent_power",
     unit="VA",
+    device_class='apparent_power',
     groups=["igen_dtsd422"],
 )
 ct5_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
@@ -350,6 +372,7 @@ ct5_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     0x1027,
     0.001,
     mqtt_topic_suffix="ct5/power_factor",
+    device_class='power_factor',
     groups=["igen_dtsd422"],
 )
 ct5_total_positive_energy = SingleRegisterSensor(
@@ -358,6 +381,7 @@ ct5_total_positive_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct5/total_positive_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -367,6 +391,7 @@ ct5_total_negative_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct5/total_negative_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -377,7 +402,7 @@ ct6_voltage_sensor = SingleRegisterSensor(
     0x1003,
     0.1,
     mqtt_topic_suffix="ct6/voltage",
-    unit="V",
+    unit="V", device_class='voltage',
     groups=["igen_dtsd422"],
 )
 ct6_current_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -385,7 +410,7 @@ ct6_current_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x100B,
     0.001,
     mqtt_topic_suffix="ct6/current",
-    unit="A",
+    unit="A", device_class='current',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -394,7 +419,7 @@ ct6_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x1013,
     1,
     mqtt_topic_suffix="ct6/active_power",
-    unit="W",
+    unit="W", device_class='power',
     groups=["igen_dtsd422"],
 )
 ct6_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -402,7 +427,7 @@ ct6_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x101B,
     1,
     mqtt_topic_suffix="ct6/reactive_power",
-    unit="Var",
+    unit="var", device_class='reactive_power',
     groups=["igen_dtsd422"],
 )
 ct6_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -411,6 +436,7 @@ ct6_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     1,
     mqtt_topic_suffix="ct6/apparent_power",
     unit="VA",
+    device_class='apparent_power',
     groups=["igen_dtsd422"],
 )
 ct6_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
@@ -418,6 +444,7 @@ ct6_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     0x1028,
     0.001,
     mqtt_topic_suffix="ct6/power_factor",
+    device_class='power_factor',
     groups=["igen_dtsd422"],
 )
 ct6_total_positive_energy = SingleRegisterSensor(
@@ -426,6 +453,7 @@ ct6_total_positive_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct6/total_positive_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -435,6 +463,7 @@ ct6_total_negative_energy = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="ct6/total_negative_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -445,7 +474,7 @@ total_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x0D,
     1,
     mqtt_topic_suffix="total/active_power",
-    unit="W",
+    unit="W", device_class='power',
     groups=["igen_dtsd422"],
 )
 total_active_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -453,7 +482,7 @@ total_active_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x100D,
     1,
     mqtt_topic_suffix="total/active_power2",
-    unit="W",
+    unit="W", device_class='power',
     groups=["igen_dtsd422"],
 )
 total_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -461,7 +490,7 @@ total_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x15,
     1,
     mqtt_topic_suffix="total/reactive_power",
-    unit="Var",
+    unit="var", device_class='reactive_power',
     groups=["igen_dtsd422"],
 )
 total_reactive_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -469,7 +498,7 @@ total_reactive_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
     0x1015,
     1,
     mqtt_topic_suffix="total/reactive_power2",
-    unit="Var",
+    unit="var", device_class='reactive_power',
     groups=["igen_dtsd422"],
 )
 total_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -478,6 +507,7 @@ total_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
     1,
     mqtt_topic_suffix="total/apparent_power",
     unit="VA",
+    device_class='apparent_power',
     groups=["igen_dtsd422"],
 )
 total_apparent_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
@@ -486,6 +516,7 @@ total_apparent_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
     1,
     mqtt_topic_suffix="total/apparent_power2",
     unit="VA",
+    device_class='apparent_power',
     groups=["igen_dtsd422"],
 )
 total_positive_energy_sensor = SingleRegisterSensor(
@@ -494,6 +525,7 @@ total_positive_energy_sensor = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="total/positive_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
 )
 total_positive_energy2_sensor = SingleRegisterSensor(
@@ -502,6 +534,7 @@ total_positive_energy2_sensor = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="total/positive_energy2",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
 )
 total_negative_energy_sensor = SingleRegisterSensor(
@@ -510,6 +543,7 @@ total_negative_energy_sensor = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="total/negative_energy",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -519,6 +553,7 @@ total_negative_energy2_sensor = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="total/negative_energy2",
     unit="kWh",
+    device_class='energy',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -527,6 +562,7 @@ total_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     0x25,
     0.001,
     mqtt_topic_suffix="total/power_factor",
+    device_class='power_factor',
     groups=["igen_dtsd422"],
 )
 total_power_factor2_sensor = SignedMagnitudeSingleRegisterSensor(
@@ -534,6 +570,7 @@ total_power_factor2_sensor = SignedMagnitudeSingleRegisterSensor(
     0x1025,
     0.001,
     mqtt_topic_suffix="total/power_factor2",
+    device_class='power_factor',
     groups=["igen_dtsd422"],
 )
 total_frequency_sensor = SingleRegisterSensor(
@@ -542,6 +579,7 @@ total_frequency_sensor = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="total/frequency",
     unit="Hz",
+    device_class='frequency',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
@@ -551,6 +589,7 @@ total_frequency2_sensor = SingleRegisterSensor(
     0.01,
     mqtt_topic_suffix="total/frequency2",
     unit="Hz",
+    device_class='frequency',
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )

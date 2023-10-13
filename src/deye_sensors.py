@@ -79,23 +79,26 @@ phase3_power_sensor = ComputedPowerSensor(
 
 # AC Freq
 ac_freq_sensor = SingleRegisterSensor(
-    "AC Freq", 0x4F, 0.01, mqtt_topic_suffix="ac/freq", unit="Hz", groups=["string", "micro"]
+    "AC Freq", 0x4F, 0.01, mqtt_topic_suffix="ac/freq", unit="Hz", device_class='frequency', groups=["string", "micro"]
 )
 
 # Production today
 production_today_sensor = SingleRegisterSensor(
-    "Production today", 0x3C, 0.1, mqtt_topic_suffix="day_energy", unit="kWh", groups=["string", "micro"]
+    "Production today", 0x3C, 0.1, mqtt_topic_suffix="day_energy", device_class='energy', unit="kWh",
+    groups=["string", "micro"]
 )
 uptime_sensor = SingleRegisterSensor(
-    "Uptime", 0x3E, 1, mqtt_topic_suffix="uptime", unit="minutes", groups=["string", "micro"]
+    "Uptime", 0x3E, 1, mqtt_topic_suffix="uptime", unit="minutes", device_class='duration', groups=["string", "micro"]
 )
 
 # DC PV1
 pv1_voltage_sensor = SingleRegisterSensor(
-    "PV1 Voltage", 0x6D, 0.1, mqtt_topic_suffix="dc/pv1/voltage", unit="V", groups=["string", "micro"]
+    "PV1 Voltage", 0x6D, 0.1, mqtt_topic_suffix="dc/pv1/voltage", unit="V", device_class='voltage',
+    groups=["string", "micro"]
 )
 pv1_current_sensor = SingleRegisterSensor(
-    "PV1 Current", 0x6E, 0.1, mqtt_topic_suffix="dc/pv1/current", unit="A", groups=["string", "micro"]
+    "PV1 Current", 0x6E, 0.1, mqtt_topic_suffix="dc/pv1/current", unit="A", device_class='current',
+    groups=["string", "micro"]
 )
 pv1_power_sensor = ComputedPowerSensor(
     "PV1 Power",
@@ -103,21 +106,25 @@ pv1_power_sensor = ComputedPowerSensor(
     pv1_current_sensor,
     mqtt_topic_suffix="dc/pv1/power",
     unit="W",
+    device_class='power',
     groups=["string", "micro"],
 )
 pv1_daily_sensor = SingleRegisterSensor(
-    "PV1 Production today", 0x41, 0.1, mqtt_topic_suffix="dc/pv1/day_energy", unit="kWh", groups=["micro"]
+    "PV1 Production today", 0x41, 0.1, mqtt_topic_suffix="dc/pv1/day_energy", unit="kWh", device_class='energy',
+    groups=["micro"]
 )
 pv1_total_sensor = DoubleRegisterSensor(
-    "PV1 Total", 0x45, 0.1, mqtt_topic_suffix="dc/pv1/total_energy", unit="kWh", groups=["micro"]
+    "PV1 Total", 0x45, 0.1, mqtt_topic_suffix="dc/pv1/total_energy", unit="kWh", device_class='energy', groups=["micro"]
 )
 
 # DC PV2
 pv2_voltage_sensor = SingleRegisterSensor(
-    "PV2 Voltage", 0x6F, 0.1, mqtt_topic_suffix="dc/pv2/voltage", unit="V", groups=["string", "micro"]
+    "PV2 Voltage", 0x6F, 0.1, mqtt_topic_suffix="dc/pv2/voltage", unit="V", device_class='voltage',
+    groups=["string", "micro"]
 )
 pv2_current_sensor = SingleRegisterSensor(
-    "PV2 Current", 0x70, 0.1, mqtt_topic_suffix="dc/pv2/current", unit="A", groups=["string", "micro"]
+    "PV2 Current", 0x70, 0.1, mqtt_topic_suffix="dc/pv2/current", unit="A", device_class='current',
+    groups=["string", "micro"]
 )
 pv2_power_sensor = ComputedPowerSensor(
     "PV2 Power",
@@ -125,21 +132,25 @@ pv2_power_sensor = ComputedPowerSensor(
     pv2_current_sensor,
     mqtt_topic_suffix="dc/pv2/power",
     unit="W",
+    device_class='power',
     groups=["string", "micro"],
 )
 pv2_daily_sensor = SingleRegisterSensor(
-    "PV2 Production today", 0x42, 0.1, mqtt_topic_suffix="dc/pv2/day_energy", unit="kWh", groups=["micro"]
+    "PV2 Production today", 0x42, 0.1, mqtt_topic_suffix="dc/pv2/day_energy", unit="kWh", device_class='energy',
+    groups=["micro"]
 )
 pv2_total_sensor = DoubleRegisterSensor(
-    "PV2 Total", 0x47, 0.1, mqtt_topic_suffix="dc/pv2/total_energy", unit="kWh", groups=["micro"]
+    "PV2 Total", 0x47, 0.1, mqtt_topic_suffix="dc/pv2/total_energy", unit="kWh", device_class='energy', groups=["micro"]
 )
 
 # DC PV3
 pv3_voltage_sensor = SingleRegisterSensor(
-    "PV3 Voltage", 0x71, 0.1, mqtt_topic_suffix="dc/pv3/voltage", unit="V", groups=["string", "micro"]
+    "PV3 Voltage", 0x71, 0.1, mqtt_topic_suffix="dc/pv3/voltage", unit="V", device_class='voltage',
+    groups=["string", "micro"]
 )
 pv3_current_sensor = SingleRegisterSensor(
-    "PV3 Current", 0x72, 0.1, mqtt_topic_suffix="dc/pv3/current", unit="A", groups=["string", "micro"]
+    "PV3 Current", 0x72, 0.1, mqtt_topic_suffix="dc/pv3/current", unit="A", device_class='current',
+    groups=["string", "micro"]
 )
 pv3_power_sensor = ComputedPowerSensor(
     "PV3 Power",
@@ -147,21 +158,25 @@ pv3_power_sensor = ComputedPowerSensor(
     pv3_current_sensor,
     mqtt_topic_suffix="dc/pv3/power",
     unit="W",
+    device_class='power',
     groups=["string", "micro"],
 )
 pv3_daily_sensor = SingleRegisterSensor(
-    "PV3 Production today", 0x43, 0.1, mqtt_topic_suffix="dc/pv3/day_energy", unit="kWh", groups=["micro"]
+    "PV3 Production today", 0x43, 0.1, mqtt_topic_suffix="dc/pv3/day_energy", unit="kWh", device_class='energy',
+    groups=["micro"]
 )
 pv3_total_sensor = DoubleRegisterSensor(
-    "PV3 Total", 0x4A, 0.1, mqtt_topic_suffix="dc/pv3/total_energy", unit="kWh", groups=["micro"]
+    "PV3 Total", 0x4A, 0.1, mqtt_topic_suffix="dc/pv3/total_energy", unit="kWh", device_class='energy', groups=["micro"]
 )
 
 # DC PV4
 pv4_voltage_sensor = SingleRegisterSensor(
-    "PV4 Voltage", 0x73, 0.1, mqtt_topic_suffix="dc/pv4/voltage", unit="V", groups=["string", "micro"]
+    "PV4 Voltage", 0x73, 0.1, mqtt_topic_suffix="dc/pv4/voltage", unit="V", device_class='voltage',
+    groups=["string", "micro"]
 )
 pv4_current_sensor = SingleRegisterSensor(
-    "PV4 Current", 0x74, 0.1, mqtt_topic_suffix="dc/pv4/current", unit="A", groups=["string", "micro"]
+    "PV4 Current", 0x74, 0.1, mqtt_topic_suffix="dc/pv4/current", unit="A", device_class='current',
+    groups=["string", "micro"]
 )
 pv4_power_sensor = ComputedPowerSensor(
     "PV4 Power",
@@ -169,51 +184,62 @@ pv4_power_sensor = ComputedPowerSensor(
     pv4_current_sensor,
     mqtt_topic_suffix="dc/pv4/power",
     unit="W",
+    device_class='power',
     groups=["string", "micro"],
 )
 pv4_daily_sensor = SingleRegisterSensor(
-    "PV4 Production today", 0x44, 0.1, mqtt_topic_suffix="dc/pv4/day_energy", unit="kWh", groups=["micro"]
+    "PV4 Production today", 0x44, 0.1, mqtt_topic_suffix="dc/pv4/day_energy", device_class='energy', unit="kWh",
+    groups=["micro"]
 )
 pv4_total_sensor = DoubleRegisterSensor(
-    "PV4 Total", 0x4D, 0.1, mqtt_topic_suffix="dc/pv4/total_energy", unit="kWh", groups=["micro"]
+    "PV4 Total", 0x4D, 0.1, mqtt_topic_suffix="dc/pv4/total_energy", unit="kWh", device_class='energy', groups=["micro"]
 )
 
 # Power sensors
 operating_power_sensor = SingleRegisterSensor(
-    "Operating Power", 0x50, 0.1, mqtt_topic_suffix="operating_power", unit="W", groups=["string", "micro"]
+    "Operating Power", 0x50, 0.1, mqtt_topic_suffix="operating_power", unit="W", device_class='power',
+    groups=["string", "micro"]
 )
 string_dc_power_sensor = SingleRegisterSensor(
-    "DC Total Power", 0x52, 0.1, mqtt_topic_suffix="dc/total_power", unit="W", groups=["string"]
+    "DC Total Power", 0x52, 0.1, mqtt_topic_suffix="dc/total_power", unit="W", device_class='power', groups=["string"]
 )
 micro_dc_power_sensor = ComputedSumSensor(
     "DC Total Power",
     [pv1_power_sensor, pv2_power_sensor, pv3_power_sensor, pv4_power_sensor],
     mqtt_topic_suffix="dc/total_power",
     unit="W",
+    device_class='power',
     groups=["micro"],
 )
 ac_apparent_power_sensor = SingleRegisterSensor(
-    "AC Apparent Power", 0x54, 0.1, mqtt_topic_suffix="ac/apparent_power", unit="W", groups=["string"]
+    "AC Apparent Power", 0x54, 0.1, mqtt_topic_suffix="ac/apparent_power", unit="W", device_class='power',
+    groups=["string"]
 )
 ac_active_power_sensor = DoubleRegisterSensor(
-    "AC Active Power", 0x56, 0.1, mqtt_topic_suffix="ac/active_power", unit="W", groups=["string", "micro"]
+    "AC Active Power", 0x56, 0.1, mqtt_topic_suffix="ac/active_power", unit="W", device_class='power',
+    groups=["string", "micro"]
 )
 ac_reactive_power_sensor = SingleRegisterSensor(
-    "AC Reactive Power", 0x58, 0.1, mqtt_topic_suffix="ac/reactive_power", unit="W", groups=["string"]
+    "AC Reactive Power", 0x58, 0.1, mqtt_topic_suffix="ac/reactive_power", unit="W", device_class='power',
+    groups=["string"]
 )
 production_total_sensor = DoubleRegisterSensor(
-    "Production Total", 0x3F, 0.1, mqtt_topic_suffix="total_energy", unit="kWh", groups=["string", "micro"]
+    "Production Total", 0x3F, 0.1, mqtt_topic_suffix="total_energy", unit="kWh", device_class='energy',
+    groups=["string", "micro"]
 )
 
 # Temperature sensors
 string_radiator_temp_sensor = SingleRegisterSensor(
-    "Radiator temperature", 0x5A, 0.1, offset=-100, mqtt_topic_suffix="radiator_temp", unit="°C", groups=["string"]
+    "Radiator temperature", 0x5A, 0.1, offset=-100, mqtt_topic_suffix="radiator_temp", unit="°C",
+    device_class='temperature', groups=["string"]
 )
 micro_radiator_temp_sensor = SingleRegisterSensor(
-    "Radiator temperature", 0x5A, 0.01, offset=-10, mqtt_topic_suffix="radiator_temp", unit="°C", groups=["micro"]
+    "Radiator temperature", 0x5A, 0.01, offset=-10, mqtt_topic_suffix="radiator_temp", unit="°C",
+    device_class='temperature', groups=["micro"]
 )
 igbt_temp_sensor = SingleRegisterSensor(
-    "IGBT temperature", 0x5B, 0.1, offset=-100, mqtt_topic_suffix="igbt_temp", unit="°C", groups=["string"]
+    "IGBT temperature", 0x5B, 0.1, offset=-100, mqtt_topic_suffix="igbt_temp", unit="°C", device_class='temperature',
+    groups=["string"]
 )
 
 sensor_list = (
