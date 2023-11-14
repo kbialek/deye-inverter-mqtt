@@ -278,20 +278,20 @@ deye_sg01hp3_upload_653 = SingleRegisterSensor(
     1,
     mqtt_topic_suffix="ac/ups/total_power",
     unit="W",
-    signed=False,
+    signed=True,
     groups=["deye_sg01hp3_ups"],
 )
 
 deye_sg01hp3_upload_650 = SingleRegisterSensor(
-    "Load L1 Power", 650, 1, mqtt_topic_suffix="ac/ups/l1/power", unit="W", signed=False, groups=["deye_sg01hp3_ups"]
+    "Load L1 Power", 650, 1, mqtt_topic_suffix="ac/ups/l1/power", unit="W", signed=True, groups=["deye_sg01hp3_ups"]
 )
 
 deye_sg01hp3_upload_651 = SingleRegisterSensor(
-    "Load L2 Power", 651, 1, mqtt_topic_suffix="ac/ups/l2/power", unit="W", signed=False, groups=["deye_sg01hp3_ups"]
+    "Load L2 Power", 651, 1, mqtt_topic_suffix="ac/ups/l2/power", unit="W", signed=True, groups=["deye_sg01hp3_ups"]
 )
 
 deye_sg01hp3_upload_652 = SingleRegisterSensor(
-    "Load L3 Power", 652, 1, mqtt_topic_suffix="ac/ups/l3/power", unit="W", signed=False, groups=["deye_sg01hp3_ups"]
+    "Load L3 Power", 652, 1, mqtt_topic_suffix="ac/ups/l3/power", unit="W", signed=True, groups=["deye_sg01hp3_ups"]
 )
 
 deye_sg01hp3_upload_644 = SingleRegisterSensor(
