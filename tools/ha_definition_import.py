@@ -145,18 +145,29 @@ def main():
 
     sensors = []
     register_ranges = []
-    with open(f'{definition_code}_ha.yaml', mode='r', encoding='utf8') as definition_file, \
-            open(f'{definition_code}_map.yaml') as map_file:
-        map = yaml.load(map_file, Loader=SafeLoader)
+    custom_definition_file_path = f'{definition_code}_ha_custom.yaml'
+    map = {}
+    data = {}
+    custom_data = {}
+    
+    with open(f'{definition_code}_ha.yaml', mode='r', encoding='utf8') as definition_file:
         data = yaml.load(definition_file, Loader=SafeLoader)
-        parameter_groups = data['parameters']
-        for parameter_group in parameter_groups:
-            for sensor in import_parameter_group(definition_code, parameter_group, map):
-                if not [s for s in sensors if sensor.reg_min == s.reg_min]:
-                    sensors.append(sensor) 
-        requests = data['requests']
-        for request in requests:
-            register_ranges.append(RegisterRangeDef(request['start'], request['end']))
+    
+    with open(f'{definition_code}_map.yaml') as map_file:
+        map = yaml.load(map_file, Loader=SafeLoader)
+    
+    if os.path.exists(custom_definition_file_path):
+        with open(custom_definition_file_path, mode='r', encoding='utf8') as custom_definition_file:
+            custom_data = yaml.load(custom_definition_file, Loader=SafeLoader)
+        
+    parameter_groups: list = data['parameters'] + custom_data.get('parameters', [])
+    for parameter_group in parameter_groups:
+        for sensor in import_parameter_group(definition_code, parameter_group, map):
+            if not [s for s in sensors if sensor.reg_min == s.reg_min]:
+                sensors.append(sensor) 
+    requests = data['requests'] + custom_data.get('requests', [])
+    for request in requests:
+        register_ranges.append(RegisterRangeDef(request['start'], request['end']))
 
     with open(sensors_file_path, mode='w', encoding='utf8') as sensors_file:
         render_sensors_file(definition_code, sensors_file, sensors, register_ranges)
