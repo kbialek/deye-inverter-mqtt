@@ -516,6 +516,66 @@ deye_hybrid_time_of_use_248 = SingleRegisterSensor(
     groups=["deye_hybrid_timeofuse"],
 )
 
+deye_hybrid_time_of_use_262 = SingleRegisterSensor(
+    "Time of Use Voltage 1",
+    262,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/1",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_263 = SingleRegisterSensor(
+    "Time of Use Voltage 2",
+    263,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/2",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_264 = SingleRegisterSensor(
+    "Time of Use Voltage 3",
+    264,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/3",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_265 = SingleRegisterSensor(
+    "Time of Use Voltage 4",
+    265,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/4",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_266 = SingleRegisterSensor(
+    "Time of Use Voltage 5",
+    266,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/5",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_267 = SingleRegisterSensor(
+    "Time of Use Voltage 6",
+    267,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/6",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
 deye_hybrid_sensors = [
     deye_hybrid_solar_186,
     deye_hybrid_solar_187,
@@ -580,13 +640,19 @@ deye_hybrid_sensors = [
     deye_hybrid_time_of_use_278,
     deye_hybrid_time_of_use_279,
     deye_hybrid_time_of_use_248,
+    deye_hybrid_time_of_use_262,
+    deye_hybrid_time_of_use_263,
+    deye_hybrid_time_of_use_264,
+    deye_hybrid_time_of_use_265,
+    deye_hybrid_time_of_use_266,
+    deye_hybrid_time_of_use_267,
 ]
 
 deye_hybrid_register_ranges = [
-    SensorRegisterRange(group="deye_hybrid", first_reg_address=3, last_reg_address=112),
     SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=3, last_reg_address=112),
-    SensorRegisterRange(group="deye_hybrid", first_reg_address=150, last_reg_address=249),
+    SensorRegisterRange(group="deye_hybrid", first_reg_address=3, last_reg_address=112),
     SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=150, last_reg_address=249),
+    SensorRegisterRange(group="deye_hybrid", first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=250, last_reg_address=279),
 ]

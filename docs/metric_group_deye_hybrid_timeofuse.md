@@ -25,3 +25,9 @@
 |Time of Use Enable 5|278|`timeofuse/enabled/5`||
 |Time of Use Enable 6|279|`timeofuse/enabled/6`||
 |Time of use|248|`timeofuse/enabled`||
+|Time of Use Voltage 1|262|`timeofuse/voltage/1`|V|
+|Time of Use Voltage 2|263|`timeofuse/voltage/2`|V|
+|Time of Use Voltage 3|264|`timeofuse/voltage/3`|V|
+|Time of Use Voltage 4|265|`timeofuse/voltage/4`|V|
+|Time of Use Voltage 5|266|`timeofuse/voltage/5`|V|
+|Time of Use Voltage 6|267|`timeofuse/voltage/6`|V|
