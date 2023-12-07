@@ -36,7 +36,8 @@ def import_single_register_item(group_prefix: str, group_name: str, parameter_it
         return None
     scale = parameter_item['scale']
     offset = parameter_item['offset'] if 'offset' in parameter_item else None
-    sensor_name = f'{group_prefix}_{group_name}_{register}'
+    gn = group_name.replace(' ', '_')
+    sensor_name = f'{group_prefix}_{gn}_{register}'
     group_suffix = groups_map[group_name]
     if group_suffix:
         group_suffix = '_' + group_suffix
