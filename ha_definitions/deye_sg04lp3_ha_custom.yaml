@@ -1,0 +1,293 @@
+requests:
+  - start: 146
+    end: 177
+
+parameters:
+ - group: Time of Use
+   items:
+    - name: "Time of Use Weekly Selling Schedule"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 1
+      mask: 1
+      registers: [146]
+      icon: 'mdi:checkbox-marked-outline'
+
+    - name: "Time of Use Time 1"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 9
+      registers: [148]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Time 2"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 9
+      registers: [149]
+      icon: "mdi:timelapse"
+      
+    - name: "Time of Use Time 3"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 9
+      registers: [150]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Time 4"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 9
+      registers: [151]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Time 5"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 9
+      registers: [152]
+      icon: "mdi:timelapse"
+
+    - name: "Time of Use Time 6"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 9
+      registers: [153]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Power 1"
+      class: ""
+      state_class: ""
+      uom: "W"
+      scale: 1
+      rule: 1
+      registers: [154]
+      icon: "mdi:lightning-bolt-outline"
+
+    - name: "Time of Use Power 2"
+      class: ""
+      state_class: ""
+      uom: "W"
+      scale: 1
+      rule: 1
+      registers: [155]
+      icon: 'mdi:lightning-bolt-outline'
+
+    - name: "Time of Use Power 3"
+      class: ""
+      state_class: ""
+      uom: "W"
+      scale: 1
+      rule: 1
+      registers: [156]
+      icon: 'mdi:lightning-bolt-outline'
+
+    - name: "Time of Use Power 4"
+      class: ""
+      state_class: ""
+      uom: "W"
+      scale: 1
+      rule: 1
+      registers: [157]
+      icon: 'mdi:lightning-bolt-outline'
+
+    - name: "Time of Use Power 5"
+      class: ""
+      state_class: ""
+      uom: "W"
+      scale: 1
+      rule: 1
+      registers: [158]
+      icon: 'mdi:lightning-bolt-outline'
+
+    - name: "Time of Use Power 6"
+      class: ""
+      state_class: ""
+      uom: "W"
+      scale: 1
+      rule: 1
+      registers: [159]
+      icon: 'mdi:lightning-bolt-outline'
+
+    - name: "Time of Use Voltage 1"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [160]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 2"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [161]
+      icon: "mdi:timelapse"
+      
+    - name: "Time of Use Voltage 3"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [162]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 4"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [163]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 5"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [164]
+      icon: "mdi:timelapse"
+
+    - name: "Time of Use Voltage 6"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [165]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use SOC 1"
+      class: ""
+      state_class: ""
+      uom: "%"
+      scale: 1
+      rule: 1
+      registers: [166]
+      icon: 'mdi:battery'
+
+    - name: "Time of Use SOC 2"
+      class: ""
+      state_class: ""
+      uom: "%"
+      scale: 1
+      rule: 1
+      registers: [167]
+      icon: 'mdi:battery'
+
+    - name: "Time of Use SOC 3"
+      class: ""
+      state_class: ""
+      uom: "%"
+      scale: 1
+      rule: 1
+      registers: [168]
+      icon: 'mdi:battery'
+
+    - name: "Time of Use SOC 4"
+      class: ""
+      state_class: ""
+      uom: "%"
+      scale: 1
+      rule: 1
+      registers: [169]
+      icon: 'mdi:battery'
+
+    - name: "Time of Use SOC 5"
+      class: ""
+      state_class: ""
+      uom: "%"
+      scale: 1
+      rule: 1
+      registers: [170]
+      icon: 'mdi:battery'
+
+    - name: "Time of Use SOC 6"
+      class: ""
+      state_class: ""
+      uom: "%"
+      scale: 1
+      rule: 1
+      registers: [171]
+      icon: 'mdi:battery'
+
+    - name: "Time of Use Charge Enable 1"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 1
+      mask: 1
+      registers: [172]
+      icon: 'mdi:checkbox-marked-outline'
+
+    - name: "Time of Use Charge Enable 2"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 1
+      mask: 1
+      registers: [173]
+      icon: 'mdi:checkbox-marked-outline'
+
+    - name: "Time of Use Charge Enable 3"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 1
+      mask: 1
+      registers: [174]
+      icon: 'mdi:checkbox-marked-outline'
+
+    - name: "Time of Use Charge Enable 4"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 1
+      mask: 1
+      registers: [175]
+      icon: 'mdi:checkbox-marked-outline'
+
+    - name: "Time of Use Charge Enable 5"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 1
+      mask: 1
+      registers: [176]
+      icon: 'mdi:checkbox-marked-outline'
+
+    - name: "Time of Use Charge Enable 6"
+      class: ""
+      state_class: ""
+      uom: ""
+      scale: 1
+      rule: 1
+      mask: 1
+      registers: [177]
+      icon: 'mdi:checkbox-marked-outline'
+
