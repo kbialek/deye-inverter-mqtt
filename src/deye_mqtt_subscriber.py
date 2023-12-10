@@ -27,7 +27,7 @@ from deye_command_handlers import DeyeCommandHandler, DeyeActivePowerRegulationC
 class DeyeMqttSubscriber:
     @staticmethod
     def create(config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus) -> "DeyeMqttSubscriber":
-        command_handlers = [DeyeActivePowerRegulationCommandHandler(modbus)]
+        command_handlers = [DeyeActivePowerRegulationCommandHandler(config, mqtt_client, modbus)]
         return DeyeMqttSubscriber(config, mqtt_client, modbus, command_handlers)
 
     def __init__(
@@ -44,4 +44,4 @@ class DeyeMqttSubscriber:
         if active_command_handlers:
             mqtt_client.connect()
             for command_handler in active_command_handlers:
-                command_handler.initialize(config, mqtt_client)
+                command_handler.initialize()
