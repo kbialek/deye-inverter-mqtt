@@ -243,4 +243,6 @@ class DeyeConfig:
         active_command_handlers = []
         if DeyeEnv.boolean("DEYE_FEATURE_ACTIVE_POWER_REGULATION", False):
             active_command_handlers.append("active_power_regulation")
+        if DeyeEnv.boolean("DEYE_FEATURE_TIME_OF_USE", False):
+            active_command_handlers.append("time_of_use")
         return active_command_handlers

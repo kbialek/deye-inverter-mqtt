@@ -57,7 +57,7 @@ class DeyeDaemon:
         plugin_loader.load_plugins(plugin_context)
 
         mqtt_publisher = DeyeMqttPublisher(config, mqtt_client)
-        DeyeMqttSubscriber.create(config, mqtt_client, self.modbus)
+        DeyeMqttSubscriber.create(config, mqtt_client, self.sensors, self.modbus)
 
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         all_processors = [mqtt_publisher, set_time_processor]
