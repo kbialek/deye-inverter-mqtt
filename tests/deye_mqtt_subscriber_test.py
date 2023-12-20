@@ -72,7 +72,6 @@ class TestDeyeMqttSubscriber:
         sut = DeyeMqttSubscriber(
             config_mock,
             mqtt_client_mock,
-            modbus_mock,
             [
                 command_handler_1_mock,
                 command_handler_2_mock,
@@ -96,7 +95,6 @@ class TestDeyeMqttSubscriber:
         sut = DeyeMqttSubscriber(
             config_mock,
             mqtt_client_mock,
-            modbus_mock,
             [
                 command_handler_1_mock,
                 command_handler_2_mock,
