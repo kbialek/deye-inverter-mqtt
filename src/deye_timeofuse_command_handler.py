@@ -32,10 +32,17 @@ class DeyeTimeOfUseCommandHandler(DeyeCommandHandler):
         self.__log = logging.getLogger(DeyeTimeOfUseCommandHandler.__name__)
         self.__sensors = [sensor for sensor in sensors if sensor.mqtt_topic_suffix.startswith("timeofuse")]
         self.__modbus = modbus
+        self.__sensor_map: dict[str, Sensor] = {}
 
     def initialize(self):
         for sensor in self.__sensors:
             self._subscribe(sensor.mqtt_topic_suffix, self.handle_command)
+            self.__sensor_map[sensor.mqtt_topic_suffix] = sensor
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
-        pass
+        sensor_topic_suffix = self._extract_topic_suffix(msg.topic)
+        if not sensor_topic_suffix or sensor_topic_suffix not in self.__sensor_map:
+            return
+        sensor = self.__sensor_map[sensor_topic_suffix]
+        value = int(msg.payload)
+        self.__log.info(f"Received value for '{sensor.name}': {value}")
