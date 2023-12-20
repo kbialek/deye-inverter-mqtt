@@ -34,7 +34,7 @@ from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
 from deye_command_handlers import DeyeActivePowerRegulationCommandHandler
-from deye_timeofuse_command_handler import DeyeTimeOfUseService
+from deye_timeofuse_service import DeyeTimeOfUseService
 
 
 class DeyeDaemon:
