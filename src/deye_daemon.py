@@ -33,6 +33,7 @@ from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
+from deye_command_handlers import DeyeActivePowerRegulationCommandHandler
 from deye_timeofuse_command_handler import DeyeTimeOfUseService
 
 
@@ -58,8 +59,6 @@ class DeyeDaemon:
         plugin_loader.load_plugins(plugin_context)
 
         mqtt_publisher = DeyeMqttPublisher(config, mqtt_client)
-        DeyeMqttSubscriber.create(config, mqtt_client, self.sensors, self.modbus)
-
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         time_of_use_service = DeyeTimeOfUseService(config, mqtt_client, self.sensors, self.modbus)
 
@@ -69,6 +68,12 @@ class DeyeDaemon:
         ] + plugin_loader.get_event_processors()
         for p in self.processors:
             p.initialize()
+
+        command_handlers = [
+            DeyeActivePowerRegulationCommandHandler(config, mqtt_client, self.modbus),
+            time_of_use_service,
+        ]
+        DeyeMqttSubscriber(config, mqtt_client, command_handlers)
 
         self.__log.info(
             'Feature "Report metrics over MQTT": {}'.format(

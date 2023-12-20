@@ -19,29 +19,14 @@ import logging
 
 from deye_config import DeyeConfig
 from deye_mqtt import DeyeMqttClient
-from deye_modbus import DeyeModbus
-from deye_sensor import Sensor
-
-from deye_command_handlers import DeyeCommandHandler, DeyeActivePowerRegulationCommandHandler
-from deye_timeofuse_command_handler import DeyeTimeOfUseService
+from deye_command_handlers import DeyeCommandHandler
 
 
 class DeyeMqttSubscriber:
-    @staticmethod
-    def create(
-        config: DeyeConfig, mqtt_client: DeyeMqttClient, sensors: list[Sensor], modbus: DeyeModbus
-    ) -> "DeyeMqttSubscriber":
-        command_handlers = [
-            DeyeActivePowerRegulationCommandHandler(config, mqtt_client, modbus),
-            DeyeTimeOfUseService(config, mqtt_client, sensors, modbus),
-        ]
-        return DeyeMqttSubscriber(config, mqtt_client, modbus, command_handlers)
-
     def __init__(
         self,
         config: DeyeConfig,
         mqtt_client: DeyeMqttClient,
-        modbus: DeyeModbus,
         command_handlers: [DeyeCommandHandler],
     ):
         self.__log = logging.getLogger(DeyeMqttSubscriber.__name__)
