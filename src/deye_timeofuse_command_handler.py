@@ -22,7 +22,8 @@ from deye_mqtt import DeyeMqttClient
 from deye_modbus import DeyeModbus
 from deye_command_handlers import DeyeCommandHandler
 from deye_sensor import Sensor
-from deye_events import DeyeEventProcessor, DeyeEventList
+from deye_observation import Observation
+from deye_events import DeyeEventProcessor, DeyeEventList, DeyeObservationEvent
 
 from paho.mqtt.client import Client, MQTTMessage
 
@@ -34,6 +35,7 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         self.__sensors = [sensor for sensor in sensors if sensor.mqtt_topic_suffix.startswith("timeofuse")]
         self.__modbus = modbus
         self.__sensor_map: dict[str, Sensor] = {}
+        self.__read_state: dict[int, int] = {}
 
     def get_id(self):
         return "time_of_use"
@@ -52,4 +54,10 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         self.__log.info(f"Received value for '{sensor.name}': {value}")
 
     def process(self, events: DeyeEventList):
-        pass
+        read_state = {}
+        observations: list[Observation] = [ev.observation for ev in events if isinstance(ev, DeyeObservationEvent)]
+        for observation in observations:
+            sensor = observation.sensor
+            if sensor in self.__sensors:
+                read_state[sensor.get_registers[0]] = int(observation.value)
+        self.__read_state = read_state
