@@ -23,7 +23,7 @@ from deye_modbus import DeyeModbus
 from deye_sensor import Sensor
 
 from deye_command_handlers import DeyeCommandHandler, DeyeActivePowerRegulationCommandHandler
-from deye_timeofuse_command_handler import DeyeTimeOfUseCommandHandler
+from deye_timeofuse_command_handler import DeyeTimeOfUseService
 
 
 class DeyeMqttSubscriber:
@@ -33,7 +33,7 @@ class DeyeMqttSubscriber:
     ) -> "DeyeMqttSubscriber":
         command_handlers = [
             DeyeActivePowerRegulationCommandHandler(config, mqtt_client, modbus),
-            DeyeTimeOfUseCommandHandler(config, mqtt_client, sensors, modbus),
+            DeyeTimeOfUseService(config, mqtt_client, sensors, modbus),
         ]
         return DeyeMqttSubscriber(config, mqtt_client, modbus, command_handlers)
 

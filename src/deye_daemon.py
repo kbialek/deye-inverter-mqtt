@@ -33,6 +33,7 @@ from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_sensor import SensorRegisterRange
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
+from deye_timeofuse_command_handler import DeyeTimeOfUseService
 
 
 class DeyeDaemon:
@@ -60,7 +61,9 @@ class DeyeDaemon:
         DeyeMqttSubscriber.create(config, mqtt_client, self.sensors, self.modbus)
 
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
-        all_processors = [mqtt_publisher, set_time_processor]
+        time_of_use_service = DeyeTimeOfUseService(config, mqtt_client, self.sensors, self.modbus)
+
+        all_processors = [mqtt_publisher, set_time_processor, time_of_use_service]
         self.processors = [
             p for p in all_processors if p.get_id() in config.active_processors
         ] + plugin_loader.get_event_processors()
@@ -75,6 +78,11 @@ class DeyeDaemon:
         self.__log.info(
             'Feature "Set inverter time once online": {}'.format(
                 "enabled" if set_time_processor.get_id() in config.active_processors else "disabled"
+            )
+        )
+        self.__log.info(
+            'Feature "Time-of-use configuration over MQTT": {}'.format(
+                "enabled" if time_of_use_service.get_id() in config.active_processors else "disabled"
             )
         )
         self.__last_observations = DeyeEventList()
