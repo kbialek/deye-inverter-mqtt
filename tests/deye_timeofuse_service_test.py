@@ -16,12 +16,20 @@
 # under the License.
 
 import pytest
+from datetime import datetime
 
 from deye_timeofuse_service import DeyeTimeOfUseService
-from deye_events import DeyeEventList
+from deye_events import DeyeEventList, DeyeObservationEvent
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
 from deye_config import DeyeConfig, DeyeMqttConfig
+from deye_observation import Observation
+import deye_sensors_deye_sg04lp3
+
+
+sensor_time_1 = deye_sensors_deye_sg04lp3.deye_sg04lp3_time_of_use_148
+sensor_time_2 = deye_sensors_deye_sg04lp3.deye_sg04lp3_time_of_use_149
+sensor_time_3 = deye_sensors_deye_sg04lp3.deye_sg04lp3_time_of_use_150
 
 
 class TestDeyeTimeOfUseService:
@@ -49,8 +57,24 @@ class TestDeyeTimeOfUseService:
 
     def test_process_events_to_build_read_state(self, config_mock, mqtt_client_mock, modbus_mock):
         # given
-        sensors = []
+        sensors = [sensor_time_1, sensor_time_2, sensor_time_3]
         sut = DeyeTimeOfUseService(config_mock, mqtt_client_mock, sensors, modbus_mock)
 
+        # and
+        now = datetime.now()
+        observations = [
+            Observation(sensor_time_1, now, 500),
+            Observation(sensor_time_2, now, 700),
+            Observation(sensor_time_3, now, 1000),
+        ]
+        events = []
+        for obs in observations:
+            events.append(DeyeObservationEvent(obs))
+
         # when
-        assert False
+        sut.process(DeyeEventList(events))
+
+        # then
+        assert sut.read_state[148] == "500.0"
+        assert sut.read_state[149] == "700.0"
+        assert sut.read_state[150] == "1000.0"

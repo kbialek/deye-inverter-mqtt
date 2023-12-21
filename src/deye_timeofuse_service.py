@@ -35,7 +35,7 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         self.__sensors = [sensor for sensor in sensors if sensor.mqtt_topic_suffix.startswith("timeofuse")]
         self.__modbus = modbus
         self.__sensor_map: dict[str, Sensor] = {}
-        self.__read_state: dict[int, int] = {}
+        self.__read_state: dict[int, str] = {}
 
     def get_id(self):
         return "time_of_use"
@@ -59,5 +59,9 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         for observation in observations:
             sensor = observation.sensor
             if sensor in self.__sensors:
-                read_state[sensor.get_registers[0]] = int(observation.value)
+                read_state[sensor.get_registers()[0]] = observation.value_as_str()
         self.__read_state = read_state
+
+    @property
+    def read_state(self):
+        return self.__read_state
