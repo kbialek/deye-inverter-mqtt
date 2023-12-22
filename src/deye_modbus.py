@@ -142,6 +142,7 @@ class DeyeModbus:
     ) -> bytearray:
         result = bytearray.fromhex("0110{:04x}{:04x}{:02x}".format(reg_address, len(reg_values), len(reg_values) * 2))
         for v in reg_values:
+            self.__log.info(f"Extending with {v}")
             result.extend(v)
         return result
 
