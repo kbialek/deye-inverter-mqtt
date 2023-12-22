@@ -17,6 +17,7 @@
 
 import pytest
 from datetime import datetime
+from paho.mqtt.client import Client, MQTTMessage
 
 from deye_timeofuse_service import DeyeTimeOfUseService
 from deye_events import DeyeEventList, DeyeObservationEvent
@@ -25,7 +26,6 @@ from deye_mqtt import DeyeMqttClient
 from deye_config import DeyeConfig, DeyeMqttConfig
 from deye_observation import Observation
 import deye_sensors_deye_sg04lp3
-
 
 sensor_time_1 = deye_sensors_deye_sg04lp3.deye_sg04lp3_time_of_use_148
 sensor_time_2 = deye_sensors_deye_sg04lp3.deye_sg04lp3_time_of_use_149
@@ -78,3 +78,23 @@ class TestDeyeTimeOfUseService:
         assert sut.read_state[148] == "500.0"
         assert sut.read_state[149] == "700.0"
         assert sut.read_state[150] == "1000.0"
+
+    def test_handle_modification_command(self, config_mock, mqtt_client_mock, modbus_mock):
+        # given
+        config_mock.mqtt.topic_prefix = "deye"
+
+        # and
+        sensors = [sensor_time_1, sensor_time_2, sensor_time_3]
+        sut = DeyeTimeOfUseService(config_mock, mqtt_client_mock, sensors, modbus_mock)
+        sut.initialize()
+
+        # and
+        assert not sut.modifications
+
+        # when
+        msg = MQTTMessage(1, b"deye/timeofuse/time/1/command")
+        msg.payload = b"0600"
+        sut.handle_command(None, None, msg)
+
+        # then
+        assert sut.modifications[148] == "0600"

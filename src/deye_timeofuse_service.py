@@ -36,6 +36,7 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         self.__modbus = modbus
         self.__sensor_map: dict[str, Sensor] = {}
         self.__read_state: dict[int, str] = {}
+        self.__modifications: dict[int, str] = {}
 
     def get_id(self):
         return "time_of_use"
@@ -50,8 +51,9 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         if not sensor_topic_suffix or sensor_topic_suffix not in self.__sensor_map:
             return
         sensor = self.__sensor_map[sensor_topic_suffix]
-        value = int(msg.payload)
+        value = msg.payload.decode("utf8")
         self.__log.info(f"Received value for '{sensor.name}': {value}")
+        self.__modifications[sensor.get_registers()[0]] = value
 
     def process(self, events: DeyeEventList):
         read_state = {}
@@ -65,3 +67,7 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
     @property
     def read_state(self):
         return self.__read_state
+
+    @property
+    def modifications(self):
+        return self.__modifications
