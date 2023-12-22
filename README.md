@@ -62,6 +62,23 @@ It is possible to modify selected inverter settings over MQTT. At the moment onl
 | Setting                 |                             Topic                              | Unit | Value range | Feature flag                           |
 | ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
 | active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |    0-120    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time |    0000 - 2359 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - 8000 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/voltage/(1-6)/command` | V | 0.00 - 63.00 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | On/Off | 0,1 | `DEYE_FEATURE_TIME_OF_USE` |
+
+#### Writing Time Of Use configuration
+
+Prerequisites:
+1. Set `DEYE_FEATURE_TIME_OF_USE` to `true`
+2. Enable time-of-use metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_timeofuse`
+
+Time Of Use configuration is modified using the following workflow:
+
+1. The service reads Time Of Use configration from the inverter and keeps it in the memory. This step happens automatically at each data read from the inverter.
+2. You send modifications over `{MQTT_TOPIC_PREFIX}/timeofuse/*/*/command` topics as needed. See the table above for more details about used MQTT topics. These changes are not immediately written to the inverter. They are **buffered** in the service memory instead.
+3. Send `write` command to topic `{MQTT_TOPIC_PREFIX}/timeofuse/control/command`. It will build a new Time Of Use configuration by putting your changes on top of the inverter configuration present in the service memory. Next the entire Time Of Use configuration is sent to the inverter. The modifications are cleared, and you can start over sending new modifications.
 
 ## Additional features
 ### Automatically set logger/inverter time
