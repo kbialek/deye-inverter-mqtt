@@ -76,7 +76,7 @@ Prerequisites:
 
 Time Of Use configuration is modified using the following workflow:
 
-1. The service reads Time Of Use configration from the inverter and keeps it in the memory. This step happens automatically at each data read from the inverter.
+1. The service reads Time Of Use configuration from the inverter and keeps it in the memory. This step happens automatically at each data read from the inverter.
 2. You send modifications over `{MQTT_TOPIC_PREFIX}/timeofuse/*/*/command` topics as needed. See the table above for more details about used MQTT topics. These changes are not immediately written to the inverter. They are **buffered** in the service memory instead.
 3. Send `write` command to topic `{MQTT_TOPIC_PREFIX}/timeofuse/control/command`. It will build a new Time Of Use configuration by putting your changes on top of the inverter configuration present in the service memory. Next the entire Time Of Use configuration is sent to the inverter. The modifications are cleared, and you can start over sending new modifications.
 
