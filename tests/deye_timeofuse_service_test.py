@@ -75,9 +75,9 @@ class TestDeyeTimeOfUseService:
         sut.process(DeyeEventList(events))
 
         # then
-        assert sut.read_state[148] == "500.0"
-        assert sut.read_state[149] == "700.0"
-        assert sut.read_state[150] == "1000.0"
+        assert sut.read_state[sensor_time_1] == "500.0"
+        assert sut.read_state[sensor_time_2] == "700.0"
+        assert sut.read_state[sensor_time_3] == "1000.0"
 
     def test_handle_modification_command(self, config_mock, mqtt_client_mock, modbus_mock):
         # given
@@ -97,4 +97,4 @@ class TestDeyeTimeOfUseService:
         sut.handle_command(None, None, msg)
 
         # then
-        assert sut.modifications[148] == "0600"
+        assert sut.modifications[sensor_time_1] == "0600"
