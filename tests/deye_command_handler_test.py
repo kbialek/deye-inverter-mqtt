@@ -59,7 +59,7 @@ class TestDeyeActivePowerRegulationCommandHandler:
         sut.handle_command(None, None, msg)
 
         # then
-        modbus_mock.write_register.assert_called_with(40, 1000)
+        modbus_mock.write_register_uint.assert_called_with(40, 1000)
 
     def test_reject_too_high_value(self, modbus_mock: DeyeModbus):
         # given
@@ -73,7 +73,7 @@ class TestDeyeActivePowerRegulationCommandHandler:
         sut.handle_command(None, None, msg)
 
         # then
-        assert not modbus_mock.write_register.called
+        assert not modbus_mock.write_register_uint.called
 
     def test_reject_too_low_value(self, modbus_mock: DeyeModbus):
         # given
@@ -87,4 +87,4 @@ class TestDeyeActivePowerRegulationCommandHandler:
         sut.handle_command(None, None, msg)
 
         # then
-        assert not modbus_mock.write_register.called
+        assert not modbus_mock.write_register_uint.called
