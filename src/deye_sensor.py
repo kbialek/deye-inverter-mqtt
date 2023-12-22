@@ -96,7 +96,8 @@ class SingleRegisterSensor(Sensor):
             return None
 
     def write_value(self, value: str) -> dict[int, bytearray]:
-        return {self.reg_address: int(value).to_bytes(2, "big", signed=self.signed)}
+        v = int((float(value) - self.offset) / self.factor)
+        return {self.reg_address: v.to_bytes(2, "big", signed=self.signed)}
 
     @abstractmethod
     def get_registers(self) -> list[int]:

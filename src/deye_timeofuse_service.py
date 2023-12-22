@@ -63,7 +63,10 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
     def write_config(self):
         write_state = self.__read_state | self.__modifications
         self.__modifications = {}
-        self.__log.info(f"Write time-of-use config: {write_state}")
+        registers = {}
+        for sensor in write_state:
+            registers |= sensor.write_value(write_state[sensor])
+        self.__log.info(f"Write time-of-use config: {registers}")
 
     def process(self, events: DeyeEventList):
         read_state = {}
