@@ -70,4 +70,4 @@ class DeyeActivePowerRegulationCommandHandler(DeyeCommandHandler):
             return
 
         self.__log.info("Setting active power regulation to %f", active_power_regulation_factor)
-        self.__modbus.write_register(40, int(active_power_regulation_factor * 10))
+        self.__modbus.write_register_uint(40, int(active_power_regulation_factor * 10))

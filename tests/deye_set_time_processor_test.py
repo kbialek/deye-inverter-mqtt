@@ -32,7 +32,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
-        modbus.write_registers.assert_any_call(22, unittest.mock.ANY)
+        modbus.write_registers_uint.assert_any_call(22, unittest.mock.ANY)
 
         # and
         self.assertTrue(processor.last_status)
@@ -61,13 +61,13 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         processor = DeyeSetTimeProcessor(modbus)
 
         # and
-        modbus.write_registers.return_value = False
+        modbus.write_registers_uint.return_value = False
 
         # when
         processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
-        modbus.write_registers.assert_any_call(22, unittest.mock.ANY)
+        modbus.write_registers_uint.assert_any_call(22, unittest.mock.ANY)
 
         # and
         self.assertFalse(processor.last_status)

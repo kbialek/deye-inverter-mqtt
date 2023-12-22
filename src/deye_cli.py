@@ -55,7 +55,7 @@ class DeyeCli:
             sys.exit(1)
         reg_address = int(args[0])
         reg_value = int(args[1])
-        if self.__modbus.write_register(reg_address, reg_value):
+        if self.__modbus.write_register_uint(reg_address, reg_value):
             print("Ok")
         else:
             print("Error")
