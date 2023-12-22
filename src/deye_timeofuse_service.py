@@ -42,6 +42,8 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         return "time_of_use"
 
     def initialize(self):
+        if self.__sensor_map:
+            return
         for sensor in self.__sensors:
             self._subscribe(sensor.mqtt_topic_suffix, self.handle_command)
             self.__sensor_map[sensor.mqtt_topic_suffix] = sensor

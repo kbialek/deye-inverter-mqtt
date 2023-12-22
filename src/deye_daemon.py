@@ -62,18 +62,18 @@ class DeyeDaemon:
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         time_of_use_service = DeyeTimeOfUseService(config, mqtt_client, self.sensors, self.modbus)
 
+        command_handlers = [
+            DeyeActivePowerRegulationCommandHandler(config, mqtt_client, self.modbus),
+            time_of_use_service,
+        ]
+        DeyeMqttSubscriber(config, mqtt_client, command_handlers)
+
         all_processors = [mqtt_publisher, set_time_processor, time_of_use_service]
         self.processors = [
             p for p in all_processors if p.get_id() in config.active_processors
         ] + plugin_loader.get_event_processors()
         for p in self.processors:
             p.initialize()
-
-        command_handlers = [
-            DeyeActivePowerRegulationCommandHandler(config, mqtt_client, self.modbus),
-            time_of_use_service,
-        ]
-        DeyeMqttSubscriber(config, mqtt_client, command_handlers)
 
         self.__log.info(
             'Feature "Report metrics over MQTT": {}'.format(
