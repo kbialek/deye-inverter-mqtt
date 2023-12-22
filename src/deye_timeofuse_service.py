@@ -61,12 +61,34 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
             self.write_config()
 
     def write_config(self):
+        if not self.__read_state:
+            self.__log.warning("Time-of-use state not yet read from the inverter. Cannot apply config modifications.")
+            return
         write_state = self.__read_state | self.__modifications
         self.__modifications = {}
-        registers = {}
+        reg_map: dict[int, bytearray] = {}
         for sensor in write_state:
-            registers |= sensor.write_value(write_state[sensor])
-        self.__log.info(f"Write time-of-use config: {registers}")
+            reg_map |= sensor.write_value(write_state[sensor])
+        self.__write_registers(reg_map)
+
+    def __write_registers(self, reg_map: dict[int, bytearray]) -> None:
+        first_reg_addr = min(reg_map)
+        last_reg_addr = max(reg_map)
+        reg_values = []
+        batch_reg_addr = 0
+        for reg_addr in range(
+            first_reg_addr, last_reg_addr + 2
+        ):  # When last reg is not found, the last batch is written
+            if reg_addr in reg_map:
+                reg_values.append(reg_map[reg_addr])
+                if not batch_reg_addr:
+                    batch_reg_addr = reg_addr
+            elif reg_values:
+                self.__log.info(f"Write time-of-use config registers: {batch_reg_addr}: {reg_values}")
+                batch_reg_addr = 0
+                reg_values = []
+
+        # self.__modbus.write_registers()
 
     def process(self, events: DeyeEventList):
         read_state = {}
