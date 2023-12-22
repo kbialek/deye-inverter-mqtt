@@ -168,6 +168,26 @@ class DeyeSensorTest(unittest.TestCase):
         # then
         self.assertEqual(result, 257)
 
+    def test_single_reg_sensor_write_unsigned(self):
+        # given
+        sut = SingleRegisterSensor("test", 0x00, 1, signed=False, groups=["string"])
+
+        # when
+        result = sut.write_value("1234")
+
+        # then
+        self.assertEqual(result, {0: bytearray.fromhex("04d2")})
+
+    def test_single_reg_sensor_write_signed(self):
+        # given
+        sut = SingleRegisterSensor("test", 0x00, 1, signed=True, groups=["string"])
+
+        # when
+        result = sut.write_value("-1234")
+
+        # then
+        self.assertEqual(result, {0: bytearray.fromhex("fb2e")})
+
 
 if __name__ == "__main__":
     unittest.main()
