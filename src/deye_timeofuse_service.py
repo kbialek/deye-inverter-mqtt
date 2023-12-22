@@ -45,6 +45,7 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         for sensor in self.__sensors:
             self._subscribe(sensor.mqtt_topic_suffix, self.handle_command)
             self.__sensor_map[sensor.mqtt_topic_suffix] = sensor
+        self._subscribe("timeofuse/control", self.handle_control_command)
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
         sensor_topic_suffix = self._extract_topic_suffix(msg.topic)
@@ -54,6 +55,15 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         value = msg.payload.decode("utf8")
         self.__log.info(f"Received value for '{sensor.name}': {value}")
         self.__modifications[sensor.get_registers()[0]] = value
+
+    def handle_control_command(self, client: Client, userdata, msg: MQTTMessage):
+        if msg.payload == b"write":
+            self.write_config()
+
+    def write_config(self):
+        write_state = self.__read_state | self.__modifications
+        self.__modifications = {}
+        self.__log.info(f"Write time-of-use config: {write_state}")
 
     def process(self, events: DeyeEventList):
         read_state = {}
