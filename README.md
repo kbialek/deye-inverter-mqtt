@@ -1,4 +1,4 @@
-Do you find this project useful? Buy me coffee [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/krbialek)
+Do you find this project useful? Buy me a coffee [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/krbialek)
 
 # Deye solar inverter MQTT bridge
 
