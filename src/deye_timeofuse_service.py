@@ -55,7 +55,7 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
             return
         sensor = self.__sensor_map[sensor_topic_suffix]
         value = msg.payload.decode("utf8")
-        self.__log.info(f"Received value for '{sensor.name}': {value}")
+        self.__log.debug(f"Received value for '{sensor.name}': {value}")
         self.__modifications[sensor] = value
 
     def handle_control_command(self, client: Client, userdata, msg: MQTTMessage):
@@ -63,6 +63,9 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
             self.write_config(dry_run=False)
         elif msg.payload == b"dry-write":
             self.write_config(dry_run=True)
+        elif msg.payload == b"reset":
+            self.__modifications.clear()
+            self.__log.info("TimeOfUse modifications cleared")
 
     def write_config(self, dry_run: bool):
         if not self.__read_state:
