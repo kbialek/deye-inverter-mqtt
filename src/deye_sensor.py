@@ -40,6 +40,13 @@ class Sensor:
         """
         pass
 
+    def write_value(self, value: str) -> dict[int, bytearray]:
+        """
+        Converts value into bytes representation.
+        Useful for configuration modifications, when values are written to the inverter.
+        """
+        return {}
+
     def format_value(self, value):
         """
         Formats sensor value using configured format string
@@ -87,6 +94,10 @@ class SingleRegisterSensor(Sensor):
             return int.from_bytes(reg_value, "big", signed=self.signed) * self.factor + self.offset
         else:
             return None
+
+    def write_value(self, value: str) -> dict[int, bytearray]:
+        v = int((float(value) - self.offset) / self.factor)
+        return {self.reg_address: v.to_bytes(2, "big", signed=self.signed)}
 
     @abstractmethod
     def get_registers(self) -> list[int]:

@@ -236,6 +236,8 @@ class DeyeConfig:
             active_processors.append("mqtt_publisher")
         if DeyeEnv.boolean("DEYE_FEATURE_SET_TIME", False):
             active_processors.append("set_time")
+        if DeyeEnv.boolean("DEYE_FEATURE_TIME_OF_USE", False):
+            active_processors.append("time_of_use")
         return active_processors
 
     @staticmethod
@@ -243,4 +245,6 @@ class DeyeConfig:
         active_command_handlers = []
         if DeyeEnv.boolean("DEYE_FEATURE_ACTIVE_POWER_REGULATION", False):
             active_command_handlers.append("active_power_regulation")
+        if DeyeEnv.boolean("DEYE_FEATURE_TIME_OF_USE", False):
+            active_command_handlers.append("time_of_use")
         return active_command_handlers

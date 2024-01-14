@@ -266,6 +266,316 @@ deye_hybrid_inverter_91 = SingleRegisterSensor(
     groups=["deye_hybrid"],
 )
 
+deye_hybrid_time_of_use_250 = SingleRegisterSensor(
+    "Time of use Time 1",
+    250,
+    1,
+    mqtt_topic_suffix="timeofuse/time/1",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_251 = SingleRegisterSensor(
+    "Time of use Time 2",
+    251,
+    1,
+    mqtt_topic_suffix="timeofuse/time/2",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_252 = SingleRegisterSensor(
+    "Time of Use Time 3",
+    252,
+    1,
+    mqtt_topic_suffix="timeofuse/time/3",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_253 = SingleRegisterSensor(
+    "Time of Use Time 4",
+    253,
+    1,
+    mqtt_topic_suffix="timeofuse/time/4",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_254 = SingleRegisterSensor(
+    "Time of Use Time 5",
+    254,
+    1,
+    mqtt_topic_suffix="timeofuse/time/5",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_255 = SingleRegisterSensor(
+    "Time of Use Time 6",
+    255,
+    1,
+    mqtt_topic_suffix="timeofuse/time/6",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_256 = SingleRegisterSensor(
+    "Time of Use Power 1",
+    256,
+    1,
+    mqtt_topic_suffix="timeofuse/power/1",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_257 = SingleRegisterSensor(
+    "Time of Use Power 2",
+    257,
+    1,
+    mqtt_topic_suffix="timeofuse/power/2",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_258 = SingleRegisterSensor(
+    "Time of Use Power 3",
+    258,
+    1,
+    mqtt_topic_suffix="timeofuse/power/3",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_259 = SingleRegisterSensor(
+    "Time of Use Power 4",
+    259,
+    1,
+    mqtt_topic_suffix="timeofuse/power/4",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_260 = SingleRegisterSensor(
+    "Time of Use Power 5",
+    260,
+    1,
+    mqtt_topic_suffix="timeofuse/power/5",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_261 = SingleRegisterSensor(
+    "Time of Use Power 6",
+    261,
+    1,
+    mqtt_topic_suffix="timeofuse/power/6",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_268 = SingleRegisterSensor(
+    "Time of Use SOC 1",
+    268,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/1",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_269 = SingleRegisterSensor(
+    "Time of Use SOC 2",
+    269,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/2",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_270 = SingleRegisterSensor(
+    "Time of Use SOC 3",
+    270,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/3",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_271 = SingleRegisterSensor(
+    "Time of Use SOC 4",
+    271,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/4",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_272 = SingleRegisterSensor(
+    "Time of Use SOC 5",
+    272,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/5",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_273 = SingleRegisterSensor(
+    "Time of Use SOC 6",
+    273,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/6",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_274 = SingleRegisterSensor(
+    "Time of Use Enable 1",
+    274,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/1",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_275 = SingleRegisterSensor(
+    "Time of Use Enable 2",
+    275,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/2",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_276 = SingleRegisterSensor(
+    "Time of Use Enable 3",
+    276,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/3",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_277 = SingleRegisterSensor(
+    "Time of Use Enable 4",
+    277,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/4",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_278 = SingleRegisterSensor(
+    "Time of Use Enable 5",
+    278,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/5",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_279 = SingleRegisterSensor(
+    "Time of Use Enable 6",
+    279,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/6",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_248 = SingleRegisterSensor(
+    "Time of use",
+    248,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled",
+    unit="",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_262 = SingleRegisterSensor(
+    "Time of Use Voltage 1",
+    262,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/1",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_263 = SingleRegisterSensor(
+    "Time of Use Voltage 2",
+    263,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/2",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_264 = SingleRegisterSensor(
+    "Time of Use Voltage 3",
+    264,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/3",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_265 = SingleRegisterSensor(
+    "Time of Use Voltage 4",
+    265,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/4",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_266 = SingleRegisterSensor(
+    "Time of Use Voltage 5",
+    266,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/5",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
+deye_hybrid_time_of_use_267 = SingleRegisterSensor(
+    "Time of Use Voltage 6",
+    267,
+    0.01,
+    mqtt_topic_suffix="timeofuse/voltage/6",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_timeofuse"],
+)
+
 deye_hybrid_sensors = [
     deye_hybrid_solar_186,
     deye_hybrid_solar_187,
@@ -305,11 +615,44 @@ deye_hybrid_sensors = [
     deye_hybrid_inverter_192,
     deye_hybrid_inverter_90,
     deye_hybrid_inverter_91,
+    deye_hybrid_time_of_use_250,
+    deye_hybrid_time_of_use_251,
+    deye_hybrid_time_of_use_252,
+    deye_hybrid_time_of_use_253,
+    deye_hybrid_time_of_use_254,
+    deye_hybrid_time_of_use_255,
+    deye_hybrid_time_of_use_256,
+    deye_hybrid_time_of_use_257,
+    deye_hybrid_time_of_use_258,
+    deye_hybrid_time_of_use_259,
+    deye_hybrid_time_of_use_260,
+    deye_hybrid_time_of_use_261,
+    deye_hybrid_time_of_use_268,
+    deye_hybrid_time_of_use_269,
+    deye_hybrid_time_of_use_270,
+    deye_hybrid_time_of_use_271,
+    deye_hybrid_time_of_use_272,
+    deye_hybrid_time_of_use_273,
+    deye_hybrid_time_of_use_274,
+    deye_hybrid_time_of_use_275,
+    deye_hybrid_time_of_use_276,
+    deye_hybrid_time_of_use_277,
+    deye_hybrid_time_of_use_278,
+    deye_hybrid_time_of_use_279,
+    deye_hybrid_time_of_use_248,
+    deye_hybrid_time_of_use_262,
+    deye_hybrid_time_of_use_263,
+    deye_hybrid_time_of_use_264,
+    deye_hybrid_time_of_use_265,
+    deye_hybrid_time_of_use_266,
+    deye_hybrid_time_of_use_267,
 ]
 
 deye_hybrid_register_ranges = [
     SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=3, last_reg_address=112),
     SensorRegisterRange(group="deye_hybrid", first_reg_address=3, last_reg_address=112),
-    SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=150, last_reg_address=248),
-    SensorRegisterRange(group="deye_hybrid", first_reg_address=150, last_reg_address=248),
+    SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=150, last_reg_address=249),
+    SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=150, last_reg_address=249),
+    SensorRegisterRange(group="deye_hybrid", first_reg_address=150, last_reg_address=249),
+    SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=250, last_reg_address=279),
 ]

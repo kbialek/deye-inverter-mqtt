@@ -37,9 +37,42 @@ topics:
   167: ac/l1/ct/internal
   171: ac/l2/ct/external
   168: ac/l2/ct/internal
+  # Time of use
+  248: timeofuse/enabled
+  250: timeofuse/time/1
+  251: timeofuse/time/2
+  252: timeofuse/time/3
+  253: timeofuse/time/4
+  254: timeofuse/time/5
+  255: timeofuse/time/6
+  256: timeofuse/power/1
+  257: timeofuse/power/2
+  258: timeofuse/power/3
+  259: timeofuse/power/4
+  260: timeofuse/power/5
+  261: timeofuse/power/6
+  262: timeofuse/voltage/1
+  263: timeofuse/voltage/2
+  264: timeofuse/voltage/3
+  265: timeofuse/voltage/4
+  266: timeofuse/voltage/5
+  267: timeofuse/voltage/6
+  268: timeofuse/soc/1
+  269: timeofuse/soc/2
+  270: timeofuse/soc/3
+  271: timeofuse/soc/4
+  272: timeofuse/soc/5
+  273: timeofuse/soc/6
+  274: timeofuse/enabled/1
+  275: timeofuse/enabled/2
+  276: timeofuse/enabled/3
+  277: timeofuse/enabled/4
+  278: timeofuse/enabled/5
+  279: timeofuse/enabled/6
 groups:
   solar: ''
   grid: ''
   inverter: ''
   battery: battery
+  time of use: timeofuse
 

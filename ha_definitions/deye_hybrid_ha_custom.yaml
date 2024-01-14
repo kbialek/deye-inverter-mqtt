@@ -1,0 +1,56 @@
+parameters:
+ - group: Time of Use
+   items:
+    - name: "Time of Use Voltage 1"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x0106]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 2"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x0107]
+      icon: "mdi:timelapse"
+      
+    - name: "Time of Use Voltage 3"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x0108]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 4"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x0109]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 5"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x010A]
+      icon: "mdi:timelapse"
+
+    - name: "Time of Use Voltage 6"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x010B]
+      icon: 'mdi:timelapse'

@@ -75,7 +75,24 @@ class DeyeModbusTest(unittest.TestCase):
         )
 
         # when
-        success = sut.write_register(0x12, 0xA3D4)
+        success = sut.write_register(0x12, bytearray.fromhex("A3D4"))
+
+        # then
+        self.assertTrue(success)
+        connector.send_request.assert_called_once_with(
+            bytearray.fromhex("a51a0010450000d202964902000000000000000000000000000001100012000102a3d4dd8d2b15")
+        )
+
+    @patch("deye_connector.DeyeConnector")
+    def test_write_register_uint_0x12_to_0xa3d4(self, connector):
+        # given
+        sut = DeyeModbus(DeyeModbusTcp(self.config, connector))
+        connector.send_request.return_value = bytearray.fromhex(
+            "a5000000000000000000000000000000000000000000000000" + "011000120001a1cc" + "0015"
+        )
+
+        # when
+        success = sut.write_register_uint(0x12, 0xA3D4)
 
         # then
         self.assertTrue(success)

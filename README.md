@@ -24,9 +24,9 @@ When your inverter turns out to work well with an already exiting metrics group,
 | [Deye SUN600/800/1000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun600-800-1000g3eu230-single-phase-4-mppt-microinverter-rapid-shutdown.html)                    | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md)                                                                                                                                             |
 | [Deye SUN-M60/80/100G3-EU-Q0](https://www.deyeinverter.com/product/microinverter-1/SUN600-800-1000G3US220-EU230-6001000W-Einphasig-2-MPPT-MikroWechselrichter-Schnelles-Herunterfahren.html) | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md)                                                                                                                                             |
 | [Deye SUN1300-2000G3-US-220/EU-230](https://www.deyeinverter.com/product/microinverter-1/sun13002000g3eu230.html)                                                                            | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md)                                                                                                                                             |
-| [Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                                            | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [settings](docs/metric_group_settings.md) |
-| [Deye SUN-5/6K-SG01LP1-US/EU](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                          | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [settings](docs/metric_group_settings.md)                                                                |
-| [Deye SUN-7.6/8K-SG01LP1-US/EU](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                        | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [settings](docs/metric_group_settings.md)                                                                |
+| [Deye SUN-5/6/8/10/12K-SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                                            | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [deye_sg04lp3_timeofuse](docs/metric_group_deye_sg04lp3_timeofuse.md), [settings](docs/metric_group_settings.md) |
+| [Deye SUN-5/6K-SG01LP1-US/EU](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                          | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                |
+| [Deye SUN-7.6/8K-SG01LP1-US/EU](https://deye.com/product/sun-5-6k-sg01lp1-us-sun-7-6-8k-sg01lp1-us-eu-5-8kw-single-phase-2-mppt-hybrid-inverter-low-voltage-battery/)                        | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                |
 | [Deye SUN-25/30/40/50K-SG01HP3-EU-BM2/3/4](https://deye.com/product/sun-25-30-40-50k-sg01hp3-eu-bm2-3-4-25-50kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/) [**(experimental)**](https://github.com/kbialek/deye-inverter-mqtt/issues/110) | [deye_sg01hp3](docs/metric_group_deye_sg01hp3.md), [deye_sg01hp3_battery](docs/metric_group_deye_sg01hp3_battery.md), [deye_sg01hp3_ups](docs/metric_group_deye_sg01hp3_ups.md), [settings](docs/metric_group_settings.md) |
 
 | Meter model                                                         | Metric groups                                     |
@@ -64,6 +64,25 @@ It is possible to modify selected inverter settings over MQTT. At the moment onl
 | Setting                 |                             Topic                              | Unit | Value range | Feature flag                           |
 | ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
 | active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |    0-120    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time | 0000 - 2359 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - 8000 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/voltage/(1-6)/command` | V | 0.00 - 63.00 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | On/Off | 0,1 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
+
+#### Writing Time Of Use configuration
+
+Prerequisites:
+1. Set `DEYE_FEATURE_TIME_OF_USE` to `true`
+2. Enable time-of-use metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_timeofuse`
+
+Time Of Use configuration is modified using the following workflow:
+
+1. The service reads Time Of Use configuration from the inverter and keeps it in the memory. This step happens automatically at each data read from the inverter.
+2. You send modifications over `{MQTT_TOPIC_PREFIX}/timeofuse/*/*/command` topics as needed. See the table above for more details about used MQTT topics. These changes are not immediately written to the inverter. They are **buffered** in the service memory instead.
+3. Send `write` command to topic `{MQTT_TOPIC_PREFIX}/timeofuse/control/command`. It will build a new Time Of Use configuration by putting your changes on top of the inverter configuration present in the service memory. Next the entire Time Of Use configuration is sent to the inverter. The modifications are cleared, and you can start over sending new modifications.
+4. Alternatively send `reset` command to purge buffered modifications without writing them to the inverter.
 
 ## Additional features
 ### Automatically set logger/inverter time
@@ -192,9 +211,11 @@ All configuration options are controlled through environment variables.
     * `micro` - micro inverter
     * `deye_hybrid` - hybrid inverter
     * `deye_hybrid_battery` - hybrid inverter battery
+    * `deye_hybrid_timeofuse` - hybrid inverter time-of-use settings
     * `deye_sg04lp3` - sg04lp3 inverter
     * `deye_sg04lp3_battery` - sg04lp3 battery
     * `deye_sg04lp3_ups` - sg04lp3 ups
+    * `deye_sg04lp3_timeofuse` - sg04lp3 time-of-use settings
     * `deye_sg01hp3` - sg01hp3 inverter
     * `deye_sg01hp3_battery` - sg01hp3 battery
     * `deye_sg01hp3_ups` - sg01hp3 ups
@@ -207,6 +228,7 @@ All configuration options are controlled through environment variables.
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
 * `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
+* `DEYE_FEATURE_TIME_OF_USE` - enabled Time Of Use feature control over MQTT
 * `MQTT_HOST` - MQTT Broker IP address
 * `MQTT_PORT` - MQTT Broker port, , defaults to `1883`
 * `MQTT_USERNAME` - MQTT Broker username for authentication, defaults to `None`

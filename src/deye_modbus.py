@@ -51,8 +51,8 @@ class DeyeModbus:
             return {}
         return self.__parse_modbus_read_holding_registers_response(modbus_resp_frame, first_reg, last_reg)
 
-    def write_register(self, reg_address: int, reg_value: int) -> bool:
-        """Write single modbus holding register
+    def write_register_uint(self, reg_address: int, reg_value: int) -> bool:
+        """Write single modbus holding register, assuming the value is an unsigned int
 
         Args:
             reg_address (int): The address of the register to write
@@ -61,15 +61,40 @@ class DeyeModbus:
         Returns:
             bool: True when the write operation was successful, False otherwise
         """
+        return self.write_register(reg_address, reg_value.to_bytes(2, "big", signed=False))
+
+    def write_register(self, reg_address: int, reg_value: bytearray) -> bool:
+        """Write single modbus holding register
+
+        Args:
+            reg_address (int): The address of the register to write
+            reg_value (bytearray): The value of the register to write
+
+        Returns:
+            bool: True when the write operation was successful, False otherwise
+        """
         return self.write_registers(reg_address, [reg_value])
 
-    def write_registers(self, reg_address: int, reg_values: list[int]) -> bool:
-        """Write multiple modbus holding registers.
+    def write_registers_uint(self, reg_address: int, reg_values: list[int]) -> bool:
+        """Write multiple modbus holding registers, assuming the values are unsigned integers.
 
 
         Args:
             reg_address (int): The address of the first register to write
             reg_values (list[int]): The values of the registers to write
+
+        Returns:
+            bool: True when the write operation was successful, False otherwise
+        """
+        self.write_registers(reg_address, [v.to_bytes(2, "big", signed=False) for v in reg_values])
+
+    def write_registers(self, reg_address: int, reg_values: list[bytearray]) -> bool:
+        """Write multiple modbus holding registers.
+
+
+        Args:
+            reg_address (int): The address of the first register to write
+            reg_values (list[bytearray]): The values of the registers to write
 
         Returns:
             bool: True when the write operation was successful, False otherwise
@@ -112,15 +137,17 @@ class DeyeModbus:
             a += 1
         return registers
 
-    def __build_modbus_write_holding_register_request_frame(self, reg_address: int, reg_values: list[int]) -> bytearray:
-        return bytearray.fromhex(
-            "0110{:04x}{:04x}{:02x}{}".format(
-                reg_address, len(reg_values), len(reg_values) * 2, "".join(["{:04x}".format(v) for v in reg_values])
-            )
-        )
+    def __build_modbus_write_holding_register_request_frame(
+        self, reg_address: int, reg_values: list[bytearray]
+    ) -> bytearray:
+        result = bytearray.fromhex("0110{:04x}{:04x}{:02x}".format(reg_address, len(reg_values), len(reg_values) * 2))
+        for v in reg_values:
+            self.__log.info(f"Extending with {v}")
+            result.extend(v)
+        return result
 
     def __parse_modbus_write_holding_register_response(
-        self, frame: bytes, reg_address: int, reg_values: list[int]
+        self, frame: bytes, reg_address: int, reg_values: list[bytearray]
     ) -> bool:
         expected_frame_data_len = 6
         expected_frame_len = 6 + 2  # 2 bytes for crc

@@ -47,7 +47,38 @@ topics:
   646: ac/ups/l3/voltage
   526: ac/ups/daily_energy
   527: ac/ups/total_energy
-
+  # Time of use
+  146: timeofuse/selling
+  148: timeofuse/time/1
+  149: timeofuse/time/2
+  150: timeofuse/time/3
+  151: timeofuse/time/4
+  152: timeofuse/time/5
+  153: timeofuse/time/6
+  154: timeofuse/power/1
+  155: timeofuse/power/2
+  156: timeofuse/power/3
+  157: timeofuse/power/4
+  158: timeofuse/power/5
+  159: timeofuse/power/6
+  160: timeofuse/voltage/1
+  161: timeofuse/voltage/2
+  162: timeofuse/voltage/3
+  163: timeofuse/voltage/4
+  164: timeofuse/voltage/5
+  165: timeofuse/voltage/6
+  166: timeofuse/soc/1
+  167: timeofuse/soc/2
+  168: timeofuse/soc/3
+  169: timeofuse/soc/4
+  170: timeofuse/soc/5
+  171: timeofuse/soc/6
+  172: timeofuse/enabled/1
+  173: timeofuse/enabled/2
+  174: timeofuse/enabled/3
+  175: timeofuse/enabled/4
+  176: timeofuse/enabled/5
+  177: timeofuse/enabled/6
 
 groups:
   solar: ''
@@ -55,4 +86,4 @@ groups:
   inverter: ''
   battery: battery
   upload: ups
-
+  time of use: timeofuse
