@@ -65,7 +65,7 @@ It is possible to modify selected inverter settings over MQTT. At the moment onl
 | ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
 | active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |    0-120    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time | 0000 - 2359 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - 8000 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - max inverter power in Watts e.g. 8000, 10000 or 12000 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/voltage/(1-6)/command` | V | 0.00 - 63.00 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | On/Off | 0,1 | `DEYE_FEATURE_TIME_OF_USE` |
