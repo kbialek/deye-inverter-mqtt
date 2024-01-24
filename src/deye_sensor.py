@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import math
 from abc import abstractmethod
 
 
@@ -266,7 +267,54 @@ class SensorRegisterRange:
         """
         return self.first_reg_address == other.first_reg_address and self.last_reg_address == other.last_reg_address
 
+    @property
+    def length(self) -> int:
+        return self.last_reg_address - self.first_reg_address + 1
+
+    def split(self, sub_range_len: int) -> list["SensorRegisterRange"]:
+        """Splits this register range into sub-ranges
+
+        Args:
+            sub_range_len (int): only ranges longer than this value are splitted
+
+        Returns:
+            list[SensorRegisterRange]: created sub-ranges
+        """
+        sub_ranges: list[SensorRegisterRange] = []
+        sub_ranges_count = math.ceil(self.length / sub_range_len)
+        for i in range(0, sub_ranges_count):
+            sub_range_first_reg = self.first_reg_address + i * sub_range_len
+            sub_range_last_reg = min(sub_range_first_reg + sub_range_len - 1, self.last_reg_address)
+            sub_ranges.append(SensorRegisterRange(self.group, sub_range_first_reg, sub_range_last_reg))
+        return sub_ranges
+
     def __str__(self):
         return "metrics group: {}, range: {:04x}-{:04x}".format(
             self.group, self.first_reg_address, self.last_reg_address
         )
+
+
+class SensorRegisterRanges:
+    def __init__(self, ranges: list[SensorRegisterRange], max_range_length: int):
+        unique_ranges = SensorRegisterRanges.__remove_duplicated_reg_ranges(ranges)
+        self.ranges = SensorRegisterRanges.__split_long_reg_ranges(unique_ranges, max_range_length)
+
+    @staticmethod
+    def __split_long_reg_ranges(
+        reg_ranges: list[SensorRegisterRange], max_range_length: int
+    ) -> list[SensorRegisterRange]:
+        result: list[SensorRegisterRange] = []
+        for reg_range in reg_ranges:
+            if reg_range.length <= max_range_length:
+                result.append(reg_range)
+            else:
+                result += reg_range.split(max_range_length)
+        return result
+
+    @staticmethod
+    def __remove_duplicated_reg_ranges(reg_ranges: list[SensorRegisterRange]) -> list[SensorRegisterRange]:
+        result: list[SensorRegisterRange] = []
+        for reg_range in reg_ranges:
+            if not [r for r in result if r.is_same_range(reg_range)]:
+                result.append(reg_range)
+        return result

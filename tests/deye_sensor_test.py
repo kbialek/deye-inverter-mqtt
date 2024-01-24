@@ -23,6 +23,8 @@ from deye_sensor import (
     SingleRegisterSensor,
     SignedMagnitudeSingleRegisterSensor,
     SignedMagnitudeDoubleRegisterSensor,
+    SensorRegisterRange,
+    SensorRegisterRanges,
 )
 
 
@@ -187,6 +189,61 @@ class DeyeSensorTest(unittest.TestCase):
 
         # then
         self.assertEqual(result, {0: bytearray.fromhex("fb2e")})
+
+    def test_split_long_register_range(self):
+        # given
+        sut = SensorRegisterRange("test", 10, 50)
+
+        # when
+        result = sut.split(21)
+
+        # then
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0].length, 21)
+        self.assertEqual(result[0].first_reg_address, 10)
+        self.assertEqual(result[0].last_reg_address, 30)
+        self.assertEqual(result[1].length, 20)
+        self.assertEqual(result[1].first_reg_address, 31)
+        self.assertEqual(result[1].last_reg_address, 50)
+
+    def test_split_short_register_range(self):
+        # given
+        sut = SensorRegisterRange("test", 10, 50)
+
+        # when
+        result = sut.split(45)
+
+        # then
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].length, 41)
+        self.assertEqual(result[0].first_reg_address, 10)
+        self.assertEqual(result[0].last_reg_address, 50)
+
+    def test_prep_register_ranges(self):
+        # when
+        sut = SensorRegisterRanges(
+            ranges=[
+                SensorRegisterRange("a", 1, 10),
+                SensorRegisterRange("b", 20, 40),
+                SensorRegisterRange("c", 60, 70),
+            ],
+            max_range_length=15,
+        )
+
+        # then
+        self.assertEqual(len(sut.ranges), 4)
+        self.assertEqual(sut.ranges[0].group, "a")
+        self.assertEqual(sut.ranges[0].first_reg_address, 1)
+        self.assertEqual(sut.ranges[0].last_reg_address, 10)
+        self.assertEqual(sut.ranges[1].group, "b")
+        self.assertEqual(sut.ranges[1].first_reg_address, 20)
+        self.assertEqual(sut.ranges[1].last_reg_address, 34)
+        self.assertEqual(sut.ranges[2].group, "b")
+        self.assertEqual(sut.ranges[2].first_reg_address, 35)
+        self.assertEqual(sut.ranges[2].last_reg_address, 40)
+        self.assertEqual(sut.ranges[3].group, "c")
+        self.assertEqual(sut.ranges[3].first_reg_address, 60)
+        self.assertEqual(sut.ranges[3].last_reg_address, 70)
 
 
 if __name__ == "__main__":
