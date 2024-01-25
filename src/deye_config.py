@@ -155,7 +155,14 @@ class DeyeLoggerConfig:
     with the device.
     """
 
-    def __init__(self, serial_number: int, ip_address: str, port: int, protocol: str = "tcp"):
+    def __init__(
+        self,
+        serial_number: int,
+        ip_address: str,
+        port: int,
+        protocol: str = "tcp",
+        max_register_range_length: int = 256,
+    ):
         self.serial_number = serial_number
         self.ip_address = ip_address
         if protocol not in ["tcp", "at"]:
@@ -167,6 +174,7 @@ class DeyeLoggerConfig:
             self.port = 48899
         else:
             self.port = port
+        self.max_register_range_length = max_register_range_length
 
     @staticmethod
     def from_env():
@@ -175,6 +183,7 @@ class DeyeLoggerConfig:
             ip_address=DeyeEnv.string("DEYE_LOGGER_IP_ADDRESS"),
             port=DeyeEnv.integer("DEYE_LOGGER_PORT", 0),
             protocol=DeyeEnv.string("DEYE_LOGGER_PROTOCOL", "tcp"),
+            max_register_range_length=DeyeEnv.integer("DEYE_LOGGER_MAX_REG_RANGE_LENGTH", 256),
         )
 
 

@@ -50,7 +50,9 @@ class DeyeDaemon:
         self.modbus = DeyeModbus(connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
-        self.reg_ranges = SensorRegisterRanges(reg_ranges, max_range_length=0x40).ranges
+        self.reg_ranges = SensorRegisterRanges(
+            reg_ranges, max_range_length=config.logger.max_register_range_length
+        ).ranges
 
         mqtt_client = DeyeMqttClient(self.__config)
 
