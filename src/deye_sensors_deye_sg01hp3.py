@@ -542,7 +542,7 @@ deye_sg01hp3_bms2_241 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/charging_voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_242 = SingleRegisterSensor(
@@ -552,7 +552,7 @@ deye_sg01hp3_bms2_242 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/discharge_voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_243 = SingleRegisterSensor(
@@ -562,7 +562,7 @@ deye_sg01hp3_bms2_243 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/charge_current_limit",
     unit="A",
     signed=False,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_244 = SingleRegisterSensor(
@@ -572,7 +572,7 @@ deye_sg01hp3_bms2_244 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/discharge_current_limit",
     unit="A",
     signed=False,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_245 = SingleRegisterSensor(
@@ -582,7 +582,7 @@ deye_sg01hp3_bms2_245 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/soc",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_246 = SingleRegisterSensor(
@@ -592,7 +592,7 @@ deye_sg01hp3_bms2_246 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_247 = SingleRegisterSensor(
@@ -602,7 +602,7 @@ deye_sg01hp3_bms2_247 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_248 = SingleRegisterSensor(
@@ -613,7 +613,7 @@ deye_sg01hp3_bms2_248 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/temp",
     unit="°C",
     signed=True,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_249 = SingleRegisterSensor(
@@ -623,7 +623,7 @@ deye_sg01hp3_bms2_249 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/charging_max_current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 deye_sg01hp3_bms2_250 = SingleRegisterSensor(
@@ -633,7 +633,7 @@ deye_sg01hp3_bms2_250 = SingleRegisterSensor(
     mqtt_topic_suffix="bms2/discharge_max_current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms2"],
+    groups=["deye_sg01hp3_bms"],
 )
 
 
@@ -728,5 +728,5 @@ deye_sg01hp3_register_ranges = [
     SensorRegisterRange(group="deye_sg01hp3_ups", first_reg_address=644, last_reg_address=653),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=672, last_reg_address=683),
     SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=210, last_reg_address=219),
-    SensorRegisterRange(group="deye_sg01hp3_bms2", first_reg_address=241, last_reg_address=250),
+    SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=241, last_reg_address=250),
 ]
