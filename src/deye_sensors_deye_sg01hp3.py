@@ -117,54 +117,60 @@ deye_sg01hp3_battery_518 = DoubleRegisterSensor(
     groups=["deye_sg01hp3_battery"],
 )
 
-deye_sg01hp3_battery_590 = SingleRegisterSensor(
-    "Battery Power", 590, 10, mqtt_topic_suffix="battery/power", unit="W", signed=True, groups=["deye_sg01hp3_battery"]
+deye_sg01hp3_battery1_590 = SingleRegisterSensor(
+    "Battery1 Power",
+    590,
+    10,
+    mqtt_topic_suffix="battery/1/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_battery"],
 )
 
-deye_sg01hp3_battery_587 = SingleRegisterSensor(
-    "Battery Voltage",
+deye_sg01hp3_battery1_587 = SingleRegisterSensor(
+    "Battery1 Voltage",
     587,
     0.1,
-    mqtt_topic_suffix="battery/voltage",
+    mqtt_topic_suffix="battery/1/voltage",
     unit="V",
     signed=False,
     groups=["deye_sg01hp3_battery"],
 )
 
-deye_sg01hp3_battery_588 = SingleRegisterSensor(
-    "Battery SOC", 588, 1, mqtt_topic_suffix="battery/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
+deye_sg01hp3_battery1_588 = SingleRegisterSensor(
+    "Battery1 SOC", 588, 1, mqtt_topic_suffix="battery/1/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
 )
 
-deye_sg01hp3_battery_591 = SingleRegisterSensor(
-    "Battery Current",
+deye_sg01hp3_battery1_591 = SingleRegisterSensor(
+    "Battery1 Current",
     591,
     0.01,
-    mqtt_topic_suffix="battery/current",
+    mqtt_topic_suffix="battery/1/current",
     unit="A",
     signed=True,
     groups=["deye_sg01hp3_battery"],
 )
 
-deye_sg01hp3_battery_586 = SingleRegisterSensor(
-    "Battery Temperature",
+deye_sg01hp3_battery1_586 = SingleRegisterSensor(
+    "Battery1 Temperature",
     586,
     0.1,
     offset=-100.0,
-    mqtt_topic_suffix="battery/temperature",
+    mqtt_topic_suffix="battery/1/temperature",
     unit="°C",
     signed=False,
     groups=["deye_sg01hp3_battery"],
 )
 
 deye_sg01hp3_battery2_589 = SingleRegisterSensor(
-    "Battery2 SOC", 589, 1, mqtt_topic_suffix="battery2/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
+    "Battery2 SOC", 589, 1, mqtt_topic_suffix="battery/2/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
 )
 
 deye_sg01hp3_battery2_593 = SingleRegisterSensor(
     "Battery2 Voltage",
     593,
     0.1,
-    mqtt_topic_suffix="battery2/voltage",
+    mqtt_topic_suffix="battery/2/voltage",
     unit="V",
     signed=False,
     groups=["deye_sg01hp3_battery"],
@@ -174,7 +180,7 @@ deye_sg01hp3_battery2_594 = SingleRegisterSensor(
     "Battery2 Current",
     594,
     0.01,
-    mqtt_topic_suffix="battery2/current",
+    mqtt_topic_suffix="battery/2/current",
     unit="A",
     signed=True,
     groups=["deye_sg01hp3_battery"],
@@ -184,17 +190,17 @@ deye_sg01hp3_battery2_595 = SingleRegisterSensor(
     "Battery2 Power",
     595,
     10,
-    mqtt_topic_suffix="battery2/power",
+    mqtt_topic_suffix="battery/2/power",
     unit="W",
     signed=True,
     groups=["deye_sg01hp3_battery"],
 )
 
 deye_sg01hp3_battery2_596 = SingleRegisterSensor(
-    "Battery Temperature",
+    "Battery2 Temperature",
     596,
     0.1,
-    mqtt_topic_suffix="battery2/temperature",
+    mqtt_topic_suffix="battery/2/temperature",
     unit="°C",
     signed=True,
     groups=["deye_sg01hp3_battery"],
@@ -676,11 +682,11 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_battery_515,
     deye_sg01hp3_battery_516,
     deye_sg01hp3_battery_518,
-    deye_sg01hp3_battery_590,
-    deye_sg01hp3_battery_587,
-    deye_sg01hp3_battery_588,
-    deye_sg01hp3_battery_591,
-    deye_sg01hp3_battery_586,
+    deye_sg01hp3_battery1_590,
+    deye_sg01hp3_battery1_587,
+    deye_sg01hp3_battery1_588,
+    deye_sg01hp3_battery1_591,
+    deye_sg01hp3_battery1_586,
     deye_sg01hp3_battery2_589,
     deye_sg01hp3_battery2_593,
     deye_sg01hp3_battery2_594,
