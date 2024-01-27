@@ -200,6 +200,11 @@ In order to do this run the following commands:
    1. `Connected to <ip>` - connection works fine. The next step is to enable DEBUG logs in `config.env` and open a github issue
    2. `telnet: can't connect to remote host (<ip>): Connection refused` - The next step is: fix your network configuration
 
+#### Random read timeouts 
+
+For best performance, multiple Modbus registers are read at once, in so called register ranges. It's been reported [here](https://github.com/kbialek/deye-inverter-mqtt/issues/141) that Deye-SUN-5K-SG03LP1 reading times out when more than 16 registers is requested at once. To mitigate this problem you may try to set `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` to lower number.
+
+
 ## Configuration
 All configuration options are controlled through environment variables.
 
@@ -227,6 +232,7 @@ All configuration options are controlled through environment variables.
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, optional, defaults to 8899 for Modbus/TCP, and 48899 for Modbus/AT
 * `DEYE_LOGGER_PROTOCOL` - inverter communication protocol, optional, either `tcp` for Modbus/TCP, or `at` for Modbus/AT, defaults to `tcp`
+* `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` - controls maximum number of registers to be read in a single Modbus registers read operation, defaults to 256
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
 * `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
