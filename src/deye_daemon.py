@@ -30,7 +30,7 @@ from deye_mqtt_publisher import DeyeMqttPublisher
 from deye_mqtt_subscriber import DeyeMqttSubscriber
 from deye_observation import Observation
 from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
-from deye_sensor import SensorRegisterRange
+from deye_sensor import SensorRegisterRanges
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
 from deye_command_handlers import DeyeActivePowerRegulationCommandHandler
@@ -49,8 +49,10 @@ class DeyeDaemon:
         connector = DeyeConnectorFactory(config).create_connector()
         self.modbus = DeyeModbus(connector)
         self.sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
-        self.reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
-        self.reg_ranges = self.__remove_duplicated_reg_ranges(self.reg_ranges)
+        reg_ranges = [r for r in sensor_register_ranges if r.in_any_group(self.__config.metric_groups)]
+        self.reg_ranges = SensorRegisterRanges(
+            reg_ranges, max_range_length=config.logger.max_register_range_length
+        ).ranges
 
         mqtt_client = DeyeMqttClient(self.__config)
 
@@ -119,13 +121,6 @@ class DeyeDaemon:
                 events.append(DeyeObservationEvent(observation))
                 self.__log.debug(f"{observation.sensor.name}: {observation.value_as_str()}")
         return events
-
-    def __remove_duplicated_reg_ranges(self, reg_ranges: list[SensorRegisterRange]) -> list[SensorRegisterRange]:
-        result: list[SensorRegisterRange] = []
-        for reg_range in reg_ranges:
-            if not [r for r in result if r.is_same_range(reg_range)]:
-                result.append(reg_range)
-        return result
 
     def __is_device_observation_changed(self, events: DeyeEventList) -> bool:
         """Check if the received event observations have changed compared to last published
