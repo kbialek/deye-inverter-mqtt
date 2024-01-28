@@ -232,18 +232,35 @@ class DeyeSensorTest(unittest.TestCase):
 
         # then
         self.assertEqual(len(sut.ranges), 4)
-        self.assertEqual(sut.ranges[0].group, "a")
+        self.assertEqual(sut.ranges[0].group, {"a"})
         self.assertEqual(sut.ranges[0].first_reg_address, 1)
         self.assertEqual(sut.ranges[0].last_reg_address, 10)
-        self.assertEqual(sut.ranges[1].group, "b")
+        self.assertEqual(sut.ranges[1].group, {"b"})
         self.assertEqual(sut.ranges[1].first_reg_address, 20)
         self.assertEqual(sut.ranges[1].last_reg_address, 34)
-        self.assertEqual(sut.ranges[2].group, "b")
+        self.assertEqual(sut.ranges[2].group, {"b"})
         self.assertEqual(sut.ranges[2].first_reg_address, 35)
         self.assertEqual(sut.ranges[2].last_reg_address, 40)
-        self.assertEqual(sut.ranges[3].group, "c")
+        self.assertEqual(sut.ranges[3].group, {"c"})
         self.assertEqual(sut.ranges[3].first_reg_address, 60)
         self.assertEqual(sut.ranges[3].last_reg_address, 70)
+
+    def test_registry_range_single_group_name(self):
+        # given
+        sut = SensorRegisterRange("a", 1, 2)
+
+        # expect
+        self.assertTrue(sut.in_any_group({"a"}))
+        self.assertFalse(sut.in_any_group({"b"}))
+
+    def test_registry_range_multiple_groups_names(self):
+        # given
+        sut = SensorRegisterRange({"a", "b"}, 1, 2)
+
+        # expect
+        self.assertTrue(sut.in_any_group({"a"}))
+        self.assertTrue(sut.in_any_group({"b"}))
+        self.assertFalse(sut.in_any_group({"c"}))
 
 
 if __name__ == "__main__":

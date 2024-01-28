@@ -245,8 +245,8 @@ class SensorRegisterRange:
     Declares a Modbus register range that must be read to provide values for sensors within a metrics group
     """
 
-    def __init__(self, group: str, first_reg_address: int, last_reg_address: int):
-        self.group = group
+    def __init__(self, group: str | set[str], first_reg_address: int, last_reg_address: int):
+        self.group = group if type(group) == set else {group}
         self.first_reg_address = first_reg_address
         self.last_reg_address = last_reg_address
 
@@ -254,7 +254,7 @@ class SensorRegisterRange:
         """
         Checks if this range is included in at least one of the given active_groups.
         """
-        return self.group in active_groups
+        return len(self.group.intersection(active_groups)) > 0
 
     def is_same_range(self, other: "SensorRegisterRange") -> bool:
         """Checks if the other range has this same first and last reg address.
