@@ -117,42 +117,92 @@ deye_sg01hp3_battery_518 = DoubleRegisterSensor(
     groups=["deye_sg01hp3_battery"],
 )
 
-deye_sg01hp3_battery_590 = SingleRegisterSensor(
-    "Battery Power", 590, 10, mqtt_topic_suffix="battery/power", unit="W", signed=True, groups=["deye_sg01hp3_battery"]
+deye_sg01hp3_battery1_590 = SingleRegisterSensor(
+    "Battery1 Power",
+    590,
+    10,
+    mqtt_topic_suffix="battery/1/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_battery"],
 )
 
-deye_sg01hp3_battery_587 = SingleRegisterSensor(
-    "Battery Voltage",
+deye_sg01hp3_battery1_587 = SingleRegisterSensor(
+    "Battery1 Voltage",
     587,
     0.1,
-    mqtt_topic_suffix="battery/voltage",
+    mqtt_topic_suffix="battery/1/voltage",
     unit="V",
     signed=False,
     groups=["deye_sg01hp3_battery"],
 )
 
-deye_sg01hp3_battery_588 = SingleRegisterSensor(
-    "Battery SOC", 588, 1, mqtt_topic_suffix="battery/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
+deye_sg01hp3_battery1_588 = SingleRegisterSensor(
+    "Battery1 SOC", 588, 1, mqtt_topic_suffix="battery/1/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
 )
 
-deye_sg01hp3_battery_591 = SingleRegisterSensor(
-    "Battery Current",
+deye_sg01hp3_battery1_591 = SingleRegisterSensor(
+    "Battery1 Current",
     591,
     0.01,
-    mqtt_topic_suffix="battery/current",
+    mqtt_topic_suffix="battery/1/current",
     unit="A",
     signed=True,
     groups=["deye_sg01hp3_battery"],
 )
 
-deye_sg01hp3_battery_586 = SingleRegisterSensor(
-    "Battery Temperature",
+deye_sg01hp3_battery1_586 = SingleRegisterSensor(
+    "Battery1 Temperature",
     586,
     0.1,
     offset=-100.0,
-    mqtt_topic_suffix="battery/temperature",
+    mqtt_topic_suffix="battery/1/temperature",
     unit="°C",
     signed=False,
+    groups=["deye_sg01hp3_battery"],
+)
+
+deye_sg01hp3_battery2_589 = SingleRegisterSensor(
+    "Battery2 SOC", 589, 1, mqtt_topic_suffix="battery/2/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
+)
+
+deye_sg01hp3_battery2_593 = SingleRegisterSensor(
+    "Battery2 Voltage",
+    593,
+    0.1,
+    mqtt_topic_suffix="battery/2/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_battery"],
+)
+
+deye_sg01hp3_battery2_594 = SingleRegisterSensor(
+    "Battery2 Current",
+    594,
+    0.01,
+    mqtt_topic_suffix="battery/2/current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3_battery"],
+)
+
+deye_sg01hp3_battery2_595 = SingleRegisterSensor(
+    "Battery2 Power",
+    595,
+    10,
+    mqtt_topic_suffix="battery/2/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_battery"],
+)
+
+deye_sg01hp3_battery2_596 = SingleRegisterSensor(
+    "Battery2 Temperature",
+    596,
+    0.1,
+    mqtt_topic_suffix="battery/2/temperature",
+    unit="°C",
+    signed=True,
     groups=["deye_sg01hp3_battery"],
 )
 
@@ -278,7 +328,7 @@ deye_sg01hp3_upload_653 = SingleRegisterSensor(
     1,
     mqtt_topic_suffix="ac/ups/total_power",
     unit="W",
-    signed=True,
+    signed=False,
     groups=["deye_sg01hp3_ups"],
 )
 
@@ -390,6 +440,209 @@ deye_sg01hp3_inverter_541 = SingleRegisterSensor(
     groups=["deye_sg01hp3"],
 )
 
+deye_sg01hp3_bms1_210 = SingleRegisterSensor(
+    "BMS1 Charging Voltage",
+    210,
+    0.1,
+    mqtt_topic_suffix="bms/1/charging_voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_211 = SingleRegisterSensor(
+    "BMS1 Discharge Voltage",
+    211,
+    0.1,
+    mqtt_topic_suffix="bms/1/discharge_voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_212 = SingleRegisterSensor(
+    "BMS1 Charge Current Limit",
+    212,
+    1,
+    mqtt_topic_suffix="bms/1/charge_current_limit",
+    unit="A",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_213 = SingleRegisterSensor(
+    "BMS1 Discharge Current Limit",
+    213,
+    1,
+    mqtt_topic_suffix="bms/1/discharge_current_limit",
+    unit="A",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_214 = SingleRegisterSensor(
+    "BMS1 SOC",
+    214,
+    1,
+    mqtt_topic_suffix="bms/1/soc",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_215 = SingleRegisterSensor(
+    "BMS1 Voltage",
+    215,
+    0.1,
+    mqtt_topic_suffix="bms/1/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_216 = SingleRegisterSensor(
+    "BMS1 Current",
+    216,
+    0.1,
+    mqtt_topic_suffix="bms/1/current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_217 = SingleRegisterSensor(
+    "BMS1 Temp",
+    217,
+    0.1,
+    offset=-100.0,
+    mqtt_topic_suffix="bms/1/temp",
+    unit="°C",
+    signed=True,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_218 = SingleRegisterSensor(
+    "BMS1 Charging Max Current",
+    218,
+    1,
+    mqtt_topic_suffix="bms/1/charging_max_current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms1_219 = SingleRegisterSensor(
+    "BMS1 Discharge Max Current",
+    219,
+    1,
+    mqtt_topic_suffix="bms/1/discharge_max_current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_241 = SingleRegisterSensor(
+    "BMS2 Charging Voltage",
+    241,
+    0.1,
+    mqtt_topic_suffix="bms/2/charging_voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_242 = SingleRegisterSensor(
+    "BMS2 Discharge Voltage",
+    242,
+    0.1,
+    mqtt_topic_suffix="bms/2/discharge_voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_243 = SingleRegisterSensor(
+    "BMS2 Charge Current Limit",
+    243,
+    1,
+    mqtt_topic_suffix="bms/2/charge_current_limit",
+    unit="A",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_244 = SingleRegisterSensor(
+    "BMS2 Discharge Current Limit",
+    244,
+    1,
+    mqtt_topic_suffix="bms/2/discharge_current_limit",
+    unit="A",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_245 = SingleRegisterSensor(
+    "BMS2 SOC",
+    245,
+    1,
+    mqtt_topic_suffix="bms/2/soc",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_246 = SingleRegisterSensor(
+    "BMS2 Voltage",
+    246,
+    0.1,
+    mqtt_topic_suffix="bms/2/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_247 = SingleRegisterSensor(
+    "BMS2 Current",
+    247,
+    0.1,
+    mqtt_topic_suffix="bms/2/current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_248 = SingleRegisterSensor(
+    "BMS2 Temp",
+    248,
+    0.1,
+    offset=-100.0,
+    mqtt_topic_suffix="bms/2/temp",
+    unit="°C",
+    signed=True,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_249 = SingleRegisterSensor(
+    "BMS2 Charging Max Current",
+    249,
+    1,
+    mqtt_topic_suffix="bms/2/charging_max_current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3_bms"],
+)
+
+deye_sg01hp3_bms2_250 = SingleRegisterSensor(
+    "BMS2 Discharge Max Current",
+    250,
+    1,
+    mqtt_topic_suffix="bms/2/discharge_max_current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3_bms"],
+)
+
+
 deye_sg01hp3_sensors = [
     deye_sg01hp3_solar_672,
     deye_sg01hp3_solar_673,
@@ -405,15 +658,40 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_solar_683,
     deye_sg01hp3_solar_529,
     deye_sg01hp3_solar_534,
+    deye_sg01hp3_bms1_210,
+    deye_sg01hp3_bms1_211,
+    deye_sg01hp3_bms1_212,
+    deye_sg01hp3_bms1_213,
+    deye_sg01hp3_bms1_214,
+    deye_sg01hp3_bms1_215,
+    deye_sg01hp3_bms1_216,
+    deye_sg01hp3_bms1_217,
+    deye_sg01hp3_bms1_218,
+    deye_sg01hp3_bms1_219,
+    deye_sg01hp3_bms2_241,
+    deye_sg01hp3_bms2_242,
+    deye_sg01hp3_bms2_243,
+    deye_sg01hp3_bms2_244,
+    deye_sg01hp3_bms2_245,
+    deye_sg01hp3_bms2_246,
+    deye_sg01hp3_bms2_247,
+    deye_sg01hp3_bms2_248,
+    deye_sg01hp3_bms2_249,
+    deye_sg01hp3_bms2_250,
     deye_sg01hp3_battery_514,
     deye_sg01hp3_battery_515,
     deye_sg01hp3_battery_516,
     deye_sg01hp3_battery_518,
-    deye_sg01hp3_battery_590,
-    deye_sg01hp3_battery_587,
-    deye_sg01hp3_battery_588,
-    deye_sg01hp3_battery_591,
-    deye_sg01hp3_battery_586,
+    deye_sg01hp3_battery1_590,
+    deye_sg01hp3_battery1_587,
+    deye_sg01hp3_battery1_588,
+    deye_sg01hp3_battery1_591,
+    deye_sg01hp3_battery1_586,
+    deye_sg01hp3_battery2_589,
+    deye_sg01hp3_battery2_593,
+    deye_sg01hp3_battery2_594,
+    deye_sg01hp3_battery2_595,
+    deye_sg01hp3_battery2_596,
     deye_sg01hp3_grid_625,
     deye_sg01hp3_grid_598,
     deye_sg01hp3_grid_599,
@@ -451,8 +729,10 @@ deye_sg01hp3_register_ranges = [
     SensorRegisterRange(group="deye_sg01hp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3_battery", first_reg_address=514, last_reg_address=558),
-    SensorRegisterRange(group="deye_sg01hp3_battery", first_reg_address=586, last_reg_address=591),
+    SensorRegisterRange(group="deye_sg01hp3_battery", first_reg_address=586, last_reg_address=596),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=598, last_reg_address=636),
     SensorRegisterRange(group="deye_sg01hp3_ups", first_reg_address=644, last_reg_address=653),
-    SensorRegisterRange(group="deye_sg01hp3", first_reg_address=672, last_reg_address=679),
+    SensorRegisterRange(group="deye_sg01hp3", first_reg_address=672, last_reg_address=683),
+    SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=210, last_reg_address=219),
+    SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=241, last_reg_address=250),
 ]
