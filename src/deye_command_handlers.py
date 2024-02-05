@@ -24,16 +24,6 @@ from deye_events import DeyeEventProcessor
 from paho.mqtt.client import Client, MQTTMessage
 
 
-class DeyeCommandHandler:
-    def __init__(self, id: str, config: DeyeConfig, mqtt_client: DeyeMqttClient):
-        self.id = id
-        self.__config = config
-        self.__mqtt_client = mqtt_client
-
-    def initialize(self):
-        pass
-
-
 class DeyeActivePowerRegulationCommandHandler(DeyeEventProcessor):
     def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus):
         self.__log = logging.getLogger(DeyeActivePowerRegulationCommandHandler.__name__)
