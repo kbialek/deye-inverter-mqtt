@@ -27,7 +27,6 @@ from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEve
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
 from deye_observation import Observation
-from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_sensor import SensorRegisterRanges
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_processor_factory import DeyeProcessorFactory
@@ -52,15 +51,7 @@ class DeyeDaemon:
 
         mqtt_client = DeyeMqttClient(self.__config)
 
-        plugin_context = DeyePluginContext(config, mqtt_client)
-        plugin_loader = DeyePluginLoader(config)
-        plugin_loader.load_plugins(plugin_context)
-
-        processor_factory = DeyeProcessorFactory(self.__config, mqtt_client)
-
-        self.processors = (
-            processor_factory.create_processors(self.modbus, self.sensors) + plugin_loader.get_event_processors()
-        )
+        self.processors = DeyeProcessorFactory(self.__config, mqtt_client).create_processors(self.modbus, self.sensors)
 
         self.__last_observations = DeyeEventList()
         self.__event_updated = time.time()
