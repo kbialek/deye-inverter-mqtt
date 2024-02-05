@@ -127,3 +127,6 @@ class DeyeMqttClient:
             return topic.replace(prefix, "").replace(suffix, "")
         else:
             return None
+
+    def subscribe_command_handler(self, mqtt_topic_suffix: str, handler_method):
+        self.subscribe(f"{self.__config.topic_prefix}/{mqtt_topic_suffix}/command", handler_method)

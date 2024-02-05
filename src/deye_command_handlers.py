@@ -32,18 +32,16 @@ class DeyeCommandHandler:
     def initialize(self):
         pass
 
-    def _subscribe(self, mqtt_topic_suffix: str, handler_method):
-        self.__mqtt_client.subscribe(f"{self.__config.mqtt.topic_prefix}/{mqtt_topic_suffix}/command", handler_method)
-
 
 class DeyeActivePowerRegulationCommandHandler(DeyeCommandHandler):
     def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus):
         super().__init__("active_power_regulation", config, mqtt_client)
         self.__log = logging.getLogger(DeyeActivePowerRegulationCommandHandler.__name__)
+        self.__mqtt_client = mqtt_client
         self.__modbus = modbus
 
     def initialize(self):
-        self._subscribe("settings/active_power_regulation", self.handle_command)
+        self.__mqtt_client.subscribe_command_handler("settings/active_power_regulation", self.handle_command)
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
         try:

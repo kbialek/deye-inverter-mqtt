@@ -46,9 +46,9 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
         if self.__sensor_map:
             return
         for sensor in self.__sensors:
-            self._subscribe(sensor.mqtt_topic_suffix, self.handle_command)
+            self.__mqtt_client.subscribe_command_handler(sensor.mqtt_topic_suffix, self.handle_command)
             self.__sensor_map[sensor.mqtt_topic_suffix] = sensor
-        self._subscribe("timeofuse/control", self.handle_control_command)
+        self.__mqtt_client.subscribe_command_handler("timeofuse/control", self.handle_control_command)
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
         sensor_topic_suffix = self.__mqtt_client.extract_command_topic_suffix(msg.topic)

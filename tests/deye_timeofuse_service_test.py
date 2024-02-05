@@ -89,7 +89,7 @@ class TestDeyeTimeOfUseService:
         mqtt_config_mock.topic_prefix = "deye"
 
         # and: do not forward subscribe calls to the wrapped client
-        mqtt_client_mock.subscribe.return_value = None
+        mqtt_client_mock.subscribe_command_handler.return_value = None
 
         # and
         sensors = [sensor_time_1, sensor_time_2, sensor_time_3]
