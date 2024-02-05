@@ -86,6 +86,11 @@ class DeyeDaemon:
                 "enabled" if time_of_use_service.get_id() in config.active_processors else "disabled"
             )
         )
+        self.__log.info(
+            'Feature "Active power regulation over MQTT": {}'.format(
+                "enabled" if active_power_regulation.get_id() in config.active_processors else "disabled"
+            )
+        )
         self.__last_observations = DeyeEventList()
         self.__event_updated = time.time()
 
