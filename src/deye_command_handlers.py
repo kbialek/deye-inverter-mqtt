@@ -20,6 +20,7 @@ import logging
 from deye_mqtt import DeyeMqttClient
 from deye_modbus import DeyeModbus
 from deye_config import DeyeConfig
+from deye_events import DeyeEventProcessor
 from paho.mqtt.client import Client, MQTTMessage
 
 
@@ -33,12 +34,14 @@ class DeyeCommandHandler:
         pass
 
 
-class DeyeActivePowerRegulationCommandHandler(DeyeCommandHandler):
+class DeyeActivePowerRegulationCommandHandler(DeyeEventProcessor):
     def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus):
-        super().__init__("active_power_regulation", config, mqtt_client)
         self.__log = logging.getLogger(DeyeActivePowerRegulationCommandHandler.__name__)
         self.__mqtt_client = mqtt_client
         self.__modbus = modbus
+
+    def get_id(self):
+        return "active_power_regulation"
 
     def initialize(self):
         self.__mqtt_client.subscribe_command_handler("settings/active_power_regulation", self.handle_command)

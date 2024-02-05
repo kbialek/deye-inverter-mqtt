@@ -20,7 +20,6 @@ import logging
 from deye_config import DeyeConfig
 from deye_mqtt import DeyeMqttClient
 from deye_modbus import DeyeModbus
-from deye_command_handlers import DeyeCommandHandler
 from deye_sensor import Sensor
 from deye_observation import Observation
 from deye_events import DeyeEventProcessor, DeyeEventList, DeyeObservationEvent
@@ -28,9 +27,8 @@ from deye_events import DeyeEventProcessor, DeyeEventList, DeyeObservationEvent
 from paho.mqtt.client import Client, MQTTMessage
 
 
-class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
+class DeyeTimeOfUseService(DeyeEventProcessor):
     def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, sensors: list[Sensor], modbus: DeyeModbus):
-        super().__init__("time_of_use", config, mqtt_client)
         self.__log = logging.getLogger(DeyeTimeOfUseService.__name__)
         self.__mqtt_client = mqtt_client
         self.__sensors = [sensor for sensor in sensors if sensor.mqtt_topic_suffix.startswith("timeofuse")]
