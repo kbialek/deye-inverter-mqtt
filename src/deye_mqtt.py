@@ -119,3 +119,11 @@ class DeyeMqttClient:
         value = "online" if is_online else "offline"
         self.__do_publish(mqtt_topic, value)
         self.__log.info("Logger is %s", value)
+
+    def extract_command_topic_suffix(self, topic: str) -> str | None:
+        prefix = f"{self.__config.topic_prefix}/"
+        suffix = "/command"
+        if topic.startswith(prefix) and topic.endswith(suffix):
+            return topic.replace(prefix, "").replace(suffix, "")
+        else:
+            return None

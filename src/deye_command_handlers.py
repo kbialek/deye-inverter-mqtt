@@ -25,7 +25,6 @@ from paho.mqtt.client import Client, MQTTMessage
 
 class DeyeCommandHandler:
     def __init__(self, id: str, config: DeyeConfig, mqtt_client: DeyeMqttClient):
-        self.__log = logging.getLogger(DeyeCommandHandler.__name__)
         self.id = id
         self.__config = config
         self.__mqtt_client = mqtt_client
@@ -35,14 +34,6 @@ class DeyeCommandHandler:
 
     def _subscribe(self, mqtt_topic_suffix: str, handler_method):
         self.__mqtt_client.subscribe(f"{self.__config.mqtt.topic_prefix}/{mqtt_topic_suffix}/command", handler_method)
-
-    def _extract_topic_suffix(self, topic: str) -> str | None:
-        prefix = f"{self.__config.mqtt.topic_prefix}/"
-        suffix = "/command"
-        if topic.startswith(prefix) and topic.endswith(suffix):
-            return topic.replace(prefix, "").replace(suffix, "")
-        else:
-            return None
 
 
 class DeyeActivePowerRegulationCommandHandler(DeyeCommandHandler):

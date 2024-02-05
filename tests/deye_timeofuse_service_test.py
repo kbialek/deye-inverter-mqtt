@@ -23,7 +23,7 @@ from deye_timeofuse_service import DeyeTimeOfUseService
 from deye_events import DeyeEventList, DeyeObservationEvent
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
-from deye_config import DeyeConfig, DeyeMqttConfig
+from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig, DeyeMqttTlsConfig
 from deye_observation import Observation
 import deye_sensors_deye_sg04lp3
 
@@ -40,20 +40,25 @@ class TestDeyeTimeOfUseService:
 
     @staticmethod
     @pytest.fixture
-    def mqtt_client_mock(mocker) -> DeyeMqttClient:
-        return mocker.Mock(spec=DeyeMqttClient)
-
-    @staticmethod
-    @pytest.fixture
     def mqtt_config_mock(mocker) -> DeyeMqttConfig:
-        return mocker.Mock(spec=DeyeMqttConfig)
+        return mocker.Mock(wraps=DeyeMqttConfig(host="", port=0, username="", password="", topic_prefix=""))
 
     @staticmethod
     @pytest.fixture
-    def config_mock(mocker, mqtt_config_mock) -> DeyeConfig:
-        mock = mocker.Mock(spec=DeyeConfig)
-        mock.mqtt = mqtt_config_mock
+    def logger_config_mock(mocker) -> DeyeLoggerConfig:
+        mock = mocker.Mock(spec=DeyeLoggerConfig)
+        mock.serial_number = 123
         return mock
+
+    @staticmethod
+    @pytest.fixture
+    def config_mock(logger_config_mock, mqtt_config_mock) -> DeyeConfig:
+        return DeyeConfig(logger_config=logger_config_mock, mqtt=mqtt_config_mock)
+
+    @staticmethod
+    @pytest.fixture
+    def mqtt_client_mock(mocker, config_mock) -> DeyeMqttClient:
+        return mocker.Mock(wraps=DeyeMqttClient(config_mock))
 
     def test_process_events_to_build_read_state(self, config_mock, mqtt_client_mock, modbus_mock):
         # given
@@ -79,9 +84,12 @@ class TestDeyeTimeOfUseService:
         assert sut.read_state[sensor_time_2] == "700.0"
         assert sut.read_state[sensor_time_3] == "1000.0"
 
-    def test_handle_modification_command(self, config_mock, mqtt_client_mock, modbus_mock):
+    def test_handle_modification_command(self, config_mock, mqtt_client_mock, mqtt_config_mock, modbus_mock):
         # given
-        config_mock.mqtt.topic_prefix = "deye"
+        mqtt_config_mock.topic_prefix = "deye"
+
+        # and: do not forward subscribe calls to the wrapped client
+        mqtt_client_mock.subscribe.return_value = None
 
         # and
         sensors = [sensor_time_1, sensor_time_2, sensor_time_3]
