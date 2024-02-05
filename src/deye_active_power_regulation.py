@@ -33,6 +33,9 @@ class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
     def get_id(self):
         return "active_power_regulation"
 
+    def get_description(self):
+        return "Active power regulation over MQTT"
+
     def initialize(self):
         self.__mqtt_client.subscribe_command_handler("settings/active_power_regulation", self.handle_command)
 

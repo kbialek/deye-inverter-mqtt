@@ -40,6 +40,9 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
     def get_id(self):
         return "time_of_use"
 
+    def get_description(self):
+        return "Time-of-use configuration over MQTT"
+
     def initialize(self):
         if self.__sensor_map:
             return

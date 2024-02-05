@@ -60,4 +60,5 @@ class DeyePluginLoader:
             event_processors.extend(plugin.get_event_processors())
         for event_processor in event_processors:
             self.__log.info("Loading custom event processor: '%s'", event_processor.get_id())
+            event_processor.initialize()
         return event_processors

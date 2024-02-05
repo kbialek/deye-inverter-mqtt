@@ -137,11 +137,17 @@ class DeyeEventProcessor:
         pass
 
     @abstractmethod
-    def get_id(self):
+    def get_id(self) -> str:
         """
         The ID is used to activate the processor in the configuration
         """
         pass
+
+    def get_description(self) -> str:
+        """
+        The description of the processor to be printed out in the logs
+        """
+        return ""
 
     @abstractmethod
     def process(self, events: DeyeEventList):
