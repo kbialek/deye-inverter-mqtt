@@ -226,7 +226,9 @@ class DeyeSensorTest(unittest.TestCase):
                 SensorRegisterRange("a", 1, 10),
                 SensorRegisterRange("b", 20, 40),
                 SensorRegisterRange("c", 60, 70),
+                SensorRegisterRange("d", 100, 102),
             ],
+            metric_groups=["a", "b", "c"],
             max_range_length=15,
         )
 

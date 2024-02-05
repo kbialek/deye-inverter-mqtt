@@ -295,9 +295,16 @@ class SensorRegisterRange:
 
 
 class SensorRegisterRanges:
-    def __init__(self, ranges: list[SensorRegisterRange], max_range_length: int):
-        unique_ranges = SensorRegisterRanges.__remove_duplicated_reg_ranges(ranges)
+    def __init__(self, ranges: list[SensorRegisterRange], metric_groups: list[str], max_range_length: int):
+        filtered_ranges = SensorRegisterRanges.__filter_reg_ranges(ranges, metric_groups)
+        unique_ranges = SensorRegisterRanges.__remove_duplicated_reg_ranges(filtered_ranges)
         self.ranges = SensorRegisterRanges.__split_long_reg_ranges(unique_ranges, max_range_length)
+
+    @staticmethod
+    def __filter_reg_ranges(
+        reg_ranges_to_filter: list[SensorRegisterRange], metric_groups: list[str]
+    ) -> list[SensorRegisterRange]:
+        return [r for r in reg_ranges_to_filter if r.in_any_group(metric_groups)]
 
     @staticmethod
     def __split_long_reg_ranges(
