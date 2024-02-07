@@ -143,10 +143,9 @@ class IntervalRunner:
         thread.start()
 
     def __handler(self):
-        self.__invoke_action()
-        nextTime = time.time() + self.interval
+        nextTime = time.time()
         while not self.stopEvent.wait(nextTime - time.time()):
-            nextTime += self.interval
+            nextTime = time.time() + self.interval
             self.__invoke_action()
 
     def __invoke_action(self):
