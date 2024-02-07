@@ -127,43 +127,48 @@ class DeyeDaemon:
 
         processors = DeyeProcessorFactory(self.__config, mqtt_client).create_processors(modbus, sensors)
         self.__inverter_state = DeyeInverterState(config, reg_ranges, modbus, sensors, processors)
+        self.__interval_runner = IntervalRunner(
+            self.__config.data_read_inverval, self.__inverter_state.read_from_logger
+        )
 
-    def do_task(self):
-        self.__inverter_state.read_from_logger()
+    def run(self):
+        self.__interval_runner.start()
 
 
 class IntervalRunner:
     def __init__(self, interval, action):
         self.__log = logging.getLogger(DeyeDaemon.__name__)
-        self.interval = interval
-        self.action = action
-        self.stopEvent = threading.Event()
-        thread = threading.Thread(target=self.__handler)
-        self.__log.debug("Start to execute the daemon at intervals of %s seconds", self.interval)
-        thread.start()
+        self.__interval = interval
+        self.__action = action
+        self.__stopEvent = threading.Event()
+        self.__thread = threading.Thread(target=self.__handler)
+        self.__log.debug("Start to execute the daemon at intervals of %s seconds", self.__interval)
 
     def __handler(self):
         nextTime = time.time()
-        while not self.stopEvent.wait(nextTime - time.time()):
-            nextTime = time.time() + self.interval
+        while not self.__stopEvent.wait(nextTime - time.time()):
+            nextTime = time.time() + self.__interval
             self.__invoke_action()
 
     def __invoke_action(self):
         try:
-            self.action()
+            self.__action()
         except Exception:
             self.__log.exception("Unexpected error during daemon execution")
 
+    def start(self):
+        signal.signal(signal.SIGINT, self.cancel)
+        signal.signal(signal.SIGTERM, self.cancel)
+        self.__thread.start()
+
     def cancel(self, _signum, _frame):
-        self.stopEvent.set()
+        self.__stopEvent.set()
 
 
 def main():
     config = DeyeConfig.from_env()
     daemon = DeyeDaemon(config)
-    time_loop = IntervalRunner(config.data_read_inverval, daemon.do_task)
-    signal.signal(signal.SIGINT, time_loop.cancel)
-    signal.signal(signal.SIGTERM, time_loop.cancel)
+    daemon.run()
 
 
 if __name__ == "__main__":
