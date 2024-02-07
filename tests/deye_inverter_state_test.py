@@ -19,14 +19,8 @@ import unittest
 from datetime import datetime
 from unittest.mock import MagicMock, patch
 
-from deye_daemon import (
-    DeyeDaemon,
-    DeyeEventList,
-    DeyeLoggerStatusEvent,
-    DeyeObservationEvent,
-    Observation,
-    DeyeInverterState,
-)
+from deye_inverter_state import DeyeInverterState
+from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, Observation
 from deye_sensor import Sensor, SensorRegisterRanges
 
 
@@ -39,9 +33,9 @@ class FakeSensor(Sensor):
         return self.value
 
 
-class TestDeyeDaemon(unittest.TestCase):
+class TestInverterState(unittest.TestCase):
     def test_no_last_observation(self):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
@@ -56,7 +50,7 @@ class TestDeyeDaemon(unittest.TestCase):
         self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
 
     def test_is_device_offline(self):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
@@ -76,7 +70,7 @@ class TestDeyeDaemon(unittest.TestCase):
 
     @patch("time.time")
     def test_is_evenets_unchanged(self, time):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
@@ -103,7 +97,7 @@ class TestDeyeDaemon(unittest.TestCase):
 
     @patch("time.time")
     def test_is_events_unchanged_expired(self, time):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
@@ -128,7 +122,7 @@ class TestDeyeDaemon(unittest.TestCase):
         self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
 
     def test_is_events_changed(self):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()

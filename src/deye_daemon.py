@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import datetime
 import logging
 import signal
 import threading
@@ -23,88 +22,12 @@ import time
 
 from deye_config import DeyeConfig
 from deye_connector_factory import DeyeConnectorFactory
-from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, DeyeEventProcessor
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
-from deye_observation import Observation
-from deye_sensor import SensorRegisterRanges, Sensor
+from deye_sensor import SensorRegisterRanges
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_processor_factory import DeyeProcessorFactory
-
-
-class DeyeInverterState:
-    def __init__(
-        self,
-        config: DeyeConfig,
-        reg_ranges: SensorRegisterRanges,
-        modbus: DeyeModbus,
-        sensors: list[Sensor],
-        processors: list[DeyeEventProcessor],
-    ):
-        self.__log = logging.getLogger(DeyeInverterState.__name__)
-        self.__config = config
-        self.__reg_ranges = reg_ranges
-        self.__modbus = modbus
-        self.__sensors = sensors
-        self.__processors = processors
-        self.__last_observations = DeyeEventList()
-        self.__event_updated = time.time()
-
-    def read_from_logger(self):
-        self.__log.info("Reading start")
-        regs = {}
-        for reg_range in self.__reg_ranges.ranges:
-            self.__log.info(f"Reading registers [{reg_range}]")
-            regs |= self.__modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
-        events = DeyeEventList()
-        events.append(DeyeLoggerStatusEvent(len(regs) > 0))
-        events += self.__get_observations_from_reg_values(regs)
-        if not self.__config.publish_on_change or self.__is_device_observation_changed(events):
-            for processor in self.__processors:
-                processor.process(events)
-        else:
-            self.__log.info("No changes found in received data, or the logger is offline, skipping")
-        self.__log.info("Reading completed")
-
-    def __get_observations_from_reg_values(self, regs: dict[int, bytearray]) -> list[DeyeObservationEvent]:
-        timestamp = datetime.datetime.now()
-        events = []
-        for sensor in self.__sensors:
-            value = sensor.read_value(regs)
-            if value is not None:
-                observation = Observation(sensor, timestamp, value)
-                events.append(DeyeObservationEvent(observation))
-                self.__log.debug(f"{observation.sensor.name}: {observation.value_as_str()}")
-        return events
-
-    def __is_device_observation_changed(self, events: DeyeEventList) -> bool:
-        """Check if the received event observations have changed compared to last published
-
-        Parameters
-        ----------
-        events : list[DeyeEvent]
-            Received event list
-
-        Returns
-        -------
-        bool
-            True if received observation events are different from last published ones
-        """
-        if events.is_offline():
-            self.__log.debug("No observation events received (offline)")
-            return False
-        if events.compare_observation_events(self.__last_observations):
-            self.__log.debug("Event data is unchanged")
-            if self.__event_updated + self.__config.event_expiry > time.time():
-                self.__log.debug("Event data hasn't expired")
-                return False
-            else:
-                self.__log.info("Event data has expired")
-        self.__log.debug("Time since previous update: %s", time.time() - self.__event_updated)
-        self.__log.debug("New event data: %s", [str(e) for e in events])
-        self.__event_updated = time.time()
-        self.__last_observations = events
-        return True
+from deye_inverter_state import DeyeInverterState
 
 
 class DeyeDaemon:
