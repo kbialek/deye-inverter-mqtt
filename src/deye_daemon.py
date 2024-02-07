@@ -30,34 +30,6 @@ from deye_processor_factory import DeyeProcessorFactory
 from deye_inverter_state import DeyeInverterState
 
 
-class DeyeDaemon:
-    def __init__(self, config: DeyeConfig):
-        self.__log = logging.getLogger(DeyeDaemon.__name__)
-        self.__config = config
-        self.__log.info(
-            "Please help me build the list of compatible inverters. "
-            "https://github.com/kbialek/deye-inverter-mqtt/issues/41"
-        )
-
-        connector = DeyeConnectorFactory(config).create_connector()
-        modbus = DeyeModbus(connector)
-        sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
-        reg_ranges = SensorRegisterRanges(
-            sensor_register_ranges, config.metric_groups, max_range_length=config.logger.max_register_range_length
-        )
-
-        mqtt_client = DeyeMqttClient(self.__config)
-
-        processors = DeyeProcessorFactory(self.__config, mqtt_client).create_processors(modbus, sensors)
-        self.__inverter_state = DeyeInverterState(config, reg_ranges, modbus, sensors, processors)
-        self.__interval_runner = IntervalRunner(
-            self.__config.data_read_inverval, self.__inverter_state.read_from_logger
-        )
-
-    def run(self):
-        self.__interval_runner.start()
-
-
 class IntervalRunner:
     def __init__(self, interval, action):
         self.__log = logging.getLogger(DeyeDaemon.__name__)
@@ -86,6 +58,33 @@ class IntervalRunner:
 
     def cancel(self, _signum, _frame):
         self.__stopEvent.set()
+
+
+class DeyeDaemon:
+    def __init__(self, config: DeyeConfig):
+        self.__log = logging.getLogger(DeyeDaemon.__name__)
+        self.__config = config
+        self.__log.info(
+            "Please help me build the list of compatible inverters. "
+            "https://github.com/kbialek/deye-inverter-mqtt/issues/41"
+        )
+
+        mqtt_client = DeyeMqttClient(self.__config)
+        self.__interval_runner = self.__create_interval_runner_for_logger(config, mqtt_client)
+
+    def __create_interval_runner_for_logger(self, config: DeyeConfig, mqtt_client: DeyeMqttClient) -> IntervalRunner:
+        modbus = DeyeModbus(DeyeConnectorFactory(config).create_connector())
+        sensors = [s for s in sensor_list if s.in_any_group(config.metric_groups)]
+        reg_ranges = SensorRegisterRanges(
+            sensor_register_ranges, config.metric_groups, max_range_length=config.logger.max_register_range_length
+        )
+
+        processors = DeyeProcessorFactory(config, mqtt_client).create_processors(modbus, sensors)
+        inverter_state = DeyeInverterState(config, reg_ranges, modbus, sensors, processors)
+        return IntervalRunner(config.data_read_inverval, inverter_state.read_from_logger)
+
+    def run(self):
+        self.__interval_runner.start()
 
 
 def main():
