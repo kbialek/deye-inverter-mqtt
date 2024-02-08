@@ -17,7 +17,6 @@
 
 import logging
 import ssl
-from typing import List
 
 import paho.mqtt.client as paho
 
@@ -36,7 +35,7 @@ class DeyeMqttClient:
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
         self.__mqtt_client = paho.Client(
-            client_id=f"deye-inverter-{config.logger.serial_number}", reconnect_on_failure=True, clean_session=True
+            client_id=f"deye-inverter-{config.logger.serial_number}-test", reconnect_on_failure=True, clean_session=True
         )
         self.__mqtt_client.enable_logger()
         if config.mqtt.tls.enabled:
@@ -104,19 +103,20 @@ class DeyeMqttClient:
         except OSError as e:
             raise DeyeMqttPublishError(f"MQTT connection error: {str(e)}")
 
-    def publish_observation(self, observation: Observation):
+    def __build_topic_name(self, logger_topic_prefix: str, topic_suffix: str) -> str:
+        if logger_topic_prefix:
+            return f"{self.__config.topic_prefix}/{logger_topic_prefix}/{topic_suffix}"
+        else:
+            return f"{self.__config.topic_prefix}/{topic_suffix}"
+
+    def publish_observation(self, observation: Observation, logger_topic_prefix: str):
         if observation.sensor.mqtt_topic_suffix:
-            mqtt_topic = f"{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}"
+            mqtt_topic = self.__build_topic_name(logger_topic_prefix, observation.sensor.mqtt_topic_suffix)
             value = observation.value_as_str()
             self.__do_publish(mqtt_topic, value)
 
-    def publish_observations(self, observations: List[Observation]):
-        for observation in observations:
-            if observation.sensor.mqtt_topic_suffix:
-                self.publish_observation(observation)
-
-    def publish_logger_status(self, is_online: bool):
-        mqtt_topic = f"{self.__config.topic_prefix}/{self.__config.logger_status_topic}"
+    def publish_logger_status(self, is_online: bool, logger_topic_prefix: str):
+        mqtt_topic = self.__build_topic_name(logger_topic_prefix, self.__config.logger_status_topic)
         value = "online" if is_online else "offline"
         self.__do_publish(mqtt_topic, value)
         self.__log.info("Logger is %s", value)
