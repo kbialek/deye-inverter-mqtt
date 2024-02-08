@@ -20,7 +20,7 @@ import signal
 import threading
 import time
 
-from deye_config import DeyeConfig
+from deye_config import DeyeConfig, DeyeLoggerConfig
 from deye_connector_factory import DeyeConnectorFactory
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
@@ -70,13 +70,15 @@ class DeyeDaemon:
         )
 
         mqtt_client = DeyeMqttClient(self.__config)
-        self.__interval_runner = self.__create_interval_runner_for_logger(config, mqtt_client)
+        self.__interval_runner = self.__create_interval_runner_for_logger(config, config.logger, mqtt_client)
 
-    def __create_interval_runner_for_logger(self, config: DeyeConfig, mqtt_client: DeyeMqttClient) -> IntervalRunner:
-        modbus = DeyeModbus(DeyeConnectorFactory(config).create_connector())
+    def __create_interval_runner_for_logger(
+        self, config: DeyeConfig, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient
+    ) -> IntervalRunner:
+        modbus = DeyeModbus(DeyeConnectorFactory().create_connector(logger_config))
         sensors = [s for s in sensor_list if s.in_any_group(config.metric_groups)]
         reg_ranges = SensorRegisterRanges(
-            sensor_register_ranges, config.metric_groups, max_range_length=config.logger.max_register_range_length
+            sensor_register_ranges, config.metric_groups, max_range_length=logger_config.max_register_range_length
         )
 
         processors = DeyeProcessorFactory(config, mqtt_client).create_processors(modbus, sensors)
