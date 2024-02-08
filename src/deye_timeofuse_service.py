@@ -47,21 +47,19 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
         return "Time-of-use configuration over MQTT"
 
     def initialize(self):
-        logger_topic_prefix = str(self.__logger_config.index) if self.__logger_config.index > 0 else ""
         if self.__sensor_map:
             return
         for sensor in self.__sensors:
             self.__mqtt_client.subscribe_command_handler(
-                logger_topic_prefix, sensor.mqtt_topic_suffix, self.handle_command
+                self.__logger_config.index, sensor.mqtt_topic_suffix, self.handle_command
             )
             self.__sensor_map[sensor.mqtt_topic_suffix] = sensor
         self.__mqtt_client.subscribe_command_handler(
-            logger_topic_prefix, "timeofuse/control", self.handle_control_command
+            self.__logger_config.index, "timeofuse/control", self.handle_control_command
         )
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
-        logger_topic_prefix = str(self.__logger_config.index) if self.__logger_config.index > 0 else ""
-        sensor_topic_suffix = self.__mqtt_client.extract_command_topic_suffix(logger_topic_prefix, msg.topic)
+        sensor_topic_suffix = self.__mqtt_client.extract_command_topic_suffix(self.__logger_config.index, msg.topic)
         if not sensor_topic_suffix or sensor_topic_suffix not in self.__sensor_map:
             return
         sensor = self.__sensor_map[sensor_topic_suffix]

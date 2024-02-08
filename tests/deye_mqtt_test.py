@@ -39,7 +39,7 @@ class TestDeyeMqttClient:
     def config_mock(logger_config_mock, mqtt_config_mock) -> DeyeConfig:
         return DeyeConfig(logger_configs=logger_config_mock, mqtt=mqtt_config_mock)
 
-    def test_extract_command_topic_suffix_with_empty_logger_topic_prefix(self, config_mock, mqtt_config_mock):
+    def test_extract_command_topic_suffix_with_zero_logger_index(self, config_mock, mqtt_config_mock):
         # given
         sut = DeyeMqttClient(config_mock)
 
@@ -47,12 +47,12 @@ class TestDeyeMqttClient:
         mqtt_config_mock.topic_prefix = "prefix"
 
         # when
-        result = sut.extract_command_topic_suffix("", "prefix/foo/command")
+        result = sut.extract_command_topic_suffix(0, "prefix/foo/command")
 
         # then
         assert result == "foo"
 
-    def test_extract_command_topic_suffix_with_non_empty_logger_topic_prefix(self, config_mock, mqtt_config_mock):
+    def test_extract_command_topic_suffix_with_non_zero_logger_index(self, config_mock, mqtt_config_mock):
         # given
         sut = DeyeMqttClient(config_mock)
 
@@ -60,7 +60,7 @@ class TestDeyeMqttClient:
         mqtt_config_mock.topic_prefix = "prefix"
 
         # when
-        result = sut.extract_command_topic_suffix("1", "prefix/1/foo/command")
+        result = sut.extract_command_topic_suffix(1, "prefix/1/foo/command")
 
         # then
         assert result == "foo"

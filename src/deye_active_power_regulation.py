@@ -38,9 +38,8 @@ class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
         return "Active power regulation over MQTT"
 
     def initialize(self):
-        logger_topic_prefix = str(self.__logger_config.index) if self.__logger_config.index > 0 else ""
         self.__mqtt_client.subscribe_command_handler(
-            logger_topic_prefix, "settings/active_power_regulation", self.handle_command
+            self.__logger_config.index, "settings/active_power_regulation", self.handle_command
         )
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):

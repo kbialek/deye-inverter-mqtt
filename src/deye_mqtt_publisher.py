@@ -40,13 +40,12 @@ class DeyeMqttPublisher(DeyeEventProcessor):
         return "Report metrics over MQTT"
 
     def process(self, events: DeyeEventList):
-        logger_topic_prefix = str(events.logger_index) if events.logger_index > 0 else ""
         for event in events:
             try:
                 if isinstance(event, DeyeObservationEvent):
-                    self.__mqtt_client.publish_observation(event.observation, logger_topic_prefix)
+                    self.__mqtt_client.publish_observation(event.observation, events.logger_index)
                 elif isinstance(event, DeyeLoggerStatusEvent):
-                    self.__mqtt_client.publish_logger_status(event.online, logger_topic_prefix)
+                    self.__mqtt_client.publish_logger_status(event.online, events.logger_index)
                 else:
                     self.__log.warning(f"Unsupported event type {event.__class__}")
             except DeyeMqttPublishError as e:
