@@ -19,7 +19,7 @@ import datetime
 import logging
 import time
 
-from deye_config import DeyeConfig
+from deye_config import DeyeConfig, DeyeLoggerConfig
 from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, DeyeEventProcessor
 from deye_modbus import DeyeModbus
 from deye_observation import Observation
@@ -30,6 +30,7 @@ class DeyeInverterState:
     def __init__(
         self,
         config: DeyeConfig,
+        logger_config: DeyeLoggerConfig,
         reg_ranges: SensorRegisterRanges,
         modbus: DeyeModbus,
         sensors: list[Sensor],
@@ -37,11 +38,12 @@ class DeyeInverterState:
     ):
         self.__log = logging.getLogger(DeyeInverterState.__name__)
         self.__config = config
+        self.__logger_config = logger_config
         self.__reg_ranges = reg_ranges
         self.__modbus = modbus
         self.__sensors = sensors
         self.__processors = processors
-        self.__last_observations = DeyeEventList()
+        self.__last_observations = DeyeEventList(logger_index=logger_config.index)
         self.__event_updated = time.time()
 
     def read_from_logger(self):
@@ -50,7 +52,7 @@ class DeyeInverterState:
         for reg_range in self.__reg_ranges.ranges:
             self.__log.info(f"Reading registers [{reg_range}]")
             regs |= self.__modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
-        events = DeyeEventList()
+        events = DeyeEventList(logger_index=self.__logger_config.index)
         events.append(DeyeLoggerStatusEvent(len(regs) > 0))
         events += self.__get_observations_from_reg_values(regs)
         if not self.__config.publish_on_change or self.__is_device_observation_changed(events):

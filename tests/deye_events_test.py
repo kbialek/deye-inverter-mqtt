@@ -97,3 +97,13 @@ class TestDeyeEventList(unittest.TestCase):
             ]
         )
         self.assertFalse(events_a.compare_observation_events(events_b))
+
+    def test_compare_events_different_logger_index(self):
+        events_a = DeyeEventList(logger_index=1)
+        events_b = DeyeEventList(logger_index=2)
+        self.assertFalse(events_a.compare_observation_events(events_b))
+
+    def test_compare_events_same_logger_index(self):
+        events_a = DeyeEventList(logger_index=2)
+        events_b = DeyeEventList(logger_index=2)
+        self.assertTrue(events_a.compare_observation_events(events_b))
