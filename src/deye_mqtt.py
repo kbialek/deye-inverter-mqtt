@@ -121,8 +121,10 @@ class DeyeMqttClient:
         self.__do_publish(mqtt_topic, value)
         self.__log.info("Logger is %s", value)
 
-    def extract_command_topic_suffix(self, topic: str) -> str | None:
+    def extract_command_topic_suffix(self, logger_topic_prefix: str, topic: str) -> str | None:
         prefix = f"{self.__config.topic_prefix}/"
+        if logger_topic_prefix:
+            prefix = f"{prefix}{logger_topic_prefix}/"
         suffix = "/command"
         if topic.startswith(prefix) and topic.endswith(suffix):
             return topic.replace(prefix, "").replace(suffix, "")
