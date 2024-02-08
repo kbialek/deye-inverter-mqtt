@@ -81,7 +81,7 @@ class DeyeDaemon:
             sensor_register_ranges, config.metric_groups, max_range_length=logger_config.max_register_range_length
         )
 
-        processors = DeyeProcessorFactory(config, mqtt_client).create_processors(modbus, sensors)
+        processors = DeyeProcessorFactory(config, mqtt_client).create_processors(logger_config, modbus, sensors)
         inverter_state = DeyeInverterState(config, reg_ranges, modbus, sensors, processors)
         return IntervalRunner(config.data_read_inverval, inverter_state.read_from_logger)
 
