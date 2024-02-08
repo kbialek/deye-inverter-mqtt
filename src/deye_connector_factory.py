@@ -33,7 +33,7 @@ class DeyeConnectorFactory:
         protocol = self.__config.logger.protocol
         if protocol == "tcp":
             self.__log.info("Creating Modbus/TCP Logger connector")
-            return DeyeModbusTcp(self.__config, DeyeTcpConnector(self.__config.logger))
+            return DeyeModbusTcp(self.__config.logger, DeyeTcpConnector(self.__config.logger))
         elif protocol == "at":
             self.__log.info("Creating Modbus/AT Logger connector")
             return DeyeAtConnector(self.__config.logger)
