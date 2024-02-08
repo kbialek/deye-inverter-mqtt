@@ -48,6 +48,7 @@ class TestDeyeTimeOfUseService:
     def logger_config_mock(mocker) -> DeyeLoggerConfig:
         mock = mocker.Mock(spec=DeyeLoggerConfig)
         mock.serial_number = 123
+        mock.index = 0
         return mock
 
     @staticmethod
@@ -60,10 +61,10 @@ class TestDeyeTimeOfUseService:
     def mqtt_client_mock(mocker, config_mock) -> DeyeMqttClient:
         return mocker.Mock(wraps=DeyeMqttClient(config_mock))
 
-    def test_process_events_to_build_read_state(self, config_mock, mqtt_client_mock, modbus_mock):
+    def test_process_events_to_build_read_state(self, logger_config_mock, mqtt_client_mock, modbus_mock):
         # given
         sensors = [sensor_time_1, sensor_time_2, sensor_time_3]
-        sut = DeyeTimeOfUseService(config_mock, mqtt_client_mock, sensors, modbus_mock)
+        sut = DeyeTimeOfUseService(logger_config_mock, mqtt_client_mock, sensors, modbus_mock)
 
         # and
         now = datetime.now()
@@ -84,7 +85,7 @@ class TestDeyeTimeOfUseService:
         assert sut.read_state[sensor_time_2] == "700.0"
         assert sut.read_state[sensor_time_3] == "1000.0"
 
-    def test_handle_modification_command(self, config_mock, mqtt_client_mock, mqtt_config_mock, modbus_mock):
+    def test_handle_modification_command(self, logger_config_mock, mqtt_client_mock, mqtt_config_mock, modbus_mock):
         # given
         mqtt_config_mock.topic_prefix = "deye"
 
@@ -93,7 +94,7 @@ class TestDeyeTimeOfUseService:
 
         # and
         sensors = [sensor_time_1, sensor_time_2, sensor_time_3]
-        sut = DeyeTimeOfUseService(config_mock, mqtt_client_mock, sensors, modbus_mock)
+        sut = DeyeTimeOfUseService(logger_config_mock, mqtt_client_mock, sensors, modbus_mock)
         sut.initialize()
 
         # and

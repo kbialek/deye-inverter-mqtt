@@ -54,9 +54,9 @@ class DeyeProcessorFactory:
         processors = []
         self.__append_processor(processors, DeyeMqttPublisher(self.__mqtt_client))
         self.__append_processor(processors, DeyeSetTimeProcessor(modbus))
-        self.__append_processor(processors, DeyeTimeOfUseService(self.__config, self.__mqtt_client, sensors, modbus))
+        self.__append_processor(processors, DeyeTimeOfUseService(logger_config, self.__mqtt_client, sensors, modbus))
         self.__append_processor(
-            processors, DeyeActivePowerRegulationEventProcessor(self.__config, self.__mqtt_client, modbus)
+            processors, DeyeActivePowerRegulationEventProcessor(logger_config, self.__mqtt_client, modbus)
         )
         return processors
 

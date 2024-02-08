@@ -129,5 +129,6 @@ class DeyeMqttClient:
         else:
             return None
 
-    def subscribe_command_handler(self, mqtt_topic_suffix: str, handler_method):
-        self.subscribe(f"{self.__config.topic_prefix}/{mqtt_topic_suffix}/command", handler_method)
+    def subscribe_command_handler(self, logger_topic_prefix: str, mqtt_topic_suffix: str, handler_method):
+        mqtt_topic = self.__build_topic_name(logger_topic_prefix, f"{mqtt_topic_suffix}/command")
+        self.subscribe(mqtt_topic, handler_method)
