@@ -26,10 +26,9 @@ class DeyeMqttPublisher(DeyeEventProcessor):
     Publishes events over MQTT.
     """
 
-    def __init__(self, mqtt_client: DeyeMqttClient, logger_index: int):
+    def __init__(self, mqtt_client: DeyeMqttClient):
         self.__log = logging.getLogger(DeyeMqttPublisher.__name__)
         self.__mqtt_client = mqtt_client
-        self.__logger_index = logger_index
 
     def initialize(self):
         self.__mqtt_client.connect()
