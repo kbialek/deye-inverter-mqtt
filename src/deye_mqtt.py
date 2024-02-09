@@ -17,6 +17,8 @@
 
 import logging
 import ssl
+import threading
+
 
 import paho.mqtt.client as paho
 
@@ -35,7 +37,7 @@ class DeyeMqttClient:
     def __init__(self, config: DeyeConfig):
         self.__log = logging.getLogger(DeyeMqttClient.__name__)
         self.__mqtt_client = paho.Client(
-            client_id=f"deye-inverter-{config.logger.serial_number}", reconnect_on_failure=True, clean_session=True
+            client_id=f"deye-inverter-{config.logger.serial_number}-test", reconnect_on_failure=True, clean_session=True
         )
         self.__mqtt_client.enable_logger()
         if config.mqtt.tls.enabled:
@@ -58,6 +60,7 @@ class DeyeMqttClient:
         self.__mqtt_client.will_set(self.__status_topic, "offline", retain=True, qos=1)
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
+        self.__publish_lock = threading.Lock()
 
     def subscribe(self, topic: str, callback):
         self.connect()
@@ -92,10 +95,12 @@ class DeyeMqttClient:
 
     def __do_publish(self, mqtt_topic: str, value: str):
         try:
+            self.__publish_lock.acquire()
             self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
             self.connect()
             info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
             info.wait_for_publish(self.__mqtt_timeout)
+            self.__publish_lock.release()
         except ValueError as e:
             raise DeyeMqttPublishError(f"MQTT outgoing queue is full: {str(e)}")
         except RuntimeError as e:
