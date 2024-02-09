@@ -19,6 +19,7 @@ import logging
 import signal
 import threading
 import time
+import random
 
 from deye_config import DeyeConfig, DeyeLoggerConfig
 from deye_connector_factory import DeyeConnectorFactory
@@ -31,16 +32,16 @@ from deye_inverter_state import DeyeInverterState
 
 
 class IntervalRunner:
-    def __init__(self, interval, action):
-        self.__log = logging.getLogger(DeyeDaemon.__name__)
+    def __init__(self, logger_config: DeyeLoggerConfig, interval: int, action):
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeDaemon.__name__))
         self.__interval = interval
         self.__action = action
         self.__stopEvent = threading.Event()
         self.__thread = threading.Thread(target=self.__handler)
-        self.__log.debug("Start to execute the daemon at intervals of %s seconds", self.__interval)
 
     def __handler(self):
-        nextTime = time.time()
+        self.__log.debug("Start to execute the daemon at intervals of %s seconds", self.__interval)
+        nextTime = time.time() + random.randint(0, self.__interval - 1)
         while not self.__stopEvent.wait(nextTime - time.time()):
             nextTime = time.time() + self.__interval
             self.__invoke_action()
@@ -84,7 +85,7 @@ class DeyeDaemon:
 
         processors = self.__processor_factory.create_processors(logger_config, modbus, sensors)
         inverter_state = DeyeInverterState(self.__config, logger_config, reg_ranges, modbus, sensors, processors)
-        return IntervalRunner(self.__config.data_read_inverval, inverter_state.read_from_logger)
+        return IntervalRunner(logger_config, self.__config.data_read_inverval, inverter_state.read_from_logger)
 
     def start(self):
         for interval_runner in self.__interval_runners:
