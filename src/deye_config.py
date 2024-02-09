@@ -18,9 +18,20 @@
 import os
 import ssl
 import sys
+import logging
 
 LOG_DEST_STDOUT = "STDOUT"
 LOG_DEST_STDERR = "STDERR"
+
+
+class ParameterizedLogger(logging.LoggerAdapter):
+    def __init__(self, logger: logging.Logger, inverterIndex: int):
+        super().__init__(logger, {"index": inverterIndex})
+
+    def process(self, msg, kwargs):
+        inverterIndex = self.extra["index"]
+        adapted_msg = "[{}] {}".format(inverterIndex, msg) if inverterIndex > 0 else msg
+        return adapted_msg, kwargs
 
 
 class DeyeEnv:
@@ -177,6 +188,9 @@ class DeyeLoggerConfig:
             self.port = port
         self.index = index
         self.max_register_range_length = max_register_range_length
+
+    def logger_adapter(self, logger: logging.Logger):
+        return ParameterizedLogger(logger, self.index)
 
     @staticmethod
     def from_env():

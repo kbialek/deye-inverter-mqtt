@@ -23,9 +23,9 @@ from deye_config import DeyeLoggerConfig
 
 
 class DeyeTcpConnector(DeyeConnector):
-    def __init__(self, config: DeyeLoggerConfig) -> None:
-        self.__log = logging.getLogger(DeyeTcpConnector.__name__)
-        self.__logger_config = config
+    def __init__(self, logger_config: DeyeLoggerConfig) -> None:
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeTcpConnector.__name__))
+        self.__logger_config = logger_config
         self.__reachable = True
 
     def send_request(self, req_frame) -> bytes | None:

@@ -36,7 +36,7 @@ class DeyeInverterState:
         sensors: list[Sensor],
         processors: list[DeyeEventProcessor],
     ):
-        self.__log = logging.getLogger(DeyeInverterState.__name__)
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeInverterState.__name__))
         self.__config = config
         self.__logger_config = logger_config
         self.__reg_ranges = reg_ranges

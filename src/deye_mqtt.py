@@ -22,7 +22,7 @@ import threading
 
 import paho.mqtt.client as paho
 
-from deye_config import DeyeConfig
+from deye_config import DeyeConfig, ParameterizedLogger
 from deye_observation import Observation
 
 import time
@@ -129,7 +129,7 @@ class DeyeMqttClient:
         mqtt_topic = self.__build_topic_name(logger_topic_prefix, self.__config.logger_status_topic)
         value = "online" if is_online else "offline"
         self.__do_publish(mqtt_topic, value)
-        self.__log.info("Logger is %s", value)
+        ParameterizedLogger(self.__log, logger_index).info("Logger is %s", value)
 
     def extract_command_topic_suffix(self, logger_index: int, topic: str) -> str | None:
         logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
