@@ -15,14 +15,17 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import logging
+import deye_sensors_aggregated
+
+from datetime import datetime
 from deye_events import DeyeEventProcessor, DeyeEventList, DeyeObservationEvent
 from deye_observation import Observation
-from deye_mqtt import DeyeMqttClient
 
 
 class DeyeMultiInverterDataAggregator(DeyeEventProcessor):
-    def __init__(self, mqtt_client: DeyeMqttClient):
-        self.__mqtt_client = mqtt_client
+    def __init__(self):
+        self.__log = logging.getLogger(DeyeMultiInverterDataAggregator.__name__)
         self.__logger_events: dict[int, DeyeEventList] = dict()
         self.__ac_active_power = 0
         self.__daily_energy = 0
@@ -35,10 +38,31 @@ class DeyeMultiInverterDataAggregator(DeyeEventProcessor):
 
     def process(self, events: DeyeEventList) -> None:
         self.__logger_events[events.logger_index] = events
-        self.__ac_active_power = sum(self.__get_metrics_for_aggregation("ac/active_power"))
-        self.__daily_energy = sum(self.__get_metrics_for_aggregation("day_energy"))
-        print(self.__ac_active_power)
-        print(self.__daily_energy)
+
+    def aggregate(self) -> list[Observation]:
+        now = datetime.now()
+        aggregated_observations = [
+            Observation(
+                deye_sensors_aggregated.aggregated_ac_active_power_sensor,
+                now,
+                sum(
+                    self.__get_metrics_for_aggregation(
+                        deye_sensors_aggregated.aggregated_ac_active_power_sensor.mqtt_topic_suffix
+                    )
+                ),
+            ),
+            Observation(
+                deye_sensors_aggregated.aggregated_day_energy_sensor,
+                now,
+                sum(
+                    self.__get_metrics_for_aggregation(
+                        deye_sensors_aggregated.aggregated_day_energy_sensor.mqtt_topic_suffix
+                    )
+                ),
+            ),
+        ]
+        self.__log.debug("Aggregated observations: %s", aggregated_observations)
+        return aggregated_observations
 
     def __get_metrics_for_aggregation(self, topic_suffix: str) -> list[float]:
         values = [self.__get_metric(topic_suffix, events) for events in self.__logger_events.values()]
