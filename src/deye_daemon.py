@@ -70,6 +70,7 @@ class DeyeDaemon:
 
         self.__mqtt_client = DeyeMqttClient(self.__config)
         self.__processor_factory = DeyeProcessorFactory(self.__config, self.__mqtt_client)
+        self.__aggregating_processors = self.__processor_factory.create_aggregating_processors(self.__config.logger)
         self.__interval_runners = [
             self.__create_interval_runner_for_logger(logger_config) for logger_config in config.logger_configs
         ]
@@ -83,7 +84,9 @@ class DeyeDaemon:
             max_range_length=logger_config.max_register_range_length,
         )
 
-        processors = self.__processor_factory.create_processors(logger_config, modbus, sensors)
+        processors = (
+            self.__processor_factory.create_processors(logger_config, modbus, sensors) + self.__aggregating_processors
+        )
         inverter_state = DeyeInverterState(self.__config, logger_config, reg_ranges, modbus, sensors, processors)
         return IntervalRunner(logger_config, self.__config.data_read_inverval, inverter_state.read_from_logger)
 

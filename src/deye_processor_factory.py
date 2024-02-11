@@ -27,6 +27,7 @@ from deye_timeofuse_service import DeyeTimeOfUseService
 from deye_active_power_regulation import DeyeActivePowerRegulationEventProcessor
 from deye_sensor import Sensor
 from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
+from deye_multi_inverter_data_aggregator import DeyeMultiInverterDataAggregator
 
 
 class DeyeProcessorFactory:
@@ -58,6 +59,17 @@ class DeyeProcessorFactory:
         self.__append_processor(
             processors, DeyeActivePowerRegulationEventProcessor(logger_config, self.__mqtt_client, modbus)
         )
+        return processors
+
+    def create_aggregating_processors(self, logger_config: DeyeLoggerConfig) -> list[DeyeEventProcessor]:
+        processors = self.__create_builtin_aggregating_processors(logger_config)
+        for p in processors:
+            p.initialize()
+        return processors
+
+    def __create_builtin_aggregating_processors(self, logger_config: DeyeLoggerConfig) -> list[DeyeEventProcessor]:
+        processors = []
+        self.__append_processor(processors, DeyeMultiInverterDataAggregator(self.__mqtt_client))
         return processors
 
     def __append_processor(self, processors: list[DeyeEventProcessor], processor: DeyeEventProcessor):
