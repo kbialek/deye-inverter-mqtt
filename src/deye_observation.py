@@ -31,3 +31,6 @@ class Observation:
 
     def value_as_str(self):
         return self.sensor.format_value(self.value)
+
+    def __repr__(self) -> str:
+        return f"{self.sensor.mqtt_topic_suffix}@{self.timestamp}:{self.value}"
