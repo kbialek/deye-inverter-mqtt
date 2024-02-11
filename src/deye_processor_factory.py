@@ -35,6 +35,7 @@ class DeyeProcessorFactory:
         self.__log = logging.getLogger(DeyeProcessorFactory.__name__)
         self.__config = config
         self.__mqtt_client = mqtt_client
+        self.__first_run = True
         plugin_context = DeyePluginContext(config, mqtt_client)
         self.plugin_loader = DeyePluginLoader(config)
         self.plugin_loader.load_plugins(plugin_context)
@@ -47,6 +48,7 @@ class DeyeProcessorFactory:
         )
         for p in processors:
             p.initialize()
+        self.__first_run = False
         return processors
 
     def __create_builtin_processors(
@@ -61,6 +63,9 @@ class DeyeProcessorFactory:
         )
         return processors
 
+    def create_multi_inverter_data_aggregator(self) -> DeyeMultiInverterDataAggregator:
+        return DeyeMultiInverterDataAggregator()
+
     def create_aggregating_processors(self, logger_config: DeyeLoggerConfig) -> list[DeyeEventProcessor]:
         processors = self.__create_builtin_aggregating_processors(logger_config)
         for p in processors:
@@ -69,13 +74,14 @@ class DeyeProcessorFactory:
 
     def __create_builtin_aggregating_processors(self, logger_config: DeyeLoggerConfig) -> list[DeyeEventProcessor]:
         processors = []
-        self.__append_processor(processors, DeyeMultiInverterDataAggregator(self.__mqtt_client))
+        self.__append_processor(processors, DeyeMqttPublisher(self.__mqtt_client))
         return processors
 
     def __append_processor(self, processors: list[DeyeEventProcessor], processor: DeyeEventProcessor):
         is_processor_active = processor.get_id() in self.__config.active_processors
-        self.__log.info(
-            'Feature "{}": {}'.format(processor.get_description(), "enabled" if is_processor_active else "disabled")
-        )
+        if self.__first_run:
+            self.__log.info(
+                'Feature "{}": {}'.format(processor.get_description(), "enabled" if is_processor_active else "disabled")
+            )
         if is_processor_active:
             processors.append(processor)
