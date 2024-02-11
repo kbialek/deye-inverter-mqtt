@@ -210,7 +210,6 @@ class ComputedPowerSensor(Sensor):
         else:
             return None
 
-    @abstractmethod
     def get_registers(self) -> list[int]:
         return []
 
@@ -235,7 +234,24 @@ class ComputedSumSensor(Sensor):
             result += value
         return result
 
-    @abstractmethod
+    def get_registers(self) -> list[int]:
+        return []
+
+
+class AggregatedValueSensor(Sensor):
+    """
+    Represents value computed as an aggregation in multi-inverter installation
+    """
+
+    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:0.1f}", groups=[]):
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
+
+    def read_value(self, registers: dict[int, bytearray]):
+        raise RuntimeError("Cannot read registers of aggregated sensor")
+
+    def write_value(self, value: str) -> dict[int, bytearray]:
+        raise RuntimeError("Cannot write registers of aggregated sensor")
+
     def get_registers(self) -> list[int]:
         return []
 
