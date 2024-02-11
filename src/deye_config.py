@@ -193,6 +193,10 @@ class DeyeLoggerConfig:
         return ParameterizedLogger(logger, self.index)
 
     @staticmethod
+    def for_aggregator():
+        return DeyeLoggerConfig(0, "127.0.0.1", 0, index=0)
+
+    @staticmethod
     def from_env():
         return DeyeLoggerConfig(
             serial_number=DeyeEnv.integer("DEYE_LOGGER_SERIAL_NUMBER"),
