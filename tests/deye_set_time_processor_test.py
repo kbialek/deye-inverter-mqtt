@@ -20,13 +20,17 @@ from unittest.mock import patch
 
 from deye_set_time_processor import DeyeSetTimeProcessor
 from deye_events import DeyeEventList, DeyeLoggerStatusEvent
+from deye_config import DeyeLoggerConfig
 
 
 class DeyeSetTimeProcessorTest(unittest.TestCase):
+    def setUp(self):
+        self.config = DeyeLoggerConfig(1234567890, "192.168.1.1", 8899)
+
     @patch("deye_modbus.DeyeModbus")
     def test_set_time__when_logger_is_becoming_online(self, modbus):
         # given
-        processor = DeyeSetTimeProcessor(modbus)
+        processor = DeyeSetTimeProcessor(self.config, modbus)
 
         # when
         processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
@@ -40,7 +44,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
     @patch("deye_modbus.DeyeModbus")
     def test_dont_set_time__when_logger_is_already_online(self, modbus):
         # given
-        processor = DeyeSetTimeProcessor(modbus)
+        processor = DeyeSetTimeProcessor(self.config, modbus)
 
         # and
         processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
@@ -58,7 +62,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
     @patch("deye_modbus.DeyeModbus")
     def test_keep_stored_status_set_to_offline__when_modbus_write_fails(self, modbus):
         # given
-        processor = DeyeSetTimeProcessor(modbus)
+        processor = DeyeSetTimeProcessor(self.config, modbus)
 
         # and
         modbus.write_registers_uint.return_value = False
