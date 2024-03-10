@@ -55,7 +55,7 @@ class DeyeProcessorFactory:
         self, logger_config: DeyeLoggerConfig, modbus: DeyeModbus, sensors: list[Sensor]
     ) -> list[DeyeEventProcessor]:
         processors = []
-        self.__append_processor(processors, DeyeMqttPublisher(self.__mqtt_client))
+        self.__append_processor(processors, DeyeMqttPublisher(logger_config, self.__mqtt_client))
         self.__append_processor(processors, DeyeSetTimeProcessor(logger_config, modbus))
         self.__append_processor(processors, DeyeTimeOfUseService(logger_config, self.__mqtt_client, sensors, modbus))
         self.__append_processor(
@@ -74,7 +74,7 @@ class DeyeProcessorFactory:
 
     def __create_builtin_aggregating_processors(self, logger_config: DeyeLoggerConfig) -> list[DeyeEventProcessor]:
         processors = []
-        self.__append_processor(processors, DeyeMqttPublisher(self.__mqtt_client))
+        self.__append_processor(processors, DeyeMqttPublisher(logger_config, self.__mqtt_client))
         return processors
 
     def __append_processor(self, processors: list[DeyeEventProcessor], processor: DeyeEventProcessor):
