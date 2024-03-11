@@ -67,3 +67,43 @@ class TestDeyeMultiInverterDataAggregator:
                 assert observation.value == pytest.approx(2.8)
             else:
                 assert False
+
+    def test_retain_missing_metrics(self):
+        # given
+        sut = DeyeMultiInverterDataAggregator()
+
+        # and
+        now = datetime.now()
+
+        # and
+        events_1 = DeyeEventList(
+            events=[
+                DeyeObservationEvent(Observation(ac_active_power_sensor, now, 1.2)),
+                DeyeObservationEvent(Observation(production_today_sensor, now, 1.3)),
+            ],
+            logger_index=1,
+        )
+
+        events_2 = DeyeEventList(
+            events=[
+                DeyeObservationEvent(Observation(ac_active_power_sensor, now, 1.4)),
+            ],
+            logger_index=1,
+        )
+
+        # when
+        sut.process(events_1)
+        sut.process(events_2)
+        observations = sut.aggregate()
+
+        # then
+        assert len(observations) == 2
+
+        # and
+        for observation in observations:
+            if observation.sensor == aggregated_ac_active_power_sensor:
+                assert observation.value == pytest.approx(1.4)
+            elif observation.sensor == aggregated_day_energy_sensor:
+                assert observation.value == pytest.approx(1.3)
+            else:
+                assert False
