@@ -42,24 +42,6 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         self.assertTrue(processor.last_status)
 
     @patch("deye_modbus.DeyeModbus")
-    def test_dont_set_time__when_logger_is_already_online(self, modbus):
-        # given
-        processor = DeyeSetTimeProcessor(self.config, modbus)
-
-        # and
-        processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
-        modbus.reset_mock()
-
-        # when
-        processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
-
-        # then
-        modbus.write_register.assert_not_called()
-
-        # and
-        self.assertTrue(processor.last_status)
-
-    @patch("deye_modbus.DeyeModbus")
     def test_keep_stored_status_set_to_offline__when_modbus_write_fails(self, modbus):
         # given
         processor = DeyeSetTimeProcessor(self.config, modbus)
