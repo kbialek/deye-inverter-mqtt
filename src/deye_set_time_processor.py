@@ -42,12 +42,12 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
 
     def process(self, events: DeyeEventList):
         logger_status = events.get_status()
-        if logger_status is not None:
-            if not self.__last_status and logger_status:
-                self.__last_status = self.__set_time()
-            else:
-                self.__last_status = logger_status
-        if not self.__last_status:
+        if logger_status is None:
+            return
+        if logger_status:
+            self.__last_status = self.__set_time()
+        else:
+            self.__last_status = False
             self.__last_update_ts = datetime.min
 
     def __set_time(self) -> bool:
