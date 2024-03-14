@@ -17,7 +17,7 @@
 
 from deye_sensor import SingleRegisterSensor, SensorRegisterRange
 
-deye_settings_active_power_regulation = SingleRegisterSensor(
+deye_settings_active_power_regulation_default = SingleRegisterSensor(
     "Active power regulation",
     40,
     0.1,
@@ -27,10 +27,18 @@ deye_settings_active_power_regulation = SingleRegisterSensor(
     groups=["settings"],
 )
 
-deye_settings_sensors = [
-    deye_settings_active_power_regulation,
-]
+deye_settings_active_power_regulation_micro = SingleRegisterSensor(
+    "Active power regulation",
+    40,
+    1,
+    mqtt_topic_suffix="settings/active_power_regulation",
+    unit="%",
+    signed=False,
+    groups=["settings_micro"],
+)
+
+deye_settings_sensors = [deye_settings_active_power_regulation_default, deye_settings_active_power_regulation_micro]
 
 deye_settings_register_ranges = [
-    SensorRegisterRange(group="settings", first_reg_address=40, last_reg_address=40),
+    SensorRegisterRange(group={"settings", "settings_micro"}, first_reg_address=40, last_reg_address=40),
 ]

@@ -246,7 +246,7 @@ class SensorRegisterRange:
     """
 
     def __init__(self, group: str | set[str], first_reg_address: int, last_reg_address: int):
-        self.group = group if type(group) == set else {group}
+        self.group = group if isinstance(group, set) else {group}
         self.first_reg_address = first_reg_address
         self.last_reg_address = last_reg_address
 
