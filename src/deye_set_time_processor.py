@@ -31,6 +31,7 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
         self.__log = logging.getLogger(DeyeSetTimeProcessor.__name__)
         self.__modbus = modbus
         self.__last_status = False
+        self.__last_update_ts = datetime.min
 
     def get_id(self):
         return "set_time"
@@ -41,14 +42,20 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
 
     def process(self, events: DeyeEventList):
         logger_status = events.get_status()
-        if logger_status is not None:
-            if not self.__last_status and logger_status:
-                self.__last_status = self.__set_time()
-            else:
-                self.__last_status = logger_status
+        if logger_status is None:
+            return
+        if logger_status:
+            self.__last_status = self.__set_time()
+        else:
+            self.__last_status = False
+            self.__last_update_ts = datetime.min
 
     def __set_time(self) -> bool:
         now = datetime.now()
+        delta = now - self.__last_update_ts
+        if delta.total_seconds() < 5 * 60:
+            return
+        self.__last_update_ts = now
         write_status = self.__modbus.write_registers_uint(
             22,
             [
