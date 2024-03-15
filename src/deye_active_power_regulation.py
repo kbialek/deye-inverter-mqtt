@@ -72,4 +72,5 @@ class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
             return
 
         self.__log.info("Setting active power regulation to %f", active_power_regulation_factor)
-        self.__modbus.write_register(40, self.__active_power_reg_sensor.write_value(msg.payload))
+        reg_addr, reg_value = self.__active_power_reg_sensor.write_value(msg.payload).popitem()
+        self.__modbus.write_register(reg_addr, reg_value)
