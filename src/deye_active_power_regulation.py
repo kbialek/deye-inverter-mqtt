@@ -27,7 +27,7 @@ from paho.mqtt.client import Client, MQTTMessage
 
 class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
     def __init__(
-        self, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus, sensors: [Sensor]
+        self, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient, sensors: [Sensor], modbus: DeyeModbus
     ):
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeActivePowerRegulationEventProcessor.__name__))
         self.__logger_config = logger_config

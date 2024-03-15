@@ -62,7 +62,7 @@ class TestDeyeActivePowerRegulationEventProcessor:
         sensors: [Sensor],
     ):
         # given
-        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock, sensors)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, sensors, modbus_mock)
 
         # and
         msg = MQTTMessage()
@@ -82,7 +82,7 @@ class TestDeyeActivePowerRegulationEventProcessor:
         sensors: [Sensor],
     ):
         # given
-        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock, sensors)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, sensors, modbus_mock)
 
         # and
         msg = MQTTMessage()
@@ -102,7 +102,7 @@ class TestDeyeActivePowerRegulationEventProcessor:
         sensors: [Sensor],
     ):
         # given
-        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock, sensors)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, sensors, modbus_mock)
 
         # and
         msg = MQTTMessage()
