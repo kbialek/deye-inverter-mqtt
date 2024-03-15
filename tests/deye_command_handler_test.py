@@ -53,7 +53,7 @@ class TestDeyeActivePowerRegulationCommandHandler:
     def sensors(mocker) -> [Sensor]:
         sensor = mocker.Mock(spec=Sensor)
         sensor.mqtt_topic_suffix = "settings/active_power_regulation"
-        sensor.write_value.return_value = bytearray.fromhex("0102")
+        sensor.write_value.return_value = {40: bytearray.fromhex("0102")}
         return [sensor]
 
     def test_handle_valid_value(
