@@ -21,10 +21,11 @@ from deye_active_power_regulation import DeyeActivePowerRegulationEventProcessor
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
 from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig
+from deye_sensor import Sensor
 from paho.mqtt.client import Client, MQTTMessage
 
 
-class TestDeyeActivePowerRegulationCommandHandler:
+class TestDeyeActivePowerRegulationEventProcessor:
     @staticmethod
     @pytest.fixture
     def modbus_mock(mocker) -> DeyeModbus:
@@ -45,11 +46,23 @@ class TestDeyeActivePowerRegulationCommandHandler:
     def config_mock(mocker) -> DeyeLoggerConfig:
         return mocker.Mock(spec=DeyeLoggerConfig)
 
+    @staticmethod
+    @pytest.fixture
+    def sensors(mocker) -> [Sensor]:
+        sensor = mocker.Mock(spec=Sensor)
+        sensor.mqtt_topic_suffix = "settings/active_power_regulation"
+        sensor.write_value.return_value = bytearray.fromhex("0102")
+        return [sensor]
+
     def test_handle_valid_value(
-        self, config_mock: DeyeLoggerConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
+        self,
+        config_mock: DeyeLoggerConfig,
+        mqtt_client_mock: DeyeMqttClient,
+        modbus_mock: DeyeModbus,
+        sensors: [Sensor],
     ):
         # given
-        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock, sensors)
 
         # and
         msg = MQTTMessage()
@@ -59,13 +72,17 @@ class TestDeyeActivePowerRegulationCommandHandler:
         sut.handle_command(None, None, msg)
 
         # then
-        modbus_mock.write_register_uint.assert_called_with(40, 1000)
+        modbus_mock.write_register.assert_called_with(40, bytearray.fromhex("0102"))
 
     def test_reject_too_high_value(
-        self, config_mock: DeyeLoggerConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
+        self,
+        config_mock: DeyeLoggerConfig,
+        mqtt_client_mock: DeyeMqttClient,
+        modbus_mock: DeyeModbus,
+        sensors: [Sensor],
     ):
         # given
-        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock, sensors)
 
         # and
         msg = MQTTMessage()
@@ -78,10 +95,14 @@ class TestDeyeActivePowerRegulationCommandHandler:
         assert not modbus_mock.write_register_uint.called
 
     def test_reject_too_low_value(
-        self, config_mock: DeyeLoggerConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
+        self,
+        config_mock: DeyeLoggerConfig,
+        mqtt_client_mock: DeyeMqttClient,
+        modbus_mock: DeyeModbus,
+        sensors: [Sensor],
     ):
         # given
-        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock, sensors)
 
         # and
         msg = MQTTMessage()
