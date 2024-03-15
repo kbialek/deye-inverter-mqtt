@@ -65,7 +65,7 @@ class DeyeDaemon:
         time_of_use_service = DeyeTimeOfUseService(config, mqtt_client, self.sensors, self.modbus)
 
         command_handlers = [
-            DeyeActivePowerRegulationCommandHandler(config, mqtt_client, self.modbus),
+            DeyeActivePowerRegulationCommandHandler(config, mqtt_client, self.modbus, self.sensors),
             time_of_use_service,
         ]
         DeyeMqttSubscriber(config, mqtt_client, command_handlers)
