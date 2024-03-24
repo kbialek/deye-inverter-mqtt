@@ -4,6 +4,8 @@ Do you find this project useful? Buy me a coffee [![Donate](https://img.shields.
 
 Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT.
 
+Supports single inverter installations, as well as fleet of microinverters.
+
 ## Supported inverters and metrics
 
 The meaning of certain inverter registers depends on the inverter type.
@@ -59,7 +61,7 @@ The default topic name is `logger_status` and can be changed in the configuratio
 The service can optionally read inverter settings. This feature may be useful when you dynamically modify active power regulation factor. Enable it by adding `settings` metric group to `DEYE_METRIC_GROUPS` env variable.
 
 ### Writing inverter settings
-It is possible to modify selected inverter settings over MQTT. At the moment only active power regulation factor is supported. This feature is disabled by default.
+It is possible to modify selected inverter settings over MQTT.
 
 | Setting                 |                             Topic                              | Unit | Value range | Feature flag                           |
 | ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
@@ -87,6 +89,28 @@ Time Of Use configuration is modified using the following workflow:
 4. Alternatively send `reset` command to purge buffered modifications without writing them to the inverter.
 
 ## Additional features
+
+### Monitoring a fleet of microinverters
+This feature enables monitoring of *N* microinverters from a single service instance (docker container), which simplifies the installation and configuration.
+It is designed to monitor a fleet of microinverters.
+To activate this feature, set `DEYE_LOGGER_COUNT` environment variable to the number of loggers you would like to connect to. Next configure each logger by adding a set of environment variables, as follows:
+```
+DEYE_LOGGER_{N}_IP_ADDRESS=192.168.XXX.YYY
+DEYE_LOGGER_{N}_SERIAL_NUMBER=0123456789
+# Optionals
+DEYE_LOGGER_{N}_PROTOCOL=at
+DEYE_LOGGER_{N}_PORT=48899
+DEYE_LOGGER_{N}_MAX_REG_RANGE_LENGTH_PORT=256
+```
+Replace `{N}` with logger index. All loggers in the range of 1 to `DEYE_LOGGER_COUNT` must be configured.
+
+All other configuration options, in particular the metric groups, are shared by all configured loggers. For example, if you set `DEYE_FEATURE_SET_TIME=true`, it will activate set-time feature for all configured loggers.
+
+Each logger gets its own MQTT topic prefix `{MQTT_TOPIC_PREFIX}/{N}`
+
+Additionally, you can enable multi-inverter data aggregation. Set `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR=true` to compute and report `Aggregated daily energy` and `Aggregated AC active power` for the entire fleet. See [aggregated metrics](docs/metric_group_aggregated.md)
+
+
 ### Automatically set logger/inverter time
 Monitors current logger status and sets the time at the logger/inverter once the connection to it can be established.
 This is useful in a setup where the inverter has no access to the public internet, or is cut off from the Solarman cloud services. 
@@ -231,15 +255,16 @@ All configuration options are controlled through environment variables.
     * `settings` - inverter settings, all types except micro
     * `settings_micro` - inverter settings for micro inverters
 * `DEYE_LOGGER_COUNT` - declares the number of inverters, and therefore loggers to connect, optional, defaults to `0`, which means, that multi-inverter support is disabled
-* `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
-* `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
-* `DEYE_LOGGER_PORT` - inverter data logger communication port, optional, defaults to 8899 for Modbus/TCP, and 48899 for Modbus/AT
-* `DEYE_LOGGER_PROTOCOL` - inverter communication protocol, optional, either `tcp` for Modbus/TCP, or `at` for Modbus/AT, defaults to `tcp`
-* `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` - controls maximum number of registers to be read in a single Modbus registers read operation, defaults to 256
+* `DEYE_LOGGER_SERIAL_NUMBER` or `DEYE_LOGGER_{N}_SERIAL_NUMBER` - inverter data logger serial number
+* `DEYE_LOGGER_IP_ADDRESS` or `DEYE_LOGGER_{N}_IP_ADDRESS` - inverter data logger IP address
+* `DEYE_LOGGER_PORT` or `DEYE_LOGGER_{N}_PORT` - inverter data logger communication port, optional, defaults to 8899 for Modbus/TCP, and 48899 for Modbus/AT
+* `DEYE_LOGGER_PROTOCOL` or `DEYE_LOGGER_{N}_PROTOCOL` - inverter communication protocol, optional, either `tcp` for Modbus/TCP, or `at` for Modbus/AT, defaults to `tcp`
+* `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` or `DEYE_LOGGER_{N}_MAX_REG_RANGE_LENGTH`- controls maximum number of registers to be read in a single Modbus registers read operation, defaults to 256
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
 * `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
-* `DEYE_FEATURE_TIME_OF_USE` - enabled Time Of Use feature control over MQTT
+* `DEYE_FEATURE_TIME_OF_USE` - enables Time Of Use feature control over MQTT
+* `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR` - enables multi-inverter data aggregation and publishing
 * `MQTT_HOST` - MQTT Broker IP address
 * `MQTT_PORT` - MQTT Broker port, , defaults to `1883`
 * `MQTT_USERNAME` - MQTT Broker username for authentication, defaults to `None`
