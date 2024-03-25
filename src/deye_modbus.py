@@ -86,7 +86,7 @@ class DeyeModbus:
         Returns:
             bool: True when the write operation was successful, False otherwise
         """
-        self.write_registers(reg_address, [v.to_bytes(2, "big", signed=False) for v in reg_values])
+        return self.write_registers(reg_address, [v.to_bytes(2, "big", signed=False) for v in reg_values])
 
     def write_registers(self, reg_address: int, reg_values: list[bytearray]) -> bool:
         """Write multiple modbus holding registers.
@@ -142,7 +142,7 @@ class DeyeModbus:
     ) -> bytearray:
         result = bytearray.fromhex("0110{:04x}{:04x}{:02x}".format(reg_address, len(reg_values), len(reg_values) * 2))
         for v in reg_values:
-            self.__log.info(f"Extending with {v}")
+            self.__log.debug(f"Extending request frame with {v.hex()}")
             result.extend(v)
         return result
 
