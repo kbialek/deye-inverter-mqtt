@@ -82,7 +82,7 @@ class DeyeDaemon:
         )
 
         processors = DeyeProcessorFactory(config, mqtt_client).create_processors(logger_config, modbus, sensors)
-        inverter_state = DeyeInverterState(config, reg_ranges, modbus, sensors, processors)
+        inverter_state = DeyeInverterState(config, logger_config, reg_ranges, modbus, sensors, processors)
         return IntervalRunner(config.data_read_inverval, inverter_state.read_from_logger)
 
     def run(self):

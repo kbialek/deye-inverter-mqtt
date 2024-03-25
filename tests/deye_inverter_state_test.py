@@ -40,7 +40,7 @@ class TestInverterState(unittest.TestCase):
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
         reg_ranges = SensorRegisterRanges([], [], 0)
-        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state = DeyeInverterState(config_mock, config_mock.logger_config, reg_ranges, modbus, [], [])
         inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
@@ -55,7 +55,7 @@ class TestInverterState(unittest.TestCase):
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
         reg_ranges = SensorRegisterRanges([], [], 0)
-        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state = DeyeInverterState(config_mock, config_mock.logger_config, reg_ranges, modbus, [], [])
         inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
@@ -75,7 +75,7 @@ class TestInverterState(unittest.TestCase):
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
         reg_ranges = SensorRegisterRanges([], [], 0)
-        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state = DeyeInverterState(config_mock, config_mock.logger_config, reg_ranges, modbus, [], [])
         inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
@@ -102,7 +102,7 @@ class TestInverterState(unittest.TestCase):
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
         reg_ranges = SensorRegisterRanges([], [], 0)
-        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state = DeyeInverterState(config_mock, config_mock.logger_config, reg_ranges, modbus, [], [])
         inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
@@ -127,7 +127,7 @@ class TestInverterState(unittest.TestCase):
         config_mock.logger_config.protocol = "tcp"
         modbus = MagicMock()
         reg_ranges = SensorRegisterRanges([], [], 0)
-        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state = DeyeInverterState(config_mock, config_mock.logger_config, reg_ranges, modbus, [], [])
         inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))

@@ -20,7 +20,7 @@ import pytest
 from deye_active_power_regulation import DeyeActivePowerRegulationEventProcessor
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
-from deye_config import DeyeConfig, DeyeMqttConfig
+from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig
 from paho.mqtt.client import Client, MQTTMessage
 
 
@@ -42,13 +42,11 @@ class TestDeyeActivePowerRegulationCommandHandler:
 
     @staticmethod
     @pytest.fixture
-    def config_mock(mocker, mqtt_config_mock) -> DeyeConfig:
-        mock = mocker.Mock(spec=DeyeConfig)
-        mock.mqtt = mqtt_config_mock
-        return mock
+    def config_mock(mocker) -> DeyeLoggerConfig:
+        return mocker.Mock(spec=DeyeLoggerConfig)
 
     def test_handle_valid_value(
-        self, config_mock: DeyeConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
+        self, config_mock: DeyeLoggerConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
     ):
         # given
         sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)
@@ -64,7 +62,7 @@ class TestDeyeActivePowerRegulationCommandHandler:
         modbus_mock.write_register_uint.assert_called_with(40, 1000)
 
     def test_reject_too_high_value(
-        self, config_mock: DeyeConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
+        self, config_mock: DeyeLoggerConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
     ):
         # given
         sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)
@@ -80,7 +78,7 @@ class TestDeyeActivePowerRegulationCommandHandler:
         assert not modbus_mock.write_register_uint.called
 
     def test_reject_too_low_value(
-        self, config_mock: DeyeConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
+        self, config_mock: DeyeLoggerConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
     ):
         # given
         sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)

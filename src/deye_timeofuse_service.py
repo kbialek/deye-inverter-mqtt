@@ -17,7 +17,7 @@
 
 import logging
 
-from deye_config import DeyeConfig
+from deye_config import DeyeLoggerConfig
 from deye_mqtt import DeyeMqttClient
 from deye_modbus import DeyeModbus
 from deye_sensor import Sensor
@@ -28,8 +28,11 @@ from paho.mqtt.client import Client, MQTTMessage
 
 
 class DeyeTimeOfUseService(DeyeEventProcessor):
-    def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, sensors: list[Sensor], modbus: DeyeModbus):
+    def __init__(
+        self, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient, sensors: list[Sensor], modbus: DeyeModbus
+    ):
         self.__log = logging.getLogger(DeyeTimeOfUseService.__name__)
+        self.__logger_config = logger_config
         self.__mqtt_client = mqtt_client
         self.__sensors = [sensor for sensor in sensors if sensor.mqtt_topic_suffix.startswith("timeofuse")]
         self.__modbus = modbus
@@ -47,12 +50,16 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
         if self.__sensor_map:
             return
         for sensor in self.__sensors:
-            self.__mqtt_client.subscribe_command_handler(sensor.mqtt_topic_suffix, self.handle_command)
+            self.__mqtt_client.subscribe_command_handler(
+                self.__logger_config.index, sensor.mqtt_topic_suffix, self.handle_command
+            )
             self.__sensor_map[sensor.mqtt_topic_suffix] = sensor
-        self.__mqtt_client.subscribe_command_handler("timeofuse/control", self.handle_control_command)
+        self.__mqtt_client.subscribe_command_handler(
+            self.__logger_config.index, "timeofuse/control", self.handle_control_command
+        )
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
-        sensor_topic_suffix = self.__mqtt_client.extract_command_topic_suffix(msg.topic)
+        sensor_topic_suffix = self.__mqtt_client.extract_command_topic_suffix(self.__logger_config.index, msg.topic)
         if not sensor_topic_suffix or sensor_topic_suffix not in self.__sensor_map:
             return
         sensor = self.__sensor_map[sensor_topic_suffix]

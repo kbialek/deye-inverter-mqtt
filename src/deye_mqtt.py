@@ -17,7 +17,6 @@
 
 import logging
 import ssl
-from typing import List
 
 import paho.mqtt.client as paho
 
@@ -104,30 +103,42 @@ class DeyeMqttClient:
         except OSError as e:
             raise DeyeMqttPublishError(f"MQTT connection error: {str(e)}")
 
-    def publish_observation(self, observation: Observation):
+    def __build_topic_name(self, logger_topic_prefix: str, topic_suffix: str) -> str:
+        if logger_topic_prefix:
+            return f"{self.__config.topic_prefix}/{logger_topic_prefix}/{topic_suffix}"
+        else:
+            return f"{self.__config.topic_prefix}/{topic_suffix}"
+
+    def __map_logger_index_to_topic_prefix(self, logger_index: int):
+        return str(logger_index) if logger_index > 0 else ""
+
+    def publish_observation(self, observation: Observation, logger_index: int):
         if observation.sensor.mqtt_topic_suffix:
-            mqtt_topic = f"{self.__config.topic_prefix}/{observation.sensor.mqtt_topic_suffix}"
+            logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
+            mqtt_topic = self.__build_topic_name(logger_topic_prefix, observation.sensor.mqtt_topic_suffix)
             value = observation.value_as_str()
             self.__do_publish(mqtt_topic, value)
 
-    def publish_observations(self, observations: List[Observation]):
-        for observation in observations:
-            if observation.sensor.mqtt_topic_suffix:
-                self.publish_observation(observation)
-
-    def publish_logger_status(self, is_online: bool):
-        mqtt_topic = f"{self.__config.topic_prefix}/{self.__config.logger_status_topic}"
+    def publish_logger_status(self, is_online: bool, logger_index: int):
+        logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
+        mqtt_topic = self.__build_topic_name(logger_topic_prefix, self.__config.logger_status_topic)
         value = "online" if is_online else "offline"
         self.__do_publish(mqtt_topic, value)
         self.__log.info("Logger is %s", value)
 
-    def extract_command_topic_suffix(self, topic: str) -> str | None:
+    def extract_command_topic_suffix(self, logger_index: int, topic: str) -> str | None:
+        logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
         prefix = f"{self.__config.topic_prefix}/"
+        if logger_topic_prefix:
+            prefix = f"{prefix}{logger_topic_prefix}/"
         suffix = "/command"
         if topic.startswith(prefix) and topic.endswith(suffix):
             return topic.replace(prefix, "").replace(suffix, "")
         else:
             return None
 
-    def subscribe_command_handler(self, mqtt_topic_suffix: str, handler_method):
-        self.subscribe(f"{self.__config.topic_prefix}/{mqtt_topic_suffix}/command", handler_method)
+    def subscribe_command_handler(self, logger_index: int, mqtt_topic_suffix: str, handler_method):
+        mqtt_topic = self.__build_topic_name(
+            self.__map_logger_index_to_topic_prefix(logger_index), f"{mqtt_topic_suffix}/command"
+        )
+        self.subscribe(mqtt_topic, handler_method)
