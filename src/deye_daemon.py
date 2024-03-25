@@ -27,13 +27,12 @@ from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEve
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
 from deye_mqtt_publisher import DeyeMqttPublisher
-from deye_mqtt_subscriber import DeyeMqttSubscriber
 from deye_observation import Observation
 from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_sensor import SensorRegisterRanges
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_set_time_processor import DeyeSetTimeProcessor
-from deye_command_handlers import DeyeActivePowerRegulationCommandHandler
+from deye_active_power_regulation import DeyeActivePowerRegulationEventProcessor
 from deye_timeofuse_service import DeyeTimeOfUseService
 
 
@@ -63,14 +62,9 @@ class DeyeDaemon:
         mqtt_publisher = DeyeMqttPublisher(config, mqtt_client)
         set_time_processor = DeyeSetTimeProcessor(self.modbus)
         time_of_use_service = DeyeTimeOfUseService(config, mqtt_client, self.sensors, self.modbus)
+        active_power_regulation = DeyeActivePowerRegulationEventProcessor(config, mqtt_client, self.modbus)
 
-        command_handlers = [
-            DeyeActivePowerRegulationCommandHandler(config, mqtt_client, self.modbus),
-            time_of_use_service,
-        ]
-        DeyeMqttSubscriber(config, mqtt_client, command_handlers)
-
-        all_processors = [mqtt_publisher, set_time_processor, time_of_use_service]
+        all_processors = [mqtt_publisher, set_time_processor, time_of_use_service, active_power_regulation]
         self.processors = [
             p for p in all_processors if p.get_id() in config.active_processors
         ] + plugin_loader.get_event_processors()
@@ -90,6 +84,11 @@ class DeyeDaemon:
         self.__log.info(
             'Feature "Time-of-use configuration over MQTT": {}'.format(
                 "enabled" if time_of_use_service.get_id() in config.active_processors else "disabled"
+            )
+        )
+        self.__log.info(
+            'Feature "Active power regulation over MQTT": {}'.format(
+                "enabled" if active_power_regulation.get_id() in config.active_processors else "disabled"
             )
         )
         self.__last_observations = DeyeEventList()

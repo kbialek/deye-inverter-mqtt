@@ -20,39 +20,21 @@ import logging
 from deye_mqtt import DeyeMqttClient
 from deye_modbus import DeyeModbus
 from deye_config import DeyeConfig
+from deye_events import DeyeEventProcessor
 from paho.mqtt.client import Client, MQTTMessage
 
 
-class DeyeCommandHandler:
-    def __init__(self, id: str, config: DeyeConfig, mqtt_client: DeyeMqttClient):
-        self.__log = logging.getLogger(DeyeCommandHandler.__name__)
-        self.id = id
-        self.__config = config
-        self.__mqtt_client = mqtt_client
-
-    def initialize(self):
-        pass
-
-    def _subscribe(self, mqtt_topic_suffix: str, handler_method):
-        self.__mqtt_client.subscribe(f"{self.__config.mqtt.topic_prefix}/{mqtt_topic_suffix}/command", handler_method)
-
-    def _extract_topic_suffix(self, topic: str) -> str | None:
-        prefix = f"{self.__config.mqtt.topic_prefix}/"
-        suffix = "/command"
-        if topic.startswith(prefix) and topic.endswith(suffix):
-            return topic.replace(prefix, "").replace(suffix, "")
-        else:
-            return None
-
-
-class DeyeActivePowerRegulationCommandHandler(DeyeCommandHandler):
+class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
     def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus):
-        super().__init__("active_power_regulation", config, mqtt_client)
-        self.__log = logging.getLogger(DeyeActivePowerRegulationCommandHandler.__name__)
+        self.__log = logging.getLogger(DeyeActivePowerRegulationEventProcessor.__name__)
+        self.__mqtt_client = mqtt_client
         self.__modbus = modbus
 
+    def get_id(self):
+        return "active_power_regulation"
+
     def initialize(self):
-        self._subscribe("settings/active_power_regulation", self.handle_command)
+        self.__mqtt_client.subscribe_command_handler("settings/active_power_regulation", self.handle_command)
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
         try:

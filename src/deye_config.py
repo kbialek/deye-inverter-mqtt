@@ -211,7 +211,6 @@ class DeyeConfig:
         self.event_expiry = event_expiry
         self.metric_groups = metric_groups
         self.active_processors = active_processors
-        self.active_command_handlers = active_command_handlers
         self.plugins_dir = plugins_dir
 
     @staticmethod
@@ -227,7 +226,6 @@ class DeyeConfig:
                 event_expiry=DeyeEnv.integer("DEYE_PUBLISH_ON_CHANGE_MAX_INTERVAL", 360),
                 metric_groups=DeyeConfig.__read_item_set(DeyeEnv.string("DEYE_METRIC_GROUPS", "")),
                 active_processors=DeyeConfig.__read_active_processors(),
-                active_command_handlers=DeyeConfig.__read_active_command_handlers(),
                 plugins_dir=DeyeEnv.string("PLUGINS_DIR", "plugins"),
             )
         except Exception as e:
@@ -247,13 +245,6 @@ class DeyeConfig:
             active_processors.append("set_time")
         if DeyeEnv.boolean("DEYE_FEATURE_TIME_OF_USE", False):
             active_processors.append("time_of_use")
-        return active_processors
-
-    @staticmethod
-    def __read_active_command_handlers() -> [str]:
-        active_command_handlers = []
         if DeyeEnv.boolean("DEYE_FEATURE_ACTIVE_POWER_REGULATION", False):
-            active_command_handlers.append("active_power_regulation")
-        if DeyeEnv.boolean("DEYE_FEATURE_TIME_OF_USE", False):
-            active_command_handlers.append("time_of_use")
-        return active_command_handlers
+            active_processors.append("active_power_regulation")
+        return active_processors

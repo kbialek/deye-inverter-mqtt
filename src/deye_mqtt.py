@@ -61,6 +61,7 @@ class DeyeMqttClient:
         self.__mqtt_timeout = 3  # seconds
 
     def subscribe(self, topic: str, callback):
+        self.connect()
         self.__log.info("Subscribing to topic: %s", topic)
         result, mid = self.__mqtt_client.subscribe(topic, qos=1)
         if result != paho.MQTT_ERR_SUCCESS:
@@ -119,3 +120,14 @@ class DeyeMqttClient:
         value = "online" if is_online else "offline"
         self.__do_publish(mqtt_topic, value)
         self.__log.info("Logger is %s", value)
+
+    def extract_command_topic_suffix(self, topic: str) -> str | None:
+        prefix = f"{self.__config.topic_prefix}/"
+        suffix = "/command"
+        if topic.startswith(prefix) and topic.endswith(suffix):
+            return topic.replace(prefix, "").replace(suffix, "")
+        else:
+            return None
+
+    def subscribe_command_handler(self, mqtt_topic_suffix: str, handler_method):
+        self.subscribe(f"{self.__config.topic_prefix}/{mqtt_topic_suffix}/command", handler_method)

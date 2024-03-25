@@ -17,7 +17,7 @@
 
 import pytest
 
-from deye_command_handlers import DeyeActivePowerRegulationCommandHandler
+from deye_active_power_regulation import DeyeActivePowerRegulationEventProcessor
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
 from deye_config import DeyeConfig, DeyeMqttConfig
@@ -51,7 +51,7 @@ class TestDeyeActivePowerRegulationCommandHandler:
         self, config_mock: DeyeConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
     ):
         # given
-        sut = DeyeActivePowerRegulationCommandHandler(config_mock, mqtt_client_mock, modbus_mock)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)
 
         # and
         msg = MQTTMessage()
@@ -67,7 +67,7 @@ class TestDeyeActivePowerRegulationCommandHandler:
         self, config_mock: DeyeConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
     ):
         # given
-        sut = DeyeActivePowerRegulationCommandHandler(config_mock, mqtt_client_mock, modbus_mock)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)
 
         # and
         msg = MQTTMessage()
@@ -83,7 +83,7 @@ class TestDeyeActivePowerRegulationCommandHandler:
         self, config_mock: DeyeConfig, mqtt_client_mock: DeyeMqttClient, modbus_mock: DeyeModbus
     ):
         # given
-        sut = DeyeActivePowerRegulationCommandHandler(config_mock, mqtt_client_mock, modbus_mock)
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, modbus_mock)
 
         # and
         msg = MQTTMessage()
