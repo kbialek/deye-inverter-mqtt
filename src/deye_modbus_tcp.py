@@ -27,7 +27,7 @@ class DeyeModbusTcp:
     """
 
     def __init__(self, logger_config: DeyeLoggerConfig, connector: DeyeConnector):
-        self.__log = logging.getLogger(DeyeModbusTcp.__name__)
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeModbusTcp.__name__))
         self.loggger_config = logger_config
         self.connector = connector
 

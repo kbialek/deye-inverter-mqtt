@@ -31,7 +31,7 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
     def __init__(
         self, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient, sensors: list[Sensor], modbus: DeyeModbus
     ):
-        self.__log = logging.getLogger(DeyeTimeOfUseService.__name__)
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeTimeOfUseService.__name__))
         self.__logger_config = logger_config
         self.__mqtt_client = mqtt_client
         self.__sensors = [sensor for sensor in sensors if sensor.mqtt_topic_suffix.startswith("timeofuse")]

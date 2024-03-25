@@ -25,7 +25,7 @@ from deye_connector import DeyeConnector
 
 class DeyeAtConnector(DeyeConnector):
     def __init__(self, logger_config: DeyeLoggerConfig) -> None:
-        self.__log = logging.getLogger(DeyeAtConnector.__name__)
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeAtConnector.__name__))
         self.__logger_config = logger_config
         self.__reachable = True
 

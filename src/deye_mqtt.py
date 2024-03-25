@@ -17,10 +17,12 @@
 
 import logging
 import ssl
+import threading
+
 
 import paho.mqtt.client as paho
 
-from deye_config import DeyeConfig
+from deye_config import DeyeConfig, ParameterizedLogger
 from deye_observation import Observation
 
 import time
@@ -58,6 +60,7 @@ class DeyeMqttClient:
         self.__mqtt_client.will_set(self.__status_topic, "offline", retain=True, qos=1)
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
+        self.__publish_lock = threading.Lock()
 
     def subscribe(self, topic: str, callback):
         self.connect()
@@ -92,10 +95,12 @@ class DeyeMqttClient:
 
     def __do_publish(self, mqtt_topic: str, value: str):
         try:
+            self.__publish_lock.acquire()
             self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
             self.connect()
             info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
             info.wait_for_publish(self.__mqtt_timeout)
+            self.__publish_lock.release()
         except ValueError as e:
             raise DeyeMqttPublishError(f"MQTT outgoing queue is full: {str(e)}")
         except RuntimeError as e:
@@ -124,7 +129,7 @@ class DeyeMqttClient:
         mqtt_topic = self.__build_topic_name(logger_topic_prefix, self.__config.logger_status_topic)
         value = "online" if is_online else "offline"
         self.__do_publish(mqtt_topic, value)
-        self.__log.info("Logger is %s", value)
+        ParameterizedLogger(self.__log, logger_index).info("Logger is %s", value)
 
     def extract_command_topic_suffix(self, logger_index: int, topic: str) -> str | None:
         logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
