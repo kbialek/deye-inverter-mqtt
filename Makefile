@@ -105,6 +105,7 @@ METRIC_GROUPS = \
 	deye_hybrid_battery \
 	deye_hybrid_timeofuse \
 	settings \
+	settings_micro \
 	deye_sg01hp3 \
 	deye_sg01hp3_battery \
 	deye_sg01hp3_ups \
