@@ -18,24 +18,23 @@
 import logging
 
 from deye_at_connector import DeyeAtConnector
-from deye_config import DeyeConfig
+from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
 from deye_tcp_connector import DeyeTcpConnector
 from deye_modbus_tcp import DeyeModbusTcp
 
 
 class DeyeConnectorFactory:
-    def __init__(self, config: DeyeConfig):
+    def __init__(self):
         self.__log = logging.getLogger(DeyeConnectorFactory.__name__)
-        self.__config = config
 
-    def create_connector(self) -> DeyeConnector:
-        protocol = self.__config.logger.protocol
+    def create_connector(self, logger_config: DeyeLoggerConfig) -> DeyeConnector:
+        protocol = logger_config.protocol
         if protocol == "tcp":
             self.__log.info("Creating Modbus/TCP Logger connector")
-            return DeyeModbusTcp(self.__config, DeyeTcpConnector(self.__config))
+            return DeyeModbusTcp(logger_config, DeyeTcpConnector(logger_config))
         elif protocol == "at":
             self.__log.info("Creating Modbus/AT Logger connector")
-            return DeyeAtConnector(self.__config)
+            return DeyeAtConnector(logger_config)
         else:
             raise Exception(f"Unsupported logger protocol {protocol}")

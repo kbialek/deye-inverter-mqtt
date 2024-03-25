@@ -28,7 +28,7 @@ class DeyeAtConnectorIntegrationTest(unittest.TestCase):
         # given
         deye_config = DeyeConfig.from_env()
 
-        deye_at_connector = DeyeAtConnector(deye_config)
+        deye_at_connector = DeyeAtConnector(deye_config.logger)
 
         # when
         deye_at_connector.send_request(bytearray.fromhex("0103002800010402"))

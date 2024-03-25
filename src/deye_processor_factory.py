@@ -18,7 +18,7 @@
 import logging
 
 from deye_events import DeyeEventProcessor
-from deye_config import DeyeConfig
+from deye_config import DeyeConfig, DeyeLoggerConfig
 from deye_mqtt import DeyeMqttClient
 from deye_modbus import DeyeModbus
 from deye_mqtt_publisher import DeyeMqttPublisher
@@ -38,15 +38,21 @@ class DeyeProcessorFactory:
         self.plugin_loader = DeyePluginLoader(config)
         self.plugin_loader.load_plugins(plugin_context)
 
-    def create_processors(self, modbus: DeyeModbus, sensors: list[Sensor]) -> list[DeyeEventProcessor]:
-        processors = self.__create_builtin_processors(modbus, sensors) + self.plugin_loader.get_event_processors()
+    def create_processors(
+        self, logger_config: DeyeLoggerConfig, modbus: DeyeModbus, sensors: list[Sensor]
+    ) -> list[DeyeEventProcessor]:
+        processors = (
+            self.__create_builtin_processors(logger_config, modbus, sensors) + self.plugin_loader.get_event_processors()
+        )
         for p in processors:
             p.initialize()
         return processors
 
-    def __create_builtin_processors(self, modbus: DeyeModbus, sensors: list[Sensor]) -> list[DeyeEventProcessor]:
+    def __create_builtin_processors(
+        self, logger_config: DeyeLoggerConfig, modbus: DeyeModbus, sensors: list[Sensor]
+    ) -> list[DeyeEventProcessor]:
         processors = []
-        self.__append_processor(processors, DeyeMqttPublisher(self.__config, self.__mqtt_client))
+        self.__append_processor(processors, DeyeMqttPublisher(self.__mqtt_client, logger_config.index))
         self.__append_processor(processors, DeyeSetTimeProcessor(modbus))
         self.__append_processor(processors, DeyeTimeOfUseService(self.__config, self.__mqtt_client, sensors, modbus))
         self.__append_processor(

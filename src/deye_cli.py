@@ -24,7 +24,7 @@ from deye_modbus import DeyeModbus
 
 class DeyeCli:
     def __init__(self, config: DeyeConfig):
-        connector = DeyeConnectorFactory(config).create_connector()
+        connector = DeyeConnectorFactory().create_connector(config.logger)
         self.__modbus = DeyeModbus(connector)
 
     def exec_command(self, args):

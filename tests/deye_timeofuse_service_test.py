@@ -53,7 +53,7 @@ class TestDeyeTimeOfUseService:
     @staticmethod
     @pytest.fixture
     def config_mock(logger_config_mock, mqtt_config_mock) -> DeyeConfig:
-        return DeyeConfig(logger_config=logger_config_mock, mqtt=mqtt_config_mock)
+        return DeyeConfig(logger_configs=logger_config_mock, mqtt=mqtt_config_mock)
 
     @staticmethod
     @pytest.fixture

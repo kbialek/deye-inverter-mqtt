@@ -19,26 +19,28 @@ import logging
 import socket
 
 from deye_connector import DeyeConnector
-from deye_config import DeyeConfig
+from deye_config import DeyeLoggerConfig
 
 
 class DeyeTcpConnector(DeyeConnector):
-    def __init__(self, config: DeyeConfig) -> None:
+    def __init__(self, config: DeyeLoggerConfig) -> None:
         self.__log = logging.getLogger(DeyeTcpConnector.__name__)
-        self.config = config.logger
+        self.__logger_config = config
         self.__reachable = True
 
     def send_request(self, req_frame) -> bytes | None:
         try:
-            client_socket = socket.create_connection((self.config.ip_address, self.config.port), timeout=10)
+            client_socket = socket.create_connection(
+                (self.__logger_config.ip_address, self.__logger_config.port), timeout=10
+            )
             if not self.__reachable:
                 self.__reachable = True
-                self.__log.info("Re-connected to socket on IP %s", self.config.ip_address)
+                self.__log.info("Re-connected to socket on IP %s", self.__logger_config.ip_address)
         except OSError as e:
             if self.__reachable:
-                self.__log.warning("Could not open socket on IP %s: %s", self.config.ip_address, e)
+                self.__log.warning("Could not open socket on IP %s: %s", self.__logger_config.ip_address, e)
             else:
-                self.__log.debug("Could not open socket on IP %s: %s", self.config.ip_address, e)
+                self.__log.debug("Could not open socket on IP %s: %s", self.__logger_config.ip_address, e)
             self.__reachable = False
             return
 
@@ -59,7 +61,7 @@ class DeyeTcpConnector(DeyeConnector):
                 if attempts == 0:
                     self.__log.warning("Too many connection timeouts")
             except OSError as e:
-                self.__log.error("Connection error: %s: %s", self.config.ip_address, e)
+                self.__log.error("Connection error: %s: %s", self.__logger_config.ip_address, e)
                 return
             except Exception:
                 self.__log.exception("Unknown connection error")
