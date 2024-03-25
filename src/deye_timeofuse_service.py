@@ -17,10 +17,9 @@
 
 import logging
 
-from deye_config import DeyeConfig
+from deye_config import DeyeLoggerConfig
 from deye_mqtt import DeyeMqttClient
 from deye_modbus import DeyeModbus
-from deye_command_handlers import DeyeCommandHandler
 from deye_sensor import Sensor
 from deye_observation import Observation
 from deye_events import DeyeEventProcessor, DeyeEventList, DeyeObservationEvent
@@ -28,10 +27,13 @@ from deye_events import DeyeEventProcessor, DeyeEventList, DeyeObservationEvent
 from paho.mqtt.client import Client, MQTTMessage
 
 
-class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
-    def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, sensors: list[Sensor], modbus: DeyeModbus):
-        super().__init__("time_of_use", config, mqtt_client)
-        self.__log = logging.getLogger(DeyeTimeOfUseService.__name__)
+class DeyeTimeOfUseService(DeyeEventProcessor):
+    def __init__(
+        self, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient, sensors: list[Sensor], modbus: DeyeModbus
+    ):
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeTimeOfUseService.__name__))
+        self.__logger_config = logger_config
+        self.__mqtt_client = mqtt_client
         self.__sensors = [sensor for sensor in sensors if sensor.mqtt_topic_suffix.startswith("timeofuse")]
         self.__modbus = modbus
         self.__sensor_map: dict[str, Sensor] = {}
@@ -41,16 +43,23 @@ class DeyeTimeOfUseService(DeyeCommandHandler, DeyeEventProcessor):
     def get_id(self):
         return "time_of_use"
 
+    def get_description(self):
+        return "Time-of-use configuration over MQTT"
+
     def initialize(self):
         if self.__sensor_map:
             return
         for sensor in self.__sensors:
-            self._subscribe(sensor.mqtt_topic_suffix, self.handle_command)
+            self.__mqtt_client.subscribe_command_handler(
+                self.__logger_config.index, sensor.mqtt_topic_suffix, self.handle_command
+            )
             self.__sensor_map[sensor.mqtt_topic_suffix] = sensor
-        self._subscribe("timeofuse/control", self.handle_control_command)
+        self.__mqtt_client.subscribe_command_handler(
+            self.__logger_config.index, "timeofuse/control", self.handle_control_command
+        )
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
-        sensor_topic_suffix = self._extract_topic_suffix(msg.topic)
+        sensor_topic_suffix = self.__mqtt_client.extract_command_topic_suffix(self.__logger_config.index, msg.topic)
         if not sensor_topic_suffix or sensor_topic_suffix not in self.__sensor_map:
             return
         sensor = self.__sensor_map[sensor_topic_suffix]

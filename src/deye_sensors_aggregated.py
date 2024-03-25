@@ -15,25 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import logging
+from deye_sensor import AggregatedValueSensor
 
-from deye_config import DeyeConfig
-from deye_mqtt import DeyeMqttClient
-from deye_command_handlers import DeyeCommandHandler
+aggregated_day_energy_sensor = AggregatedValueSensor(
+    "Aggregated daily energy", mqtt_topic_suffix="day_energy", unit="kWh", groups=["aggregated"]
+)
+aggregated_ac_active_power_sensor = AggregatedValueSensor(
+    "Aggregated AC active power", mqtt_topic_suffix="ac/active_power", unit="W", groups=["aggregated"]
+)
 
-
-class DeyeMqttSubscriber:
-    def __init__(
-        self,
-        config: DeyeConfig,
-        mqtt_client: DeyeMqttClient,
-        command_handlers: [DeyeCommandHandler],
-    ):
-        self.__log = logging.getLogger(DeyeMqttSubscriber.__name__)
-
-        active_command_handlers = [h for h in command_handlers if h.id in config.active_command_handlers]
-
-        if active_command_handlers:
-            mqtt_client.connect()
-            for command_handler in active_command_handlers:
-                command_handler.initialize()
+aggregated_sensor_list = [aggregated_day_energy_sensor, aggregated_ac_active_power_sensor]

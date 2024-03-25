@@ -19,37 +19,19 @@ import logging
 
 from deye_mqtt import DeyeMqttClient
 from deye_modbus import DeyeModbus
-from deye_config import DeyeConfig
+from deye_config import DeyeLoggerConfig
+from deye_events import DeyeEventProcessor
 from deye_sensor import Sensor
 from paho.mqtt.client import Client, MQTTMessage
 
 
-class DeyeCommandHandler:
-    def __init__(self, id: str, config: DeyeConfig, mqtt_client: DeyeMqttClient):
-        self.__log = logging.getLogger(DeyeCommandHandler.__name__)
-        self.id = id
-        self.__config = config
+class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
+    def __init__(
+        self, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient, sensors: [Sensor], modbus: DeyeModbus
+    ):
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeActivePowerRegulationEventProcessor.__name__))
+        self.__logger_config = logger_config
         self.__mqtt_client = mqtt_client
-
-    def initialize(self):
-        pass
-
-    def _subscribe(self, mqtt_topic_suffix: str, handler_method):
-        self.__mqtt_client.subscribe(f"{self.__config.mqtt.topic_prefix}/{mqtt_topic_suffix}/command", handler_method)
-
-    def _extract_topic_suffix(self, topic: str) -> str | None:
-        prefix = f"{self.__config.mqtt.topic_prefix}/"
-        suffix = "/command"
-        if topic.startswith(prefix) and topic.endswith(suffix):
-            return topic.replace(prefix, "").replace(suffix, "")
-        else:
-            return None
-
-
-class DeyeActivePowerRegulationCommandHandler(DeyeCommandHandler):
-    def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus, sensors: [Sensor]):
-        super().__init__("active_power_regulation", config, mqtt_client)
-        self.__log = logging.getLogger(DeyeActivePowerRegulationCommandHandler.__name__)
         self.__modbus = modbus
         self.__active_power_regulation_topic_suffix = "settings/active_power_regulation"
         matching_sensors = [s for s in sensors if s.mqtt_topic_suffix == self.__active_power_regulation_topic_suffix]
@@ -63,8 +45,16 @@ class DeyeActivePowerRegulationCommandHandler(DeyeCommandHandler):
             return
         self.__active_power_reg_sensor = matching_sensors[0]
 
+    def get_id(self):
+        return "active_power_regulation"
+
+    def get_description(self):
+        return "Active power regulation over MQTT"
+
     def initialize(self):
-        self._subscribe(self.__active_power_regulation_topic_suffix, self.handle_command)
+        self.__mqtt_client.subscribe_command_handler(
+            self.__logger_config.index, self.__active_power_regulation_topic_suffix, self.handle_command
+        )
 
     def handle_command(self, client: Client, userdata, msg: MQTTMessage):
         try:

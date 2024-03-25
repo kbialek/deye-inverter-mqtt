@@ -18,9 +18,20 @@
 import os
 import ssl
 import sys
+import logging
 
 LOG_DEST_STDOUT = "STDOUT"
 LOG_DEST_STDERR = "STDERR"
+
+
+class ParameterizedLogger(logging.LoggerAdapter):
+    def __init__(self, logger: logging.Logger, inverterIndex: int):
+        super().__init__(logger, {"index": inverterIndex})
+
+    def process(self, msg, kwargs):
+        inverterIndex = self.extra["index"]
+        adapted_msg = "[{}] {}".format(inverterIndex, msg) if inverterIndex > 0 else msg
+        return adapted_msg, kwargs
 
 
 class DeyeEnv:
@@ -160,6 +171,7 @@ class DeyeLoggerConfig:
         serial_number: int,
         ip_address: str,
         port: int,
+        index: int = 0,
         protocol: str = "tcp",
         max_register_range_length: int = 256,
     ):
@@ -174,7 +186,15 @@ class DeyeLoggerConfig:
             self.port = 48899
         else:
             self.port = port
+        self.index = index
         self.max_register_range_length = max_register_range_length
+
+    def logger_adapter(self, logger: logging.Logger):
+        return ParameterizedLogger(logger, self.index)
+
+    @staticmethod
+    def for_aggregator():
+        return DeyeLoggerConfig(0, "127.0.0.1", 0, index=0)
 
     @staticmethod
     def from_env():
@@ -186,11 +206,22 @@ class DeyeLoggerConfig:
             max_register_range_length=DeyeEnv.integer("DEYE_LOGGER_MAX_REG_RANGE_LENGTH", 256),
         )
 
+    @staticmethod
+    def from_env_indexed(index: int):
+        return DeyeLoggerConfig(
+            serial_number=DeyeEnv.integer(f"DEYE_LOGGER_{index}_SERIAL_NUMBER"),
+            ip_address=DeyeEnv.string(f"DEYE_LOGGER_{index}_IP_ADDRESS"),
+            port=DeyeEnv.integer(f"DEYE_LOGGER_{index}_PORT", 0),
+            index=index,
+            protocol=DeyeEnv.string(f"DEYE_LOGGER_{index}_PROTOCOL", "tcp"),
+            max_register_range_length=DeyeEnv.integer(f"DEYE_LOGGER_{index}_MAX_REG_RANGE_LENGTH", 256),
+        )
+
 
 class DeyeConfig:
     def __init__(
         self,
-        logger_config: DeyeLoggerConfig,
+        logger_configs: list[DeyeLoggerConfig] | DeyeLoggerConfig,
         mqtt: DeyeMqttConfig,
         log_level="INFO",
         log_stream=LOG_DEST_STDOUT,
@@ -202,7 +233,10 @@ class DeyeConfig:
         active_command_handlers: [str] = [],
         plugins_dir: str = "",
     ):
-        self.logger = logger_config
+        if isinstance(logger_configs, DeyeLoggerConfig):
+            self.logger_configs = [logger_configs]
+        else:
+            self.logger_configs = logger_configs
         self.mqtt = mqtt
         self.log_level = log_level
         self.log_stream = log_stream
@@ -211,14 +245,22 @@ class DeyeConfig:
         self.event_expiry = event_expiry
         self.metric_groups = metric_groups
         self.active_processors = active_processors
-        self.active_command_handlers = active_command_handlers
         self.plugins_dir = plugins_dir
+
+    @property
+    def logger(self):
+        return self.logger_configs[0]
 
     @staticmethod
     def from_env():
         try:
+            logger_count = DeyeEnv.integer("DEYE_LOGGER_COUNT", 0)
+            if logger_count == 0:
+                logger_configs = [DeyeLoggerConfig.from_env()]
+            else:
+                logger_configs = [DeyeLoggerConfig.from_env_indexed(i) for i in range(1, logger_count + 1)]
             return DeyeConfig(
-                DeyeLoggerConfig.from_env(),
+                logger_configs,
                 DeyeMqttConfig.from_env(),
                 log_level=DeyeEnv.string("LOG_LEVEL", "INFO"),
                 log_stream=DeyeEnv.string("LOG_STREAM", LOG_DEST_STDOUT),
@@ -227,7 +269,6 @@ class DeyeConfig:
                 event_expiry=DeyeEnv.integer("DEYE_PUBLISH_ON_CHANGE_MAX_INTERVAL", 360),
                 metric_groups=DeyeConfig.__read_item_set(DeyeEnv.string("DEYE_METRIC_GROUPS", "")),
                 active_processors=DeyeConfig.__read_active_processors(),
-                active_command_handlers=DeyeConfig.__read_active_command_handlers(),
                 plugins_dir=DeyeEnv.string("PLUGINS_DIR", "plugins"),
             )
         except Exception as e:
@@ -247,13 +288,8 @@ class DeyeConfig:
             active_processors.append("set_time")
         if DeyeEnv.boolean("DEYE_FEATURE_TIME_OF_USE", False):
             active_processors.append("time_of_use")
-        return active_processors
-
-    @staticmethod
-    def __read_active_command_handlers() -> [str]:
-        active_command_handlers = []
         if DeyeEnv.boolean("DEYE_FEATURE_ACTIVE_POWER_REGULATION", False):
-            active_command_handlers.append("active_power_regulation")
-        if DeyeEnv.boolean("DEYE_FEATURE_TIME_OF_USE", False):
-            active_command_handlers.append("time_of_use")
-        return active_command_handlers
+            active_processors.append("active_power_regulation")
+        if DeyeEnv.boolean("DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR", False):
+            active_processors.append("multi_inverter_data_aggregator")
+        return active_processors

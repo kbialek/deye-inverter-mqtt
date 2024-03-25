@@ -210,7 +210,6 @@ class ComputedPowerSensor(Sensor):
         else:
             return None
 
-    @abstractmethod
     def get_registers(self) -> list[int]:
         return []
 
@@ -235,7 +234,24 @@ class ComputedSumSensor(Sensor):
             result += value
         return result
 
-    @abstractmethod
+    def get_registers(self) -> list[int]:
+        return []
+
+
+class AggregatedValueSensor(Sensor):
+    """
+    Represents value computed as an aggregation in multi-inverter installation
+    """
+
+    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:0.1f}", groups=[]):
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
+
+    def read_value(self, registers: dict[int, bytearray]):
+        raise RuntimeError("Cannot read registers of aggregated sensor")
+
+    def write_value(self, value: str) -> dict[int, bytearray]:
+        raise RuntimeError("Cannot write registers of aggregated sensor")
+
     def get_registers(self) -> list[int]:
         return []
 
@@ -295,9 +311,16 @@ class SensorRegisterRange:
 
 
 class SensorRegisterRanges:
-    def __init__(self, ranges: list[SensorRegisterRange], max_range_length: int):
-        unique_ranges = SensorRegisterRanges.__remove_duplicated_reg_ranges(ranges)
+    def __init__(self, ranges: list[SensorRegisterRange], metric_groups: list[str], max_range_length: int):
+        filtered_ranges = SensorRegisterRanges.__filter_reg_ranges(ranges, metric_groups)
+        unique_ranges = SensorRegisterRanges.__remove_duplicated_reg_ranges(filtered_ranges)
         self.ranges = SensorRegisterRanges.__split_long_reg_ranges(unique_ranges, max_range_length)
+
+    @staticmethod
+    def __filter_reg_ranges(
+        reg_ranges_to_filter: list[SensorRegisterRange], metric_groups: list[str]
+    ) -> list[SensorRegisterRange]:
+        return [r for r in reg_ranges_to_filter if r.in_any_group(metric_groups)]
 
     @staticmethod
     def __split_long_reg_ranges(

@@ -17,7 +17,7 @@
 
 import logging
 
-from deye_config import DeyeConfig
+from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
 
 
@@ -26,9 +26,9 @@ class DeyeModbusTcp:
     Inspired by https://github.com/jlopez77/DeyeInverter
     """
 
-    def __init__(self, config: DeyeConfig, connector: DeyeConnector):
-        self.__log = logging.getLogger(DeyeModbusTcp.__name__)
-        self.config = config.logger
+    def __init__(self, logger_config: DeyeLoggerConfig, connector: DeyeConnector):
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeModbusTcp.__name__))
+        self.loggger_config = logger_config
         self.connector = connector
 
     def send_request(self, modbus_frame) -> bytes | None:
@@ -44,7 +44,7 @@ class DeyeModbusTcp:
         datafield = bytearray.fromhex("020000000000000000000000000000")
         checksum = bytearray.fromhex("00")  # checksum placeholder for outer frame
         end_code = bytearray.fromhex("15")
-        inverter_sn = bytearray.fromhex("{:10x}".format(self.config.serial_number))
+        inverter_sn = bytearray.fromhex("{:10x}".format(self.loggger_config.serial_number))
         inverter_sn.reverse()
         frame = (
             start

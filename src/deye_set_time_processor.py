@@ -36,6 +36,9 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
     def get_id(self):
         return "set_time"
 
+    def get_description(self):
+        return "Set inverter time once online"
+
     @property
     def last_status(self):
         return self.__last_status

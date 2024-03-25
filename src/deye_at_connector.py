@@ -19,14 +19,14 @@ import logging
 import socket
 import time
 
-from deye_config import DeyeConfig
+from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
 
 
 class DeyeAtConnector(DeyeConnector):
-    def __init__(self, config: DeyeConfig) -> None:
-        self.__log = logging.getLogger(DeyeAtConnector.__name__)
-        self.config = config.logger
+    def __init__(self, logger_config: DeyeLoggerConfig) -> None:
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeAtConnector.__name__))
+        self.__logger_config = logger_config
         self.__reachable = True
 
     def __create_socket(self) -> socket.socket | None:
@@ -35,19 +35,19 @@ class DeyeAtConnector(DeyeConnector):
             client_socket.settimeout(1)
             if not self.__reachable:
                 self.__reachable = True
-                self.__log.info("Re-connected to socket on IP %s", self.config.ip_address)
+                self.__log.info("Re-connected to socket on IP %s", self.__logger_config.ip_address)
             return client_socket
         except OSError as e:
             if self.__reachable:
-                self.__log.warning("Could not open socket on IP %s: %s", self.config.ip_address, e)
+                self.__log.warning("Could not open socket on IP %s: %s", self.__logger_config.ip_address, e)
             else:
-                self.__log.debug("Could not open socket on IP %s: %s", self.config.ip_address, e)
+                self.__log.debug("Could not open socket on IP %s: %s", self.__logger_config.ip_address, e)
             self.__reachable = False
             return
 
     def __send_at_command(self, client_socket: socket, at_command: str) -> None:
         self.__log.debug("Sending AT command: %s", at_command)
-        client_socket.sendto(at_command, (self.config.ip_address, self.config.port))
+        client_socket.sendto(at_command, (self.__logger_config.ip_address, self.__logger_config.port))
         time.sleep(0.1)
 
     def __receive_at_response(self, client_socket: socket) -> str:
@@ -65,7 +65,7 @@ class DeyeAtConnector(DeyeConnector):
                 if attempts == 0:
                     self.__log.warning("Too many connection timeouts")
             except OSError as e:
-                self.__log.error("Connection error: %s: %s", self.config.ip_address, e)
+                self.__log.error("Connection error: %s: %s", self.__logger_config.ip_address, e)
                 return
             except Exception:
                 self.__log.exception("Unknown connection error")

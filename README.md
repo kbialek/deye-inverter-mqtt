@@ -230,6 +230,7 @@ All configuration options are controlled through environment variables.
     * `igen_dtsd422`- dtsd422 smart meter
     * `settings` - inverter settings, all types except micro
     * `settings_micro` - inverter settings for micro inverters
+* `DEYE_LOGGER_COUNT` - declares the number of inverters, and therefore loggers to connect, optional, defaults to `0`, which means, that multi-inverter support is disabled
 * `DEYE_LOGGER_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` - inverter data logger IP address
 * `DEYE_LOGGER_PORT` - inverter data logger communication port, optional, defaults to 8899 for Modbus/TCP, and 48899 for Modbus/AT

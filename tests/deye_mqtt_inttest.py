@@ -72,11 +72,11 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
     def setUp(self):
         self.received_messages = []
         self.config = DeyeConfig(
-            logger_config=DeyeLoggerConfig("123456", "192.168.0.1", 9090),
+            logger_configs=DeyeLoggerConfig("123456", "192.168.0.1", 9090),
             mqtt=DeyeMqttConfig("localhost", self.mqtt_broker_port, "", "", "deye"),
         )
         self.config_with_tls = DeyeConfig(
-            logger_config=DeyeLoggerConfig("123456", "192.168.0.1", 9090),
+            logger_configs=DeyeLoggerConfig("123456", "192.168.0.1", 9090),
             mqtt=DeyeMqttConfig(
                 "localhost",
                 self.mqtt_broker_port,
@@ -120,7 +120,7 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # when
         self.test_mqtt_client.loop_start()
-        mqtt.publish_observation(observation)
+        mqtt.publish_observation(observation, 0)
         self.test_mqtt_client.loop_stop()
 
         # and
@@ -156,7 +156,7 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # when
         self.test_mqtt_client.loop_start()
-        mqtt.publish_observation(observation)
+        mqtt.publish_observation(observation, 0)
         self.test_mqtt_client.loop_stop()
 
         # and
@@ -190,7 +190,7 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # when
         self.test_mqtt_client.loop_start()
-        mqtt.publish_observation(observation)
+        mqtt.publish_observation(observation, 0)
         self.test_mqtt_client.loop_stop()
 
         # and
@@ -222,7 +222,7 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         # when
         self.test_mqtt_client.loop_start()
-        mqtt.publish_observation(observation)
+        mqtt.publish_observation(observation, 0)
         self.test_mqtt_client.loop_stop()
 
         # and

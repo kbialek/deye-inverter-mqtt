@@ -80,8 +80,9 @@ class DeyeEventList(list):
     An list of Deye Events
     """
 
-    def __init__(self, events: list[DeyeEvent] | None = None):
+    def __init__(self, events: list[DeyeEvent] | None = None, logger_index: int = 0):
         self.__log = logging.getLogger(DeyeEventList.__name__)
+        self.__logger_index = logger_index
         super().__init__(events if events else [])
 
     def __str__(self) -> str:
@@ -93,6 +94,10 @@ class DeyeEventList(list):
             if isinstance(event, DeyeLoggerStatusEvent):
                 return event.online
         return None
+
+    @property
+    def logger_index(self) -> int:
+        return self.__logger_index
 
     def is_offline(self) -> bool:
         """Check for the status event offline
@@ -118,6 +123,8 @@ class DeyeEventList(list):
         bool
             True if both lists are containing the same events with same values
         """
+        if self.logger_index != events.logger_index:
+            return False
         set_a = {e for e in self if isinstance(e, DeyeObservationEvent)}
         set_b = {e for e in events if isinstance(e, DeyeObservationEvent)}
         self.__log.debug("Compare events A[%s] == B[%s]", str(self), str(DeyeEventList(events)))
@@ -137,12 +144,21 @@ class DeyeEventProcessor:
         pass
 
     @abstractmethod
-    def get_id(self):
+    def get_id(self) -> str:
         """
         The ID is used to activate the processor in the configuration
         """
         pass
 
+    def get_description(self) -> str:
+        """
+        The description of the processor to be printed out in the logs
+        """
+        return ""
+
     @abstractmethod
     def process(self, events: DeyeEventList):
+        """
+        Processes events representing changes of metric values
+        """
         pass
