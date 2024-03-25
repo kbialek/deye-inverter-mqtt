@@ -38,6 +38,9 @@ class DeyeMqttPublisher(DeyeEventProcessor):
     def get_id(self):
         return "mqtt_publisher"
 
+    def get_description(self):
+        return "Report metrics over MQTT"
+
     def process(self, events: DeyeEventList):
         for event in events:
             try:
