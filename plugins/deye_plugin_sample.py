@@ -26,6 +26,7 @@ class DeyeSamplePublisher(DeyeEventProcessor):
         return "sample_publisher"
 
     def process(self, events: DeyeEventList):
+        print(f"Processing events from logger: {events.logger_index}")
         for event in events:
             if isinstance(event, DeyeObservationEvent):
                 observation_event: DeyeObservationEvent = event
