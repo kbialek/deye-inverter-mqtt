@@ -29,6 +29,7 @@ from deye_sensor import SensorRegisterRanges
 from deye_sensors import sensor_list, sensor_register_ranges
 from deye_processor_factory import DeyeProcessorFactory
 from deye_inverter_state import DeyeInverterState
+from deye_events import DeyeObservationEvent, DeyeEventList
 
 
 class IntervalRunner:
@@ -40,22 +41,25 @@ class IntervalRunner:
         self.__thread = threading.Thread(target=self.__handler)
 
     def __handler(self):
-        self.__log.debug("Start to execute the daemon at intervals of %s seconds", self.__interval)
         nextTime = time.time() + random.randint(0, self.__interval - 1)
         while not self.__stopEvent.wait(nextTime - time.time()):
             nextTime = time.time() + self.__interval
+            self.__log.debug("Invoking action")
             self.__invoke_action()
+        self.__log.debug("Invocation loop stopped")
 
     def __invoke_action(self):
         try:
             self.__action()
         except Exception:
-            self.__log.exception("Unexpected error during daemon execution")
+            self.__log.exception("Unexpected error during runner execution")
 
     def start(self):
+        self.__log.debug("Starting executing the runner at intervals of %s seconds", self.__interval)
         self.__thread.start()
 
     def stop(self):
+        self.__log.debug("Stopping the runner")
         self.__stopEvent.set()
 
 
@@ -70,9 +74,13 @@ class DeyeDaemon:
 
         self.__mqtt_client = DeyeMqttClient(self.__config)
         self.__processor_factory = DeyeProcessorFactory(self.__config, self.__mqtt_client)
+        self.__multi_inverter_data_aggregator = self.__processor_factory.create_multi_inverter_data_aggregator()
         self.__interval_runners = [
             self.__create_interval_runner_for_logger(logger_config) for logger_config in config.logger_configs
         ]
+        if len(self.__config.logger_configs) > 1:
+            self.__aggregating_processors = self.__processor_factory.create_aggregating_processors(self.__config.logger)
+            self.__interval_runners += [self.__create_interval_runner_for_aggregators()]
 
     def __create_interval_runner_for_logger(self, logger_config: DeyeLoggerConfig) -> IntervalRunner:
         modbus = DeyeModbus(DeyeConnectorFactory().create_connector(logger_config))
@@ -83,9 +91,23 @@ class DeyeDaemon:
             max_range_length=logger_config.max_register_range_length,
         )
 
-        processors = self.__processor_factory.create_processors(logger_config, modbus, sensors)
+        processors = self.__processor_factory.create_processors(logger_config, modbus, sensors) + [
+            self.__multi_inverter_data_aggregator
+        ]
         inverter_state = DeyeInverterState(self.__config, logger_config, reg_ranges, modbus, sensors, processors)
         return IntervalRunner(logger_config, self.__config.data_read_inverval, inverter_state.read_from_logger)
+
+    def __create_interval_runner_for_aggregators(self) -> IntervalRunner:
+        return IntervalRunner(
+            DeyeLoggerConfig.for_aggregator(), self.__config.data_read_inverval, self.__run_aggregating_processors
+        )
+
+    def __run_aggregating_processors(self) -> None:
+        self.__log.debug("Running aggregating processors")
+        observations = self.__multi_inverter_data_aggregator.aggregate()
+        events = DeyeEventList([DeyeObservationEvent(observation) for observation in observations], logger_index=0)
+        for processor in self.__aggregating_processors:
+            processor.process(events)
 
     def start(self):
         for interval_runner in self.__interval_runners:

@@ -158,4 +158,7 @@ class DeyeEventProcessor:
 
     @abstractmethod
     def process(self, events: DeyeEventList):
+        """
+        Processes events representing changes of metric values
+        """
         pass

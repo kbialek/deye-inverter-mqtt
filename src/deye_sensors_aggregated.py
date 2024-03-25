@@ -15,22 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from deye_sensor import Sensor
-from datetime import datetime
+from deye_sensor import AggregatedValueSensor
 
+aggregated_day_energy_sensor = AggregatedValueSensor(
+    "Aggregated daily energy", mqtt_topic_suffix="day_energy", unit="kWh", groups=["aggregated"]
+)
+aggregated_ac_active_power_sensor = AggregatedValueSensor(
+    "Aggregated AC active power", mqtt_topic_suffix="ac/active_power", unit="W", groups=["aggregated"]
+)
 
-class Observation:
-    """
-    Models Solar Inverter sensor reading.
-    """
-
-    def __init__(self, sensor: Sensor, timestamp: datetime, value):
-        self.sensor = sensor
-        self.timestamp = timestamp
-        self.value = value
-
-    def value_as_str(self):
-        return self.sensor.format_value(self.value)
-
-    def __repr__(self) -> str:
-        return f"{self.sensor.mqtt_topic_suffix}@{self.timestamp}:{self.value}"
+aggregated_sensor_list = [aggregated_day_energy_sensor, aggregated_ac_active_power_sensor]
