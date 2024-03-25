@@ -19,8 +19,9 @@ import unittest
 from datetime import datetime
 from unittest.mock import MagicMock, patch
 
-from deye_daemon import DeyeDaemon, DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, Observation
-from deye_sensor import Sensor
+from deye_inverter_state import DeyeInverterState
+from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, Observation
+from deye_sensor import Sensor, SensorRegisterRanges
 
 
 class FakeSensor(Sensor):
@@ -32,70 +33,84 @@ class FakeSensor(Sensor):
         return self.value
 
 
-class TestDeyeDaemon(unittest.TestCase):
+class TestInverterState(unittest.TestCase):
     def test_no_last_observation(self):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
-        config_mock.logger.protocol = "tcp"
-        daemon = DeyeDaemon(config_mock)
-        daemon._DeyeDaemon__config.event_expiry = 360
+        config_mock.logger_config.protocol = "tcp"
+        modbus = MagicMock()
+        reg_ranges = SensorRegisterRanges([], [], 0)
+        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
         observation_2 = DeyeObservationEvent(Observation(FakeSensor("Humidity", 1.1), datetime.now(), 63.5))
         status_event_online = DeyeLoggerStatusEvent(online=True)
         events_new = DeyeEventList([status_event_online, observation_1, observation_2])
-        self.assertTrue(daemon._DeyeDaemon__is_device_observation_changed(events_new))
+        self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
 
     def test_is_device_offline(self):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
-        config_mock.logger.protocol = "tcp"
-        daemon = DeyeDaemon(config_mock)
-        daemon._DeyeDaemon__config.event_expiry = 360
+        config_mock.logger_config.protocol = "tcp"
+        modbus = MagicMock()
+        reg_ranges = SensorRegisterRanges([], [], 0)
+        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
         observation_2 = DeyeObservationEvent(Observation(FakeSensor("Humidity", 1.1), datetime.now(), 63.5))
         status_event_online = DeyeLoggerStatusEvent(online=True)
         status_event_offline = DeyeLoggerStatusEvent(online=False)
-        daemon._DeyeDaemon__last_observations = DeyeEventList([status_event_online, observation_1, observation_2])
+        inverter_state._DeyeInverterState__last_observations = DeyeEventList(
+            [status_event_online, observation_1, observation_2]
+        )
         events_new = DeyeEventList([status_event_offline])
-        self.assertFalse(daemon._DeyeDaemon__is_device_observation_changed(events_new))
+        self.assertFalse(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
 
     @patch("time.time")
     def test_is_evenets_unchanged(self, time):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
-        config_mock.logger.protocol = "tcp"
-        daemon = DeyeDaemon(config_mock)
-        daemon._DeyeDaemon__config.event_expiry = 360
+        config_mock.logger_config.protocol = "tcp"
+        modbus = MagicMock()
+        reg_ranges = SensorRegisterRanges([], [], 0)
+        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
         observation_2 = DeyeObservationEvent(Observation(FakeSensor("Humidity", 1.1), datetime.now(), 63.5))
         status_event_online = DeyeLoggerStatusEvent(online=True)
-        daemon._DeyeDaemon__last_observations = DeyeEventList([status_event_online, observation_1, observation_2])
+        inverter_state._DeyeInverterState__last_observations = DeyeEventList(
+            [status_event_online, observation_1, observation_2]
+        )
 
         # Set the initial time for the test
         initial_time = 1628098000
         time.return_value = initial_time
 
         # Received events are the same as the last published one and within the expiry time
-        daemon.__last_observations = DeyeEventList([status_event_online, observation_1, observation_2])
+        inverter_state.__last_observations = DeyeEventList([status_event_online, observation_1, observation_2])
         events_new = DeyeEventList([status_event_online, observation_1, observation_2])
-        daemon._DeyeDaemon__event_updated = initial_time - 300  # 5 minutes ago
-        self.assertFalse(daemon._DeyeDaemon__is_device_observation_changed(events_new))
+        inverter_state._DeyeInverterState__event_updated = initial_time - 300  # 5 minutes ago
+        self.assertFalse(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
 
     @patch("time.time")
     def test_is_events_unchanged_expired(self, time):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
-        config_mock.logger.protocol = "tcp"
-        daemon = DeyeDaemon(config_mock)
-        daemon._DeyeDaemon__config.event_expiry = 360
+        config_mock.logger_config.protocol = "tcp"
+        modbus = MagicMock()
+        reg_ranges = SensorRegisterRanges([], [], 0)
+        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
         observation_2 = DeyeObservationEvent(Observation(FakeSensor("Humidity", 1.1), datetime.now(), 63.5))
         status_event_online = DeyeLoggerStatusEvent(online=True)
-        daemon._DeyeDaemon__last_observations = DeyeEventList([status_event_online, observation_1, observation_2])
+        inverter_state._DeyeInverterState__last_observations = DeyeEventList(
+            [status_event_online, observation_1, observation_2]
+        )
 
         # Set the initial time for the test
         initial_time = 1628098000
@@ -103,20 +118,24 @@ class TestDeyeDaemon(unittest.TestCase):
 
         # Received events are the same as the last published one and time expired
         events_new = DeyeEventList([status_event_online, observation_1, observation_2])
-        daemon._DeyeDaemon__event_updated = initial_time - 600  # 10 minutes ago
-        self.assertTrue(daemon._DeyeDaemon__is_device_observation_changed(events_new))
+        inverter_state._DeyeInverterState__event_updated = initial_time - 600  # 10 minutes ago
+        self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
 
     def test_is_events_changed(self):
-        # Create the DeyeDaemon instance with a mock configuration
+        # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
-        config_mock.logger.protocol = "tcp"
-        daemon = DeyeDaemon(config_mock)
-        daemon._DeyeDaemon__config.event_expiry = 360
+        config_mock.logger_config.protocol = "tcp"
+        modbus = MagicMock()
+        reg_ranges = SensorRegisterRanges([], [], 0)
+        inverter_state = DeyeInverterState(config_mock, reg_ranges, modbus, [], [])
+        inverter_state._DeyeInverterState__config.event_expiry = 360
         # Create some sample events for the test
         observation_1 = DeyeObservationEvent(Observation(FakeSensor("Temperature", 1.1), datetime.now(), 21.2))
         observation_2 = DeyeObservationEvent(Observation(FakeSensor("Humidity", 1.1), datetime.now(), 63.5))
         status_event_online = DeyeLoggerStatusEvent(online=True)
-        daemon._DeyeDaemon__last_observations = DeyeEventList([status_event_online, observation_1, observation_2])
+        inverter_state._DeyeInverterState__last_observations = DeyeEventList(
+            [status_event_online, observation_1, observation_2]
+        )
 
         # Received events are different from the last published one (humidity changed)
         events_new = DeyeEventList(
@@ -126,4 +145,4 @@ class TestDeyeDaemon(unittest.TestCase):
                 DeyeObservationEvent(Observation(FakeSensor("Humidity", 1.1), datetime.now(), 63.0)),
             ]
         )
-        self.assertTrue(daemon._DeyeDaemon__is_device_observation_changed(events_new))
+        self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
