@@ -20,6 +20,7 @@ from datetime import datetime
 
 from deye_events import DeyeEventList, DeyeEventProcessor
 from deye_modbus import DeyeModbus
+from deye_config import DeyeLoggerConfig
 
 
 class DeyeSetTimeProcessor(DeyeEventProcessor):
@@ -27,8 +28,8 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
     Set logger time when the logger becomes available online.
     """
 
-    def __init__(self, modbus: DeyeModbus):
-        self.__log = logging.getLogger(DeyeSetTimeProcessor.__name__)
+    def __init__(self, logger_config: DeyeLoggerConfig, modbus: DeyeModbus):
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeSetTimeProcessor.__name__))
         self.__modbus = modbus
         self.__last_status = False
         self.__last_update_ts = datetime.min

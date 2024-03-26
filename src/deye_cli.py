@@ -16,6 +16,7 @@
 # under the License.
 
 import sys
+import logging
 
 from deye_config import DeyeConfig
 from deye_connector_factory import DeyeConnectorFactory
@@ -24,41 +25,52 @@ from deye_modbus import DeyeModbus
 
 class DeyeCli:
     def __init__(self, config: DeyeConfig):
-        connector = DeyeConnectorFactory().create_connector(config.logger)
-        self.__modbus = DeyeModbus(connector)
+        self.__log = logging.getLogger()
+        self.__config = config
 
     def exec_command(self, args):
+        logger_config = self.__config.logger
+        if args[0].isnumeric():
+            logger_index = int(args[0]) - 1
+            logger_config = self.__config.logger_configs[logger_index]
+            args = args[1:]
+
+        self.__log.info(f"Connecting to logger at IP {logger_config.ip_address}")
+
+        connector = DeyeConnectorFactory().create_connector(logger_config)
+        modbus = DeyeModbus(connector)
+
         command = args[0]
         if command == "r":
-            self.read_register(args[1:])
+            self.read_register(modbus, args[1:])
         elif command == "w":
-            self.write_register(args[1:])
+            self.write_register(modbus, args[1:])
 
-    def read_register(self, args):
+    def read_register(self, modbus, args):
         reg_address = int(args[0])
-        registers = self.__modbus.read_registers(reg_address, reg_address)
+        registers = modbus.read_registers(reg_address, reg_address)
         if registers is None:
-            print("Error: no registers read")
+            self.__log.error("Error: no registers read")
             sys.exit(1)
         if reg_address not in registers:
-            print(f"Error: register {reg_address} not read")
+            self.__log.error(f"Error: register {reg_address} not read")
             sys.exit(1)
         reg_bytes = registers[reg_address]
         reg_value_int = int.from_bytes(reg_bytes, "big")
         low_byte = reg_bytes[1]
         high_byte = reg_bytes[0]
-        print(f"int: {reg_value_int}, l: {low_byte}, h: {high_byte}")
+        self.__log.info(f"int: {reg_value_int}, l: {low_byte}, h: {high_byte}")
 
-    def write_register(self, args):
+    def write_register(self, modbus, args):
         if len(args) < 2:
-            print("Not enough arguments")
+            self.__log.error("Not enough arguments")
             sys.exit(1)
         reg_address = int(args[0])
         reg_value = int(args[1])
-        if self.__modbus.write_register_uint(reg_address, reg_value):
-            print("Ok")
+        if modbus.write_register_uint(reg_address, reg_value):
+            self.__log.info("Ok")
         else:
-            print("Error")
+            self.__log.error("Error")
 
 
 def main():
