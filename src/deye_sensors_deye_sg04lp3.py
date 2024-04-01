@@ -682,6 +682,76 @@ deye_sg04lp3_time_of_use_177 = SingleRegisterSensor(
     groups=["deye_sg04lp3_timeofuse"],
 )
 
+deye_sg04lp3_generator_661 = SingleRegisterSensor(
+    "Phase voltage of Gen port A",
+    661,
+    0.1,
+    mqtt_topic_suffix="generator/a/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg04lp3_generator"],
+)
+
+deye_sg04lp3_generator_662 = SingleRegisterSensor(
+    "Phase voltage of Gen port B",
+    662,
+    0.1,
+    mqtt_topic_suffix="generator/b/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg04lp3_generator"],
+)
+
+deye_sg04lp3_generator_663 = SingleRegisterSensor(
+    "Phase voltage of Gen port C",
+    663,
+    0.1,
+    mqtt_topic_suffix="generator/c/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg04lp3_generator"],
+)
+
+deye_sg04lp3_generator_664 = SingleRegisterSensor(
+    "Phase power of Gen port A",
+    664,
+    1,
+    mqtt_topic_suffix="generator/a/power",
+    unit="W",
+    signed=False,
+    groups=["deye_sg04lp3_generator"],
+)
+
+deye_sg04lp3_generator_665 = SingleRegisterSensor(
+    "Phase power of Gen port B",
+    665,
+    1,
+    mqtt_topic_suffix="generator/b/power",
+    unit="W",
+    signed=False,
+    groups=["deye_sg04lp3_generator"],
+)
+
+deye_sg04lp3_generator_666 = SingleRegisterSensor(
+    "Phase power of Gen port C",
+    666,
+    1,
+    mqtt_topic_suffix="generator/c/power",
+    unit="W",
+    signed=False,
+    groups=["deye_sg04lp3_generator"],
+)
+
+deye_sg04lp3_generator_667 = SingleRegisterSensor(
+    "Total Power of Gen Ports",
+    667,
+    1,
+    mqtt_topic_suffix="generator/total_power",
+    unit="W",
+    signed=False,
+    groups=["deye_sg04lp3_generator"],
+)
+
 deye_sg04lp3_sensors = [
     deye_sg04lp3_solar_672,
     deye_sg04lp3_solar_673,
@@ -762,15 +832,23 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_time_of_use_175,
     deye_sg04lp3_time_of_use_176,
     deye_sg04lp3_time_of_use_177,
+    deye_sg04lp3_generator_661,
+    deye_sg04lp3_generator_662,
+    deye_sg04lp3_generator_663,
+    deye_sg04lp3_generator_664,
+    deye_sg04lp3_generator_665,
+    deye_sg04lp3_generator_666,
+    deye_sg04lp3_generator_667,
 ]
 
 deye_sg04lp3_register_ranges = [
-    SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=514, last_reg_address=558),
+    SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_battery", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_battery", first_reg_address=586, last_reg_address=591),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=598, last_reg_address=636),
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=644, last_reg_address=653),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=672, last_reg_address=679),
     SensorRegisterRange(group="deye_sg04lp3_timeofuse", first_reg_address=146, last_reg_address=177),
+    SensorRegisterRange(group="deye_sg04lp3_generator", first_reg_address=661, last_reg_address=667),
 ]
