@@ -80,13 +80,13 @@ topics:
   176: timeofuse/enabled/5
   177: timeofuse/enabled/6
   # Generator ports
-  661: generator/a/voltage
-  662: generator/b/voltage
-  663: generator/c/voltage
-  664: generator/a/power
-  665: generator/b/power
-  666: generator/c/power
-  667: generator/total_power
+  661: ac/generator/a/voltage
+  662: ac/generator/b/voltage
+  663: ac/generator/c/voltage
+  664: ac/generator/a/power
+  665: ac/generator/b/power
+  666: ac/generator/c/power
+  667: ac/generator/total_power
 
 groups:
   solar: ''
