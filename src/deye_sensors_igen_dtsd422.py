@@ -514,7 +514,7 @@ ch1_total_negative_energy_sensor = DoubleRegisterSensor(
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ch2_total_negative_energy_sensor = SingleRegisterSensor(
+ch2_total_negative_energy_sensor = DoubleRegisterSensor(
     "Total Negative Energy (2nd channel)",
     0x1034,
     0.01,

@@ -57,7 +57,7 @@
 |Total Positive Energy (1st channel)|42,43|`total/1/positive_energy`|kWh|
 |Total Positive Energy (2nd channel)|4138,4139|`total/2/positive_energy`|kWh|
 |Total Negative Energy (1st channel)|52,53|`total/1/negative_energy`|kWh|
-|Total Negative Energy (2nd channel)|4148|`total/2/negative_energy`|kWh|
+|Total Negative Energy (2nd channel)|4148,4149|`total/2/negative_energy`|kWh|
 |Power Factor (1st channel)|37|`total/1/power_factor`||
 |Power Factor (2nd channel)|4133|`total/2/power_factor`||
 |Frequency (1st channel)|41|`total/1/frequency`|Hz|
