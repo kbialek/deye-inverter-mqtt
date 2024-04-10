@@ -17,6 +17,7 @@
 
 from deye_sensor import (
     SingleRegisterSensor,
+    DoubleRegisterSensor,
     SignedMagnitudeSingleRegisterSensor,
     SignedMagnitudeDoubleRegisterSensor,
     SensorRegisterRange,
@@ -80,18 +81,18 @@ ct1_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     mqtt_topic_suffix="ct1/power_factor",
     groups=["igen_dtsd422"],
 )
-ct1_total_positive_energy = SingleRegisterSensor(
+ct1_total_positive_energy = DoubleRegisterSensor(
     "Total Positive Energy CT1",
-    0x3F,
+    0x3E,
     0.01,
     mqtt_topic_suffix="ct1/total_positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct1_total_negative_energy = SingleRegisterSensor(
+ct1_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT1",
-    0x49,
+    0x48,
     0.01,
     mqtt_topic_suffix="ct1/total_negative_energy",
     unit="kWh",
@@ -148,18 +149,18 @@ ct2_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     mqtt_topic_suffix="ct2/power_factor",
     groups=["igen_dtsd422"],
 )
-ct2_total_positive_energy = SingleRegisterSensor(
+ct2_total_positive_energy = DoubleRegisterSensor(
     "Total Positive Energy CT2",
-    0x53,
+    0x52,
     0.01,
     mqtt_topic_suffix="ct2/total_positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct2_total_negative_energy = SingleRegisterSensor(
+ct2_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT2",
-    0x5D,
+    0x5C,
     0.01,
     mqtt_topic_suffix="ct2/total_negative_energy",
     unit="kWh",
@@ -216,18 +217,18 @@ ct3_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     mqtt_topic_suffix="ct3/power_factor",
     groups=["igen_dtsd422"],
 )
-ct3_total_positive_energy = SingleRegisterSensor(
+ct3_total_positive_energy = DoubleRegisterSensor(
     "Total Positive Energy CT3",
-    0x67,
+    0x66,
     0.01,
     mqtt_topic_suffix="ct3/total_positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct3_total_negative_energy = SingleRegisterSensor(
+ct3_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT3",
-    0x71,
+    0x70,
     0.01,
     mqtt_topic_suffix="ct3/total_negative_energy",
     unit="kWh",
@@ -284,18 +285,18 @@ ct4_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     mqtt_topic_suffix="ct4/power_factor",
     groups=["igen_dtsd422"],
 )
-ct4_total_positive_energy = SingleRegisterSensor(
+ct4_total_positive_energy = DoubleRegisterSensor(
     "Total Positive Energy CT4",
-    0x103F,
+    0x103E,
     0.01,
     mqtt_topic_suffix="ct4/total_positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct4_total_negative_energy = SingleRegisterSensor(
+ct4_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT4",
-    0x1049,
+    0x1048,
     0.01,
     mqtt_topic_suffix="ct4/total_negative_energy",
     unit="kWh",
@@ -352,18 +353,18 @@ ct5_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     mqtt_topic_suffix="ct5/power_factor",
     groups=["igen_dtsd422"],
 )
-ct5_total_positive_energy = SingleRegisterSensor(
+ct5_total_positive_energy = DoubleRegisterSensor(
     "Total Positive Energy CT5",
-    0x1053,
+    0x1052,
     0.01,
     mqtt_topic_suffix="ct5/total_positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct5_total_negative_energy = SingleRegisterSensor(
+ct5_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT5",
-    0x105D,
+    0x105C,
     0.01,
     mqtt_topic_suffix="ct5/total_negative_energy",
     unit="kWh",
@@ -420,18 +421,18 @@ ct6_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     mqtt_topic_suffix="ct6/power_factor",
     groups=["igen_dtsd422"],
 )
-ct6_total_positive_energy = SingleRegisterSensor(
+ct6_total_positive_energy = DoubleRegisterSensor(
     "Total Positive Energy CT6",
-    0x1067,
+    0x1066,
     0.01,
     mqtt_topic_suffix="ct6/total_positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-ct6_total_negative_energy = SingleRegisterSensor(
+ct6_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT6",
-    0x1071,
+    0x1070,
     0.01,
     mqtt_topic_suffix="ct6/total_negative_energy",
     unit="kWh",
@@ -440,116 +441,116 @@ ct6_total_negative_energy = SingleRegisterSensor(
 )
 
 # Total
-total_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
-    "Total Active Power",
+ch1_total_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
+    "Total Active Power (1st channel)",
     0x0D,
     1,
-    mqtt_topic_suffix="total/active_power",
+    mqtt_topic_suffix="total/1/active_power",
     unit="W",
     groups=["igen_dtsd422"],
 )
-total_active_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
-    "Total Active Power 2",
+ch2_total_active_power_sensor = SignedMagnitudeDoubleRegisterSensor(
+    "Total Active Power (2nd channel)",
     0x100D,
     1,
-    mqtt_topic_suffix="total/active_power2",
+    mqtt_topic_suffix="total/2/active_power",
     unit="W",
     groups=["igen_dtsd422"],
 )
-total_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
-    "Total Reactive Power",
+ch1_total_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
+    "Total Reactive Power (1st channel)",
     0x15,
     1,
-    mqtt_topic_suffix="total/reactive_power",
+    mqtt_topic_suffix="total/1/reactive_power",
     unit="Var",
     groups=["igen_dtsd422"],
 )
-total_reactive_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
-    "Total Reactive Power 2",
+ch2_total_reactive_power_sensor = SignedMagnitudeDoubleRegisterSensor(
+    "Total Reactive Power (2nd channel)",
     0x1015,
     1,
-    mqtt_topic_suffix="total/reactive_power2",
+    mqtt_topic_suffix="total/2/reactive_power",
     unit="Var",
     groups=["igen_dtsd422"],
 )
-total_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
-    "Total Apparent Power",
+ch1_total_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
+    "Total Apparent Power (1st channel)",
     0x1D,
     1,
-    mqtt_topic_suffix="total/apparent_power",
+    mqtt_topic_suffix="total/1/apparent_power",
     unit="VA",
     groups=["igen_dtsd422"],
 )
-total_apparent_power2_sensor = SignedMagnitudeDoubleRegisterSensor(
-    "Total Apparent Power 2",
+ch2_total_apparent_power_sensor = SignedMagnitudeDoubleRegisterSensor(
+    "Total Apparent Power (2nd channel)",
     0x101D,
     1,
-    mqtt_topic_suffix="total/apparent_power2",
+    mqtt_topic_suffix="total/2/apparent_power",
     unit="VA",
     groups=["igen_dtsd422"],
 )
-total_positive_energy_sensor = SingleRegisterSensor(
-    "Total Positive Energy",
-    0x2B,
+ch1_total_positive_energy_sensor = DoubleRegisterSensor(
+    "Total Positive Energy (1st channel)",
+    0x2A,
     0.01,
-    mqtt_topic_suffix="total/positive_energy",
+    mqtt_topic_suffix="total/1/positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
 )
-total_positive_energy2_sensor = SingleRegisterSensor(
-    "Total Positive Energy 2",
-    0x102B,
+ch2_total_positive_energy_sensor = DoubleRegisterSensor(
+    "Total Positive Energy (2nd channel)",
+    0x102A,
     0.01,
-    mqtt_topic_suffix="total/positive_energy2",
+    mqtt_topic_suffix="total/2/positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
 )
-total_negative_energy_sensor = SingleRegisterSensor(
-    "Total Negative Energy",
-    0x35,
+ch1_total_negative_energy_sensor = DoubleRegisterSensor(
+    "Total Negative Energy (1st channel)",
+    0x34,
     0.01,
-    mqtt_topic_suffix="total/negative_energy",
-    unit="kWh",
-    groups=["igen_dtsd422"],
-    print_format="{:0.2f}",
-)
-total_negative_energy2_sensor = SingleRegisterSensor(
-    "Total Negative Energy 2",
-    0x1035,
-    0.01,
-    mqtt_topic_suffix="total/negative_energy2",
+    mqtt_topic_suffix="total/1/negative_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-total_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
-    "Power Factor",
+ch2_total_negative_energy_sensor = SingleRegisterSensor(
+    "Total Negative Energy (2nd channel)",
+    0x1034,
+    0.01,
+    mqtt_topic_suffix="total/2/negative_energy",
+    unit="kWh",
+    groups=["igen_dtsd422"],
+    print_format="{:0.2f}",
+)
+ch1_total_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
+    "Power Factor (1st channel)",
     0x25,
     0.001,
-    mqtt_topic_suffix="total/power_factor",
+    mqtt_topic_suffix="total/1/power_factor",
     groups=["igen_dtsd422"],
 )
-total_power_factor2_sensor = SignedMagnitudeSingleRegisterSensor(
-    "Power Factor 2",
+ch2_total_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
+    "Power Factor (2nd channel)",
     0x1025,
     0.001,
-    mqtt_topic_suffix="total/power_factor2",
+    mqtt_topic_suffix="total/2/power_factor",
     groups=["igen_dtsd422"],
 )
-total_frequency_sensor = SingleRegisterSensor(
-    "Frequency",
+ch1_total_frequency_sensor = SingleRegisterSensor(
+    "Frequency (1st channel)",
     0x29,
     0.01,
-    mqtt_topic_suffix="total/frequency",
+    mqtt_topic_suffix="total/1/frequency",
     unit="Hz",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
 )
-total_frequency2_sensor = SingleRegisterSensor(
-    "Frequency 2",
+ch2_total_frequency_sensor = SingleRegisterSensor(
+    "Frequency (2nd channel)",
     0x1029,
     0.01,
-    mqtt_topic_suffix="total/frequency2",
+    mqtt_topic_suffix="total/2/frequency",
     unit="Hz",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
@@ -605,20 +606,20 @@ igen_dtsd422_sensors = [
     ct6_power_factor_sensor,
     ct6_total_positive_energy,
     ct6_total_negative_energy,
-    total_active_power_sensor,
-    total_active_power2_sensor,
-    total_reactive_power_sensor,
-    total_reactive_power2_sensor,
-    total_apparent_power_sensor,
-    total_apparent_power2_sensor,
-    total_positive_energy_sensor,
-    total_positive_energy2_sensor,
-    total_negative_energy_sensor,
-    total_negative_energy2_sensor,
-    total_power_factor_sensor,
-    total_power_factor2_sensor,
-    total_frequency_sensor,
-    total_frequency2_sensor,
+    ch1_total_active_power_sensor,
+    ch2_total_active_power_sensor,
+    ch1_total_reactive_power_sensor,
+    ch2_total_reactive_power_sensor,
+    ch1_total_apparent_power_sensor,
+    ch2_total_apparent_power_sensor,
+    ch1_total_positive_energy_sensor,
+    ch2_total_positive_energy_sensor,
+    ch1_total_negative_energy_sensor,
+    ch2_total_negative_energy_sensor,
+    ch1_total_power_factor_sensor,
+    ch2_total_power_factor_sensor,
+    ch1_total_frequency_sensor,
+    ch2_total_frequency_sensor,
 ]
 
 igen_dtsd422_register_ranges = [
