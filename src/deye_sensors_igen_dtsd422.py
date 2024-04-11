@@ -89,6 +89,7 @@ ct1_total_positive_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 ct1_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT1",
@@ -98,6 +99,7 @@ ct1_total_negative_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 
 # CT2
@@ -157,6 +159,7 @@ ct2_total_positive_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 ct2_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT2",
@@ -166,6 +169,7 @@ ct2_total_negative_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 
 # CT3
@@ -225,6 +229,7 @@ ct3_total_positive_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 ct3_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT3",
@@ -234,6 +239,7 @@ ct3_total_negative_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 
 # CT4
@@ -293,6 +299,7 @@ ct4_total_positive_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 ct4_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT4",
@@ -302,6 +309,7 @@ ct4_total_negative_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 
 # CT5
@@ -361,6 +369,7 @@ ct5_total_positive_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 ct5_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT5",
@@ -370,6 +379,7 @@ ct5_total_negative_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 
 # CT6
@@ -429,6 +439,7 @@ ct6_total_positive_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 ct6_total_negative_energy = DoubleRegisterSensor(
     "Total Negative Energy CT6",
@@ -438,6 +449,7 @@ ct6_total_negative_energy = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 
 # Total
@@ -496,6 +508,7 @@ ch1_total_positive_energy_sensor = DoubleRegisterSensor(
     mqtt_topic_suffix="total/1/positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
+    low_word_first=False,
 )
 ch2_total_positive_energy_sensor = DoubleRegisterSensor(
     "Total Positive Energy (2nd channel)",
@@ -504,6 +517,7 @@ ch2_total_positive_energy_sensor = DoubleRegisterSensor(
     mqtt_topic_suffix="total/2/positive_energy",
     unit="kWh",
     groups=["igen_dtsd422"],
+    low_word_first=False,
 )
 ch1_total_negative_energy_sensor = DoubleRegisterSensor(
     "Total Negative Energy (1st channel)",
@@ -513,6 +527,7 @@ ch1_total_negative_energy_sensor = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 ch2_total_negative_energy_sensor = DoubleRegisterSensor(
     "Total Negative Energy (2nd channel)",
@@ -522,6 +537,7 @@ ch2_total_negative_energy_sensor = DoubleRegisterSensor(
     unit="kWh",
     groups=["igen_dtsd422"],
     print_format="{:0.2f}",
+    low_word_first=False,
 )
 ch1_total_power_factor_sensor = SignedMagnitudeSingleRegisterSensor(
     "Power Factor (1st channel)",
