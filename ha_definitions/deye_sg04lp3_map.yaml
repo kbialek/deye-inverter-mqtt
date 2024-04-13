@@ -80,6 +80,7 @@ topics:
   176: timeofuse/enabled/5
   177: timeofuse/enabled/6
   # Generator ports
+  536: ac/generator/daily_energy
   661: ac/generator/a/voltage
   662: ac/generator/b/voltage
   663: ac/generator/c/voltage

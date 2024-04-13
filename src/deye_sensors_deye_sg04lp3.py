@@ -752,6 +752,16 @@ deye_sg04lp3_generator_667 = SingleRegisterSensor(
     groups=["deye_sg04lp3_generator"],
 )
 
+deye_sg04lp3_generator_536 = SingleRegisterSensor(
+    "Daily Generator Production",
+    536,
+    0.1,
+    mqtt_topic_suffix="ac/generator/daily_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg04lp3_generator"],
+)
+
 deye_sg04lp3_sensors = [
     deye_sg04lp3_solar_672,
     deye_sg04lp3_solar_673,
@@ -839,12 +849,14 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_generator_665,
     deye_sg04lp3_generator_666,
     deye_sg04lp3_generator_667,
+    deye_sg04lp3_generator_536,
 ]
 
 deye_sg04lp3_register_ranges = [
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_battery", first_reg_address=514, last_reg_address=558),
-    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=514, last_reg_address=558),
+    SensorRegisterRange(group="deye_sg04lp3_generator", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_battery", first_reg_address=586, last_reg_address=591),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=598, last_reg_address=636),
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=644, last_reg_address=653),

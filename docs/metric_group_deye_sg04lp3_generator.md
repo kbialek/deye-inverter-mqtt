@@ -7,3 +7,4 @@
 |Phase power of Gen port B|665|`ac/generator/b/power`|W|
 |Phase power of Gen port C|666|`ac/generator/c/power`|W|
 |Total Power of Gen Ports|667|`ac/generator/total_power`|W|
+|Daily Generator Production|536|`ac/generator/daily_energy`|kWh|
