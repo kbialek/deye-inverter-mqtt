@@ -121,16 +121,18 @@ class DoubleRegisterSensor(Sensor):
         unit="",
         print_format="{:0.1f}",
         groups=[],
+        low_word_first=True,
     ):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
         self.reg_address = reg_address
         self.factor = factor
         self.offset = offset
         self.signed = signed
+        self.low_word_first = low_word_first
 
     def read_value(self, registers: dict[int, bytearray]):
-        low_word_reg_address = self.reg_address
-        high_word_reg_address = self.reg_address + 1
+        low_word_reg_address = self.reg_address + (0 if self.low_word_first else 1)
+        high_word_reg_address = self.reg_address + (1 if self.low_word_first else 0)
         if low_word_reg_address in registers and high_word_reg_address in registers:
             low_word = registers[low_word_reg_address]
             high_word = registers[high_word_reg_address]
