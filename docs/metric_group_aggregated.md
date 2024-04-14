@@ -1,4 +1,4 @@
-|Metric|Modbus address|MQTT topic suffix|Unit|
+|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
 |---|:-:|---|:-:|
-|Aggregated daily energy|computed|`day_energy`|kWh|
-|Aggregated AC active power|computed|`ac/active_power`|W|
+|Aggregated daily energy|`day_energy`|kWh|computed|computed||1|
+|Aggregated AC active power|`ac/active_power`|W|computed|computed||1|

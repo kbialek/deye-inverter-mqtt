@@ -1,18 +1,39 @@
 import sys
 sys.path.append('../src')
 
-from deye_sensor import Sensor
+from deye_sensor import Sensor, SingleRegisterSensor, SignedMagnitudeSingleRegisterSensor, DoubleRegisterSensor, SignedMagnitudeDoubleRegisterSensor
 from deye_sensors import sensor_list
 import argparse
 
 def render_table(sensors: list[Sensor]):
-    print('|Metric|Modbus address|MQTT topic suffix|Unit|')
+    print('|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|')
     print('|---|:-:|---|:-:|')
     for s in sensors:
-        regs = ','.join(['{:d}'.format(r) for r in s.get_registers()])
-        if not regs:
-            regs = 'computed'
-        print(f"|{s.name}|{regs}|`{s.mqtt_topic_suffix}`|{s.unit}|")
+        data_type = ''
+        scale_factor = '1'
+        if isinstance(s, SignedMagnitudeSingleRegisterSensor):
+            data_type = 'SM_WORD'
+            scale_factor = s.factor
+        elif isinstance(s, SingleRegisterSensor):
+            data_type = 'S_WORD' if s.signed else 'U_WORD'
+            scale_factor = s.factor
+        elif isinstance(s, SignedMagnitudeDoubleRegisterSensor):
+            data_type = 'SM_DWORD'
+            data_type += ' (LW,HW)' if s.low_word_first else ' (HW,LW)'
+            scale_factor = s.factor
+        elif isinstance(s, DoubleRegisterSensor):
+            data_type = 'S_DWORD' if s.signed else 'U_DWORD'
+            data_type += ' (LW,HW)' if s.low_word_first else ' (HW,LW)'
+            scale_factor = s.factor
+
+        regs_dec = ','.join(['{:d}'.format(r) for r in s.get_registers()])
+        regs_hex = ','.join(['{:x}'.format(r) for r in s.get_registers()])
+        if not regs_dec:
+            regs_dec = 'computed'
+        if not regs_hex:
+            regs_hex = 'computed'
+
+        print(f"|{s.name}|`{s.mqtt_topic_suffix}`|{s.unit}|{regs_dec}|{regs_hex}|{data_type}|{scale_factor}|")
 
 
 def main():
