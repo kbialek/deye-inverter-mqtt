@@ -1,4 +1,4 @@
-|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
+|Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |Phase voltage of Gen port A|`ac/generator/a/voltage`|V|661|295|U_WORD|0.1|
 |Phase voltage of Gen port B|`ac/generator/b/voltage`|V|662|296|U_WORD|0.1|

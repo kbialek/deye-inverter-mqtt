@@ -1,4 +1,4 @@
-|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
+|Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |BMS1 Charging Voltage|`bms/1/charging_voltage`|V|210|d2|U_WORD|0.1|
 |BMS1 Discharge Voltage|`bms/1/discharge_voltage`|V|211|d3|U_WORD|0.1|

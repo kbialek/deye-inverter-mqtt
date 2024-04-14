@@ -1,4 +1,4 @@
-|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
+|Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |Voltage CT1|`ct1/voltage`|V|1|1|U_WORD|0.1|
 |Current CT1|`ct1/current`|A|7,8|7,8|SM_DWORD (LW,HW)|0.001|

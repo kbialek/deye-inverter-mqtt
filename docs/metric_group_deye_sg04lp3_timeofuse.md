@@ -1,4 +1,4 @@
-|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
+|Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |Time of Use Weekly Selling Schedule|`timeofuse/selling`||146|92|U_WORD|1|
 |Time of Use Time 1|`timeofuse/time/1`||148|94|U_WORD|1|

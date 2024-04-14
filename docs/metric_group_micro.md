@@ -1,4 +1,4 @@
-|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
+|Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |Production today|`day_energy`|kWh|60|3c|U_WORD|0.1|
 |Production Total|`total_energy`|kWh|63,64|3f,40|U_DWORD (LW,HW)|0.1|

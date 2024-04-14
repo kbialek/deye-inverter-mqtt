@@ -6,7 +6,7 @@ from deye_sensors import sensor_list
 import argparse
 
 def render_table(sensors: list[Sensor]):
-    print('|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|')
+    print('|Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|')
     print('|---|---|:-:|:-:|:-:|:-:|:-:|')
     for s in sensors:
         data_type = 'n/a'
