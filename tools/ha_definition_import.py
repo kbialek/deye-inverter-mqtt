@@ -26,6 +26,24 @@ class RegisterRangeDef:
     def contains(self, reg: int) -> bool:
         return reg >= self.reg_min and reg <= self.reg_max
 
+    def combine(self, other: 'RegisterRangeDef') -> 'RegisterRangeDef':
+        min = None
+        max = None
+        if other.reg_min < self.reg_min and other.reg_max >= self.reg_min:
+            min = other.reg_min
+        if other.reg_max > self.reg_max and other.reg_min <= self.reg_max:
+            max = other.reg_max
+        if other.reg_min >= self.reg_min and other.reg_max <= self.reg_max:
+            min = self.reg_min
+            max = self.reg_max
+        if other.reg_min <= self.reg_min and other.reg_max >= self.reg_max:
+            min = other.reg_min
+            max = other.reg_max
+        if min and max:
+            return RegisterRangeDef(min, max)
+        else:
+            return None
+
 
 def import_single_register_item(group_prefix: str, group_name: str, parameter_item: dict, map: dict, signed: bool) -> SensorDef:
     name = parameter_item['name']
@@ -134,6 +152,19 @@ def render_sensors_file(
     sensors_file.write(f'{group_prefix}_register_ranges = [\n    {delimiter.join(ranges_code)}')
     sensors_file.write('\n]\n\n')
 
+def add_register_range(ranges: list[RegisterRangeDef], range_to_add: RegisterRangeDef) -> list[RegisterRangeDef]:
+    new_ranges: list[RegisterRangeDef] = []
+    combinded = False
+    for rr in ranges:
+        combined_range = rr.combine(range_to_add)
+        if combined_range:
+            new_ranges.append(combined_range)
+            combinded = True
+        else:
+            new_ranges.append(rr)
+    if not combinded:
+        new_ranges.append(range_to_add)
+    return new_ranges
 
 def main():
     parser = argparse.ArgumentParser(description='Home Assistant inverter definition importer')
@@ -167,7 +198,7 @@ def main():
                 sensors.append(sensor) 
     requests = data['requests'] + custom_data.get('requests', [])
     for request in requests:
-        register_ranges.append(RegisterRangeDef(request['start'], request['end']))
+        register_ranges = add_register_range(register_ranges, RegisterRangeDef(request['start'], request['end']))
 
     with open(sensors_file_path, mode='w', encoding='utf8') as sensors_file:
         render_sensors_file(definition_code, sensors_file, sensors, register_ranges)
