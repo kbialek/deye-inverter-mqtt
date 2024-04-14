@@ -1,5 +1,5 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
-|---|:-:|---|:-:|
+|---|---|:-:|:-:|:-:|:-:|:-:|
 |Total Battery Charge|`battery/total_charge`|kWh|72,73|48,49|U_DWORD (LW,HW)|0.1|
 |Total Battery Discharge|`battery/total_discharge`|kWh|74,75|4a,4b|U_DWORD (LW,HW)|0.1|
 |Daily Battery Charge|`battery/daily_charge`|kWh|70|46|U_WORD|0.1|

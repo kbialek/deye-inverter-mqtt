@@ -1,5 +1,5 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
-|---|:-:|---|:-:|
+|---|---|:-:|:-:|:-:|:-:|:-:|
 |Voltage CT1|`ct1/voltage`|V|1|1|U_WORD|0.1|
 |Current CT1|`ct1/current`|A|7,8|7,8|SM_DWORD (LW,HW)|0.001|
 |Active Power CT1|`ct1/active_power`|W|15,16|f,10|SM_DWORD (LW,HW)|1|

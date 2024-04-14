@@ -1,5 +1,5 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
-|---|:-:|---|:-:|
+|---|---|:-:|:-:|:-:|:-:|:-:|
 |Total Load Power|`ac/ups/total_power`|W|653|28d|U_WORD|1|
 |Load L1 Power|`ac/ups/l1/power`|W|650|28a|S_WORD|1|
 |Load L2 Power|`ac/ups/l2/power`|W|651|28b|S_WORD|1|

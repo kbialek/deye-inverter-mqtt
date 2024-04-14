@@ -1,5 +1,5 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
-|---|:-:|---|:-:|
+|---|---|:-:|:-:|:-:|:-:|:-:|
 |Time of use Time 1|`timeofuse/time/1`||250|fa|U_WORD|1|
 |Time of use Time 2|`timeofuse/time/2`||251|fb|U_WORD|1|
 |Time of Use Time 3|`timeofuse/time/3`||252|fc|U_WORD|1|

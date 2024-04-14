@@ -1,5 +1,5 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|
-|---|:-:|---|:-:|
+|---|---|:-:|:-:|:-:|:-:|:-:|
 |PV1 Power|`dc/pv1/power`|W|672|2a0|U_WORD|10|
 |PV2 Power|`dc/pv2/power`|W|673|2a1|U_WORD|10|
 |PV3 Power|`dc/pv3/power`|W|674|2a2|U_WORD|10|

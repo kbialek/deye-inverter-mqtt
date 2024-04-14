@@ -7,9 +7,9 @@ import argparse
 
 def render_table(sensors: list[Sensor]):
     print('|Metric|MQTT topic suffix|Unit|Modbus address (dec)| Modbus address (hex)|Data type|Scale factor|')
-    print('|---|:-:|---|:-:|')
+    print('|---|---|:-:|:-:|:-:|:-:|:-:|')
     for s in sensors:
-        data_type = ''
+        data_type = 'n/a'
         scale_factor = '1'
         if isinstance(s, SignedMagnitudeSingleRegisterSensor):
             data_type = 'SM_WORD'
