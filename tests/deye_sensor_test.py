@@ -118,6 +118,19 @@ class DeyeSensorTest(unittest.TestCase):
         # then
         self.assertEqual(result, -2)
 
+    def test_double_reg_sensor_unsigned_high_word_first(self):
+        # given
+        sut = DoubleRegisterSensor("test", 0x00, 1, signed=False, groups=["string"], low_word_first=False)
+
+        # and
+        registers = {0: bytearray.fromhex("0102"), 1: bytearray.fromhex("0304")}  # low word  # high word
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, 0x01020304)
+
     def test_signed_magnitude_single_register_signed(self):
         # given
         sut = SignedMagnitudeSingleRegisterSensor("test", 0x00, 1, groups=["igen_dtsd422"])
