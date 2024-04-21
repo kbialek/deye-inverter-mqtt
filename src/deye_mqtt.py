@@ -60,7 +60,7 @@ class DeyeMqttClient:
         self.__mqtt_client.will_set(self.__status_topic, "offline", retain=True, qos=1)
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
-        self.__publish_lock = threading.Lock()
+        self.__publish_lock = threading.RLock()
 
     def subscribe(self, topic: str, callback):
         self.connect()
@@ -100,13 +100,14 @@ class DeyeMqttClient:
             self.connect()
             info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
             info.wait_for_publish(self.__mqtt_timeout)
-            self.__publish_lock.release()
         except ValueError as e:
             raise DeyeMqttPublishError(f"MQTT outgoing queue is full: {str(e)}")
         except RuntimeError as e:
             raise DeyeMqttPublishError(f"Unknown MQTT publishing error: {str(e)}")
         except OSError as e:
             raise DeyeMqttPublishError(f"MQTT connection error: {str(e)}")
+        finally:
+            self.__publish_lock.release()
 
     def __build_topic_name(self, logger_topic_prefix: str, topic_suffix: str) -> str:
         if logger_topic_prefix:
