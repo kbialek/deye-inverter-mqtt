@@ -9,7 +9,7 @@ comma = ,
 
 # Gets Github personal token from Bitwarden vault
 get_github_token = \
-	$(shell bw --session "$$(bw-read-session)" get item aa3dab0a-6c68-49d1-8a4d-193f37d3a5fc |\
+	$(shell BW_SESSION="$$(bw-read-session)" bw get item aa3dab0a-6c68-49d1-8a4d-193f37d3a5fc |\
 		jq -r '.fields[] | select(.name=="token") | .value')
 
 gen-tls-certs:
