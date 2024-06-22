@@ -2,6 +2,7 @@ GITHUB_USER = kbialek
 VERSION = $(shell poetry version -s)
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
+DOCKER_BASE_IMAGE = python:3.10.13-alpine3.18
 
 null =
 space = $(null) $(null)
@@ -39,12 +40,13 @@ test-at-connector:
 	@bash -c "set -a; source config.env; pytest -v --log-cli-level=DEBUG tests/deye_at_connector_inttest.py"
 
 run:
-	@bash -c "set -a; source config.env; python src/deye_docker_entrypoint.py"
+	@./local-run.sh $(DOCKER_BASE_IMAGE)
 
 $(ARCHS:%=docker-build-%): docker-build-%: py-export-requirements
 	-@docker buildx rm deye-docker-build
 	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
+		--build-arg base_image=$(DOCKER_BASE_IMAGE) \
 		--platform $* \
 		--output type=docker \
 		-t deye-inverter-mqtt:$(VERSION) \
@@ -75,6 +77,7 @@ docker-push: test py-export-requirements
 	-@docker buildx rm deye-docker-build
 	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
+		--build-arg base_image=$(DOCKER_BASE_IMAGE) \
 		--platform $(subst $(space),$(comma),$(ARCHS)) \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
@@ -87,6 +90,7 @@ docker-push-beta: test py-export-requirements
 	-@docker buildx rm deye-docker-build
 	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
+		--build-arg base_image=$(DOCKER_BASE_IMAGE) \
 		--platform $(subst $(space),$(comma),$(ARCHS)) \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
