@@ -93,7 +93,7 @@ class DeyeMqttClient:
     def disconnect(self):
         self.__mqtt_client.disconnect()
 
-    def __do_publish(self, mqtt_topic: str, value: str):
+    def publish(self, mqtt_topic: str, value: str):
         try:
             self.__publish_lock.acquire()
             self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
@@ -123,13 +123,13 @@ class DeyeMqttClient:
             logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
             mqtt_topic = self.__build_topic_name(logger_topic_prefix, observation.sensor.mqtt_topic_suffix)
             value = observation.value_as_str()
-            self.__do_publish(mqtt_topic, value)
+            self.publish(mqtt_topic, value)
 
     def publish_logger_status(self, is_online: bool, logger_index: int):
         logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
         mqtt_topic = self.__build_topic_name(logger_topic_prefix, self.__config.logger_status_topic)
         value = "online" if is_online else "offline"
-        self.__do_publish(mqtt_topic, value)
+        self.publish(mqtt_topic, value)
         ParameterizedLogger(self.__log, logger_index).info("Logger is %s", value)
 
     def extract_command_topic_suffix(self, logger_index: int, topic: str) -> str | None:
