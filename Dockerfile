@@ -15,14 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM python:3.10.13-alpine3.18 as builder
+ARG base_image
+FROM ${base_image} AS builder
 
 WORKDIR /build
 RUN apk add gcc alpine-sdk
 COPY requirements.txt ./
 RUN pip install --no-cache-dir --target . -r requirements.txt
 
-FROM python:3.10.13-alpine3.18
+FROM ${base_image}
 WORKDIR /opt/deye_inverter_mqtt
 ADD src/*.py ./
 COPY --from=builder /build/ ./
