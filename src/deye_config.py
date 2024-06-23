@@ -36,18 +36,8 @@ class ParameterizedLogger(logging.LoggerAdapter):
 
 class DeyeEnv:
     @staticmethod
-    def unquote(value: str) -> str:
-        """Remove single and double quotes at the beginning and the end"""
-        if value and value[0] == '"' and value[-1] == '"':
-            value = value[1:-1]
-        elif value and value[0] == "'" and value[-1] == "'":
-            value = value[1:-1]
-        return value
-
-    @staticmethod
     def integer(env_var_name: str, default_value: int = None) -> int:
         value = os.getenv(env_var_name)
-        value = DeyeEnv.unquote(value)
         if value:
             try:
                 return int(value)
@@ -61,7 +51,6 @@ class DeyeEnv:
     @staticmethod
     def boolean(env_var_name: str, default_value: bool = None) -> bool:
         value = os.getenv(env_var_name)
-        value = DeyeEnv.unquote(value)
         if value and value == "true":
             return True
         elif value and value == "false":
@@ -78,7 +67,6 @@ class DeyeEnv:
     @staticmethod
     def string(env_var_name: str, default_value: str = None) -> str | None:
         value = os.getenv(env_var_name)
-        value = DeyeEnv.unquote(value)
         if value:
             return value
         elif default_value is not None:
