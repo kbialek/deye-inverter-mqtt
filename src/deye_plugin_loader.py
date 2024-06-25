@@ -50,6 +50,13 @@ class DeyePluginLoader:
         }
 
         for plugin_name in discovered_plugins:
+            if plugin_name not in self.__config.plugins_enabled:
+                self.__log.info(
+                    "Plugin '%s' discovered but not loaded, because it's not enabled in the config",
+                    plugin_name
+                )
+                continue
+
             self.__log.info("Loading plugin: '%s'", plugin_name)
             plugin_module = discovered_plugins[plugin_name]
             try:
