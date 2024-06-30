@@ -280,6 +280,7 @@ All configuration options are controlled through environment variables.
 * `MQTT_TLS_CLIENT_CERT_PATH` - Client certificate location for TLS based authentication, defaults to `None`
 * `MQTT_TLS_CLIENT_KEY_PATH` - Client private key location for TLS based authentication, defaults to `None`
 * `PLUGINS_DIR` - Path to a directory containing custom plugins extending the functionality of the service
+* `PLUGINS_ENABLED` - A list of plugin names that will be loaded when successfully discovered in `PLUGINS_DIR`, defaults to `[]`
 
 ### Publish on change feature
 

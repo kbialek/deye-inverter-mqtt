@@ -232,6 +232,7 @@ class DeyeConfig:
         active_processors: [str] = [],
         active_command_handlers: [str] = [],
         plugins_dir: str = "",
+        plugins_enabled: [str] = [],
     ):
         if isinstance(logger_configs, DeyeLoggerConfig):
             self.logger_configs = [logger_configs]
@@ -246,6 +247,7 @@ class DeyeConfig:
         self.metric_groups = metric_groups
         self.active_processors = active_processors
         self.plugins_dir = plugins_dir
+        self.plugins_enabled = plugins_enabled
 
     @property
     def logger(self):
@@ -270,6 +272,7 @@ class DeyeConfig:
                 metric_groups=DeyeConfig.__read_item_set(DeyeEnv.string("DEYE_METRIC_GROUPS", "")),
                 active_processors=DeyeConfig.__read_active_processors(),
                 plugins_dir=DeyeEnv.string("PLUGINS_DIR", "plugins"),
+                plugins_enabled=DeyeConfig.__read_item_set(DeyeEnv.string("PLUGINS_ENABLED", "")),
             )
         except Exception as e:
             print(e)
