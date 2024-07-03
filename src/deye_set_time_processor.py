@@ -48,17 +48,17 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
         logger_status = events.get_status()
         if logger_status is None:
             return
-        if logger_status:
-            self.__last_status = self.__set_time()
-        else:
-            self.__last_status = False
-            self.__last_update_ts = datetime.min
-
-    def __set_time(self) -> bool:
         now = datetime.now()
         delta = now - self.__last_update_ts
         if delta.total_seconds() < 5 * 60:
             return
+        if logger_status:
+            self.__last_status = self.__set_time(now)
+        else:
+            self.__last_status = False
+            self.__last_update_ts = datetime.min
+
+    def __set_time(self, now) -> bool:
         self.__last_update_ts = now
         write_status = self.__modbus.write_registers_uint(
             22,
