@@ -52,8 +52,7 @@ class DeyePluginLoader:
         for plugin_name in discovered_plugins:
             if plugin_name not in self.__config.plugins_enabled:
                 self.__log.info(
-                    "Plugin '%s' discovered but not loaded, because it's not enabled in the config",
-                    plugin_name
+                    "Plugin '%s' discovered but not loaded, because it's not enabled in the config", plugin_name
                 )
                 continue
 
