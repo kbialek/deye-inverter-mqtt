@@ -2,7 +2,7 @@ Do you find this project useful? Buy me a coffee [![Donate](https://img.shields.
 
 # Deye solar inverter MQTT bridge
 
-Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT.
+Reads Deye solar inverter metrics using Modbus over ethernet and publishes them over MQTT.
 
 Supports single inverter installations, as well as fleet of microinverters.
 
