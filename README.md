@@ -134,6 +134,7 @@ This feature allows advanced users to extend the functionality of this project. 
 
 #### List of public plugins
 * [stdout-publisher](https://github.com/hoegaarden/deye-inverter-mqtt-plugins/) by @hoegaarden
+* [Deye MQTT HA Plugin](https://sr.ht/~carstengrohmann/deye-mqtt-ha-plugin/) by Carsten Grohmann
 
 ## Installation
 The communication with the logger can be performed using either Modbus/TCP or Modbus/AT protocol.
@@ -315,12 +316,9 @@ By using this tool you accept this risk, and you take full responsibility for th
 
 ## Home Assistant integration
 
-This project currently has no integration with [Home Assistant](https://www.home-assistant.io/). You can manually configure HA to use these data,
-or you can write a plugin as described earlier in this document.
-
-For help with integration, see
-* [MQTT Client Component](https://esphome.io/components/mqtt.html)
-* [MQTT Discovery examples](https://www.home-assistant.io/integrations/mqtt/#discovery-examples)
+This project currently has no integration with [Home Assistant](https://www.home-assistant.io/). You can use the
+[Deye MQTT HA Plugin](https://sr.ht/~carstengrohmann/deye-mqtt-ha-plugin/) to integrate all data published via
+MQTT into [Home Assistant](https://www.home-assistant.io/).
 
 ## Other related projects and resources
 * https://github.com/StephanJoubert/home_assistant_solarman
