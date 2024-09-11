@@ -16,7 +16,8 @@
 # under the License.
 
 import math
-from abc import abstractmethod
+from datetime import datetime
+from abc import abstractmethod, abstractproperty
 
 
 class Sensor:
@@ -26,13 +27,9 @@ class Sensor:
     This is an abstract class. Method 'read_value' must be provided by the extending subclass.
     """
 
-    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:s}", groups=[]):
-        self.name = name
-        self.mqtt_topic_suffix = mqtt_topic_suffix
-        self.unit = unit
-        self.print_format = print_format
-        assert len(groups) > 0, f"Sensor {name} must belong to at least one group"
-        self.groups = groups
+    @abstractproperty
+    def mqtt_topic_suffix(self) -> str:
+        pass
 
     @abstractmethod
     def read_value(self, registers: dict[int, bytearray]):
@@ -66,7 +63,59 @@ class Sensor:
         """Returns the list of Modbus registers read by this sensor"""
 
 
-class SingleRegisterSensor(Sensor):
+class DailyResetSensor(Sensor):
+    """
+    Wraps other sensor and ensures that the value reported is reset daily.
+    This is useful to avoid the last value measured yesterday being reported as the first value of today.
+    Implemented to mitigate microinverter daily energy value "leak".
+    """
+
+    def __init__(self, delegate: Sensor):
+        self.__delegate = delegate
+        self.__last_value = 0
+        self.__last_value_ts = datetime.now()
+
+    @property
+    def mqtt_topic_suffix(self) -> str:
+        return self.__delegate.mqtt_topic_suffix
+
+    def read_value(self, registers: dict[int, bytearray]):
+        now = datetime.now()
+        value = self.__delegate.read_value(registers)
+        if value is not None and now.day != self.__last_value_ts.day and value >= self.__last_value:
+            return 0
+        self.__last_value = value
+        self.__last_value_ts = now
+        return value
+
+    def write_value(self, value: str) -> dict[int, bytearray]:
+        return self.__delegate.write_value(value)
+
+    def format_value(self, value):
+        return self.__delegate.format_value(value)
+
+    def in_any_group(self, active_groups: set[str]) -> bool:
+        return self.__delegate.in_any_group(active_groups)
+
+    def get_registers(self) -> list[int]:
+        return self.__delegate.get_registers()
+
+
+class NamedSensor(Sensor):
+    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:s}", groups=[]):
+        self.name = name
+        self.__mqtt_topic_suffix = mqtt_topic_suffix
+        self.unit = unit
+        self.print_format = print_format
+        assert len(groups) > 0, f"Sensor {name} must belong to at least one group"
+        self.groups = groups
+
+    @property
+    def mqtt_topic_suffix(self) -> str:
+        return self.__mqtt_topic_suffix
+
+
+class SingleRegisterSensor(NamedSensor):
     """
     Solar inverter sensor with value stored as 32-bit integer in a single Modbus register.
     """
@@ -104,8 +153,11 @@ class SingleRegisterSensor(Sensor):
     def get_registers(self) -> list[int]:
         return [self.reg_address]
 
+    def reset_daily(self) -> DailyResetSensor:
+        return DailyResetSensor(self)
 
-class DoubleRegisterSensor(Sensor):
+
+class DoubleRegisterSensor(NamedSensor):
     """
     Solar inverter sensor with value stored as 64-bit integer in two Modbus registers.
     """
@@ -143,6 +195,9 @@ class DoubleRegisterSensor(Sensor):
     @abstractmethod
     def get_registers(self) -> list[int]:
         return [self.reg_address, self.reg_address + 1]
+
+    def reset_daily(self) -> DailyResetSensor:
+        return DailyResetSensor(self)
 
 
 class SignedMagnitudeSingleRegisterSensor(SingleRegisterSensor):
@@ -185,7 +240,7 @@ class SignedMagnitudeDoubleRegisterSensor(DoubleRegisterSensor):
             return None
 
 
-class ComputedPowerSensor(Sensor):
+class ComputedPowerSensor(NamedSensor):
     """
     Electric Power sensor with value computed as multiplication of values read by voltage and current sensors.
     """
@@ -216,7 +271,7 @@ class ComputedPowerSensor(Sensor):
         return []
 
 
-class ComputedSumSensor(Sensor):
+class ComputedSumSensor(NamedSensor):
     """
     Computes a sum of values read by given list of sensors.
     """
@@ -240,7 +295,7 @@ class ComputedSumSensor(Sensor):
         return []
 
 
-class AggregatedValueSensor(Sensor):
+class AggregatedValueSensor(NamedSensor):
     """
     Represents value computed as an aggregation in multi-inverter installation
     """

@@ -20,10 +20,10 @@ from datetime import datetime
 
 from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent
 from deye_observation import Observation
-from deye_sensor import Sensor
+from deye_sensor import NamedSensor
 
 
-class FakeSensor(Sensor):
+class FakeSensor(NamedSensor):
     def __init__(self, name: str, value: float):
         super().__init__(name, groups=["float"], print_format="{:0.1f}")
         self.value = value

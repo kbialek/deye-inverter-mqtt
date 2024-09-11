@@ -21,10 +21,10 @@ from unittest.mock import MagicMock, patch
 
 from deye_inverter_state import DeyeInverterState
 from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, Observation
-from deye_sensor import Sensor, SensorRegisterRanges
+from deye_sensor import NamedSensor, SensorRegisterRanges
 
 
-class FakeSensor(Sensor):
+class FakeSensor(NamedSensor):
     def __init__(self, name: str, value: float):
         super().__init__(name, groups=["float"], print_format="{:0.1f}")
         self.value = value

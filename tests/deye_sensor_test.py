@@ -18,6 +18,7 @@
 import unittest
 from deye_sensor import (
     Sensor,
+    NamedSensor,
     ComputedSumSensor,
     DoubleRegisterSensor,
     SingleRegisterSensor,
@@ -28,7 +29,7 @@ from deye_sensor import (
 )
 
 
-class FakeSensor(Sensor):
+class FakeSensor(NamedSensor):
     def __init__(self, name, value):
         super().__init__(name, groups=["string"])
         self.value = value
@@ -276,6 +277,19 @@ class DeyeSensorTest(unittest.TestCase):
         self.assertTrue(sut.in_any_group({"a"}))
         self.assertTrue(sut.in_any_group({"b"}))
         self.assertFalse(sut.in_any_group({"c"}))
+
+    def test_reset_sensor_passthrough(self):
+        # given
+        sut = SingleRegisterSensor("test", 0x00, 1, signed=False, groups=["string"]).reset_daily()
+
+        # and
+        registers = {0: bytearray.fromhex("0102")}
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, 0x0102)
 
 
 if __name__ == "__main__":
