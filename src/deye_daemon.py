@@ -83,7 +83,7 @@ class DeyeDaemon:
             self.__interval_runners += [self.__create_interval_runner_for_aggregators()]
 
     def __create_interval_runner_for_logger(self, logger_config: DeyeLoggerConfig) -> IntervalRunner:
-        modbus = DeyeModbus(DeyeConnectorFactory().create_connector(logger_config))
+        modbus = DeyeModbus(self.__config, DeyeConnectorFactory().create_connector(logger_config))
         sensors = [s for s in sensor_list if s.in_any_group(self.__config.metric_groups)]
         reg_ranges = SensorRegisterRanges(
             sensor_register_ranges,

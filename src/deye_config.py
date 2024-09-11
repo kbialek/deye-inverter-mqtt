@@ -233,6 +233,7 @@ class DeyeConfig:
         active_command_handlers: [str] = [],
         plugins_dir: str = "",
         plugins_enabled: [str] = [],
+        data_filters: [str] = [],
     ):
         if isinstance(logger_configs, DeyeLoggerConfig):
             self.logger_configs = [logger_configs]
@@ -248,10 +249,15 @@ class DeyeConfig:
         self.active_processors = active_processors
         self.plugins_dir = plugins_dir
         self.plugins_enabled = plugins_enabled
+        self.data_filters = data_filters
 
     @property
     def logger(self):
         return self.logger_configs[0]
+
+    @property
+    def data_filter_ignore_zeroed_frames(self) -> bool:
+        return "ignore_zeroed_frames" in self.data_filters
 
     @staticmethod
     def from_env():
@@ -273,6 +279,7 @@ class DeyeConfig:
                 active_processors=DeyeConfig.__read_active_processors(),
                 plugins_dir=DeyeEnv.string("PLUGINS_DIR", "plugins"),
                 plugins_enabled=DeyeConfig.__read_item_set(DeyeEnv.string("PLUGINS_ENABLED", "")),
+                data_filters=DeyeConfig.__read_item_set(DeyeEnv.string("DEYE_DATA_FILTERS", "")),
             )
         except Exception as e:
             print(e)

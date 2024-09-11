@@ -268,6 +268,8 @@ All configuration options are controlled through environment variables.
 * `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
 * `DEYE_FEATURE_TIME_OF_USE` - enables Time Of Use feature control over MQTT
 * `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR` - enables multi-inverter data aggregation and publishing
+* `DEYE_DATA_FILTERS` - comma separated list of data filters that mitigate invalid data patterns. No filter is active by default.
+  * `ignore_zeroed_frames` - ignore Modbus frames having all bytes equal zero
 * `MQTT_HOST` - MQTT Broker IP address
 * `MQTT_PORT` - MQTT Broker port, , defaults to `1883`
 * `MQTT_USERNAME` - MQTT Broker username for authentication, defaults to `None`

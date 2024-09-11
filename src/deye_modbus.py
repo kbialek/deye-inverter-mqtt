@@ -20,6 +20,7 @@ import logging
 import libscrc
 
 from deye_connector import DeyeConnector
+from deye_config import DeyeConfig
 
 
 class DeyeModbus:
@@ -27,8 +28,9 @@ class DeyeModbus:
     Inspired by https://github.com/jlopez77/DeyeInverter
     """
 
-    def __init__(self, connector: DeyeConnector):
+    def __init__(self, config: DeyeConfig, connector: DeyeConnector):
         self.__log = logging.getLogger(DeyeModbus.__name__)
+        self.__config = config
         self.connector = connector
 
     def read_registers(self, first_reg: int, last_reg: int) -> dict[int, bytearray]:
@@ -49,7 +51,13 @@ class DeyeModbus:
         modbus_resp_frame = self.connector.send_request(modbus_frame + modbus_crc)
         if modbus_resp_frame is None:
             return {}
-        return self.__parse_modbus_read_holding_registers_response(modbus_resp_frame, first_reg, last_reg)
+        registers = self.__parse_modbus_read_holding_registers_response(modbus_resp_frame, first_reg, last_reg)
+        if self.__config.data_filter_ignore_zeroed_frames:
+            zeroed_reg_count = sum([1 for r in registers.values() if r == bytearray.fromhex("0000")])
+            if zeroed_reg_count == len(registers):
+                self.__log.debug("Ignoring zeroed frame: %s", modbus_resp_frame.hex())
+                return {}
+        return registers
 
     def write_register_uint(self, reg_address: int, reg_value: int) -> bool:
         """Write single modbus holding register, assuming the value is an unsigned int
