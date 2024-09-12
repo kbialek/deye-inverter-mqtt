@@ -28,6 +28,10 @@ class Sensor:
     """
 
     @abstractproperty
+    def name(self) -> str:
+        pass
+
+    @abstractproperty
     def mqtt_topic_suffix(self) -> str:
         pass
 
@@ -72,8 +76,12 @@ class DailyResetSensor(Sensor):
 
     def __init__(self, delegate: Sensor):
         self.__delegate = delegate
-        self.__last_value = 0
+        self.__last_value: float | None = None
         self.__last_value_ts = datetime.now()
+
+    @property
+    def name(self) -> str:
+        return self.__delegate.name
 
     @property
     def mqtt_topic_suffix(self) -> str:
@@ -82,7 +90,12 @@ class DailyResetSensor(Sensor):
     def read_value(self, registers: dict[int, bytearray]):
         now = datetime.now()
         value = self.__delegate.read_value(registers)
-        if value is not None and now.day != self.__last_value_ts.day and value >= self.__last_value:
+        if (
+            value is not None
+            and self.__last_value is not None
+            and now.day != self.__last_value_ts.day
+            and value >= self.__last_value
+        ):
             return 0
         self.__last_value = value
         self.__last_value_ts = now
@@ -103,12 +116,16 @@ class DailyResetSensor(Sensor):
 
 class NamedSensor(Sensor):
     def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:s}", groups=[]):
-        self.name = name
+        self.__name = name
         self.__mqtt_topic_suffix = mqtt_topic_suffix
         self.unit = unit
         self.print_format = print_format
         assert len(groups) > 0, f"Sensor {name} must belong to at least one group"
         self.groups = groups
+
+    @property
+    def name(self) -> str:
+        return self.__name
 
     @property
     def mqtt_topic_suffix(self) -> str:
