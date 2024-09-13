@@ -287,7 +287,7 @@ class DeyeConfig:
 
     @staticmethod
     def __read_item_set(value: str) -> set[str]:
-        return set([p.strip() for p in value.split(",")])
+        return set([p.strip() for p in value.split(",")]) if value else {}
 
     @staticmethod
     def __read_active_processors() -> [str]:

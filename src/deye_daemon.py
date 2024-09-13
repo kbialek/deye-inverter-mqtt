@@ -81,6 +81,8 @@ class DeyeDaemon:
         if len(self.__config.logger_configs) > 1:
             self.__aggregating_processors = self.__processor_factory.create_aggregating_processors(self.__config.logger)
             self.__interval_runners += [self.__create_interval_runner_for_aggregators()]
+        if self.__config.data_filters:
+            self.__log.info("Active data filters: %s", ",".join(self.__config.data_filters))
 
     def __create_interval_runner_for_logger(self, logger_config: DeyeLoggerConfig) -> IntervalRunner:
         modbus = DeyeModbus(self.__config, DeyeConnectorFactory().create_connector(logger_config))
