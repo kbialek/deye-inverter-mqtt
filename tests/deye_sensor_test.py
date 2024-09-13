@@ -18,7 +18,7 @@
 import unittest
 from deye_sensor import (
     Sensor,
-    NamedSensor,
+    AbstractSensor,
     ComputedSumSensor,
     DoubleRegisterSensor,
     SingleRegisterSensor,
@@ -29,7 +29,7 @@ from deye_sensor import (
 )
 
 
-class FakeSensor(NamedSensor):
+class FakeSensor(AbstractSensor):
     def __init__(self, name, value):
         super().__init__(name, groups=["string"])
         self.value = value

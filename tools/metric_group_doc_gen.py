@@ -9,22 +9,8 @@ def render_table(sensors: list[Sensor]):
     print('|Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|')
     print('|---|---|:-:|:-:|:-:|:-:|:-:|')
     for s in sensors:
-        data_type = 'n/a'
-        scale_factor = '1'
-        if isinstance(s, SignedMagnitudeSingleRegisterSensor):
-            data_type = 'SM_WORD'
-            scale_factor = s.factor
-        elif isinstance(s, SingleRegisterSensor):
-            data_type = 'S_WORD' if s.signed else 'U_WORD'
-            scale_factor = s.factor
-        elif isinstance(s, SignedMagnitudeDoubleRegisterSensor):
-            data_type = 'SM_DWORD'
-            data_type += ' (LW,HW)' if s.low_word_first else ' (HW,LW)'
-            scale_factor = s.factor
-        elif isinstance(s, DoubleRegisterSensor):
-            data_type = 'S_DWORD' if s.signed else 'U_DWORD'
-            data_type += ' (LW,HW)' if s.low_word_first else ' (HW,LW)'
-            scale_factor = s.factor
+        data_type = s.data_type
+        scale_factor = s.scale_factor
 
         regs_dec = ','.join(['{:d}'.format(r) for r in s.get_registers()])
         regs_hex = ','.join(['{:x}'.format(r) for r in s.get_registers()])
