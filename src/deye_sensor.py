@@ -59,6 +59,10 @@ class Sensor:
     def scale_factor(self) -> float:
         pass
 
+    @abstractproperty
+    def is_readiness_check(self) -> bool:
+        pass
+
     @abstractmethod
     def read_value(self, registers: dict[int, bytearray]):
         """
@@ -127,13 +131,17 @@ class DailyResetSensor(Sensor):
     def groups(self) -> [str]:
         return self.__delegate.groups
 
-    @abstractproperty
+    @property
     def data_type(self) -> str:
         return self.__delegate.data_type
 
-    @abstractproperty
+    @property
     def scale_factor(self) -> float:
         return self.__delegate.scale_factor
+
+    @property
+    def is_readiness_check(self) -> bool:
+        return self.__delegate.is_readiness_check
 
     def read_value(self, registers: dict[int, bytearray]):
         now = datetime.now()
@@ -170,6 +178,7 @@ class AbstractSensor(Sensor):
         self.__print_format = print_format
         assert len(groups) > 0, f"Sensor {name} must belong to at least one group"
         self.__groups = groups
+        self.__is_readiness_check = False
 
     @property
     def name(self) -> str:
@@ -198,6 +207,14 @@ class AbstractSensor(Sensor):
     @property
     def scale_factor(self) -> float:
         return 1
+
+    @property
+    def is_readiness_check(self) -> bool:
+        return self.__is_readiness_check
+
+    def use_as_readiness_check(self) -> Sensor:
+        self.__is_readiness_check = True
+        return self
 
 
 class SingleRegisterSensor(AbstractSensor):
