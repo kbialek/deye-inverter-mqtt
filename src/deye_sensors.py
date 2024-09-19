@@ -86,7 +86,7 @@ ac_freq_sensor = SingleRegisterSensor(
 # Production today
 production_today_sensor = SingleRegisterSensor(
     "Production today", 0x3C, 0.1, mqtt_topic_suffix="day_energy", unit="kWh", groups=["string", "micro"]
-)
+).reset_daily()
 uptime_sensor = SingleRegisterSensor(
     "Uptime", 0x3E, 1, mqtt_topic_suffix="uptime", unit="minutes", groups=["string", "micro"]
 )
@@ -108,7 +108,7 @@ pv1_power_sensor = ComputedPowerSensor(
 )
 pv1_daily_sensor = SingleRegisterSensor(
     "PV1 Production today", 0x41, 0.1, mqtt_topic_suffix="dc/pv1/day_energy", unit="kWh", groups=["micro"]
-)
+).reset_daily()
 pv1_total_sensor = DoubleRegisterSensor(
     "PV1 Total", 0x45, 0.1, mqtt_topic_suffix="dc/pv1/total_energy", unit="kWh", groups=["micro"]
 )
@@ -130,7 +130,7 @@ pv2_power_sensor = ComputedPowerSensor(
 )
 pv2_daily_sensor = SingleRegisterSensor(
     "PV2 Production today", 0x42, 0.1, mqtt_topic_suffix="dc/pv2/day_energy", unit="kWh", groups=["micro"]
-)
+).reset_daily()
 pv2_total_sensor = DoubleRegisterSensor(
     "PV2 Total", 0x47, 0.1, mqtt_topic_suffix="dc/pv2/total_energy", unit="kWh", groups=["micro"]
 )
@@ -152,7 +152,7 @@ pv3_power_sensor = ComputedPowerSensor(
 )
 pv3_daily_sensor = SingleRegisterSensor(
     "PV3 Production today", 0x43, 0.1, mqtt_topic_suffix="dc/pv3/day_energy", unit="kWh", groups=["micro"]
-)
+).reset_daily()
 pv3_total_sensor = DoubleRegisterSensor(
     "PV3 Total", 0x4A, 0.1, mqtt_topic_suffix="dc/pv3/total_energy", unit="kWh", groups=["micro"]
 )
@@ -174,7 +174,7 @@ pv4_power_sensor = ComputedPowerSensor(
 )
 pv4_daily_sensor = SingleRegisterSensor(
     "PV4 Production today", 0x44, 0.1, mqtt_topic_suffix="dc/pv4/day_energy", unit="kWh", groups=["micro"]
-)
+).reset_daily()
 pv4_total_sensor = DoubleRegisterSensor(
     "PV4 Total", 0x4D, 0.1, mqtt_topic_suffix="dc/pv4/total_energy", unit="kWh", groups=["micro"]
 )
