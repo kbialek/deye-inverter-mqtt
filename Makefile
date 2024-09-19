@@ -2,7 +2,7 @@ GITHUB_USER = kbialek
 VERSION = $(shell poetry version -s)
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
-DOCKER_BASE_IMAGE = python:3.10.13-alpine3.18
+DOCKER_BASE_IMAGE_TAG = 3.10.13-alpine3.18
 
 null =
 space = $(null) $(null)
@@ -40,13 +40,13 @@ test-at-connector:
 	@bash -c "set -a; source config.env; pytest -v --log-cli-level=DEBUG tests/deye_at_connector_inttest.py"
 
 run:
-	@./local-run.sh $(DOCKER_BASE_IMAGE)
+	@./local-run.sh "python:$(DOCKER_BASE_IMAGE_TAG)"
 
 $(ARCHS:%=docker-build-%): docker-build-%: py-export-requirements
 	-@docker buildx rm deye-docker-build
 	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
-		--build-arg base_image=$(DOCKER_BASE_IMAGE) \
+		--build-arg base_image_tag=$(DOCKER_BASE_IMAGE_TAG) \
 		--platform $* \
 		--output type=docker \
 		-t deye-inverter-mqtt:$(VERSION) \
@@ -76,8 +76,8 @@ docker-push: test py-export-requirements
 	@echo $(call get_github_token) | docker login ghcr.io -u $(GITHUB_USER) --password-stdin
 	-@docker buildx rm deye-docker-build
 	@docker buildx create --use --name deye-docker-build
-	@docker buildx build \
-		--build-arg base_image=$(DOCKER_BASE_IMAGE) \
+	@docker --debug buildx build \
+		--build-arg base_image_tag=$(DOCKER_BASE_IMAGE_TAG) \
 		--platform $(subst $(space),$(comma),$(ARCHS)) \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
@@ -90,7 +90,7 @@ docker-push-beta: test py-export-requirements
 	-@docker buildx rm deye-docker-build
 	@docker buildx create --use --name deye-docker-build
 	@docker buildx build \
-		--build-arg base_image=$(DOCKER_BASE_IMAGE) \
+		--build-arg base_image_tag=$(DOCKER_BASE_IMAGE_TAG) \
 		--platform $(subst $(space),$(comma),$(ARCHS)) \
 		--push \
 		-t ghcr.io/$(GITHUB_USER)/deye-inverter-mqtt:$(VERSION) \
