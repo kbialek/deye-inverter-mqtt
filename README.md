@@ -1,12 +1,14 @@
-Do you find this project useful? Buy me a coffee [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/krbialek)
+----
+### Do you find this project useful? Buy me a coffee ☕ [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/krbialek)
+----
 
-# Deye solar inverter MQTT bridge
+# :sunny: Deye solar inverter MQTT bridge
 
 Reads Deye solar inverter metrics using Modbus over ethernet and publishes them over MQTT.
 
 Supports single inverter installations, as well as fleet of microinverters.
 
-## Supported inverters and metrics
+## :bulb: Supported inverters and metrics
 
 The meaning of certain inverter registers depends on the inverter type.
 You should choose metric group(s) that are appropriate to your inverter model.
@@ -44,99 +46,7 @@ Rebranded models
 | [Fuji Solar FU-SUN-4/5/6/7/8/10/12K-G05](https://fuji-solar.com/product/fu-sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt) | [string](docs/metric_group_string.md) |
 
 
-### Additional MQTT topics
-#### **Availability topic**
-Reports deye-inverter-mqtt service status (not the inverter/logger status):
-* `online` - when the service is connected to the MQTT broker
-* `offline` - when the service is disconnected from the MQTT broker
-
-The default topic name is `status` and can be changed in the configuration.
-
-#### **Logger status topic**
-Reports solar inverter's logger connectivity status
-* `online` - when the service connect to the logger successfully
-* `offline` - when the service can't connect to the logger
-
-The default topic name is `logger_status` and can be changed in the configuration.
-
-### Reading inverter settings
-The service can optionally read inverter settings. This feature may be useful when you dynamically modify active power regulation factor. Enable it by adding `settings` or `settings_micro` metric group to `DEYE_METRIC_GROUPS` env variable.
-
-### Writing inverter settings
-It is possible to modify selected inverter settings over MQTT.
-
-| Setting                 |                             Topic                              | Unit | Value range | Feature flag                           |
-| ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
-| active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |    0-120    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time | 0000 - 2359 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - max power<sup>(1)</sup> | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/voltage/(1-6)/command` | V | 0.00 - 63.00 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | On/Off | 0,1 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
-
-<sup>(1)</sup> max inverter power in Watts e.g. 8000, 10000 or 12000
-
-#### Writing Time Of Use configuration
-
-Prerequisites:
-1. Set `DEYE_FEATURE_TIME_OF_USE` to `true`
-2. Enable time-of-use metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_timeofuse`
-
-Time Of Use configuration is modified using the following workflow:
-
-1. The service reads Time Of Use configuration from the inverter and keeps it in the memory. This step happens automatically at each data read from the inverter.
-2. You send modifications over `{MQTT_TOPIC_PREFIX}/timeofuse/*/*/command` topics as needed. See the table above for more details about used MQTT topics. These changes are not immediately written to the inverter. They are **buffered** in the service memory instead.
-3. Send `write` command to topic `{MQTT_TOPIC_PREFIX}/timeofuse/control/command`. It will build a new Time Of Use configuration by putting your changes on top of the inverter configuration present in the service memory. Next the entire Time Of Use configuration is sent to the inverter. The modifications are cleared, and you can start over sending new modifications.
-4. Alternatively send `reset` command to purge buffered modifications without writing them to the inverter.
-
-## Additional features
-
-### Monitoring a fleet of microinverters
-This feature enables monitoring of *N* microinverters from a single service instance (docker container), which simplifies the installation and configuration.
-It is designed to monitor a fleet of microinverters.
-To activate this feature, set `DEYE_LOGGER_COUNT` environment variable to the number of loggers you would like to connect to. Next configure each logger by adding a set of environment variables, as follows:
-```
-DEYE_LOGGER_{N}_IP_ADDRESS=192.168.XXX.YYY
-DEYE_LOGGER_{N}_SERIAL_NUMBER=0123456789
-# Optionals
-DEYE_LOGGER_{N}_PROTOCOL=at
-DEYE_LOGGER_{N}_PORT=48899
-DEYE_LOGGER_{N}_MAX_REG_RANGE_LENGTH_PORT=256
-```
-Replace `{N}` with logger index. All loggers in the range of 1 to `DEYE_LOGGER_COUNT` must be configured.
-
-All other configuration options, in particular the metric groups, are shared by all configured loggers. For example, if you set `DEYE_FEATURE_SET_TIME=true`, it will activate set-time feature for all configured loggers.
-
-Each logger gets its own MQTT topic prefix `{MQTT_TOPIC_PREFIX}/{N}`
-
-Additionally, you can enable multi-inverter data aggregation. Set `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR=true` to compute and report `Aggregated daily energy` and `Aggregated AC active power` for the entire fleet. See [aggregated metrics](docs/metric_group_aggregated.md)
-
-
-### Automatically set logger/inverter time
-Monitors current logger status and sets the time at the logger/inverter once the connection to it can be established.
-This is useful in a setup where the inverter has no access to the public internet, or is cut off from the Solarman cloud services. 
-This feature is disabled by default and must be activated by setting `DEYE_FEATURE_SET_TIME` in the config file.
-
-### Custom plugins
-This feature allows advanced users to extend the functionality of this project. At the moment the plugins can be used to provide custom event processors. This means, that you can now process the readings as you like. No need to rely on MQTT at all anymore.
-
-#### How to implement a plugin
-* Plugin is a Python file placed in `plugins` directory. The filename must begin with `deye_plugin_`
-* The plugin must define a `DeyePlugin` class. See `plugins/deye_plugin_sample.py` for inspiration.
-
-#### How to start the docker container with custom plugins
-
-  Mount your `plugins` dir into the container filesystem
-  ```
-  --volume ./plugins:/opt/deye_inverter_mqtt/plugins:ro
-  ```
-
-#### List of public plugins
-* [stdout-publisher](https://github.com/hoegaarden/deye-inverter-mqtt-plugins/) by @hoegaarden
-* [Deye MQTT HA Plugin](https://sr.ht/~carstengrohmann/deye-mqtt-ha-plugin/) by Carsten Grohmann
-
-## Installation
+## :wrench: Installation
 The communication with the logger can be performed using either Modbus/TCP or Modbus/AT protocol.
 This project has been started with Modbus/TCP protocol support and it's still the default one.
 However, logger firmware versions 2.x does not seem to expose Modbus/TCP interface anymore, hence Modbus/AT protocol support has been implemented. Use `DEYE_LOGGER_PROTOCOL` environment variable to select
@@ -232,7 +142,7 @@ In order to do this run the following commands:
 For best performance, multiple Modbus registers are read at once, in so called register ranges. It's been reported [here](https://github.com/kbialek/deye-inverter-mqtt/issues/141) that Deye-SUN-5K-SG03LP1 reading times out when more than 16 registers is requested at once. To mitigate this problem you may try to set `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` to lower number.
 
 
-## Configuration
+## :gear: Configuration
 All configuration options are controlled through environment variables.
 
 * `LOG_LEVEL` - application log level, can be any of `DEBUG`, `INFO`, `WARN`, `ERROR`, defaults to `INFO`
@@ -283,6 +193,78 @@ All configuration options are controlled through environment variables.
 * `PLUGINS_DIR` - Path to a directory containing custom plugins extending the functionality of the service
 * `PLUGINS_ENABLED` - A list of plugin names that will be loaded when successfully discovered in `PLUGINS_DIR`, defaults to `[]`
 
+## ➕ Additional features
+### Additional MQTT topics
+#### **Availability topic**
+Reports deye-inverter-mqtt service status (not the inverter/logger status):
+* `online` - when the service is connected to the MQTT broker
+* `offline` - when the service is disconnected from the MQTT broker
+
+The default topic name is `status` and can be changed in the configuration.
+
+#### **Logger status topic**
+Reports solar inverter's logger connectivity status
+* `online` - when the service connect to the logger successfully
+* `offline` - when the service can't connect to the logger
+
+The default topic name is `logger_status` and can be changed in the configuration.
+
+### Monitoring a fleet of microinverters
+This feature enables monitoring of *N* microinverters from a single service instance (docker container), which simplifies the installation and configuration.
+It is designed to monitor a fleet of microinverters.
+To activate this feature, set `DEYE_LOGGER_COUNT` environment variable to the number of loggers you would like to connect to. Next configure each logger by adding a set of environment variables, as follows:
+```
+DEYE_LOGGER_{N}_IP_ADDRESS=192.168.XXX.YYY
+DEYE_LOGGER_{N}_SERIAL_NUMBER=0123456789
+# Optionals
+DEYE_LOGGER_{N}_PROTOCOL=at
+DEYE_LOGGER_{N}_PORT=48899
+DEYE_LOGGER_{N}_MAX_REG_RANGE_LENGTH_PORT=256
+```
+Replace `{N}` with logger index. All loggers in the range of 1 to `DEYE_LOGGER_COUNT` must be configured.
+
+All other configuration options, in particular the metric groups, are shared by all configured loggers. For example, if you set `DEYE_FEATURE_SET_TIME=true`, it will activate set-time feature for all configured loggers.
+
+Each logger gets its own MQTT topic prefix `{MQTT_TOPIC_PREFIX}/{N}`
+
+Additionally, you can enable multi-inverter data aggregation. Set `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR=true` to compute and report `Aggregated daily energy` and `Aggregated AC active power` for the entire fleet. See [aggregated metrics](docs/metric_group_aggregated.md)
+
+### Automatically set logger/inverter time
+Monitors current logger status and sets the time at the logger/inverter once the connection to it can be established.
+This is useful in a setup where the inverter has no access to the public internet, or is cut off from the Solarman cloud services. 
+This feature is disabled by default and must be activated by setting `DEYE_FEATURE_SET_TIME` in the config file.
+
+### Reading inverter settings
+The service can optionally read inverter settings. This feature may be useful when you dynamically modify active power regulation factor. Enable it by adding `settings` or `settings_micro` metric group to `DEYE_METRIC_GROUPS` env variable.
+
+### Writing inverter settings
+It is possible to modify selected inverter settings over MQTT.
+
+| Setting                 |                             Topic                              | Unit | Value range | Feature flag                           |
+| ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
+| active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |    0-120    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time | 0000 - 2359 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - max power<sup>(1)</sup> | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/voltage/(1-6)/command` | V | 0.00 - 63.00 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | On/Off | 0,1 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
+
+<sup>(1)</sup> max inverter power in Watts e.g. 8000, 10000 or 12000
+
+#### Writing Time Of Use configuration
+
+Prerequisites:
+1. Set `DEYE_FEATURE_TIME_OF_USE` to `true`
+2. Enable time-of-use metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_timeofuse`
+
+Time Of Use configuration is modified using the following workflow:
+
+1. The service reads Time Of Use configuration from the inverter and keeps it in the memory. This step happens automatically at each data read from the inverter.
+2. You send modifications over `{MQTT_TOPIC_PREFIX}/timeofuse/*/*/command` topics as needed. See the table above for more details about used MQTT topics. These changes are not immediately written to the inverter. They are **buffered** in the service memory instead.
+3. Send `write` command to topic `{MQTT_TOPIC_PREFIX}/timeofuse/control/command`. It will build a new Time Of Use configuration by putting your changes on top of the inverter configuration present in the service memory. Next the entire Time Of Use configuration is sent to the inverter. The modifications are cleared, and you can start over sending new modifications.
+4. Alternatively send `reset` command to purge buffered modifications without writing them to the inverter.
+
 ### Publish on change feature
 
 The Deye logger usually only updates the measurements only every 5 minutes, so that shorter `DEYE_DATA_READ_INTERVAL` values
@@ -295,6 +277,30 @@ previous reading.
 
 For the rare case that none of the measurements may have changed between subsequent measurements, a maximum interval between
 two published messaged is configured with the variable `DEYE_PUBLISH_ON_CHANGE_MAX_INTERVAL` (default 360 seconds = 6 minutes).
+
+### Home Assistant integration
+
+This project currently has no built-in integration with [Home Assistant](https://www.home-assistant.io/). You can use the
+[Deye MQTT HA Plugin](https://sr.ht/~carstengrohmann/deye-mqtt-ha-plugin/) to integrate all data published via
+MQTT into [Home Assistant](https://www.home-assistant.io/).
+
+## 🔌 Custom plugins
+This feature allows advanced users to extend the functionality of this project. At the moment the plugins can be used to provide custom event processors. This means, that you can now process the readings as you like. No need to rely on MQTT at all anymore.
+
+### How to implement a plugin
+* Plugin is a Python file placed in `plugins` directory. The filename must begin with `deye_plugin_`
+* The plugin must define a `DeyePlugin` class. See `plugins/deye_plugin_sample.py` for inspiration.
+
+### How to start the docker container with custom plugins
+
+  Mount your `plugins` dir into the container filesystem
+  ```
+  --volume ./plugins:/opt/deye_inverter_mqtt/plugins:ro
+  ```
+
+### List of public plugins
+* [stdout-publisher](https://github.com/hoegaarden/deye-inverter-mqtt-plugins/) by @hoegaarden
+* [Deye MQTT HA Plugin](https://sr.ht/~carstengrohmann/deye-mqtt-ha-plugin/) by Carsten Grohmann
 
 ## Reading and writing raw register values
 The tool allows reading and writing raw register values directly in the terminal.
@@ -314,13 +320,7 @@ By using this tool you accept this risk, and you take full responsibility for th
     ```
     where `<reg_address>` is register address (decimal), and <reg_value> is a value to set (decimal)
 
-## Home Assistant integration
-
-This project currently has no integration with [Home Assistant](https://www.home-assistant.io/). You can use the
-[Deye MQTT HA Plugin](https://sr.ht/~carstengrohmann/deye-mqtt-ha-plugin/) to integrate all data published via
-MQTT into [Home Assistant](https://www.home-assistant.io/).
-
-## Other related projects and resources
+## 👀 Other related projects and resources
 * https://github.com/StephanJoubert/home_assistant_solarman
 * https://github.com/dasrecht/deye-firmware
 * https://github.com/Hypfer/deye-microinverter-cloud-free
