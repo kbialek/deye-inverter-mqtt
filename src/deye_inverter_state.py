@@ -54,7 +54,11 @@ class DeyeInverterState:
             regs |= self.__modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
         events = DeyeEventList(logger_index=self.__logger_config.index)
         events.append(DeyeLoggerStatusEvent(len(regs) > 0))
-        events += self.__get_observations_from_reg_values(regs)
+        observation_events = self.__get_observations_from_reg_values(regs)
+        data_is_ready = self.__is_data_ready(observation_events)
+        self.__log.debug(f"Data readiness check result: {data_is_ready}")
+        if data_is_ready:
+            events += observation_events
         if not self.__config.publish_on_change or self.__is_device_observation_changed(events):
             for processor in self.__processors:
                 processor.process(events)
@@ -101,3 +105,12 @@ class DeyeInverterState:
         self.__event_updated = time.time()
         self.__last_observations = events
         return True
+
+    def __is_data_ready(self, observation_events: list[DeyeObservationEvent]) -> bool:
+        readiness_check_observations = [
+            event.observation for event in observation_events if event.observation.sensor.is_readiness_check
+        ]
+        self.__log.debug(f"Data readiness observations: {readiness_check_observations}")
+        if not readiness_check_observations:
+            return True
+        return len([o for o in readiness_check_observations if o.value != 0]) == len(readiness_check_observations)

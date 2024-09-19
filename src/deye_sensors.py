@@ -204,7 +204,7 @@ ac_reactive_power_sensor = SingleRegisterSensor(
 )
 production_total_sensor = DoubleRegisterSensor(
     "Production Total", 0x3F, 0.1, mqtt_topic_suffix="total_energy", unit="kWh", groups=["string", "micro"]
-)
+).use_as_readiness_check()
 
 # Temperature sensors
 string_radiator_temp_sensor = SingleRegisterSensor(

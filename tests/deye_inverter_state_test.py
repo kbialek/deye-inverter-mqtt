@@ -20,17 +20,23 @@ from datetime import datetime
 from unittest.mock import MagicMock, patch
 
 from deye_inverter_state import DeyeInverterState
-from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, Observation
-from deye_sensor import AbstractSensor, SensorRegisterRanges
+from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, Observation, DeyeEventProcessor
+from deye_sensor import AbstractSensor, SensorRegisterRanges, SensorRegisterRange
+from deye_modbus import DeyeModbus
 
 
 class FakeSensor(AbstractSensor):
-    def __init__(self, name: str, value: float):
+    def __init__(self, name: str, value: float, is_readiness_check=False):
         super().__init__(name, groups=["float"], print_format="{:0.1f}")
         self.value = value
+        self.__is_readiness_check = is_readiness_check
 
     def read_value(self, registers):
         return self.value
+
+    @property
+    def is_readiness_check(self):
+        return self.__is_readiness_check
 
 
 class TestInverterState(unittest.TestCase):
@@ -69,7 +75,7 @@ class TestInverterState(unittest.TestCase):
         self.assertFalse(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
 
     @patch("time.time")
-    def test_is_evenets_unchanged(self, time):
+    def test_is_events_unchanged(self, time):
         # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
         config_mock.logger_config.protocol = "tcp"
@@ -146,3 +152,71 @@ class TestInverterState(unittest.TestCase):
             ]
         )
         self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
+
+    def test_readiness_test_success(self):
+        # given: create processor
+        processor: DeyeEventProcessor = MagicMock()
+
+        # Create the InverterState instance with a mock configuration
+        config_mock = MagicMock()
+        config_mock.logger_config.protocol = "tcp"
+        config_mock.publish_on_change = False
+
+        # and
+        modbus: DeyeModbus = MagicMock()
+
+        # and
+        reg_ranges = SensorRegisterRanges([], [], 0)
+
+        # and
+        sensors = [
+            FakeSensor("Energy", 0, is_readiness_check=True),
+            FakeSensor("Power", 0),
+        ]
+
+        # and
+        inverter_state = DeyeInverterState(
+            config_mock, config_mock.logger_config, reg_ranges, modbus, sensors, [processor]
+        )
+
+        # when
+        inverter_state.read_from_logger()
+
+        # then
+        processor.process.assert_called_once()
+        published_events = processor.process.call_args.args[0]
+        assert len(published_events) == 1  # as only online event is published
+
+    def test_readiness_test_failure(self):
+        # given: create processor
+        processor: DeyeEventProcessor = MagicMock()
+
+        # Create the InverterState instance with a mock configuration
+        config_mock = MagicMock()
+        config_mock.logger_config.protocol = "tcp"
+        config_mock.publish_on_change = False
+
+        # and
+        modbus: DeyeModbus = MagicMock()
+
+        # and
+        reg_ranges = SensorRegisterRanges([], [], 0)
+
+        # and
+        sensors = [
+            FakeSensor("Energy", 1, is_readiness_check=True),
+            FakeSensor("Power", 0),
+        ]
+
+        # and
+        inverter_state = DeyeInverterState(
+            config_mock, config_mock.logger_config, reg_ranges, modbus, sensors, [processor]
+        )
+
+        # when
+        inverter_state.read_from_logger()
+
+        # then
+        processor.process.assert_called_once()
+        published_events = processor.process.call_args.args[0]
+        assert len(published_events) == 3  # as online event and two observation events are published
