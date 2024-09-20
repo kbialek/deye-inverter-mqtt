@@ -46,7 +46,7 @@ Rebranded models
 | [Fuji Solar FU-SUN-4/5/6/7/8/10/12K-G05](https://fuji-solar.com/product/fu-sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt) | [string](docs/metric_group_string.md) |
 
 
-## :wrench: Installation
+## :hammer_and_wrench: Installation
 The communication with the logger can be performed using either Modbus/TCP or Modbus/AT protocol.
 This project has been started with Modbus/TCP protocol support and it's still the default one.
 However, logger firmware versions 2.x does not seem to expose Modbus/TCP interface anymore, hence Modbus/AT protocol support has been implemented. Use `DEYE_LOGGER_PROTOCOL` environment variable to select
