@@ -300,7 +300,7 @@ This feature allows advanced users to extend the functionality of this project. 
 
 ### List of public plugins
 * [stdout-publisher](https://github.com/hoegaarden/deye-inverter-mqtt-plugins/) by @hoegaarden
-* [Deye MQTT HA Plugin](https://sr.ht/~carstengrohmann/deye-mqtt-ha-plugin/) by Carsten Grohmann
+* [Deye MQTT HA Plugin](https://sr.ht/~carstengrohmann/deye-mqtt-ha-plugin/) (mirrored on [GitHub](https://github.com/CarstenGrohmann/deye-mqtt-ha-plugin)) by Carsten Grohmann
 
 ## Reading and writing raw register values
 The tool allows reading and writing raw register values directly in the terminal.
