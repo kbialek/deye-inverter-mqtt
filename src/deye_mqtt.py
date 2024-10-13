@@ -118,16 +118,18 @@ class DeyeMqttClient:
     def __map_logger_index_to_topic_prefix(self, logger_index: int):
         return str(logger_index) if logger_index > 0 else ""
 
+    def build_topic_name(self, logger_index: int, topic_suffix: str) -> str:
+        logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
+        return self.__build_topic_name(logger_topic_prefix, topic_suffix)
+
     def publish_observation(self, observation: Observation, logger_index: int):
         if observation.sensor.mqtt_topic_suffix:
-            logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
-            mqtt_topic = self.__build_topic_name(logger_topic_prefix, observation.sensor.mqtt_topic_suffix)
+            mqtt_topic = self.build_topic_name(logger_index, observation.sensor.mqtt_topic_suffix)
             value = observation.value_as_str()
             self.publish(mqtt_topic, value)
 
     def publish_logger_status(self, is_online: bool, logger_index: int):
-        logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
-        mqtt_topic = self.__build_topic_name(logger_topic_prefix, self.__config.logger_status_topic)
+        mqtt_topic = self.build_topic_name(logger_index, self.__config.logger_status_topic)
         value = "online" if is_online else "offline"
         self.publish(mqtt_topic, value)
         ParameterizedLogger(self.__log, logger_index).info("Logger is %s", value)
@@ -144,7 +146,5 @@ class DeyeMqttClient:
             return None
 
     def subscribe_command_handler(self, logger_index: int, mqtt_topic_suffix: str, handler_method):
-        mqtt_topic = self.__build_topic_name(
-            self.__map_logger_index_to_topic_prefix(logger_index), f"{mqtt_topic_suffix}/command"
-        )
+        mqtt_topic = self.build_topic_name(logger_index, f"{mqtt_topic_suffix}/command")
         self.subscribe(mqtt_topic, handler_method)
