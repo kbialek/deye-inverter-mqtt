@@ -31,6 +31,9 @@ class DeyeConnectorFactory:
         if protocol == "tcp":
             log.info("Creating Modbus/TCP Logger connector")
             return DeyeModbusTcp(logger_config, DeyeTcpConnector(logger_config))
+        elif protocol == "slimtcp":
+            log.info("Creating Slim Modbus/TCP Logger connector")
+            return DeyeTcpConnector(logger_config)
         elif protocol == "at":
             log.info("Creating Modbus/AT Logger connector")
             return DeyeAtConnector(logger_config)
