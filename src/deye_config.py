@@ -174,10 +174,11 @@ class DeyeLoggerConfig:
         index: int = 0,
         protocol: str = "tcp",
         max_register_range_length: int = 256,
+        modbus_address=1,
     ):
         self.serial_number = serial_number
         self.ip_address = ip_address
-        if protocol not in ["tcp", "at"]:
+        if protocol not in ["tcp", "at", "slimtcp"]:
             raise Exception(f"Unsupported protocol {protocol}")
         self.protocol = protocol
         if port == 0 and protocol == "tcp":
@@ -188,6 +189,7 @@ class DeyeLoggerConfig:
             self.port = port
         self.index = index
         self.max_register_range_length = max_register_range_length
+        self.modbus_address = modbus_address
 
     def logger_adapter(self, logger: logging.Logger):
         return ParameterizedLogger(logger, self.index)
@@ -204,6 +206,7 @@ class DeyeLoggerConfig:
             port=DeyeEnv.integer("DEYE_LOGGER_PORT", 0),
             protocol=DeyeEnv.string("DEYE_LOGGER_PROTOCOL", "tcp"),
             max_register_range_length=DeyeEnv.integer("DEYE_LOGGER_MAX_REG_RANGE_LENGTH", 256),
+            modbus_address=DeyeEnv.integer("DEYE_LOGGER_MODBUS_ADDRESS", 1),
         )
 
     @staticmethod
@@ -215,6 +218,7 @@ class DeyeLoggerConfig:
             index=index,
             protocol=DeyeEnv.string(f"DEYE_LOGGER_{index}_PROTOCOL", "tcp"),
             max_register_range_length=DeyeEnv.integer(f"DEYE_LOGGER_{index}_MAX_REG_RANGE_LENGTH", 256),
+            modbus_address=DeyeEnv.integer(f"DEYE_LOGGER_{index}_MODBUS_ADDRESS", 1),
         )
 
 
