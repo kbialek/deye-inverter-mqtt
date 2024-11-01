@@ -69,10 +69,19 @@ topics:
   277: timeofuse/enabled/4
   278: timeofuse/enabled/5
   279: timeofuse/enabled/6
+  312: bms/1/charging_voltage
+  313: bms/1/discharge_voltage
+  314: bms/1/charge_current_limit
+  315: bms/1/discharge_current_limit
+  316: bms/1/soc
+  317: bms/1/voltage
+  318: bms/1/current
+  319: bms/1/temp
 groups:
   solar: ''
   grid: ''
   inverter: ''
   battery: battery
   time of use: timeofuse
+  bms: bms
 
