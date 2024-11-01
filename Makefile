@@ -108,6 +108,7 @@ METRIC_GROUPS = \
 	igen_dtsd422 \
 	deye_hybrid \
 	deye_hybrid_battery \
+	deye_hybrid_bms \
 	deye_hybrid_timeofuse \
 	settings \
 	settings_micro \

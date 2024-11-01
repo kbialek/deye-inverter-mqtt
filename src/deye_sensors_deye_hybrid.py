@@ -576,6 +576,62 @@ deye_hybrid_time_of_use_267 = SingleRegisterSensor(
     groups=["deye_hybrid_timeofuse"],
 )
 
+deye_hybrid_bms_312 = SingleRegisterSensor(
+    "BMS1 Charging Voltage",
+    312,
+    0.01,
+    mqtt_topic_suffix="bms/1/charging_voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_bms"],
+)
+
+deye_hybrid_bms_313 = SingleRegisterSensor(
+    "BMS1 Discharge Voltage",
+    313,
+    0.01,
+    mqtt_topic_suffix="bms/1/discharge_voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_hybrid_bms"],
+)
+
+deye_hybrid_bms_314 = SingleRegisterSensor(
+    "BMS1 Charge Current Limit",
+    314,
+    1,
+    mqtt_topic_suffix="bms/1/charge_current_limit",
+    unit="A",
+    signed=False,
+    groups=["deye_hybrid_bms"],
+)
+
+deye_hybrid_bms_315 = SingleRegisterSensor(
+    "BMS1 Discharge Current Limit",
+    315,
+    1,
+    mqtt_topic_suffix="bms/1/discharge_current_limit",
+    unit="A",
+    signed=False,
+    groups=["deye_hybrid_bms"],
+)
+
+deye_hybrid_bms_316 = SingleRegisterSensor(
+    "BMS1 SOC", 316, 1, mqtt_topic_suffix="bms/1/soc", unit="%", signed=False, groups=["deye_hybrid_bms"]
+)
+
+deye_hybrid_bms_317 = SingleRegisterSensor(
+    "BMS1 Voltage", 317, 0.01, mqtt_topic_suffix="bms/1/voltage", unit="V", signed=False, groups=["deye_hybrid_bms"]
+)
+
+deye_hybrid_bms_318 = SingleRegisterSensor(
+    "BMS1 Current", 318, 1, mqtt_topic_suffix="bms/1/current", unit="A", signed=True, groups=["deye_hybrid_bms"]
+)
+
+deye_hybrid_bms_319 = SingleRegisterSensor(
+    "BMS1 Temp", 319, 0.1, mqtt_topic_suffix="bms/1/temp", unit="°C", signed=False, groups=["deye_hybrid_bms"]
+)
+
 deye_hybrid_sensors = [
     deye_hybrid_solar_186,
     deye_hybrid_solar_187,
@@ -646,13 +702,21 @@ deye_hybrid_sensors = [
     deye_hybrid_time_of_use_265,
     deye_hybrid_time_of_use_266,
     deye_hybrid_time_of_use_267,
+    deye_hybrid_bms_312,
+    deye_hybrid_bms_313,
+    deye_hybrid_bms_314,
+    deye_hybrid_bms_315,
+    deye_hybrid_bms_316,
+    deye_hybrid_bms_317,
+    deye_hybrid_bms_318,
+    deye_hybrid_bms_319,
 ]
 
 deye_hybrid_register_ranges = [
     SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=3, last_reg_address=112),
     SensorRegisterRange(group="deye_hybrid", first_reg_address=3, last_reg_address=112),
-    SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group="deye_hybrid", first_reg_address=150, last_reg_address=249),
+    SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=250, last_reg_address=279),
 ]
