@@ -715,8 +715,9 @@ deye_hybrid_sensors = [
 deye_hybrid_register_ranges = [
     SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=3, last_reg_address=112),
     SensorRegisterRange(group="deye_hybrid", first_reg_address=3, last_reg_address=112),
+    SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group="deye_hybrid_battery", first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group="deye_hybrid", first_reg_address=150, last_reg_address=249),
-    SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group="deye_hybrid_timeofuse", first_reg_address=250, last_reg_address=279),
+    SensorRegisterRange(group="deye_hybrid_bms", first_reg_address=312, last_reg_address=319),
 ]

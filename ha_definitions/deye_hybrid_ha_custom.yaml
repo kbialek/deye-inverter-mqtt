@@ -1,3 +1,11 @@
+requests:
+  - start: 0x0106
+    end: 0x010b
+    mb_functioncode: 0x03
+  - start: 0x0138
+    end: 0x013f
+    mb_functioncode: 0x03
+
 parameters:
  - group: Time of Use
    items:
