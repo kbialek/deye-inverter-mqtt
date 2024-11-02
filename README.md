@@ -319,6 +319,7 @@ By using this tool you accept this risk, and you take full responsibility for th
 ## 👀 Other related projects and resources
 * https://github.com/StephanJoubert/home_assistant_solarman
 * https://github.com/dasrecht/deye-firmware
+* https://github.com/klatremis/esphome-for-deye
 * https://github.com/Hypfer/deye-microinverter-cloud-free
 * https://github.com/jedie/inverter-connect
 * https://github.com/MichaluxPL/Sofar_LSW3
