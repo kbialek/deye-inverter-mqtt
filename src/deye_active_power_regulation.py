@@ -36,7 +36,7 @@ class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
         self.__active_power_regulation_topic_suffix = "settings/active_power_regulation"
         matching_sensors = [s for s in sensors if s.mqtt_topic_suffix == self.__active_power_regulation_topic_suffix]
         if len(matching_sensors) == 0:
-            self.__log.error("Active power regulation sensor not found. Enable appropriate settings metric group.")
+            self.__log.info("Active power regulation sensor not found. Enable appropriate settings metric group.")
             return
         elif len(matching_sensors) > 1:
             self.__log.error(
