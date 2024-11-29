@@ -446,6 +446,43 @@ class AggregatedValueSensor(AbstractSensor):
         return []
 
 
+class EnumValueSensor(AbstractSensor):
+    """
+    Solar inverter sensor with enum value stored as 32-bit integer in a single Modbus register
+    """
+
+    def __init__(
+        self,
+        name: str,
+        reg_address: int,
+        signed=False,
+        mqtt_topic_suffix="",
+        groups=[],
+        enum_values={},
+    ):
+        super().__init__(name, mqtt_topic_suffix, "", "", groups)
+        self.__reg_address = reg_address
+        self.__signed = signed
+        self.__enum_values = enum_values
+
+    def read_value(self, registers: dict[int, bytearray]):
+        if self.__reg_address in registers:
+            reg_value = registers[self.__reg_address]
+            return self.__enum_values.get(int.from_bytes(reg_value, "big", signed=self.__signed), "")
+        else:
+            return None
+
+    def get_registers(self) -> list[int]:
+        return [self.__reg_address]
+
+    @property
+    def data_type(self) -> str:
+        return "S_WORD" if self.__signed else "U_WORD"
+
+    def format_value(self, value):
+        return value
+
+
 class SensorRegisterRange:
     """
     Declares a Modbus register range that must be read to provide values for sensors within a metrics group
