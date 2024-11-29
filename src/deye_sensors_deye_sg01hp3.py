@@ -18,7 +18,12 @@
 from deye_sensor import (
     SingleRegisterSensor,
     DoubleRegisterSensor,
+    ComputedSumSensor,
     SensorRegisterRange,
+)
+
+deye_sg01hp3_inverter_500 = SingleRegisterSensor(
+    "Running status", 500, 1, mqtt_topic_suffix="inverter/status", unit="", signed=False, groups=["deye_sg01hp3"]
 )
 
 deye_sg01hp3_solar_672 = SingleRegisterSensor(
@@ -642,8 +647,16 @@ deye_sg01hp3_bms2_250 = SingleRegisterSensor(
     groups=["deye_sg01hp3_bms"],
 )
 
+total_pv_power_sensor = ComputedSumSensor(
+    "DC Total Power",
+    [deye_sg01hp3_solar_672, deye_sg01hp3_solar_673, deye_sg01hp3_solar_674, deye_sg01hp3_solar_675],
+    mqtt_topic_suffix="dc/total_power",
+    unit="W",
+    groups=["deye_sg01hp3"],
+)
 
 deye_sg01hp3_sensors = [
+    deye_sg01hp3_inverter_500,
     deye_sg01hp3_solar_672,
     deye_sg01hp3_solar_673,
     deye_sg01hp3_solar_674,
@@ -723,9 +736,11 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_inverter_635,
     deye_sg01hp3_inverter_540,
     deye_sg01hp3_inverter_541,
+    total_pv_power_sensor,
 ]
 
 deye_sg01hp3_register_ranges = [
+    SensorRegisterRange(group="deye_sg01hp3", first_reg_address=500, last_reg_address=500),
     SensorRegisterRange(group="deye_sg01hp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3_battery", first_reg_address=514, last_reg_address=558),
