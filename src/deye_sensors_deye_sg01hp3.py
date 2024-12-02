@@ -24,7 +24,11 @@ from deye_sensor import (
 )
 
 deye_sg01hp3_inverter_500 = EnumValueSensor(
-    "Running status", 500, mqtt_topic_suffix="inverter/status", groups=["deye_sg01hp3"], enum_values={0: "standby", 1: "selfcheck", 2: "normal", 3: "alarm", 4: "fault"}
+    "Running status",
+    500,
+    mqtt_topic_suffix="inverter/status",
+    groups=["deye_sg01hp3"],
+    enum_values={0: "standby", 1: "selfcheck", 2: "normal", 3: "alarm", 4: "fault"},
 )
 
 deye_sg01hp3_solar_672 = SingleRegisterSensor(
