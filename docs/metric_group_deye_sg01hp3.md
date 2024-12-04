@@ -1,9 +1,11 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
+|Running status|`inverter/status`|N/A (0: standby, 1: selfcheck, 2: normal, 3: alarm, 4: fault)|500|1f4|U_WORD|1|
 |PV1 Power|`dc/pv1/power`|W|672|2a0|U_WORD|10|
 |PV2 Power|`dc/pv2/power`|W|673|2a1|U_WORD|10|
 |PV3 Power|`dc/pv3/power`|W|674|2a2|U_WORD|10|
 |PV4 Power|`dc/pv4/power`|W|675|2a3|U_WORD|10|
+|DC Total Power|`dc/total_power`|W|672,673,674,675|2a0,2a1,2a2,2a3|U_WORD|10|
 |PV1 Voltage|`dc/pv1/voltage`|V|676|2a4|U_WORD|0.1|
 |PV1 Current|`dc/pv1/current`|A|677|2a5|U_WORD|0.1|
 |PV2 Voltage|`dc/pv2/voltage`|V|678|2a6|U_WORD|0.1|
