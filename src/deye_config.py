@@ -177,13 +177,15 @@ class DeyeLoggerConfig:
     ):
         self.serial_number = serial_number
         self.ip_address = ip_address
-        if protocol not in ["tcp", "at"]:
+        if protocol not in ["tcp", "at", "mbtcp"]:
             raise Exception(f"Unsupported protocol {protocol}")
         self.protocol = protocol
         if port == 0 and protocol == "tcp":
             self.port = 8899
         elif port == 0 and protocol == "at":
             self.port = 48899
+        elif port == 0 and protocol == "mbtcp":
+            self.port = 502
         else:
             self.port = port
         self.index = index
