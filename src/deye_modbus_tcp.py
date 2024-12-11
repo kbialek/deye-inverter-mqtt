@@ -29,18 +29,20 @@ class DeyeModbusTcp(DeyeConnector):
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeModbusTcp.__name__))
         self.loggger_config = logger_config
         self.connector = connector
+        self.__tx_id = 0
 
     def send_request(self, modbus_frame: bytearray) -> bytes | None:
+        self.__tx_id = (self.__tx_id + 1) % 0xFFFF
         req_frame = self.__build_request_frame(modbus_frame)
         resp_frame = self.connector.send_request(req_frame)
         return self.__extract_modbus_response_frame(modbus_frame[0], resp_frame)
 
     def __build_request_frame(self, modbus_frame: bytearray) -> bytearray:
-        mbap_tx_id = bytearray.fromhex("0000")
-        mbap_protocol_id = bytearray.fromhex("0000")
-        mbap_payload_length = bytearray.fromhex("{:04x}".format(1 + len(modbus_frame) - 3))
-        mbap_unit_id = bytearray.fromhex("01")  # hardcoded unitId
         payload = modbus_frame[1:-2]  # modbus frame w/o address and checksum
+        mbap_tx_id = bytearray.fromhex("{:04x}".format(self.__tx_id))
+        mbap_protocol_id = bytearray.fromhex("0000")
+        mbap_payload_length = bytearray.fromhex("{:04x}".format(1 + len(payload)))
+        mbap_unit_id = bytearray.fromhex("01")  # hardcoded unitId
 
         return mbap_tx_id + mbap_protocol_id + mbap_payload_length + mbap_unit_id + payload
 

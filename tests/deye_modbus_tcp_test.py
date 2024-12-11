@@ -31,7 +31,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
     def test_read_register_0x01(self, connector):
         # given
         sut = DeyeModbus(DeyeModbusTcp(self.config, connector))
-        connector.send_request.return_value = bytearray.fromhex("00000000000501" + "0302000a")
+        connector.send_request.return_value = bytearray.fromhex("00010000000501" + "0302000a")
 
         # when
         reg_values = sut.read_registers(1, 1)
@@ -45,7 +45,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
     def test_read_registers_0x02_0x03(self, connector):
         # given
         sut = DeyeModbus(DeyeModbusTcp(self.config, connector))
-        connector.send_request.return_value = bytearray.fromhex("00000000000701" + "0302000a000b")
+        connector.send_request.return_value = bytearray.fromhex("00010000000701" + "0302000a000b")
 
         # when
         reg_values = sut.read_registers(2, 3)
@@ -58,33 +58,53 @@ class DeyeModbusTcpTest(unittest.TestCase):
         self.assertEqual(reg_values[3].hex(), "000b")
 
         # and
-        connector.send_request.assert_called_once_with(bytearray.fromhex("00000000000601" + "0300020002"))
+        connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000601" + "0300020002"))
 
     @patch("deye_connector.DeyeConnector")
     def test_write_register_0x12_to_0xa3d4(self, connector):
         # given
         sut = DeyeModbus(DeyeModbusTcp(self.config, connector))
-        connector.send_request.return_value = bytearray.fromhex("00000000000601" + "1000120001")
+        connector.send_request.return_value = bytearray.fromhex("00010000000601" + "1000120001")
 
         # when
         success = sut.write_register(0x12, bytearray.fromhex("A3D4"))
 
         # then
         self.assertTrue(success)
-        connector.send_request.assert_called_once_with(bytearray.fromhex("00000000000901" + "100012000102a3d4"))
+        connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000901" + "100012000102a3d4"))
 
     @patch("deye_connector.DeyeConnector")
     def test_write_register_uint_0x12_to_0xa3d4(self, connector):
         # given
         sut = DeyeModbus(DeyeModbusTcp(self.config, connector))
-        connector.send_request.return_value = bytearray.fromhex("00000000000601" + "1000120001")
+        connector.send_request.return_value = bytearray.fromhex("00010000000601" + "1000120001")
 
         # when
         success = sut.write_register_uint(0x12, 0xA3D4)
 
         # then
         self.assertTrue(success)
-        connector.send_request.assert_called_once_with(bytearray.fromhex("00000000000901" + "100012000102a3d4"))
+        connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000901" + "100012000102a3d4"))
+
+    @patch("deye_connector.DeyeConnector")
+    def test_subsequent_requests_have_distinct_tx_id(self, connector):
+        # given
+        sut = DeyeModbus(DeyeModbusTcp(self.config, connector))
+
+        # when
+        connector.send_request.return_value = bytearray.fromhex("00010000000701" + "0302000a000b")
+        reg_values = sut.read_registers(2, 3)
+
+        # then
+        connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000601" + "0300020002"))
+
+        # when
+        connector.send_request.reset_mock()
+        connector.send_request.return_value = bytearray.fromhex("00020000000701" + "0302000a000b")
+        reg_values = sut.read_registers(2, 3)
+
+        # then
+        connector.send_request.assert_called_once_with(bytearray.fromhex("00020000000601" + "0300020002"))
 
 
 if __name__ == "__main__":
