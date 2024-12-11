@@ -21,7 +21,7 @@ from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
 
 
-class DeyeModbusTcpCustom:
+class DeyeModbusTcpCustom(DeyeConnector):
     """Simplified Modbus over TCP implementation that works with Deye Solar inverter.
     Inspired by https://github.com/jlopez77/DeyeInverter
     """

@@ -15,10 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 
 
-class DeyeConnector:
+class DeyeConnector(ABC):
     @abstractmethod
-    def send_request(self, req_frame) -> bytes | None:
+    def send_request(self, req_frame: bytearray) -> bytes | None:
         pass

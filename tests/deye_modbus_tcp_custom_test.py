@@ -23,7 +23,7 @@ from deye_modbus import DeyeModbus
 from deye_modbus_tcp_custom import DeyeModbusTcpCustom
 
 
-class DeyeModbusTest(unittest.TestCase):
+class DeyeModbusTcpCustomTest(unittest.TestCase):
     def setUp(self):
         self.config = DeyeLoggerConfig(1234567890, "192.168.1.1", 8899)
 
