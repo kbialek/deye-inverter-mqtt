@@ -21,13 +21,13 @@ from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
 
 
-class DeyeModbusTcp:
+class DeyeModbusTcpCustom:
     """Simplified Modbus over TCP implementation that works with Deye Solar inverter.
     Inspired by https://github.com/jlopez77/DeyeInverter
     """
 
     def __init__(self, logger_config: DeyeLoggerConfig, connector: DeyeConnector):
-        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeModbusTcp.__name__))
+        self.__log = logger_config.logger_adapter(logging.getLogger(DeyeModbusTcpCustom.__name__))
         self.loggger_config = logger_config
         self.connector = connector
 
