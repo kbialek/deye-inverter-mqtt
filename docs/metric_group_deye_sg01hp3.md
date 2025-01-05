@@ -5,7 +5,6 @@
 |PV2 Power|`dc/pv2/power`|W|673|2a1|U_WORD|10|
 |PV3 Power|`dc/pv3/power`|W|674|2a2|U_WORD|10|
 |PV4 Power|`dc/pv4/power`|W|675|2a3|U_WORD|10|
-|DC Total Power|`dc/total_power`|W|672,673,674,675|2a0,2a1,2a2,2a3|U_WORD|10|
 |PV1 Voltage|`dc/pv1/voltage`|V|676|2a4|U_WORD|0.1|
 |PV1 Current|`dc/pv1/current`|A|677|2a5|U_WORD|0.1|
 |PV2 Voltage|`dc/pv2/voltage`|V|678|2a6|U_WORD|0.1|
@@ -38,3 +37,4 @@
 |Inverter L3 Power|`ac/l3/power`|W|635|27b|S_WORD|1|
 |DC Temperature|`radiator_temp`|°C|540|21c|S_WORD|0.1|
 |AC Temperature|`ac/temperature`|°C|541|21d|S_WORD|0.1|
+|DC Total Power|`dc/total_power`|W|computed|computed|n/a|1|

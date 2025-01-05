@@ -30,3 +30,4 @@
 |Inverter L3 Power|`ac/l3/power`|W|635|27b|S_WORD|1|
 |DC Temperature|`radiator_temp`|°C|540|21c|S_WORD|0.1|
 |AC Temperature|`ac/temperature`|°C|541|21d|S_WORD|0.1|
+|DC Total Power|`dc/total_power`|W|computed|computed|n/a|1|
