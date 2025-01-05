@@ -174,7 +174,7 @@ All configuration options are controlled through environment variables.
 * `DEYE_LOGGER_PORT` or `DEYE_LOGGER_{N}_PORT` - inverter data logger communication port, optional, defaults to:
   *  8899 for proprietary Deye Modbus/TCP
   *  48899 for proprietary Deye Modbus/AT
-  *  502 for standard Deye Modbus/TCP
+  *  502 for standard Modbus/TCP
 * `DEYE_LOGGER_PROTOCOL` or `DEYE_LOGGER_{N}_PROTOCOL` - inverter communication protocol, optional, defaults to `tcp`, can be set to one of:
   *  `tcp` for proprietary Deye Modbus/TCP
   *  `at` for proprietary Deye Modbus/AT
