@@ -21,6 +21,7 @@ from deye_at_connector import DeyeAtConnector
 from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
 from deye_tcp_connector import DeyeTcpConnector
+from deye_modbus_tcp_custom import DeyeModbusTcpCustom
 from deye_modbus_tcp import DeyeModbusTcp
 
 
@@ -29,7 +30,10 @@ class DeyeConnectorFactory:
         log = logger_config.logger_adapter(logging.getLogger(DeyeConnectorFactory.__name__))
         protocol = logger_config.protocol
         if protocol == "tcp":
-            log.info("Creating Modbus/TCP Logger connector")
+            log.info("Creating proprietary Deye Modbus/TCP Logger connector")
+            return DeyeModbusTcpCustom(logger_config, DeyeTcpConnector(logger_config))
+        elif protocol == "mbtcp":
+            log.info("Creating standard Modbus/TCP Logger connector")
             return DeyeModbusTcp(logger_config, DeyeTcpConnector(logger_config))
         elif protocol == "at":
             log.info("Creating Modbus/AT Logger connector")
