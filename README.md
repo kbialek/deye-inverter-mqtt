@@ -21,15 +21,16 @@ When your inverter turns out to work well with an already exiting metrics group,
 
 **The list below is built basing on the reports from the users. Compatiblity is not guaranteed.**
 
-| Inverter model                                                                                                                                                                               | Metric groups                                                                                                                                                                                                              |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Deye SUN-4/5/6/7/8/10/12K-G05-P](https://deye.com/product/sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt/) | [string](docs/metric_group_string.md), [settings](docs/metric_group_settings.md)                                                                                                                                           |
-| [Deye Microinverters 300/500/600/800/1000/1300/2000]() | [micro](docs/metric_group_micro.md), [settings_micro](docs/metric_group_settings_micro.md)                                                                                                                                             |
-| [Deye Microinverters M60/M80/M100](https://deye.com/product/sun-m60-80-100g4-eu-q0/) | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md)                                                                                                                                             |
-| [Deye Microinverters M130/M160/M180/M200/M220](https://deye.com/product/sun-m130-160-180-200-220g4-eu-q0/) | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md)                                                                                                                                             |
-| [Deye SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-eu/)                                            | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [deye_sg04lp3_timeofuse](docs/metric_group_deye_sg04lp3_timeofuse.md), [deye_sg04lp3_generator](docs/metric_group_deye_sg04lp3_generator.md), [settings](docs/metric_group_settings.md) |
-| [Deye SG01LP1](https://deye.com/product/sun-7-6-8k-sg01lp1-eu/)                        | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_bms](docs/metric_group_deye_hybrid_bms.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                |
-| [Deye SG01HP3](https://deye.com/product/sun-5-6-8-10-12-15-20-25k-sg01hp3-eu-am2/) | [deye_sg01hp3](docs/metric_group_deye_sg01hp3.md), [deye_sg01hp3_battery](docs/metric_group_deye_sg01hp3_battery.md), [deye_sg01hp3_bms](docs/metric_group_deye_sg01hp3_bms.md), [deye_sg01hp3_ups](docs/metric_group_deye_sg01hp3_ups.md), [settings](docs/metric_group_settings.md) |
+| Inverter model                                                                                                  | Protocol | Metric groups                                                                                                                                                                                                                                                                                                                                                            |
+| --------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Deye SUN-4/5/6/7/8/10/12K-G05-P](https://deye.com/product/sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt/) | tcp, at  | [string](docs/metric_group_string.md), [settings](docs/metric_group_settings.md)                                                                                                                                                                                                                                                                                         |
+| [Deye SUN-3/4/5/6/7/8/9/10/12/15K-G06P3](https://deye.com/product/sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt/) | mbtcp  | [string](docs/metric_group_string.md), [settings](docs/metric_group_settings.md)                                                                                                                                                                                                                                                                                         |
+| [Deye Microinverters 300/500/600/800/1000/1300/2000]()                                                          | tcp, at  | [micro](docs/metric_group_micro.md), [settings_micro](docs/metric_group_settings_micro.md)                                                                                                                                                                                                                                                                               |
+| [Deye Microinverters M60/M80/M100](https://deye.com/product/sun-m60-80-100g4-eu-q0/)                            | tcp, at  | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md)                                                                                                                                                                                                                                                                                           |
+| [Deye Microinverters M130/M160/M180/M200/M220](https://deye.com/product/sun-m130-160-180-200-220g4-eu-q0/)      | tcp, at  | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md)                                                                                                                                                                                                                                                                                           |
+| [Deye SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-eu/)                                           | tcp, at  | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [deye_sg04lp3_timeofuse](docs/metric_group_deye_sg04lp3_timeofuse.md), [deye_sg04lp3_generator](docs/metric_group_deye_sg04lp3_generator.md), [settings](docs/metric_group_settings.md) |
+| [Deye SG01LP1](https://deye.com/product/sun-7-6-8k-sg01lp1-eu/)                                                 | tcp, at  | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_bms](docs/metric_group_deye_hybrid_bms.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                                |
+| [Deye SG01HP3](https://deye.com/product/sun-5-6-8-10-12-15-20-25k-sg01hp3-eu-am2/)                              | tcp, at  | [deye_sg01hp3](docs/metric_group_deye_sg01hp3.md), [deye_sg01hp3_battery](docs/metric_group_deye_sg01hp3_battery.md), [deye_sg01hp3_bms](docs/metric_group_deye_sg01hp3_bms.md), [deye_sg01hp3_ups](docs/metric_group_deye_sg01hp3_ups.md), [settings](docs/metric_group_settings.md)                                                                                    |
 
 | Meter model                                                         | Metric groups                                     |
 | ------------------------------------------------------------------- | ------------------------------------------------- |
@@ -43,9 +44,13 @@ Rebranded models
 
 
 ## :hammer_and_wrench: Installation
-The communication with the logger can be performed using either Modbus/TCP or Modbus/AT protocol.
-This project has been started with Modbus/TCP protocol support and it's still the default one.
-However, logger firmware versions 2.x does not seem to expose Modbus/TCP interface anymore, hence Modbus/AT protocol support has been implemented. Use `DEYE_LOGGER_PROTOCOL` environment variable to select
+The communication with the logger can be performed using one of three different protocols:
+* Proprietary Deye Modbus/TCP protocol - used by inverters produced until 2024 (configuration code is `tcp`)
+* Proprietary Deye Modbus/AT protocol - used by inverters produced until 2024 (configuration code is `at`)
+* Standard Modbus/TCP protocol - used by some? inverters produced starting from 2024 onwards. (configuration code is `mbtcp`)
+  
+This project has been started with proprietary Deye Modbus/TCP protocol support and it's still the default one.
+However, logger firmware versions 2.x does not seem to expose Modbus/TCP interface anymore, hence proprietary Deye Modbus/AT protocol support has been implemented. Use `DEYE_LOGGER_PROTOCOL` environment variable to select
 the communication protocol.
 Please note, that Modbus/TCP uses tcp/ip, while Modbus/AT uses udp/ip communication. 
 
@@ -166,8 +171,14 @@ All configuration options are controlled through environment variables.
 * `DEYE_LOGGER_COUNT` - declares the number of inverters, and therefore loggers to connect, optional, defaults to `0`, which means, that multi-inverter support is disabled
 * `DEYE_LOGGER_SERIAL_NUMBER` or `DEYE_LOGGER_{N}_SERIAL_NUMBER` - inverter data logger serial number
 * `DEYE_LOGGER_IP_ADDRESS` or `DEYE_LOGGER_{N}_IP_ADDRESS` - inverter data logger IP address
-* `DEYE_LOGGER_PORT` or `DEYE_LOGGER_{N}_PORT` - inverter data logger communication port, optional, defaults to 8899 for Modbus/TCP, and 48899 for Modbus/AT
-* `DEYE_LOGGER_PROTOCOL` or `DEYE_LOGGER_{N}_PROTOCOL` - inverter communication protocol, optional, either `tcp` for Modbus/TCP, or `at` for Modbus/AT, defaults to `tcp`
+* `DEYE_LOGGER_PORT` or `DEYE_LOGGER_{N}_PORT` - inverter data logger communication port, optional, defaults to:
+  *  8899 for proprietary Deye Modbus/TCP
+  *  48899 for proprietary Deye Modbus/AT
+  *  502 for standard Deye Modbus/TCP
+* `DEYE_LOGGER_PROTOCOL` or `DEYE_LOGGER_{N}_PROTOCOL` - inverter communication protocol, optional, defaults to `tcp`, can be set to one of:
+  *  `tcp` for proprietary Deye Modbus/TCP
+  *  `at` for proprietary Deye Modbus/AT
+  *  `mbtcp` for standard Modbus/TCP
 * `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` or `DEYE_LOGGER_{N}_MAX_REG_RANGE_LENGTH`- controls maximum number of registers to be read in a single Modbus registers read operation, defaults to 256
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
