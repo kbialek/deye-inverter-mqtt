@@ -2,17 +2,28 @@
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |Production today|`day_energy`|kWh|60|3c|U_WORD|0.1|
 |Production Total|`total_energy`|kWh|63,64|3f,40|U_DWORD (LW,HW)|0.1|
-|Phase1 Voltage|`ac/l1/voltage`|V|73|49|U_WORD|0.1|
-|Phase1 Current|`ac/l1/current`|A|76|4c|U_WORD|0.1|
-|Phase1 Power|`ac/l1/power`|W|computed|computed|n/a|1|
-|Phase2 Voltage|`ac/l2/voltage`|V|74|4a|U_WORD|0.1|
-|Phase2 Current|`ac/l2/current`|A|77|4d|U_WORD|0.1|
-|Phase2 Power|`ac/l2/power`|W|computed|computed|n/a|1|
-|Phase3 Voltage|`ac/l3/voltage`|V|75|4b|U_WORD|0.1|
-|Phase3 Current|`ac/l3/current`|A|78|4e|U_WORD|0.1|
-|Phase3 Power|`ac/l3/power`|W|computed|computed|n/a|1|
+|Grid L1 Voltage|`ac/l1/voltage`|V|73|49|U_WORD|0.1|
+|Grid L1 Current|`ac/l1/current`|A|76|4c|U_WORD|0.1|
+|Grid L1 Power|`ac/l1/power`|W|computed|computed|n/a|1|
+|Grid L2 Voltage|`ac/l2/voltage`|V|74|4a|U_WORD|0.1|
+|Grid L2 Current|`ac/l2/current`|A|77|4d|U_WORD|0.1|
+|Grid L2 Power|`ac/l2/power`|W|computed|computed|n/a|1|
+|Grid L3 Voltage|`ac/l3/voltage`|V|75|4b|U_WORD|0.1|
+|Grid L3 Current|`ac/l3/current`|A|78|4e|U_WORD|0.1|
+|Grid L3 Power|`ac/l3/power`|W|computed|computed|n/a|1|
+|Grid L12 Voltage|`ac/l12/voltage`|V|70|46|U_WORD|0.1|
+|Grid L23 Voltage|`ac/l23/voltage`|V|71|47|U_WORD|0.1|
+|Grid L31 Voltage|`ac/l31/voltage`|V|72|48|U_WORD|0.1|
+|Grid Power|`ac/grid/power`|W|203,204|cb,cc|U_DWORD (LW,HW)|1.0|
+|Load Power|`ac/ups/power`|W|198,199|c6,c7|U_DWORD (LW,HW)|1.0|
 |AC Freq|`ac/freq`|Hz|79|4f|U_WORD|0.01|
 |Uptime|`uptime`|minutes|62|3e|U_WORD|1|
+|Daily Load Consumption|`ac/ups/daily_energy`|kWh|200|c8|U_WORD|0.01|
+|Total Load Consumption|`ac/ups/total_energy`|kWh|201,202|c9,ca|U_DWORD (LW,HW)|0.1|
+|Daily Energy Sold|`ac/daily_energy_sold`|kWh|205|cd|U_WORD|0.01|
+|Total Energy Sold|`ac/total_energy_sold`|kWh|206,207|ce,cf|U_DWORD (LW,HW)|0.1|
+|Daily Energy Bought|`ac/daily_energy_bought`|kWh|208|d0|U_WORD|0.01|
+|Total Energy Bought|`ac/total_energy_bought`|kWh|209,210|d1,d2|U_DWORD (LW,HW)|0.1|
 |PV1 Voltage|`dc/pv1/voltage`|V|109|6d|U_WORD|0.1|
 |PV1 Current|`dc/pv1/current`|A|110|6e|U_WORD|0.1|
 |PV1 Power|`dc/pv1/power`|W|computed|computed|n/a|1|
