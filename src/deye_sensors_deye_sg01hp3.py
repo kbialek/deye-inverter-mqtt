@@ -660,6 +660,97 @@ total_pv_power_sensor = ComputedSumSensor(
     groups=["deye_sg01hp3"],
 )
 
+
+deye_sg01hp3_generator_661 = SingleRegisterSensor(
+    "Phase voltage of Gen port L1",
+    661,
+    0.1,
+    mqtt_topic_suffix="ac/generator/l1/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_662 = SingleRegisterSensor(
+    "Phase voltage of Gen port L2",
+    662,
+    0.1,
+    mqtt_topic_suffix="ac/generator/l2/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_663 = SingleRegisterSensor(
+    "Phase voltage of Gen port L3",
+    663,
+    0.1,
+    mqtt_topic_suffix="ac/generator/l3/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_664 = SingleRegisterSensor(
+    "Phase power of Gen port L1",
+    664,
+    1,
+    mqtt_topic_suffix="ac/generator/l1/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_665 = SingleRegisterSensor(
+    "Phase power of Gen port L2",
+    665,
+    1,
+    mqtt_topic_suffix="ac/generator/l2/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_666 = SingleRegisterSensor(
+    "Phase power of Gen port L3",
+    666,
+    1,
+    mqtt_topic_suffix="ac/generator/l3/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_667 = SingleRegisterSensor(
+    "Total Power of Gen Ports",
+    667,
+    1,
+    mqtt_topic_suffix="ac/generator/total_power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_536 = SingleRegisterSensor(
+    "Daily Generator Production",
+    536,
+    0.1,
+    mqtt_topic_suffix="ac/generator/daily_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_537 = SingleRegisterSensor(
+    "Total Generator Production",
+    537,
+    0.1,
+    mqtt_topic_suffix="ac/generator/total_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_generator"],
+)
+
 deye_sg01hp3_sensors = [
     deye_sg01hp3_inverter_500,
     deye_sg01hp3_solar_672,
@@ -742,6 +833,15 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_inverter_540,
     deye_sg01hp3_inverter_541,
     total_pv_power_sensor,
+    deye_sg01hp3_generator_661,
+    deye_sg01hp3_generator_662,
+    deye_sg01hp3_generator_663,
+    deye_sg01hp3_generator_664,
+    deye_sg01hp3_generator_665,
+    deye_sg01hp3_generator_666,
+    deye_sg01hp3_generator_667,
+    deye_sg01hp3_generator_536,
+    deye_sg01hp3_generator_537,
 ]
 
 deye_sg01hp3_register_ranges = [
@@ -755,4 +855,6 @@ deye_sg01hp3_register_ranges = [
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=672, last_reg_address=683),
     SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=210, last_reg_address=219),
     SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=241, last_reg_address=250),
+    SensorRegisterRange(group="deye_sg01hp3_generator", first_reg_address=661, last_reg_address=667),
+    SensorRegisterRange(group="deye_sg01hp3_generator", first_reg_address=536, last_reg_address=537),
 ]
