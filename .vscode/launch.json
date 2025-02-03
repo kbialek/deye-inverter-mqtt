@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Debug with config.env",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/deye_docker_entrypoint.py",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/config.env",
+            "env": {
+                "PYTHONUNBUFFERED": "1"
+            },
+            "args": [
+                // "${command:pickArgs}"
+            ],
+            "preLaunchTask": "sudo"
+        }
+    ]
+}
