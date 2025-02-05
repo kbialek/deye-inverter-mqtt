@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "deye-inverter-mqtt"
-version = "2025.01.1"
+version = "2025.02.1"
 description = "Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT."
 authors = ["Krzysztof Białek <kbialek@users.noreply.github.com>"]
 license = "Apache License 2"
