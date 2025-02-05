@@ -327,6 +327,7 @@ sensor_list = (
 sensor_register_ranges = (
     [
         SensorRegisterRange(group="string", first_reg_address=0x3C, last_reg_address=0x74),
+        SensorRegisterRange(group="string", first_reg_address=0xC6, last_reg_address=0xD2),
         SensorRegisterRange(group="micro", first_reg_address=0x3C, last_reg_address=0x74),
     ]
     + deye_sg04lp3_register_ranges
