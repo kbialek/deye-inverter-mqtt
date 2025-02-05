@@ -33,13 +33,13 @@ from deye_sensors_aggregated import aggregated_sensor_list
 
 # AC Phase 1
 phase1_voltage_sensor = SingleRegisterSensor(
-    "Phase1 Voltage", 0x49, 0.1, mqtt_topic_suffix="ac/l1/voltage", unit="V", groups=["string", "micro"]
+    "Grid L1 Voltage", 0x49, 0.1, mqtt_topic_suffix="ac/l1/voltage", unit="V", groups=["string", "micro"]
 )
 phase1_current_sensor = SingleRegisterSensor(
-    "Phase1 Current", 0x4C, 0.1, mqtt_topic_suffix="ac/l1/current", unit="A", groups=["string", "micro"]
+    "Grid L1 Current", 0x4C, 0.1, mqtt_topic_suffix="ac/l1/current", unit="A", groups=["string", "micro"]
 )
 phase1_power_sensor = ComputedPowerSensor(
-    "Phase1 Power",
+    "Grid L1 Power",
     phase1_voltage_sensor,
     phase1_current_sensor,
     mqtt_topic_suffix="ac/l1/power",
@@ -49,13 +49,13 @@ phase1_power_sensor = ComputedPowerSensor(
 
 # AC Phase 2
 phase2_voltage_sensor = SingleRegisterSensor(
-    "Phase2 Voltage", 0x4A, 0.1, mqtt_topic_suffix="ac/l2/voltage", unit="V", groups=["string"]
+    "Grid L2 Voltage", 0x4A, 0.1, mqtt_topic_suffix="ac/l2/voltage", unit="V", groups=["string"]
 )
 phase2_current_sensor = SingleRegisterSensor(
-    "Phase2 Current", 0x4D, 0.1, mqtt_topic_suffix="ac/l2/current", unit="A", groups=["string"]
+    "Grid L2 Current", 0x4D, 0.1, mqtt_topic_suffix="ac/l2/current", unit="A", groups=["string"]
 )
 phase2_power_sensor = ComputedPowerSensor(
-    "Phase2 Power",
+    "Grid L2 Power",
     phase2_voltage_sensor,
     phase2_current_sensor,
     mqtt_topic_suffix="ac/l2/power",
@@ -65,18 +65,39 @@ phase2_power_sensor = ComputedPowerSensor(
 
 # AC Phase 3
 phase3_voltage_sensor = SingleRegisterSensor(
-    "Phase3 Voltage", 0x4B, 0.1, mqtt_topic_suffix="ac/l3/voltage", unit="V", groups=["string"]
+    "Grid L3 Voltage", 0x4B, 0.1, mqtt_topic_suffix="ac/l3/voltage", unit="V", groups=["string"]
 )
 phase3_current_sensor = SingleRegisterSensor(
-    "Phase3 Current", 0x4E, 0.1, mqtt_topic_suffix="ac/l3/current", unit="A", groups=["string"]
+    "Grid L3 Current", 0x4E, 0.1, mqtt_topic_suffix="ac/l3/current", unit="A", groups=["string"]
 )
 phase3_power_sensor = ComputedPowerSensor(
-    "Phase3 Power",
+    "Grid L3 Power",
     phase3_voltage_sensor,
     phase3_current_sensor,
     mqtt_topic_suffix="ac/l3/power",
     unit="W",
     groups=["string"],
+)
+
+# Grid voltages
+grid12_voltage_sensor = SingleRegisterSensor(
+    "Grid L12 Voltage", 0x46, 0.1, mqtt_topic_suffix="ac/l12/voltage", unit="V", groups=["string"]
+)
+grid23_voltage_sensor = SingleRegisterSensor(
+    "Grid L23 Voltage", 0x47, 0.1, mqtt_topic_suffix="ac/l23/voltage", unit="V", groups=["string"]
+)
+grid31_voltage_sensor = SingleRegisterSensor(
+    "Grid L31 Voltage", 0x48, 0.1, mqtt_topic_suffix="ac/l31/voltage", unit="V", groups=["string"]
+)
+
+# Grid power
+grid_power = DoubleRegisterSensor(
+    "Grid Power", 0xCB, 1.0, mqtt_topic_suffix="ac/grid/power", unit="W", groups=["string"]
+)
+
+# Load power
+load_power = DoubleRegisterSensor(
+    "Load Power", 0xC6, 1.0, mqtt_topic_suffix="ac/ups/power", unit="W", groups=["string"]
 )
 
 # AC Freq
@@ -90,6 +111,26 @@ production_today_sensor = SingleRegisterSensor(
 ).reset_daily()
 uptime_sensor = SingleRegisterSensor(
     "Uptime", 0x3E, 1, mqtt_topic_suffix="uptime", unit="minutes", groups=["string", "micro"]
+)
+
+# Totals
+today_load_consumption_sensor = SingleRegisterSensor(
+    "Daily Load Consumption", 0xC8, 0.01, mqtt_topic_suffix="ac/ups/daily_energy", unit="kWh", groups=["string"]
+)
+total_load_consumption_sensor = DoubleRegisterSensor(
+    "Total Load Consumption", 0xC9, 0.1, mqtt_topic_suffix="ac/ups/total_energy", unit="kWh", groups=["string"]
+)
+today_energy_export_sensor = SingleRegisterSensor(
+    "Daily Energy Sold", 0xCD, 0.01, mqtt_topic_suffix="ac/daily_energy_sold", unit="kWh", groups=["string"]
+)
+total_energy_export_sensor = DoubleRegisterSensor(
+    "Total Energy Sold", 0xCE, 0.1, mqtt_topic_suffix="ac/total_energy_sold", unit="kWh", groups=["string"]
+)
+today_energy_import_sensor = SingleRegisterSensor(
+    "Daily Energy Bought", 0xD0, 0.01, mqtt_topic_suffix="ac/daily_energy_bought", unit="kWh", groups=["string"]
+)
+total_energy_import_sensor = DoubleRegisterSensor(
+    "Total Energy Bought", 0xD1, 0.1, mqtt_topic_suffix="ac/total_energy_bought", unit="kWh", groups=["string"]
 )
 
 # DC PV1
@@ -231,8 +272,19 @@ sensor_list = (
         phase3_voltage_sensor,
         phase3_current_sensor,
         phase3_power_sensor,
+        grid12_voltage_sensor,
+        grid23_voltage_sensor,
+        grid31_voltage_sensor,
+        grid_power,
+        load_power,
         ac_freq_sensor,
         uptime_sensor,
+        today_load_consumption_sensor,
+        total_load_consumption_sensor,
+        today_energy_export_sensor,
+        total_energy_export_sensor,
+        today_energy_import_sensor,
+        total_energy_import_sensor,
         pv1_voltage_sensor,
         pv1_current_sensor,
         pv1_power_sensor,
@@ -275,6 +327,7 @@ sensor_list = (
 sensor_register_ranges = (
     [
         SensorRegisterRange(group="string", first_reg_address=0x3C, last_reg_address=0x74),
+        SensorRegisterRange(group="string", first_reg_address=0xC6, last_reg_address=0xD2),
         SensorRegisterRange(group="micro", first_reg_address=0x3C, last_reg_address=0x74),
     ]
     + deye_sg04lp3_register_ranges

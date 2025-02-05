@@ -2,9 +2,9 @@
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |Production today|`day_energy`|kWh|60|3c|U_WORD|0.1|
 |Production Total|`total_energy`|kWh|63,64|3f,40|U_DWORD (LW,HW)|0.1|
-|Phase1 Voltage|`ac/l1/voltage`|V|73|49|U_WORD|0.1|
-|Phase1 Current|`ac/l1/current`|A|76|4c|U_WORD|0.1|
-|Phase1 Power|`ac/l1/power`|W|computed|computed|n/a|1|
+|Grid L1 Voltage|`ac/l1/voltage`|V|73|49|U_WORD|0.1|
+|Grid L1 Current|`ac/l1/current`|A|76|4c|U_WORD|0.1|
+|Grid L1 Power|`ac/l1/power`|W|computed|computed|n/a|1|
 |AC Freq|`ac/freq`|Hz|79|4f|U_WORD|0.01|
 |Uptime|`uptime`|minutes|62|3e|U_WORD|1|
 |PV1 Voltage|`dc/pv1/voltage`|V|109|6d|U_WORD|0.1|
