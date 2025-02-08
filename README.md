@@ -166,6 +166,7 @@ All configuration options are controlled through environment variables.
     * `deye_sg01hp3_bms` - sg01hp3 bms
     * `deye_sg01hp3_ups` - sg01hp3 ups
     * `deye_sg01hp3_generator` - tracks generation power and energy for each phase (1/2/3) and total (also works with Microinverter mode)
+    * `deye_sg01hp3_timeofuse` - sg01hp3 time-of-use settings
     * `igen_dtsd422`- dtsd422 smart meter
     * `settings` - inverter settings, all types except micro
     * `settings_micro` - inverter settings for micro inverters

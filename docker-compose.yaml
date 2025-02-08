@@ -1,7 +1,6 @@
 services:
   deye-mqtt:
-    container_name: deye-inverter
-    image: deye-inverter-mqtt
+    image: ghcr.io/kbialek/deye-inverter-mqtt
     build: ./
     env_file:
       - config.env
