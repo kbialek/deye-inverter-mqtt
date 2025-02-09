@@ -661,7 +661,6 @@ total_pv_power_sensor = ComputedSumSensor(
 )
 
 
-
 deye_sg01hp3_time_of_use_146 = SingleRegisterSensor(
     "Time of Use Weekly Selling Schedule",
     146,
