@@ -260,7 +260,7 @@ It is possible to modify selected inverter settings over MQTT.
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | number<sup>(3)<sup> | 0,1,3,4 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
 
-<sup>(1)</sup> encodes the weekdays setting from Monday (MSB) ... Sunday (LSB)
+<sup>(1)</sup> encodes the weekdays setting from Monday (bit 7) ... Sunday (bit 1). Additionally controls whether TimeOfUse feature is enabled or not (bit 0)
 | Bit     |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0    |
 | ------- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :----: |
 | Meaning |  Mon  |  Tue  |  Wed  |  Thu  |  Fri  |  Sat  |  Sun  | On/Off |
