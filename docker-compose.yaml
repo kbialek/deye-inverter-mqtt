@@ -5,5 +5,4 @@ services:
       - config.env
     restart: unless-stopped
     volumes: 
-     - ./plugins:/opt/deye_inverter_mqtt/plugins:ro
-    
+      - ./plugins:/opt/deye_inverter_mqtt/plugins:ro

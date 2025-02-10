@@ -661,6 +661,317 @@ total_pv_power_sensor = ComputedSumSensor(
 )
 
 
+deye_sg01hp3_time_of_use_146 = SingleRegisterSensor(
+    "Time of Use Weekly Selling Schedule",
+    146,
+    1,
+    mqtt_topic_suffix="timeofuse/selling",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_148 = SingleRegisterSensor(
+    "Time of Use Time 1",
+    148,
+    1,
+    mqtt_topic_suffix="timeofuse/time/1",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_149 = SingleRegisterSensor(
+    "Time of Use Time 2",
+    149,
+    1,
+    mqtt_topic_suffix="timeofuse/time/2",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_150 = SingleRegisterSensor(
+    "Time of Use Time 3",
+    150,
+    1,
+    mqtt_topic_suffix="timeofuse/time/3",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_151 = SingleRegisterSensor(
+    "Time of Use Time 4",
+    151,
+    1,
+    mqtt_topic_suffix="timeofuse/time/4",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_152 = SingleRegisterSensor(
+    "Time of Use Time 5",
+    152,
+    1,
+    mqtt_topic_suffix="timeofuse/time/5",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_153 = SingleRegisterSensor(
+    "Time of Use Time 6",
+    153,
+    1,
+    mqtt_topic_suffix="timeofuse/time/6",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_154 = SingleRegisterSensor(
+    "Time of Use Power 1",
+    154,
+    10,
+    mqtt_topic_suffix="timeofuse/power/1",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_155 = SingleRegisterSensor(
+    "Time of Use Power 2",
+    155,
+    10,
+    mqtt_topic_suffix="timeofuse/power/2",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_156 = SingleRegisterSensor(
+    "Time of Use Power 3",
+    156,
+    10,
+    mqtt_topic_suffix="timeofuse/power/3",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_157 = SingleRegisterSensor(
+    "Time of Use Power 4",
+    157,
+    10,
+    mqtt_topic_suffix="timeofuse/power/4",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_158 = SingleRegisterSensor(
+    "Time of Use Power 5",
+    158,
+    10,
+    mqtt_topic_suffix="timeofuse/power/5",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_159 = SingleRegisterSensor(
+    "Time of Use Power 6",
+    159,
+    10,
+    mqtt_topic_suffix="timeofuse/power/6",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_160 = SingleRegisterSensor(
+    "Time of Use Voltage 1",
+    160,
+    0.1,
+    mqtt_topic_suffix="timeofuse/voltage/1",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_161 = SingleRegisterSensor(
+    "Time of Use Voltage 2",
+    161,
+    0.1,
+    mqtt_topic_suffix="timeofuse/voltage/2",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_162 = SingleRegisterSensor(
+    "Time of Use Voltage 3",
+    162,
+    0.1,
+    mqtt_topic_suffix="timeofuse/voltage/3",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_163 = SingleRegisterSensor(
+    "Time of Use Voltage 4",
+    163,
+    0.1,
+    mqtt_topic_suffix="timeofuse/voltage/4",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_164 = SingleRegisterSensor(
+    "Time of Use Voltage 5",
+    164,
+    0.1,
+    mqtt_topic_suffix="timeofuse/voltage/5",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_165 = SingleRegisterSensor(
+    "Time of Use Voltage 6",
+    165,
+    0.1,
+    mqtt_topic_suffix="timeofuse/voltage/6",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_166 = SingleRegisterSensor(
+    "Time of Use SOC 1",
+    166,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/1",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_167 = SingleRegisterSensor(
+    "Time of Use SOC 2",
+    167,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/2",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_168 = SingleRegisterSensor(
+    "Time of Use SOC 3",
+    168,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/3",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_169 = SingleRegisterSensor(
+    "Time of Use SOC 4",
+    169,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/4",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_170 = SingleRegisterSensor(
+    "Time of Use SOC 5",
+    170,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/5",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_171 = SingleRegisterSensor(
+    "Time of Use SOC 6",
+    171,
+    1,
+    mqtt_topic_suffix="timeofuse/soc/6",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_172 = SingleRegisterSensor(
+    "Time of Use Charge Enable 1",
+    172,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/1",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_173 = SingleRegisterSensor(
+    "Time of Use Charge Enable 2",
+    173,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/2",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_174 = SingleRegisterSensor(
+    "Time of Use Charge Enable 3",
+    174,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/3",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_175 = SingleRegisterSensor(
+    "Time of Use Charge Enable 4",
+    175,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/4",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_176 = SingleRegisterSensor(
+    "Time of Use Charge Enable 5",
+    176,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/5",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+deye_sg01hp3_time_of_use_177 = SingleRegisterSensor(
+    "Time of Use Charge Enable 6",
+    177,
+    1,
+    mqtt_topic_suffix="timeofuse/enabled/6",
+    unit="",
+    signed=False,
+    groups=["deye_sg01hp3_timeofuse"],
+)
+
+
 deye_sg01hp3_generator_661 = SingleRegisterSensor(
     "Phase voltage of Gen port L1",
     661,
@@ -833,6 +1144,37 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_inverter_540,
     deye_sg01hp3_inverter_541,
     total_pv_power_sensor,
+    deye_sg01hp3_time_of_use_146,
+    deye_sg01hp3_time_of_use_148,
+    deye_sg01hp3_time_of_use_149,
+    deye_sg01hp3_time_of_use_150,
+    deye_sg01hp3_time_of_use_151,
+    deye_sg01hp3_time_of_use_152,
+    deye_sg01hp3_time_of_use_153,
+    deye_sg01hp3_time_of_use_154,
+    deye_sg01hp3_time_of_use_155,
+    deye_sg01hp3_time_of_use_156,
+    deye_sg01hp3_time_of_use_157,
+    deye_sg01hp3_time_of_use_158,
+    deye_sg01hp3_time_of_use_159,
+    deye_sg01hp3_time_of_use_160,
+    deye_sg01hp3_time_of_use_161,
+    deye_sg01hp3_time_of_use_162,
+    deye_sg01hp3_time_of_use_163,
+    deye_sg01hp3_time_of_use_164,
+    deye_sg01hp3_time_of_use_165,
+    deye_sg01hp3_time_of_use_166,
+    deye_sg01hp3_time_of_use_167,
+    deye_sg01hp3_time_of_use_168,
+    deye_sg01hp3_time_of_use_169,
+    deye_sg01hp3_time_of_use_170,
+    deye_sg01hp3_time_of_use_171,
+    deye_sg01hp3_time_of_use_172,
+    deye_sg01hp3_time_of_use_173,
+    deye_sg01hp3_time_of_use_174,
+    deye_sg01hp3_time_of_use_175,
+    deye_sg01hp3_time_of_use_176,
+    deye_sg01hp3_time_of_use_177,
     deye_sg01hp3_generator_661,
     deye_sg01hp3_generator_662,
     deye_sg01hp3_generator_663,
@@ -855,6 +1197,7 @@ deye_sg01hp3_register_ranges = [
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=672, last_reg_address=683),
     SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=210, last_reg_address=219),
     SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=241, last_reg_address=250),
+    SensorRegisterRange(group="deye_sg01hp3_timeofuse", first_reg_address=146, last_reg_address=177),
     SensorRegisterRange(group="deye_sg01hp3_generator", first_reg_address=661, last_reg_address=667),
     SensorRegisterRange(group="deye_sg01hp3_generator", first_reg_address=536, last_reg_address=537),
 ]

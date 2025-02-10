@@ -166,6 +166,7 @@ All configuration options are controlled through environment variables.
     * `deye_sg01hp3_bms` - sg01hp3 bms
     * `deye_sg01hp3_ups` - sg01hp3 ups
     * `deye_sg01hp3_generator` - tracks generation power and energy for each phase (1/2/3) and total (also works with Microinverter mode)
+    * `deye_sg01hp3_timeofuse` - sg01hp3 time-of-use settings
     * `igen_dtsd422`- dtsd422 smart meter
     * `settings` - inverter settings, all types except micro
     * `settings_micro` - inverter settings for micro inverters
@@ -251,14 +252,30 @@ It is possible to modify selected inverter settings over MQTT.
 | Setting                 |                             Topic                              | Unit | Value range | Feature flag                           |
 | ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
 | active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |    0-120    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/selling` | number<sup>(1)</sup> | 0-255 |`DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time | 0000 - 2359 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - max power<sup>(1)</sup> | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - max power<sup>(2)</sup> | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/voltage/(1-6)/command` | V | 0.00 - 63.00 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | On/Off | 0,1 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | number<sup>(3)<sup> | 0,1,3,4 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
 
-<sup>(1)</sup> max inverter power in Watts e.g. 8000, 10000 or 12000
+<sup>(1)</sup> encodes the weekdays setting from Monday (bit 7) ... Sunday (bit 1). Additionally controls whether TimeOfUse feature is enabled or not (bit 0)
+| Bit     |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0    |
+| ------- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :----: |
+| Meaning |  Mon  |  Tue  |  Wed  |  Thu  |  Fri  |  Sat  |  Sun  | On/Off |
+
+
+<sup>(2)</sup> max inverter power in Watts e.g. 8000, 10000 or 12000
+
+<sup>(3)</sup> encodes the charging source, with Grid (bit 0) and Generator (bit 1). 
+|  Gen  | Grid | Binary | Value |
+| :---: | :--: | :----: | :---: |
+|   0   | 0    |  `00`  | **0** |
+|   0   | 1    |  `01`  | **1** |
+|   1   | 0    |  `10`  | **2** |
+|   1   | 1    |  `11`  | **3** |
+
 
 #### Writing Time Of Use configuration
 
