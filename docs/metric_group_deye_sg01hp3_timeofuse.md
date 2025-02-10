@@ -1,18 +1,18 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
-|Time of Use Weekly Selling Schedule|`timeofuse/selling`| `weekdays` |146|92|U_WORD|1|
-|Time of Use Time 1|`timeofuse/time/1`| `time` |148|94|U_WORD|1|
-|Time of Use Time 2|`timeofuse/time/2`| `time` |149|95|U_WORD|1|
-|Time of Use Time 3|`timeofuse/time/3`| `time` |150|96|U_WORD|1|
-|Time of Use Time 4|`timeofuse/time/4`| `time` |151|97|U_WORD|1|
-|Time of Use Time 5|`timeofuse/time/5`| `time` |152|98|U_WORD|1|
-|Time of Use Time 6|`timeofuse/time/6`| `time` |153|99|U_WORD|1|
-|Time of Use Power 1|`timeofuse/power/1`|W|154|9a|U_WORD| 10 |
-|Time of Use Power 2|`timeofuse/power/2`|W|155|9b|U_WORD| 10 |
-|Time of Use Power 3|`timeofuse/power/3`|W|156|9c|U_WORD| 10 |
-|Time of Use Power 4|`timeofuse/power/4`|W|157|9d|U_WORD| 10 |
-|Time of Use Power 5|`timeofuse/power/5`|W|158|9e|U_WORD| 10 |
-|Time of Use Power 6|`timeofuse/power/6`|W|159|9f|U_WORD| 10 |
+|Time of Use Weekly Selling Schedule|`timeofuse/selling`||146|92|U_WORD|1|
+|Time of Use Time 1|`timeofuse/time/1`||148|94|U_WORD|1|
+|Time of Use Time 2|`timeofuse/time/2`||149|95|U_WORD|1|
+|Time of Use Time 3|`timeofuse/time/3`||150|96|U_WORD|1|
+|Time of Use Time 4|`timeofuse/time/4`||151|97|U_WORD|1|
+|Time of Use Time 5|`timeofuse/time/5`||152|98|U_WORD|1|
+|Time of Use Time 6|`timeofuse/time/6`||153|99|U_WORD|1|
+|Time of Use Power 1|`timeofuse/power/1`|W|154|9a|U_WORD|10|
+|Time of Use Power 2|`timeofuse/power/2`|W|155|9b|U_WORD|10|
+|Time of Use Power 3|`timeofuse/power/3`|W|156|9c|U_WORD|10|
+|Time of Use Power 4|`timeofuse/power/4`|W|157|9d|U_WORD|10|
+|Time of Use Power 5|`timeofuse/power/5`|W|158|9e|U_WORD|10|
+|Time of Use Power 6|`timeofuse/power/6`|W|159|9f|U_WORD|10|
 |Time of Use Voltage 1|`timeofuse/voltage/1`|V|160|a0|U_WORD|0.1|
 |Time of Use Voltage 2|`timeofuse/voltage/2`|V|161|a1|U_WORD|0.1|
 |Time of Use Voltage 3|`timeofuse/voltage/3`|V|162|a2|U_WORD|0.1|
@@ -25,41 +25,9 @@
 |Time of Use SOC 4|`timeofuse/soc/4`|%|169|a9|U_WORD|1|
 |Time of Use SOC 5|`timeofuse/soc/5`|%|170|aa|U_WORD|1|
 |Time of Use SOC 6|`timeofuse/soc/6`|%|171|ab|U_WORD|1|
-|Time of Use Charge Enable 1|`timeofuse/enabled/1`| `charge_source` |172|ac|U_WORD|1|
-|Time of Use Charge Enable 2|`timeofuse/enabled/2`| `charge_source` |173|ad|U_WORD|1|
-|Time of Use Charge Enable 3|`timeofuse/enabled/3`| `charge_source` |174|ae|U_WORD|1|
-|Time of Use Charge Enable 4|`timeofuse/enabled/4`| `charge_source` |175|af|U_WORD|1|
-|Time of Use Charge Enable 5|`timeofuse/enabled/5`| `charge_source` |176|b0|U_WORD|1|
-|Time of Use Charge Enable 6|`timeofuse/enabled/6`| `charge_source` |177|b1|U_WORD|1|
-
-
-</br>
-</br>
-
-
-### Unit definitions
-
-`time` in format hours-minute: HHMM, i.e. 900 for 9:00 (am), 1315 for 13:15, 2359 for 23:59
-
-
-**`weekdays`** encodes the weekdays setting from Monday, ... Sunday
-
-| Binary    | value     |
-|:---------:|----------:|
-| `1111111` | **255**   |
-| `0111110` | **125**   |
-| `1111100` | **63**    |
-
-The encoding seems to be: Encoded value = 2× (Binary Value as decimal) + 1
-
-</br>
-
-
-**`charge_source`** encodes Grid-charge and Gen-charge setting. It looks like a RBC code.
-
-| Grid | Gen | Binary | value   |
-|------|-----|:------:|--------:|
-| 0    | 0   | `00`   | **0**   |
-| 1    | 0   | `10`   | **1**   |
-| 0    | 1   | `01`   | **2**   |
-| 1    | 1   | `11`   | **3**   |
+|Time of Use Charge Enable 1|`timeofuse/enabled/1`||172|ac|U_WORD|1|
+|Time of Use Charge Enable 2|`timeofuse/enabled/2`||173|ad|U_WORD|1|
+|Time of Use Charge Enable 3|`timeofuse/enabled/3`||174|ae|U_WORD|1|
+|Time of Use Charge Enable 4|`timeofuse/enabled/4`||175|af|U_WORD|1|
+|Time of Use Charge Enable 5|`timeofuse/enabled/5`||176|b0|U_WORD|1|
+|Time of Use Charge Enable 6|`timeofuse/enabled/6`||177|b1|U_WORD|1|
