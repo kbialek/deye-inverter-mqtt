@@ -21,6 +21,7 @@ from deye_sensor import (
     ComputedSumSensor,
     SensorRegisterRange,
     EnumValueSensor,
+    ComputedBooleanSensor,
 )
 
 deye_sg01hp3_inverter_500 = EnumValueSensor(
@@ -29,6 +30,25 @@ deye_sg01hp3_inverter_500 = EnumValueSensor(
     mqtt_topic_suffix="inverter/status",
     groups=["deye_sg01hp3"],
     enum_values={0: "standby", 1: "selfcheck", 2: "normal", 3: "alarm", 4: "fault"},
+)
+
+deye_sg01hp3_inverter_552 = SingleRegisterSensor(
+    "AC relays status",
+    552,
+    1,
+    mqtt_topic_suffix="ac/relay_status",
+    unit="",
+    print_format="{:0>2X}",
+    signed=False,
+    groups=["deye_sg01hp3"],
+)
+
+ongrid_status_sensor = ComputedBooleanSensor(
+    "On-grid",
+    bitarray_sensor=deye_sg01hp3_inverter_552,
+    mask=0x4,
+    mqtt_topic_suffix="ac/ongrid",
+    groups=["deye_sg01hp3"],
 )
 
 deye_sg01hp3_solar_672 = SingleRegisterSensor(
@@ -1064,6 +1084,7 @@ deye_sg01hp3_generator_537 = SingleRegisterSensor(
 
 deye_sg01hp3_sensors = [
     deye_sg01hp3_inverter_500,
+    deye_sg01hp3_inverter_552,
     deye_sg01hp3_solar_672,
     deye_sg01hp3_solar_673,
     deye_sg01hp3_solar_674,
@@ -1126,6 +1147,7 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_grid_522,
     deye_sg01hp3_grid_521,
     deye_sg01hp3_grid_524,
+    ongrid_status_sensor,
     deye_sg01hp3_upload_653,
     deye_sg01hp3_upload_650,
     deye_sg01hp3_upload_651,
@@ -1188,6 +1210,7 @@ deye_sg01hp3_sensors = [
 
 deye_sg01hp3_register_ranges = [
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=500, last_reg_address=500),
+    SensorRegisterRange(group="deye_sg01hp3", first_reg_address=552, last_reg_address=552),
     SensorRegisterRange(group="deye_sg01hp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3_battery", first_reg_address=514, last_reg_address=558),
