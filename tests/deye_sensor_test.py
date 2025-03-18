@@ -26,6 +26,7 @@ from deye_sensor import (
     SignedMagnitudeDoubleRegisterSensor,
     SensorRegisterRange,
     SensorRegisterRanges,
+    ComputedBooleanSensor,
 )
 
 
@@ -290,6 +291,81 @@ class DeyeSensorTest(unittest.TestCase):
 
         # then
         self.assertEqual(result, 0x0102)
+
+    def test_boolean_sensor_returns_true_when_mask_matches(self):
+        # given
+        test_sensor1 = FakeSensor("ts1", 0xAA)
+        test_sensor2 = FakeSensor("ts2", 0x55)
+
+        # and
+        sut1 = ComputedBooleanSensor(
+            "test1",
+            bitarray_sensor=test_sensor1,
+            mask=1,
+            groups=["string"],
+        )
+        sut2 = ComputedBooleanSensor(
+            "test2",
+            bitarray_sensor=test_sensor1,
+            mask=0xFF,
+            groups=["string"],
+        )
+        sut3 = ComputedBooleanSensor(
+            "test3",
+            bitarray_sensor=test_sensor1,
+            mask=0xAA,
+            groups=["string"],
+        )
+        sut4 = ComputedBooleanSensor(
+            "test4",
+            bitarray_sensor=test_sensor1,
+            mask=0x55,
+            groups=["string"],
+        )
+        sut5 = ComputedBooleanSensor(
+            "test5",
+            bitarray_sensor=test_sensor2,
+            mask=1,
+            groups=["string"],
+        )
+        sut6 = ComputedBooleanSensor(
+            "test6",
+            bitarray_sensor=test_sensor2,
+            mask=0xFF,
+            groups=["string"],
+        )
+        sut7 = ComputedBooleanSensor(
+            "test7",
+            bitarray_sensor=test_sensor2,
+            mask=0xAA,
+            groups=["string"],
+        )
+        sut8 = ComputedBooleanSensor(
+            "test8",
+            bitarray_sensor=test_sensor2,
+            mask=0x55,
+            groups=["string"],
+        )
+
+        # when
+        result1 = sut1.read_value([])
+        result2 = sut2.read_value([])
+        result3 = sut3.read_value([])
+        result4 = sut4.read_value([])
+        result5 = sut5.read_value([])
+        result6 = sut6.read_value([])
+        result7 = sut7.read_value([])
+        result8 = sut8.read_value([])
+
+        # then
+        self.assertEqual(result1, False)
+        self.assertEqual(result2, False)
+        self.assertEqual(result3, True)
+        self.assertEqual(result4, False)
+        self.assertEqual(result5, True)
+        self.assertEqual(result6, False)
+        self.assertEqual(result7, False)
+        self.assertEqual(result8, True)
 
 
 if __name__ == "__main__":

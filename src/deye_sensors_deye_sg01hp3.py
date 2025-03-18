@@ -43,7 +43,7 @@ deye_sg01hp3_inverter_552 = SingleRegisterSensor(
     groups=["deye_sg01hp3"],
 )
 
-ongrid_status_sensor = ComputedBooleanSensor(
+deye_sg01hp3_ongrid_status_sensor = ComputedBooleanSensor(
     "On-grid",
     bitarray_sensor=deye_sg01hp3_inverter_552,
     mask=0x4,
@@ -1147,7 +1147,7 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_grid_522,
     deye_sg01hp3_grid_521,
     deye_sg01hp3_grid_524,
-    ongrid_status_sensor,
+    deye_sg01hp3_ongrid_status_sensor,
     deye_sg01hp3_upload_653,
     deye_sg01hp3_upload_650,
     deye_sg01hp3_upload_651,
