@@ -483,6 +483,40 @@ class EnumValueSensor(AbstractSensor):
         return value
 
 
+class ComputedBooleanSensor(AbstractSensor):
+    """
+    Extracts a boolean value represented by a single bit or a combination of bits in a bit array
+    It tells if the bits that are set to 1 in the mask are set in the bitarray_sensor
+    """
+
+    def __init__(
+        self,
+        name: str,
+        bitarray_sensor: Sensor,
+        mask: int,
+        mqtt_topic_suffix="",
+        groups=[],
+    ):
+        super().__init__(name, mqtt_topic_suffix, "", "", groups)
+        self.bitarray_sensor = bitarray_sensor
+        self.mask = mask
+
+    def read_value(self, registers: dict[int, bytearray]):
+        bitarray = self.bitarray_sensor.read_value(registers)
+        if bitarray is None:
+            return None
+        if bitarray & self.mask == self.mask:
+            return True
+        else:
+            return False
+
+    def format_value(self, value):
+        return str(value)
+
+    def get_registers(self) -> list[int]:
+        return []
+
+
 class SensorRegisterRange:
     """
     Declares a Modbus register range that must be read to provide values for sensors within a metrics group

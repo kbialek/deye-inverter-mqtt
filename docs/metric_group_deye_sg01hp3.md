@@ -1,6 +1,8 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |Running status|`inverter/status`|N/A (0: standby, 1: selfcheck, 2: normal, 3: alarm, 4: fault)|500|1f4|U_WORD|1|
+|AC relays status|`ac/relay_status`|bit array supposedly storing states of AC relays|552|228|U_WORD|1|
+|On-grid|`ac/ongrid`|True/False|552 (bit no. 2)|228 (bit no. 2)|n/a|1|
 |PV1 Power|`dc/pv1/power`|W|672|2a0|U_WORD|10|
 |PV2 Power|`dc/pv2/power`|W|673|2a1|U_WORD|10|
 |PV3 Power|`dc/pv3/power`|W|674|2a2|U_WORD|10|
