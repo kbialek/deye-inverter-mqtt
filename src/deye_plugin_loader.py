@@ -24,12 +24,14 @@ import os
 from deye_config import DeyeConfig
 from deye_mqtt import DeyeMqttClient
 from deye_events import DeyeEventProcessor
+from deye_modbus import DeyeModbus
 
 
 class DeyePluginContext:
-    def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient):
+    def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient, modbus: DeyeModbus):
         self.config = config
         self.mqtt_client = mqtt_client
+        self.modbus = modbus
 
 
 class DeyePluginLoader:
