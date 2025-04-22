@@ -58,6 +58,7 @@ class DeyeMqttClient:
             self.__mqtt_client.username_pw_set(username=config.mqtt.username, password=config.mqtt.password)
         self.__status_topic = f"{config.mqtt.topic_prefix}/{config.mqtt.availability_topic}"
         self.__mqtt_client.will_set(self.__status_topic, "offline", retain=True, qos=1)
+        self.__mqtt_client.on_connect = self.__on_connect
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
         self.__publish_lock = threading.RLock()
@@ -79,16 +80,18 @@ class DeyeMqttClient:
             self.__mqtt_client.loop_start()
             while not self.__mqtt_client.is_connected():
                 time.sleep(1)
-            self.__mqtt_client.publish(self.__status_topic, "online", retain=True, qos=1)
-            self.__log.info(
-                "Successfully connected to MQTT Broker located at %s:%d", self.__config.host, self.__config.port
-            )
             return True
         except (ConnectionRefusedError, OSError):
             self.__log.error(
                 "Failed to connect to MQTT Broker located at %s:%d", self.__config.host, self.__config.port
             )
             return False
+
+    def __on_connect(self, client, userdata, flags, rc) -> None:
+        self.__mqtt_client.publish(self.__status_topic, "online", retain=True, qos=1)
+        self.__log.info(
+            "Successfully connected to MQTT Broker located at %s:%d", self.__config.host, self.__config.port
+        )
 
     def disconnect(self):
         self.__mqtt_client.disconnect()

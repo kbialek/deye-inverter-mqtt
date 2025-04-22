@@ -170,6 +170,60 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         self.assertEqual(received_message.topic, "deye/dc/total_power")
         self.assertEqual(received_message.payload, b"1.2")
 
+    def test_resend_availability_status_on_reconnect(self):
+        # given
+        self.__start_broker()
+
+        # and
+        self.__connect_test_client()
+        self.test_mqtt_client.subscribe(f"deye/status")
+        self.test_mqtt_client.loop_start()
+
+        # when: connect
+        mqtt = DeyeMqttClient(self.config)
+        mqtt.connect()
+        time.sleep(3)
+
+        # then
+        self.assertEqual(len(self.received_messages), 1)
+
+        # and
+        received_message = self.received_messages[0]
+        self.assertEqual(received_message.topic, "deye/status")
+        self.assertEqual(received_message.payload, b"online")
+        self.received_messages.clear()
+
+        # and
+        self.test_mqtt_client.loop_stop()
+
+        # and: restart broker
+        self.__stop_broker()
+        self.__start_broker()
+
+        # and: recreate a test client
+        self.__connect_test_client()
+        self.test_mqtt_client.subscribe(f"deye/status")
+        self.test_mqtt_client.loop_start()
+
+        # and: send an observation, so the client can reconnect
+        timestamp = datetime.now()
+        observation = Observation(string_dc_power_sensor, timestamp, 1.2)
+        mqtt.publish_observation(observation, 0)
+
+        # then
+        self.assertEqual(len(self.received_messages), 1)
+
+        # and
+        received_message = self.received_messages[0]
+        self.assertEqual(received_message.topic, "deye/status")
+        self.assertEqual(received_message.payload, b"online")
+
+        # and
+        self.test_mqtt_client.loop_stop()
+
+        # and
+        mqtt.disconnect()
+
     def test_connect_on_publish(self):
         # given: broker is stopped
 
