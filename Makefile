@@ -1,5 +1,5 @@
 GITHUB_USER = kbialek
-VERSION = $(shell uv --quiet tree --depth 0 | grep -oE "[0-9.]*$$")
+VERSION = $(shell uv --quiet tree --depth 0 | cut -f 2 -d ' ' | sed "s/v//")
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
 DOCKER_BASE_IMAGE_TAG = 3.10.13-alpine3.18
