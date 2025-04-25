@@ -135,3 +135,6 @@ dmypy.json
 
 # data folder
 data/
+
+requirements.txt
+requirements-dev.txt

@@ -1,5 +1,5 @@
 GITHUB_USER = kbialek
-VERSION = $(shell poetry version -s)
+VERSION = $(shell uv --quiet tree --depth 0 | cut -f 2 -d ' ' | sed "s/v//")
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
 DOCKER_BASE_IMAGE_TAG = 3.10.13-alpine3.18
@@ -27,20 +27,20 @@ mosquitto-stop:
 	@pkill mosquitto
 
 test:
-	@pytest -v --cov --cov-report=xml --log-cli-level=DEBUG
+	@uv run pytest -v --cov --cov-report=xml --log-cli-level=DEBUG
 
 test-coverage: test
-	@coverage report --skip-empty --no-skip-covered --sort=Cover
+	@uv run coverage report --skip-empty --no-skip-covered --sort=Cover
 
 test-mqtt: gen-tls-certs
-	-@pytest -v tests/deye_mqtt_inttest.py
+	-@uv run pytest -v tests/deye_mqtt_inttest.py
 	@rm certs/* && rmdir certs
 
 test-at-connector:
-	@bash -c "set -a; source config.env; pytest -v --log-cli-level=DEBUG tests/deye_at_connector_inttest.py"
+	@bash -c "set -a; source config.env; uv run pytest -v --log-cli-level=DEBUG tests/deye_at_connector_inttest.py"
 
 run:
-	@./local-run.sh "python:$(DOCKER_BASE_IMAGE_TAG)"
+	@uv run ./local-run.sh "python:$(DOCKER_BASE_IMAGE_TAG)"
 
 $(ARCHS:%=docker-build-%): docker-build-%: py-export-requirements
 	-@docker buildx rm deye-docker-build
@@ -132,30 +132,26 @@ git-uninstall-hooks:
 	@rm .git/hooks/pre-commit
 
 py-setup: git-install-hooks
-	pyenv install 3.10
-	pyenv local 3.10
-	poetry env use 3.10
+	uv python install
+	uv venv
 
 py-install-dependencies:
-	poetry lock
-	poetry install --with dev
+	uv run uv lock
+	uv run uv sync
 
 py-export-requirements:
-	poetry export -f requirements.txt --output requirements.txt
-	poetry export -f requirements.txt --only dev --output requirements-dev.txt
+	uv export --no-editable --no-emit-project --format requirements.txt --no-dev > requirements.txt
+	uv export --no-editable --no-emit-project --format requirements.txt --only-dev > requirements-dev.txt
 
 py-show-dependencies:
-	poetry show
+	uv tree
 
 py-show-dependencies-outdated:
-	poetry show -o
-
-py-update-dependencies:
-	poetry update
+	uv run uv pip list --outdated
 
 py-code-format:
-	poetry run black src/
-	poetry run black tests/
+	uv run black src/
+	uv run black tests/
 
 py-check-code:
-	poetry run flake8 src/
+	uv run flake8 src/

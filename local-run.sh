@@ -10,7 +10,7 @@ set -f -o pipefail
 readonly DOCKER_IMAGE="$1"
 
 if [[ -z "$VIRTUAL_ENV" ]]; then
-    echo "[ERROR] Python virtual env is not activated. Run "poetry shell" first."
+    echo "[ERROR] Python virtual env is not activated."
     exit 1
 fi
 
