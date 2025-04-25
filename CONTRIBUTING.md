@@ -1,7 +1,6 @@
 # Development environment
 ## Prerequisites
-1. [pyenv](https://github.com/pyenv/pyenv)
-2. [poetry](https://python-poetry.org/)
+1. [uv](https://github.com/astral-sh/uv)
 3. GNU make
 
 ## Setup the environment
@@ -12,7 +11,7 @@ make py-install-dependencies
 
 ## Activate python environment
 ```
-poetry shell
+source .venv/bin/activate
 ```
 
 ## Git hooks
