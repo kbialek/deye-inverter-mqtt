@@ -62,6 +62,7 @@ class DeyeMqttClient:
         self.__config = config.mqtt
         self.__mqtt_timeout = 3  # seconds
         self.__publish_lock = threading.RLock()
+        self.__command_handlers = {}
 
     def subscribe(self, topic: str, callback):
         self.connect()
@@ -92,6 +93,12 @@ class DeyeMqttClient:
         self.__log.info(
             "Successfully connected to MQTT Broker located at %s:%d", self.__config.host, self.__config.port
         )
+        self.__resubscribe_command_handlers()
+
+    def __resubscribe_command_handlers(self):
+        for mqtt_topic in self.__command_handlers:
+            handler_method = self.__command_handlers[mqtt_topic]
+            self.subscribe(mqtt_topic, handler_method)
 
     def disconnect(self):
         self.__mqtt_client.disconnect()
@@ -150,4 +157,5 @@ class DeyeMqttClient:
 
     def subscribe_command_handler(self, logger_index: int, mqtt_topic_suffix: str, handler_method):
         mqtt_topic = self.build_topic_name(logger_index, f"{mqtt_topic_suffix}/command")
+        self.__command_handlers[mqtt_topic] = handler_method
         self.subscribe(mqtt_topic, handler_method)
