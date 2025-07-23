@@ -1,10 +1,13 @@
 topics:
   186: dc/pv1/power
   187: dc/pv2/power
+  188: dc/pv3/power
   109: dc/pv1/voltage
   111: dc/pv2/voltage
+  113: dc/pv3/voltage
   110: dc/pv1/current
   112: dc/pv2/current
+  114: dc/pv3/current
   108: day_energy
   96: total_energy
   166: micro_inverter_power

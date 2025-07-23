@@ -29,6 +29,10 @@ deye_sg02lp1_solar_187 = SingleRegisterSensor('PV2 Power', 187, 1,
                                               mqtt_topic_suffix='dc/pv2/power', unit='W', signed=False,
                                               groups=['deye_sg02lp1'])
 
+deye_sg02lp1_solar_188 = SingleRegisterSensor('PV3 Power', 188, 1,
+                                              mqtt_topic_suffix='dc/pv3/power', unit='W', signed=False,
+                                              groups=['deye_sg02lp1'])
+
 deye_sg02lp1_solar_109 = SingleRegisterSensor('PV1 Voltage', 109, 0.1,
                                               mqtt_topic_suffix='dc/pv1/voltage', unit='V', signed=False,
                                               groups=['deye_sg02lp1'])
@@ -37,12 +41,20 @@ deye_sg02lp1_solar_111 = SingleRegisterSensor('PV2 Voltage', 111, 0.1,
                                               mqtt_topic_suffix='dc/pv2/voltage', unit='V', signed=False,
                                               groups=['deye_sg02lp1'])
 
+deye_sg02lp1_solar_113 = SingleRegisterSensor('PV3 Voltage', 113, 0.1,
+                                              mqtt_topic_suffix='dc/pv3/voltage', unit='V', signed=False,
+                                              groups=['deye_sg02lp1'])
+
 deye_sg02lp1_solar_110 = SingleRegisterSensor('PV1 Current', 110, 0.1,
                                               mqtt_topic_suffix='dc/pv1/current', unit='A', signed=False,
                                               groups=['deye_sg02lp1'])
 
 deye_sg02lp1_solar_112 = SingleRegisterSensor('PV2 Current', 112, 0.1,
                                               mqtt_topic_suffix='dc/pv2/current', unit='A', signed=False,
+                                              groups=['deye_sg02lp1'])
+
+deye_sg02lp1_solar_114 = SingleRegisterSensor('PV3 Current', 114, 0.1,
+                                              mqtt_topic_suffix='dc/pv3/current', unit='A', signed=False,
                                               groups=['deye_sg02lp1'])
 
 deye_sg02lp1_solar_108 = SingleRegisterSensor('Daily Production', 108, 0.1,
@@ -332,10 +344,13 @@ deye_sg02lp1_bms_319 = SingleRegisterSensor('BMS1 Temp', 319, 0.1,
 deye_sg02lp1_sensors = [
     deye_sg02lp1_solar_186,
     deye_sg02lp1_solar_187,
+    deye_sg02lp1_solar_188,
     deye_sg02lp1_solar_109,
     deye_sg02lp1_solar_111,
+    deye_sg02lp1_solar_113,
     deye_sg02lp1_solar_110,
     deye_sg02lp1_solar_112,
+    deye_sg02lp1_solar_114,
     deye_sg02lp1_solar_108,
     deye_sg02lp1_solar_96,
     deye_sg02lp1_solar_166,
@@ -410,11 +425,11 @@ deye_sg02lp1_sensors = [
 ]
 
 deye_sg02lp1_register_ranges = [
-    SensorRegisterRange(group='deye_sg02lp1', first_reg_address=3, last_reg_address=112),
-    SensorRegisterRange(group='deye_sg02lp1_battery', first_reg_address=3, last_reg_address=112),
+    SensorRegisterRange(group='deye_sg02lp1', first_reg_address=3, last_reg_address=114),
+    SensorRegisterRange(group='deye_sg02lp1_battery', first_reg_address=3, last_reg_address=114),
     SensorRegisterRange(group='deye_sg02lp1', first_reg_address=150, last_reg_address=249),
-    SensorRegisterRange(group='deye_sg02lp1_battery', first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group='deye_sg02lp1_timeofuse', first_reg_address=150, last_reg_address=249),
+    SensorRegisterRange(group='deye_sg02lp1_battery', first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group='deye_sg02lp1_timeofuse', first_reg_address=250, last_reg_address=279),
     SensorRegisterRange(group='deye_sg02lp1_bms', first_reg_address=312, last_reg_address=319)
 ]
