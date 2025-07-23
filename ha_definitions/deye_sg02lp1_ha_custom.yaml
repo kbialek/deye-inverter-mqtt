@@ -1,0 +1,114 @@
+requests:
+  - start: 0x0106
+    end: 0x010b
+    mb_functioncode: 0x03
+  - start: 0x0138
+    end: 0x013f
+    mb_functioncode: 0x03
+
+parameters:
+ - group: Time of Use
+   items:
+    - name: "Time of Use Voltage 1"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x0106]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 2"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x0107]
+      icon: "mdi:timelapse"
+      
+    - name: "Time of Use Voltage 3"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x0108]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 4"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x0109]
+      icon: 'mdi:timelapse'
+
+    - name: "Time of Use Voltage 5"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x010A]
+      icon: "mdi:timelapse"
+
+    - name: "Time of Use Voltage 6"
+      class: ""
+      state_class: ""
+      uom: "V"
+      scale: 0.01
+      rule: 9
+      registers: [0x010B]
+      icon: 'mdi:timelapse'
+
+ - group: BMS
+   items:
+    - name: "BMS1 Charging Voltage"
+      uom: "V"
+      scale: 0.01
+      rule: 1
+      registers: [0x0138]
+
+    - name: "BMS1 Discharge Voltage"
+      uom: "V"
+      scale: 0.01
+      rule: 1
+      registers: [0x0139]
+
+    - name: "BMS1 Charge Current Limit"
+      uom: "A"
+      scale: 1
+      rule: 1
+      registers: [0x013a]
+
+    - name: "BMS1 Discharge Current Limit"
+      uom: "A"
+      scale: 1
+      rule: 1
+      registers: [0x013b]
+
+    - name: "BMS1 SOC"
+      uom: "%"
+      scale: 1
+      rule: 1
+      registers: [0x013c]
+
+    - name: "BMS1 Voltage"
+      uom: "V"
+      scale: 0.01
+      rule: 1
+      registers: [0x013d]
+
+    - name: "BMS1 Current"
+      uom: "A"
+      scale: 1
+      rule: 2
+      registers: [0x013e]
+
+    - name: "BMS1 Temp"
+      uom: "°C"
+      scale: 0.1
+      rule: 1
+      registers: [0x013f]
