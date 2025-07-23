@@ -109,7 +109,7 @@ deye_sg02lp1_battery_182 = SingleRegisterSensor('Battery Temperature', 182, 0.1,
                                                 mqtt_topic_suffix='battery/temperature', unit='°C', signed=False,
                                                 groups=['deye_sg02lp1_battery'])
 
-deye_sg02lp1_grid_169 = SingleRegisterSensor('Total Grid Power', 169, 1,
+deye_sg02lp1_grid_169 = SingleRegisterSensor('Total Grid Power', 169, 10,
                                              mqtt_topic_suffix='ac/total_grid_power', unit='W', signed=True,
                                              groups=['deye_sg02lp1'])
 
@@ -428,8 +428,8 @@ deye_sg02lp1_register_ranges = [
     SensorRegisterRange(group='deye_sg02lp1', first_reg_address=3, last_reg_address=114),
     SensorRegisterRange(group='deye_sg02lp1_battery', first_reg_address=3, last_reg_address=114),
     SensorRegisterRange(group='deye_sg02lp1', first_reg_address=150, last_reg_address=249),
-    SensorRegisterRange(group='deye_sg02lp1_timeofuse', first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group='deye_sg02lp1_battery', first_reg_address=150, last_reg_address=249),
+    SensorRegisterRange(group='deye_sg02lp1_timeofuse', first_reg_address=150, last_reg_address=249),
     SensorRegisterRange(group='deye_sg02lp1_timeofuse', first_reg_address=250, last_reg_address=279),
     SensorRegisterRange(group='deye_sg02lp1_bms', first_reg_address=312, last_reg_address=319)
 ]
