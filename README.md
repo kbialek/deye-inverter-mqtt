@@ -158,6 +158,9 @@ All configuration options are controlled through environment variables.
     * `deye_hybrid` - hybrid inverter
     * `deye_hybrid_battery` - hybrid inverter battery
     * `deye_hybrid_timeofuse` - hybrid inverter time-of-use settings
+    * `deye_sg02lp1` - sg02lp1 inverter
+    * `deye_sg02lp1_battery` - sg02lp1 inverter battery
+    * `deye_sg02lp1_timeofuse` - sg02lp1 inverter time-of-use settings
     * `deye_sg04lp3` - sg04lp3 inverter
     * `deye_sg04lp3_battery` - sg04lp3 battery
     * `deye_sg04lp3_ups` - sg04lp3 ups
