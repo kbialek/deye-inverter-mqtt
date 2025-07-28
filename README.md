@@ -1,5 +1,5 @@
 ----
-### Do you find this project useful? Buy me a coffee ☕ [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/krbialek)
+### Do you find this project useful? Buy me a coffee ☕ [![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/krbialek) [![Donate Ko-Fi](https://img.shields.io/badge/Donate-KoFi-orange.svg)](https://ko-fi.com/kbialek)
 ----
 
 # :sunny: Deye solar inverter MQTT bridge
