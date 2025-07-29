@@ -259,7 +259,7 @@ toml = [
 
 [[package]]
 name = "deye-inverter-mqtt"
-version = "2025.4.1"
+version = "2025.5.1"
 source = { editable = "." }
 dependencies = [
     { name = "libscrc" },

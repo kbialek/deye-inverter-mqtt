@@ -1,0 +1,58 @@
+--- src/deye_sensors_deye_hybrid.py	2025-06-27 11:35:30.357807861 +1000
++++ /home/tdmobbs/Downloads/sync-app/nas-trevws/temp/deye_sensors_deye_hybrid.py	2025-07-19 13:12:20.706250011 +1000
+@@ -35,6 +35,10 @@
+     "PV2 Power", 187, 1, mqtt_topic_suffix="dc/pv2/power", unit="W", signed=False, groups=["deye_hybrid"]
+ )
+ 
++deye_hybrid_solar_188 = SingleRegisterSensor(
++    "PV3 Power", 188, 1, mqtt_topic_suffix="dc/pv3/power", unit="W", signed=False, groups=["deye_hybrid"]
++)
++
+ deye_hybrid_solar_109 = SingleRegisterSensor(
+     "PV1 Voltage", 109, 0.1, mqtt_topic_suffix="dc/pv1/voltage", unit="V", signed=False, groups=["deye_hybrid"]
+ )
+@@ -43,6 +47,10 @@
+     "PV2 Voltage", 111, 0.1, mqtt_topic_suffix="dc/pv2/voltage", unit="V", signed=False, groups=["deye_hybrid"]
+ )
+ 
++deye_hybrid_solar_113 = SingleRegisterSensor(
++    "PV3 Voltage", 113, 0.1, mqtt_topic_suffix="dc/pv3/voltage", unit="V", signed=False, groups=["deye_hybrid"]
++)
++
+ deye_hybrid_solar_110 = SingleRegisterSensor(
+     "PV1 Current", 110, 0.1, mqtt_topic_suffix="dc/pv1/current", unit="A", signed=False, groups=["deye_hybrid"]
+ )
+@@ -51,6 +59,10 @@
+     "PV2 Current", 112, 0.1, mqtt_topic_suffix="dc/pv2/current", unit="A", signed=False, groups=["deye_hybrid"]
+ )
+ 
++deye_hybrid_solar_114 = SingleRegisterSensor(
++    "PV3 Current", 114, 0.1, mqtt_topic_suffix="dc/pv3/current", unit="A", signed=False, groups=["deye_hybrid"]
++)
++
+ deye_hybrid_solar_108 = SingleRegisterSensor(
+     "Daily Production", 108, 0.1, mqtt_topic_suffix="day_energy", unit="kWh", signed=False, groups=["deye_hybrid"]
+ )
+@@ -153,7 +165,7 @@
+ )
+ 
+ deye_hybrid_grid_169 = SingleRegisterSensor(
+-    "Total Grid Power", 169, 1, mqtt_topic_suffix="ac/total_grid_power", unit="W", signed=True, groups=["deye_hybrid"]
++    "Total Grid Power", 169, 10, mqtt_topic_suffix="ac/total_grid_power", unit="W", signed=True, groups=["deye_hybrid"]
+ )
+ 
+ deye_hybrid_grid_150 = SingleRegisterSensor(
+@@ -635,10 +647,13 @@
+ deye_hybrid_sensors = [
+     deye_hybrid_solar_186,
+     deye_hybrid_solar_187,
++    deye_hybrid_solar_188,
+     deye_hybrid_solar_109,
+     deye_hybrid_solar_111,
++    deye_hybrid_solar_113,
+     deye_hybrid_solar_110,
+     deye_hybrid_solar_112,
++    deye_hybrid_solar_114,
+     deye_hybrid_solar_108,
+     deye_hybrid_solar_96,
+     deye_hybrid_solar_166,
