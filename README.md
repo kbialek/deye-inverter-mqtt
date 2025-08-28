@@ -30,6 +30,7 @@ When your inverter turns out to work well with an already exiting metrics group,
 | [Deye Microinverters M130/M160/M180/M200/M220](https://deye.com/product/sun-m130-160-180-200-220g4-eu-q0/)      | tcp, at  | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md)                                                                                                                                                                                                                                                                                           |
 | [Deye SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-eu/)                                           | tcp, at  | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [deye_sg04lp3_timeofuse](docs/metric_group_deye_sg04lp3_timeofuse.md), [deye_sg04lp3_generator](docs/metric_group_deye_sg04lp3_generator.md), [settings](docs/metric_group_settings.md) |
 | [Deye SG01LP1](https://deye.com/product/sun-7-6-8k-sg01lp1-eu/)                                                 | tcp, at  | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_bms](docs/metric_group_deye_hybrid_bms.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                                |
+| [Deye SG02LP1](https://deye.com/product/sun-7-6-8k-sg02lp1-eu-am2/)                                                 | tcp, at  | [deye_sg02lp1](docs/metric_group_deye_sg02lp1.md), [deye_sg02lp1_battery](docs/metric_group_deye_sg02lp1_battery.md), [deye_sg02lp1_bms](docs/metric_group_deye_sg02lp1_bms.md), [deye_sg02lp1_timeofuse](docs/metric_group_deye_sg02lp1_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                                |
 | [Deye SG01HP3](https://deye.com/product/sun-5-6-8-10-12-15-20-25k-sg01hp3-eu-am2/)                              | tcp, at  | [deye_sg01hp3](docs/metric_group_deye_sg01hp3.md), [deye_sg01hp3_battery](docs/metric_group_deye_sg01hp3_battery.md), [deye_sg01hp3_bms](docs/metric_group_deye_sg01hp3_bms.md), [deye_sg01hp3_ups](docs/metric_group_deye_sg01hp3_ups.md), [deye_sg01hp3_generator](docs/metric_group_deye_sg01hp3_generator.md), [settings](docs/metric_group_settings.md)                                                                                    |
 
 | Meter model                                                         | Metric groups                                     |
@@ -157,6 +158,9 @@ All configuration options are controlled through environment variables.
     * `deye_hybrid` - hybrid inverter
     * `deye_hybrid_battery` - hybrid inverter battery
     * `deye_hybrid_timeofuse` - hybrid inverter time-of-use settings
+    * `deye_sg02lp1` - sg02lp1 inverter
+    * `deye_sg02lp1_battery` - sg02lp1 inverter battery
+    * `deye_sg02lp1_timeofuse` - sg02lp1 inverter time-of-use settings
     * `deye_sg04lp3` - sg04lp3 inverter
     * `deye_sg04lp3_battery` - sg04lp3 battery
     * `deye_sg04lp3_ups` - sg04lp3 ups
