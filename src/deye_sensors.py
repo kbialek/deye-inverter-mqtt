@@ -98,7 +98,7 @@ grid_power = DoubleRegisterSensor(
 
 # Load power
 load_power = DoubleRegisterSensor(
-    "Load Power", 0xC6, 1.0, mqtt_topic_suffix="ac/ups/power", unit="W", groups=["string"]
+    "Load Power", 0xC6, 1.0, mqtt_topic_suffix="ac/ups/power", unit="W", groups=["string"], signed=True
 )
 
 # AC Freq
