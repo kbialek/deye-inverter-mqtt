@@ -190,7 +190,17 @@ deye_hybrid_grid_76 = SingleRegisterSensor(
     groups=["deye_hybrid"],
 )
 
-deye_hybrid_grid_78 = DoubleRegisterSensor(
+deye_hybrid_grid_77 = SingleRegisterSensor(
+    "Daily Energy Sold",
+    77,
+    0.1,
+    mqtt_topic_suffix="ac/daily_energy_sold",
+    unit="kWh",
+    signed=False,
+    groups=["deye_hybrid"],
+)
+
+deye_hybrid_grid_78 = SingleRegisterSensor(
     "Total Energy Bought",
     78,
     0.1,
@@ -200,12 +210,12 @@ deye_hybrid_grid_78 = DoubleRegisterSensor(
     groups=["deye_hybrid"],
 )
 
-deye_hybrid_grid_77 = SingleRegisterSensor(
-    "Daily Energy Sold",
-    77,
-    0.1,
-    mqtt_topic_suffix="ac/daily_energy_sold",
-    unit="kWh",
+deye_hybrid_grid_79 = SingleRegisterSensor(
+    "Grid Frequecy",
+    79,
+    0.01,
+    mqtt_topic_suffix="ac/grid_frequency",
+    unit="Hz",
     signed=False,
     groups=["deye_hybrid"],
 )
@@ -660,8 +670,9 @@ deye_hybrid_sensors = [
     deye_hybrid_grid_170,
     deye_hybrid_grid_171,
     deye_hybrid_grid_76,
-    deye_hybrid_grid_78,
     deye_hybrid_grid_77,
+    deye_hybrid_grid_78,
+    deye_hybrid_grid_79,
     deye_hybrid_grid_81,
     deye_hybrid_inverter_175,
     deye_hybrid_inverter_164,
