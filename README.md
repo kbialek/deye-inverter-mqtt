@@ -319,6 +319,13 @@ This feature allows advanced users to extend the functionality of this project. 
 ### How to implement a plugin
 * Plugin is a Python file placed in `plugins` directory. The filename must begin with `deye_plugin_`
 * The plugin must define a `DeyePlugin` class. See `plugins/deye_plugin_sample.py` for inspiration.
+* The plugin class must implement one of the following methods:
+  * `get_event_processors() -> list(DeyeEventProcessor)`
+  * `get_event_processors_v2(event_processor_context: DeyeEventProcessorContext) -> list(DeyeEventProcessor)`, where `DeyeEventProcessorContext` provides access to the `modbus` client
+
+#### Accessing service resources from the plugin
+1. Plugin constructor accepts `DeyePluginContext`, which provides access to `config` object and to `mqtt` client.
+2. Event processors created by the plugin having `get_event_processors_v2` implemented have access to the `modbus` client
 
 ### How to start the docker container with custom plugins
 

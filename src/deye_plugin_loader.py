@@ -20,16 +20,24 @@ import pkgutil
 import logging
 import sys
 import os
+import inspect
 
-from deye_config import DeyeConfig
+from deye_config import DeyeConfig, DeyeLoggerConfig
 from deye_mqtt import DeyeMqttClient
 from deye_events import DeyeEventProcessor
+from deye_modbus import DeyeModbus
 
 
 class DeyePluginContext:
     def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient):
         self.config = config
         self.mqtt_client = mqtt_client
+
+
+class DeyeEventProcessorContext:
+    def __init__(self, logger_config: DeyeLoggerConfig, modbus: DeyeModbus):
+        self.logger_config = logger_config
+        self.modbus = modbus
 
 
 class DeyePluginLoader:
@@ -63,10 +71,19 @@ class DeyePluginLoader:
             except AttributeError:
                 self.__log.warn("Ignoring plugin '%s', because DeyePlugin class is not defined.", plugin_name)
 
-    def get_event_processors(self) -> [DeyeEventProcessor]:
+    def get_event_processors(self, event_processor_context: DeyeEventProcessorContext) -> [DeyeEventProcessor]:
         event_processors = []
         for plugin in self.__plugins:
-            event_processors.extend(plugin.get_event_processors())
+            if self.__plugin_method_defined(plugin, "get_event_processors_v2"):
+                event_processors.extend(plugin.get_event_processors_v2(event_processor_context))
+            elif self.__plugin_method_defined(plugin, "get_event_processors"):
+                event_processors.extend(plugin.get_event_processors())
         for event_processor in event_processors:
             self.__log.info("Loading custom event processor: '%s'", event_processor.get_id())
         return event_processors
+
+    def __plugin_method_defined(self, plugin, method_name: str) -> bool:
+        def filter(v):
+            return inspect.ismethod(v) and v.__name__ == method_name
+
+        return len(inspect.getmembers(plugin, filter)) == 1
