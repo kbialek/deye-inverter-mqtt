@@ -17,8 +17,9 @@
 |External CT L1 Power|`ac/l1/ct/external`|W|170|aa|S_WORD|1|
 |External CT L2 Power|`ac/l2/ct/external`|W|171|ab|S_WORD|1|
 |Daily Energy Bought|`ac/daily_energy_bought`|kWh|76|4c|U_WORD|0.1|
-|Total Energy Bought|`ac/total_energy_bought`|kWh|78|4e|U_WORD|0.1|
 |Daily Energy Sold|`ac/daily_energy_sold`|kWh|77|4d|U_WORD|0.1|
+|Total Energy Bought|`ac/total_energy_bought`|kWh|78|4e|U_WORD|0.1|
+|Grid Frequecy|`ac/grid_frequency`|Hz|79|4f|U_WORD|0.01|
 |Total Energy Sold|`ac/total_energy_sold`|kWh|81,82|51,52|U_DWORD (LW,HW)|0.1|
 |Total Power|`ac/total_power`|W|175|af|S_WORD|1|
 |Current L1|`ac/l1/current`|A|164|a4|S_WORD|0.01|
@@ -26,6 +27,5 @@
 |Inverter L1 Power|`ac/l1/power`|W|173|ad|S_WORD|1|
 |Inverter L2 Power|`ac/l2/power`|W|174|ae|S_WORD|1|
 |Load Frequency|`ac/frequency`|Hz|192|c0|U_WORD|0.01|
-|Grid Frequency|`ac/grid_frequency`|Hz|79|4f|U_WORD|0.01|
 |DC Temperature|`radiator_temp`|°C|90|5a|S_WORD|0.1|
 |AC Temperature|`ac/temperature`|°C|91|5b|S_WORD|0.1|
