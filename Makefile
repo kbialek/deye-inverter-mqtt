@@ -110,6 +110,7 @@ METRIC_GROUPS = \
 	deye_hybrid_battery \
 	deye_hybrid_bms \
 	deye_hybrid_timeofuse \
+	deye_sg03lp1 \
 	deye_sg02lp1 \
 	deye_sg02lp1_battery \
 	deye_sg02lp1_bms \
