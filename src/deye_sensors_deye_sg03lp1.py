@@ -82,19 +82,43 @@ deye_sg03lp1_grid_151 = SingleRegisterSensor(
 )
 
 deye_sg03lp1_grid_167 = SingleRegisterSensor(
-    "Internal CT L1 Power", 167, 1, mqtt_topic_suffix="ac/l1/ct/internal", unit="W", signed=True, groups=["deye_sg03lp1"]
+    "Internal CT L1 Power",
+    167,
+    1,
+    mqtt_topic_suffix="ac/l1/ct/internal",
+    unit="W",
+    signed=True,
+    groups=["deye_sg03lp1"],
 )
 
 deye_sg03lp1_grid_168 = SingleRegisterSensor(
-    "Internal CT L2 Power", 168, 1, mqtt_topic_suffix="ac/l2/ct/internal", unit="W", signed=True, groups=["deye_sg03lp1"]
+    "Internal CT L2 Power",
+    168,
+    1,
+    mqtt_topic_suffix="ac/l2/ct/internal",
+    unit="W",
+    signed=True,
+    groups=["deye_sg03lp1"],
 )
 
 deye_sg03lp1_grid_170 = SingleRegisterSensor(
-    "External CT L1 Power", 170, 1, mqtt_topic_suffix="ac/l1/ct/external", unit="W", signed=True, groups=["deye_sg03lp1"]
+    "External CT L1 Power",
+    170,
+    1,
+    mqtt_topic_suffix="ac/l1/ct/external",
+    unit="W",
+    signed=True,
+    groups=["deye_sg03lp1"],
 )
 
 deye_sg03lp1_grid_171 = SingleRegisterSensor(
-    "External CT L2 Power", 171, 1, mqtt_topic_suffix="ac/l2/ct/external", unit="W", signed=True, groups=["deye_sg03lp1"]
+    "External CT L2 Power",
+    171,
+    1,
+    mqtt_topic_suffix="ac/l2/ct/external",
+    unit="W",
+    signed=True,
+    groups=["deye_sg03lp1"],
 )
 
 deye_sg03lp1_grid_76 = SingleRegisterSensor(
