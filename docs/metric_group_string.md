@@ -15,7 +15,7 @@
 |Grid L23 Voltage|`ac/l23/voltage`|V|71|47|U_WORD|0.1|
 |Grid L31 Voltage|`ac/l31/voltage`|V|72|48|U_WORD|0.1|
 |Grid Power|`ac/grid/power`|W|203,204|cb,cc|U_DWORD (LW,HW)|1.0|
-|Load Power|`ac/ups/power`|W|198,199|c6,c7|U_DWORD (LW,HW)|1.0|
+|Load Power|`ac/ups/power`|W|198,199|c6,c7|S_DWORD (LW,HW)|1.0|
 |AC Freq|`ac/freq`|Hz|79|4f|U_WORD|0.01|
 |Uptime|`uptime`|minutes|62|3e|U_WORD|1|
 |Daily Load Consumption|`ac/ups/daily_energy`|kWh|200|c8|U_WORD|0.01|
