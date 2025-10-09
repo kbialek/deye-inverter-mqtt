@@ -1,6 +1,6 @@
 # Development environment
 ## Prerequisites
-1. [uv](https://github.com/astral-sh/uv)
+1. [uv](https://github.com/astral-sh/uv) (>= v0.9.0)
 3. GNU make
 
 ## Setup the environment
