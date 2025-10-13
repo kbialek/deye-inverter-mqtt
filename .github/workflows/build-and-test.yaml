@@ -12,7 +12,7 @@ jobs:
       - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
-          python-version: '3.14'
+          python-version: '3.13'
           architecture: 'x64'
           cache: 'pip'
       - name: Install dependencies
