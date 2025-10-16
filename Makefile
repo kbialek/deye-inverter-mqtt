@@ -137,8 +137,12 @@ git-install-hooks:
 git-uninstall-hooks:
 	@rm .git/hooks/pre-commit
 
+py-cleanup:
+	@rm -rf .venv/
+	@rm -f uv.lock
+
 py-setup: git-install-hooks
-	uv python install
+	uv python install 3.13
 	uv venv
 
 py-install-dependencies:
