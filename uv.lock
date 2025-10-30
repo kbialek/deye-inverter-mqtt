@@ -219,7 +219,7 @@ wheels = [
 
 [[package]]
 name = "deye-inverter-mqtt"
-version = "2025.8.1"
+version = "2025.10.1"
 source = { editable = "." }
 dependencies = [
     { name = "libscrc" },
