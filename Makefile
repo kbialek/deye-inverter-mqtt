@@ -2,7 +2,8 @@ GITHUB_USER = kbialek
 VERSION = $(shell grep "^version" pyproject.toml | head -1 | sed 's/version.=.//' | tr -d '"')
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
-DOCKER_BASE_IMAGE_TAG = 3.10.13-alpine3.18
+DOCKER_BASE_LINUX_VERSION=alpine3.22
+DOCKER_BASE_IMAGE_TAG = 3.13-${DOCKER_BASE_LINUX_VERSION}
 
 null =
 space = $(null) $(null)
@@ -110,6 +111,7 @@ METRIC_GROUPS = \
 	deye_hybrid_battery \
 	deye_hybrid_bms \
 	deye_hybrid_timeofuse \
+	deye_sg03lp1 \
 	deye_sg02lp1 \
 	deye_sg02lp1_battery \
 	deye_sg02lp1_bms \
@@ -135,8 +137,12 @@ git-install-hooks:
 git-uninstall-hooks:
 	@rm .git/hooks/pre-commit
 
+py-cleanup:
+	@rm -rf .venv/
+	@rm -f uv.lock
+
 py-setup: git-install-hooks
-	uv python install
+	uv python install 3.13
 	uv venv
 
 py-install-dependencies:
