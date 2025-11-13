@@ -2,14 +2,17 @@
 |---|---|:-:|:-:|:-:|:-:|:-:|
 |PV1 Power|`dc/pv1/power`|W|186|ba|U_WORD|1|
 |PV2 Power|`dc/pv2/power`|W|187|bb|U_WORD|1|
+|PV3 Power|`dc/pv3/power`|W|188|bc|U_WORD|1|
 |PV1 Voltage|`dc/pv1/voltage`|V|109|6d|U_WORD|0.1|
 |PV2 Voltage|`dc/pv2/voltage`|V|111|6f|U_WORD|0.1|
+|PV3 Voltage|`dc/pv3/voltage`|V|113|71|U_WORD|0.1|
 |PV1 Current|`dc/pv1/current`|A|110|6e|U_WORD|0.1|
 |PV2 Current|`dc/pv2/current`|A|112|70|U_WORD|0.1|
+|PV3 Current|`dc/pv3/current`|A|114|72|U_WORD|0.1|
 |Daily Production|`day_energy`|kWh|108|6c|U_WORD|0.1|
 |Total Production|`total_energy`|kWh|96,97|60,61|U_DWORD (LW,HW)|0.1|
 |Micro-inverter Power|`micro_inverter_power`|W|166|a6|U_WORD|1|
-|Total Grid Power|`ac/total_grid_power`|W|169|a9|S_WORD|1|
+|Total Grid Power|`ac/total_grid_power`|W|169|a9|S_WORD|10|
 |Grid Voltage L1|`ac/l1/voltage`|V|150|96|U_WORD|0.1|
 |Grid Voltage L2|`ac/l2/voltage`|V|151|97|U_WORD|0.1|
 |Internal CT L1 Power|`ac/l1/ct/internal`|W|167|a7|S_WORD|1|
