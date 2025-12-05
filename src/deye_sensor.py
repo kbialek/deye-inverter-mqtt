@@ -517,6 +517,64 @@ class ComputedBooleanSensor(AbstractSensor):
         return []
 
 
+class DateTimeSensor(AbstractSensor):
+    """
+    Sensor for system date&time stored in three Modbus registers.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        reg_address: int,
+        mqtt_topic_suffix="",
+        print_format="{:.0f}",
+        groups=[],
+    ):
+        super().__init__(name, mqtt_topic_suffix, "", print_format, groups)
+        self.__reg0_address = reg_address
+        self.__reg1_address = reg_address + 1
+        self.__reg2_address = reg_address + 2
+
+    def read_value(self, registers: dict[int, bytearray]):
+
+        if self.__reg0_address in registers:
+            year = (int.from_bytes(registers[self.__reg0_address], "big", signed=False) >> 8) + 2000
+            month = int.from_bytes(registers[self.__reg0_address], "big", signed=False) & 0xFF
+        else:
+            return None
+
+        if self.__reg1_address in registers:
+            day = int.from_bytes(registers[self.__reg1_address], "big", signed=False) >> 8
+            hour = int.from_bytes(registers[self.__reg1_address], "big", signed=False) & 0xFF
+        else:
+            return None
+
+        if self.__reg2_address in registers:
+            minute = int.from_bytes(registers[self.__reg2_address], "big", signed=False) >> 8
+            second = int.from_bytes(registers[self.__reg2_address], "big", signed=False) & 0xFF
+        else:
+            return None
+
+        return datetime(year, month, day, hour, minute, second).timestamp()
+
+    def write_value(self, value: datetime) -> dict[int, bytearray]:
+
+        reg0_value = 256 * (value.year % 100) + value.month
+        reg1_value = 256 * value.day + value.hour
+        reg2_value = 256 * value.minute + value.second
+
+        return {
+            self.__reg0_address: [
+                reg0_value.to_bytes(2, "big", signed=False),
+                reg1_value.to_bytes(2, "big", signed=False),
+                reg2_value.to_bytes(2, "big", signed=False),
+            ]
+        }
+
+    def get_registers(self) -> list[int]:
+        return [self.__reg0_address, self.__reg1_address, self.__reg2_address]
+
+
 class SensorRegisterRange:
     """
     Declares a Modbus register range that must be read to provide values for sensors within a metrics group

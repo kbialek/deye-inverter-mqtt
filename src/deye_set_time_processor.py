@@ -21,6 +21,7 @@ from datetime import datetime
 from deye_events import DeyeEventList, DeyeEventProcessor
 from deye_modbus import DeyeModbus
 from deye_config import DeyeLoggerConfig
+from deye_sensor import Sensor, DateTimeSensor
 
 
 class DeyeSetTimeProcessor(DeyeEventProcessor):
@@ -28,11 +29,16 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
     Set logger time when the logger becomes available online.
     """
 
-    def __init__(self, logger_config: DeyeLoggerConfig, modbus: DeyeModbus):
+    def __init__(self, logger_config: DeyeLoggerConfig, interval: int, sensors: [Sensor], modbus: DeyeModbus):
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeSetTimeProcessor.__name__))
+        self.__interval = interval
         self.__modbus = modbus
         self.__last_status = False
         self.__last_update_ts = datetime.min
+        self.__sensors = []
+        for sensor in sensors:
+            if isinstance(sensor, DateTimeSensor):
+                self.__sensors.append(sensor)
 
     def get_id(self):
         return "set_time"
@@ -50,7 +56,7 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
             return
         now = datetime.now()
         delta = now - self.__last_update_ts
-        if delta.total_seconds() < 5 * 60:
+        if delta.total_seconds() < self.__interval:
             return
         if logger_status:
             self.__last_status = self.__set_time(now)
@@ -60,17 +66,33 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
 
     def __set_time(self, now) -> bool:
         self.__last_update_ts = now
-        write_status = self.__modbus.write_registers_uint(
-            22,
-            [
-                # year and month
-                256 * (now.year % 100) + now.month,
-                # day and hour
-                256 * now.day + now.hour,
-                # minute and seconds
-                256 * now.minute + now.second,
-            ],
-        )
+        write_status = False
+        if len(self.__sensors) == 1:
+            reg_addr, reg_value = self.__sensors[0].write_value(now).popitem()
+            write_status = self.__modbus.write_registers(reg_addr, reg_value)
+        else:
+            if len(self.__sensors) == 0:
+                self.__log.warning(
+                    "Couldn't determine the DateTimeSensor object. Using registers 22-24. "
+                    "If setting of the time fails, please ensure there's a DateTimeSensor defined for your inverter "
+                    "in the metric groups."
+                )
+                write_status = self.__modbus.write_registers_uint(
+                    22,
+                    [
+                        # year and month
+                        256 * (now.year % 100) + now.month,
+                        # day and hour
+                        256 * now.day + now.hour,
+                        # minute and seconds
+                        256 * now.minute + now.second,
+                    ],
+                )
+            else:
+                self.__log.warning(
+                    "More than one DateTimeSensor object defined. Time won't be updated. "
+                    "Please verify the configuration - DEYE_METRIC_GROUPS."
+                )
         if write_status:
             self.__log.info(f"Logger time set to {now}")
         else:

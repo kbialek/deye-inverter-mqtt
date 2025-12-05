@@ -22,6 +22,14 @@ from deye_sensor import (
     SensorRegisterRange,
     EnumValueSensor,
     ComputedBooleanSensor,
+    DateTimeSensor,
+)
+
+deye_sg01hp3_system_time_62 = DateTimeSensor(
+    "System time",
+    62,
+    mqtt_topic_suffix="settings/system_time",
+    groups=["deye_sg01hp3_systemtime"],
 )
 
 deye_sg01hp3_inverter_500 = EnumValueSensor(
@@ -1083,6 +1091,7 @@ deye_sg01hp3_generator_537 = SingleRegisterSensor(
 )
 
 deye_sg01hp3_sensors = [
+    deye_sg01hp3_system_time_62,
     deye_sg01hp3_inverter_500,
     deye_sg01hp3_inverter_552,
     deye_sg01hp3_solar_672,
@@ -1209,6 +1218,7 @@ deye_sg01hp3_sensors = [
 ]
 
 deye_sg01hp3_register_ranges = [
+    SensorRegisterRange(group="deye_sg01hp3_systemtime", first_reg_address=62, last_reg_address=64),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=500, last_reg_address=500),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=552, last_reg_address=552),
     SensorRegisterRange(group="deye_sg01hp3_ups", first_reg_address=514, last_reg_address=558),
