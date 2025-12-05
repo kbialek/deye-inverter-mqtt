@@ -100,7 +100,9 @@ docker-push-beta: test py-export-requirements
 
 METRIC_GROUPS = \
 	string \
+	deye_string_systemtime \
 	micro \
+	deye_micro_systemtime \
 	deye_sg04lp3 \
 	deye_sg04lp3_battery \
 	deye_sg04lp3_ups \
