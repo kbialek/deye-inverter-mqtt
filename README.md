@@ -21,6 +21,8 @@ When your inverter turns out to work well with an already exiting metrics group,
 
 **The list below is built basing on the reports from the users. Compatiblity is not guaranteed.**
 
+For LSE-3 Ethernet datalogger use `mbtcp` protocol
+
 | Inverter model                                                                                                  | Protocol | Metric groups                                                                                                                                                                                                                                                                                                                                                            |
 | --------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [Deye SUN-4/5/6/7/8/10/12K-G05-P](https://deye.com/product/sun-4-5-6-7-8-10-12k-g05-4-12kw-three-phase-2-mppt/) | tcp, at  | [string](docs/metric_group_string.md), [settings](docs/metric_group_settings.md), [deye_string_systemtime](docs/metric_group_deye_string_systemtime.md)                                                                                                                                                                                                                                                                                         |
