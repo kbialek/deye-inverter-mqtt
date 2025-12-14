@@ -40,7 +40,7 @@ class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
             return
         elif len(matching_sensors) > 1:
             self.__log.error(
-                "Too many active power regulation sensors not found. Check your metric groups configuration."
+                "Too many active power regulation sensors found. Check your metric groups configuration."
             )
             return
         self.__active_power_reg_sensor = matching_sensors[0]
