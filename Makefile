@@ -127,6 +127,7 @@ METRIC_GROUPS = \
 	deye_sg01hp3_bms \
 	deye_sg01hp3_timeofuse \
 	deye_sg01hp3_systemtime \
+	deye_sg01hp3_settings \
 	aggregated
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:

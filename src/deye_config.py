@@ -300,4 +300,6 @@ class DeyeConfig:
             active_processors.append("active_power_regulation")
         if DeyeEnv.boolean("DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR", False):
             active_processors.append("multi_inverter_data_aggregator")
+        if DeyeEnv.boolean("DEYE_FEATURE_SOLAR_SELL", False):
+            active_processors.append("solar_sell")
         return active_processors
