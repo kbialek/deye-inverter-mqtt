@@ -555,7 +555,12 @@ class DateTimeSensor(AbstractSensor):
         else:
             return None
 
-        return datetime(year, month, day, hour, minute, second).timestamp()
+        try:
+            retval = datetime(year, month, day, hour, minute, second).timestamp()
+        except ValueError:
+            retval = None
+
+        return retval
 
     def write_value(self, value: datetime) -> dict[int, bytearray]:
 
