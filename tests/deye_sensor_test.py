@@ -399,5 +399,27 @@ class DeyeSensorTest(unittest.TestCase):
         self.assertEqual(result1, now.timestamp())
         self.assertEqual(result2, {22: [reg0_value, reg1_value, reg2_value]})
 
+    def test_datetime_sensor_wrong_input(self):
+        # given
+        sut = DateTimeSensor(
+            "test",
+            22,
+            mqtt_topic_suffix="settings/system_time",
+            groups=["test"],
+        )
+
+        # and
+        registers = {
+            22: bytes([0x00]),
+            23: bytes([0x00]),
+            24: bytes([0x00])
+        }
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, None)
+
 if __name__ == "__main__":
     unittest.main()
