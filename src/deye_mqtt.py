@@ -65,7 +65,8 @@ class DeyeMqttClient:
         self.__command_handlers = {}
 
     def subscribe(self, topic: str, callback):
-        self.connect()
+        if not self.__mqtt_client.is_connected():
+            self.connect()
         self.__log.info("Subscribing to topic: %s", topic)
         result, mid = self.__mqtt_client.subscribe(topic, qos=1)
         if result != paho.MQTT_ERR_SUCCESS:
@@ -73,6 +74,8 @@ class DeyeMqttClient:
             return
         self.__mqtt_client.message_callback_add(topic, callback)
 
+
+    
     def connect(self) -> bool:
         if self.__mqtt_client.is_connected():
             return True
@@ -96,8 +99,8 @@ class DeyeMqttClient:
         self.__resubscribe_command_handlers()
 
     def __resubscribe_command_handlers(self):
-        for mqtt_topic in self.__command_handlers:
-            handler_method = self.__command_handlers[mqtt_topic]
+        # Iterate over snapshot to avoid "dictionary changed size during iteration"
+        for mqtt_topic, handler_method in list(self.__command_handlers.items()):
             self.subscribe(mqtt_topic, handler_method)
 
     def disconnect(self):
