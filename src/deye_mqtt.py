@@ -74,8 +74,6 @@ class DeyeMqttClient:
             return
         self.__mqtt_client.message_callback_add(topic, callback)
 
-
-    
     def connect(self) -> bool:
         if self.__mqtt_client.is_connected():
             return True
