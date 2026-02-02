@@ -385,11 +385,7 @@ class DeyeSensorTest(unittest.TestCase):
         reg0_value = (256 * (now.year % 100) + now.month).to_bytes(2, "big", signed=False)
         reg1_value = (256 * now.day + now.hour).to_bytes(2, "big", signed=False)
         reg2_value = (256 * now.minute + now.second).to_bytes(2, "big", signed=False)
-        registers = {
-            22: reg0_value,
-            23: reg1_value,
-            24: reg2_value
-        }
+        registers = {22: reg0_value, 23: reg1_value, 24: reg2_value}
 
         # when
         result1 = sut.read_value(registers)
@@ -409,17 +405,14 @@ class DeyeSensorTest(unittest.TestCase):
         )
 
         # and
-        registers = {
-            22: bytes([0x00]),
-            23: bytes([0x00]),
-            24: bytes([0x00])
-        }
+        registers = {22: bytes([0x00]), 23: bytes([0x00]), 24: bytes([0x00])}
 
         # when
         result = sut.read_value(registers)
 
         # then
         self.assertEqual(result, None)
+
 
 if __name__ == "__main__":
     unittest.main()

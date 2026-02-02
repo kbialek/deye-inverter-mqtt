@@ -54,9 +54,9 @@ class TestDeyeSolarSellEventProcessor(unittest.TestCase):
     @patch("deye_mqtt.DeyeMqttClient")
     @patch("deye_modbus.DeyeModbus")
     def test_init_with_no_sensor(
-            self,
-            mqtt_client_mock: DeyeMqttClient,
-            modbus_mock: DeyeModbus,
+        self,
+        mqtt_client_mock: DeyeMqttClient,
+        modbus_mock: DeyeModbus,
     ):
         # given
         sensors = [self.sensor2]
@@ -71,9 +71,9 @@ class TestDeyeSolarSellEventProcessor(unittest.TestCase):
     @patch("deye_mqtt.DeyeMqttClient")
     @patch("deye_modbus.DeyeModbus")
     def test_init_with_required_sensor(
-            self,
-            mqtt_client_mock: DeyeMqttClient,
-            modbus_mock: DeyeModbus,
+        self,
+        mqtt_client_mock: DeyeMqttClient,
+        modbus_mock: DeyeModbus,
     ):
         # given
         sensors = [self.sensor1]
@@ -99,7 +99,7 @@ class TestDeyeSolarSellEventProcessor(unittest.TestCase):
 
         # and
         msg = MQTTMessage()
-        msg.payload = b'1'
+        msg.payload = b"1"
 
         # when
         processor.handle_command(None, None, msg)
@@ -121,7 +121,7 @@ class TestDeyeSolarSellEventProcessor(unittest.TestCase):
 
         # and
         msg = MQTTMessage()
-        msg.payload = b'0'
+        msg.payload = b"0"
 
         # when
         processor.handle_command(None, None, msg)
@@ -144,9 +144,9 @@ class TestDeyeSolarSellEventProcessor(unittest.TestCase):
         # and
         msg = MQTTMessage()
 
-        for msg_payload in [b'', b'-5', b'1.2', b'100', b'test', b'Enable', b'X']:
+        for msg_payload in [b"", b"-5", b"1.2", b"100", b"test", b"Enable", b"X"]:
             msg.payload = msg_payload
-            with patch.object(processor, '_DeyeSolarSellEventProcessor__log') as mock_log:
+            with patch.object(processor, "_DeyeSolarSellEventProcessor__log") as mock_log:
                 processor.handle_command(None, None, msg)
             modbus_mock.write_register_uint.assert_not_called()
             mock_log.error.assert_called()
