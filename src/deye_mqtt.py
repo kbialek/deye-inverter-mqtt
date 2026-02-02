@@ -65,8 +65,7 @@ class DeyeMqttClient:
         self.__command_handlers = {}
 
     def subscribe(self, topic: str, callback):
-        if not self.__mqtt_client.is_connected():
-            self.connect()
+        self.connect()
         self.__log.info("Subscribing to topic: %s", topic)
         result, mid = self.__mqtt_client.subscribe(topic, qos=1)
         if result != paho.MQTT_ERR_SUCCESS:
