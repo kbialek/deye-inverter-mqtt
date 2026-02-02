@@ -26,6 +26,7 @@ import deye_sensors_deye_sg01hp3
 datetime_sensor_1 = deye_sensors_deye_sg01hp3.deye_sg01hp3_system_time_62
 datetime_sensor_2 = deye_sensors_deye_sg01hp3.deye_sg01hp3_system_time_62
 
+
 class DeyeSetTimeProcessorTest(unittest.TestCase):
     def setUp(self):
         self.config = DeyeLoggerConfig(1234567890, "192.168.1.1", 8899)
@@ -37,16 +38,16 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         processor = DeyeSetTimeProcessor(self.config, 300, sensors, modbus)
 
         # when
-        with patch.object(processor, '_DeyeSetTimeProcessor__log') as mock_log:
+        with patch.object(processor, "_DeyeSetTimeProcessor__log") as mock_log:
             processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
         modbus.write_registers_uint.assert_any_call(22, unittest.mock.ANY)
-        mock_log.warning.assert_called_with("Couldn't determine the DateTimeSensor object. Using registers 22-24. "
-                                            "If setting of the time fails, please ensure there's a DateTimeSensor "
-                                            "defined for your inverter in the metric groups.")
-
-
+        mock_log.warning.assert_called_with(
+            "Couldn't determine the DateTimeSensor object. Using registers 22-24. "
+            "If setting of the time fails, please ensure there's a DateTimeSensor "
+            "defined for your inverter in the metric groups."
+        )
 
         # and
         self.assertTrue(processor.last_status)
@@ -61,7 +62,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         modbus.write_registers_uint.return_value = False
 
         # when
-        with patch.object(processor, '_DeyeSetTimeProcessor__log') as mock_log:
+        with patch.object(processor, "_DeyeSetTimeProcessor__log") as mock_log:
             processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
@@ -97,7 +98,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         modbus.write_registers.return_value = False
 
         # when
-        with patch.object(processor, '_DeyeSetTimeProcessor__log') as mock_log:
+        with patch.object(processor, "_DeyeSetTimeProcessor__log") as mock_log:
             processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
@@ -115,7 +116,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         processor = DeyeSetTimeProcessor(self.config, 300, sensors, modbus)
 
         # when
-        with patch.object(processor, '_DeyeSetTimeProcessor__log') as mock_log:
+        with patch.object(processor, "_DeyeSetTimeProcessor__log") as mock_log:
             processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
