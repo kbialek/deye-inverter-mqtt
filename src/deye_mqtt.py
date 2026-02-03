@@ -96,8 +96,8 @@ class DeyeMqttClient:
         self.__resubscribe_command_handlers()
 
     def __resubscribe_command_handlers(self):
-        for mqtt_topic in self.__command_handlers:
-            handler_method = self.__command_handlers[mqtt_topic]
+        # Iterate over snapshot to avoid "dictionary changed size during iteration"
+        for mqtt_topic, handler_method in list(self.__command_handlers.items()):
             self.subscribe(mqtt_topic, handler_method)
 
     def disconnect(self):
