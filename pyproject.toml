@@ -1,13 +1,13 @@
 [project]
 name = "deye-inverter-mqtt"
-version = "2025.08.1"
+version = "2026.01.1"
 description = "Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT."
 authors = [
     { name = "Krzysztof Białek", email = "kbialek@users.noreply.github.com" }
 ]
 license = { text = "Apache License 2" }
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.13.0"
 
 dependencies = [
     "libscrc==1.8.1",

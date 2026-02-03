@@ -16,6 +16,7 @@
 # under the License.
 
 import unittest
+from datetime import datetime
 from deye_sensor import (
     Sensor,
     AbstractSensor,
@@ -27,6 +28,7 @@ from deye_sensor import (
     SensorRegisterRange,
     SensorRegisterRanges,
     ComputedBooleanSensor,
+    DateTimeSensor,
 )
 
 
@@ -366,6 +368,50 @@ class DeyeSensorTest(unittest.TestCase):
         self.assertEqual(result6, False)
         self.assertEqual(result7, False)
         self.assertEqual(result8, True)
+
+    def test_datetime_sensor(self):
+        # given
+        sut = DateTimeSensor(
+            "test",
+            22,
+            mqtt_topic_suffix="settings/system_time",
+            groups=["test"],
+        )
+
+        # and
+        now = datetime.now().replace(microsecond=0)
+
+        # and
+        reg0_value = (256 * (now.year % 100) + now.month).to_bytes(2, "big", signed=False)
+        reg1_value = (256 * now.day + now.hour).to_bytes(2, "big", signed=False)
+        reg2_value = (256 * now.minute + now.second).to_bytes(2, "big", signed=False)
+        registers = {22: reg0_value, 23: reg1_value, 24: reg2_value}
+
+        # when
+        result1 = sut.read_value(registers)
+        result2 = sut.write_value(now)
+
+        # then
+        self.assertEqual(result1, now.timestamp())
+        self.assertEqual(result2, {22: [reg0_value, reg1_value, reg2_value]})
+
+    def test_datetime_sensor_wrong_input(self):
+        # given
+        sut = DateTimeSensor(
+            "test",
+            22,
+            mqtt_topic_suffix="settings/system_time",
+            groups=["test"],
+        )
+
+        # and
+        registers = {22: bytes([0x00]), 23: bytes([0x00]), 24: bytes([0x00])}
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        self.assertEqual(result, None)
 
 
 if __name__ == "__main__":

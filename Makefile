@@ -2,7 +2,8 @@ GITHUB_USER = kbialek
 VERSION = $(shell grep "^version" pyproject.toml | head -1 | sed 's/version.=.//' | tr -d '"')
 
 ARCHS = linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64/v8
-DOCKER_BASE_IMAGE_TAG = 3.10.13-alpine3.18
+DOCKER_BASE_LINUX_VERSION=alpine3.22
+DOCKER_BASE_IMAGE_TAG = 3.13-${DOCKER_BASE_LINUX_VERSION}
 
 null =
 space = $(null) $(null)
@@ -99,17 +100,21 @@ docker-push-beta: test py-export-requirements
 
 METRIC_GROUPS = \
 	string \
+	deye_string_systemtime \
 	micro \
+	deye_micro_systemtime \
 	deye_sg04lp3 \
 	deye_sg04lp3_battery \
 	deye_sg04lp3_ups \
 	deye_sg04lp3_timeofuse \
 	deye_sg04lp3_generator \
+	deye_sg04lp3_systemtime \
 	igen_dtsd422 \
 	deye_hybrid \
 	deye_hybrid_battery \
 	deye_hybrid_bms \
 	deye_hybrid_timeofuse \
+	deye_sg03lp1 \
 	deye_sg02lp1 \
 	deye_sg02lp1_battery \
 	deye_sg02lp1_bms \
@@ -121,6 +126,8 @@ METRIC_GROUPS = \
 	deye_sg01hp3_ups \
 	deye_sg01hp3_bms \
 	deye_sg01hp3_timeofuse \
+	deye_sg01hp3_systemtime \
+	deye_sg01hp3_settings \
 	aggregated
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:
@@ -135,8 +142,12 @@ git-install-hooks:
 git-uninstall-hooks:
 	@rm .git/hooks/pre-commit
 
+py-cleanup:
+	@rm -rf .venv/
+	@rm -f uv.lock
+
 py-setup: git-install-hooks
-	uv python install
+	uv python install 3.13
 	uv venv
 
 py-install-dependencies:

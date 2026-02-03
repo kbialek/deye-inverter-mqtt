@@ -21,6 +21,7 @@ from deye_sensor import (
     DoubleRegisterSensor,
     ComputedSumSensor,
     SensorRegisterRange,
+    DateTimeSensor,
 )
 
 from deye_sensors_deye_sg04lp3 import deye_sg04lp3_sensors, deye_sg04lp3_register_ranges
@@ -28,9 +29,17 @@ from deye_sensors_deye_sg04lp3_computed import deye_sg04lp3_computed_sensors
 from deye_sensors_deye_sg01hp3 import deye_sg01hp3_sensors, deye_sg01hp3_register_ranges
 from deye_sensors_igen_dtsd422 import igen_dtsd422_sensors, igen_dtsd422_register_ranges
 from deye_sensors_deye_hybrid import deye_hybrid_sensors, deye_hybrid_register_ranges
+from deye_sensors_deye_sg03lp1 import deye_sg03lp1_sensors, deye_sg03lp1_register_ranges
 from deye_sensors_deye_sg02lp1 import deye_sg02lp1_sensors, deye_sg02lp1_register_ranges
 from deye_sensors_settings import deye_settings_sensors, deye_settings_register_ranges
 from deye_sensors_aggregated import aggregated_sensor_list
+
+deye_system_time_22 = DateTimeSensor(
+    "System time",
+    22,
+    mqtt_topic_suffix="settings/system_time",
+    groups=["deye_string_systemtime", "deye_micro_systemtime"],
+)
 
 # AC Phase 1
 phase1_voltage_sensor = SingleRegisterSensor(
@@ -262,6 +271,7 @@ igbt_temp_sensor = SingleRegisterSensor(
 
 sensor_list = (
     [
+        deye_system_time_22,
         production_today_sensor,
         production_total_sensor,
         phase1_voltage_sensor,
@@ -321,6 +331,7 @@ sensor_list = (
     + igen_dtsd422_sensors
     + deye_hybrid_sensors
     + deye_sg02lp1_sensors
+    + deye_sg03lp1_sensors
     + deye_settings_sensors
     + deye_sg01hp3_sensors
     + aggregated_sensor_list
@@ -328,6 +339,8 @@ sensor_list = (
 
 sensor_register_ranges = (
     [
+        SensorRegisterRange(group="deye_string_systemtime", first_reg_address=0x16, last_reg_address=0x18),
+        SensorRegisterRange(group="deye_micro_systemtime", first_reg_address=0x16, last_reg_address=0x18),
         SensorRegisterRange(group="string", first_reg_address=0x3C, last_reg_address=0x74),
         SensorRegisterRange(group="string", first_reg_address=0xC6, last_reg_address=0xD2),
         SensorRegisterRange(group="micro", first_reg_address=0x3C, last_reg_address=0x74),
@@ -336,6 +349,7 @@ sensor_register_ranges = (
     + igen_dtsd422_register_ranges
     + deye_hybrid_register_ranges
     + deye_sg02lp1_register_ranges
+    + deye_sg03lp1_register_ranges
     + deye_settings_register_ranges
     + deye_sg01hp3_register_ranges
 )

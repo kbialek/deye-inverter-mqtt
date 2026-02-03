@@ -25,6 +25,14 @@ from deye_sensor import (
     DoubleRegisterSensor,
     ComputedSumSensor,
     SensorRegisterRange,
+    DateTimeSensor,
+)
+
+deye_sg04lp3_system_time_62 = DateTimeSensor(
+    "System time",
+    62,
+    mqtt_topic_suffix="settings/system_time",
+    groups=["deye_sg04lp3_systemtime"],
 )
 
 deye_sg04lp3_solar_672 = SingleRegisterSensor(
@@ -763,6 +771,7 @@ deye_sg04lp3_generator_536 = SingleRegisterSensor(
 )
 
 deye_sg04lp3_sensors = [
+    deye_sg04lp3_system_time_62,
     deye_sg04lp3_solar_672,
     deye_sg04lp3_solar_673,
     deye_sg04lp3_solar_676,
@@ -853,6 +862,7 @@ deye_sg04lp3_sensors = [
 ]
 
 deye_sg04lp3_register_ranges = [
+    SensorRegisterRange(group="deye_sg04lp3_systemtime", first_reg_address=62, last_reg_address=64),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_battery", first_reg_address=514, last_reg_address=558),
