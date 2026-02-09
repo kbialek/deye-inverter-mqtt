@@ -34,12 +34,9 @@ class DeyeCli:
             logger_index = int(args[0]) - 1
             logger_config = self.__config.logger_configs[logger_index]
             args = args[1:]
-
         self.__log.info(f"Connecting to logger at IP {logger_config.ip_address}")
-
         connector = DeyeConnectorFactory().create_connector(logger_config)
-        modbus = DeyeModbus(connector)
-
+        modbus = DeyeModbus(connector, modbus_id=logger_config.modbus_id)
         command = args[0]
         if command == "r":
             self.read_register(modbus, args[1:])
@@ -82,3 +79,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    

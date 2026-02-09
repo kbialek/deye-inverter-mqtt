@@ -42,7 +42,7 @@ class DeyeModbusTcp(DeyeConnector):
         mbap_tx_id = bytearray.fromhex("{:04x}".format(self.__tx_id))
         mbap_protocol_id = bytearray.fromhex("0000")
         mbap_payload_length = bytearray.fromhex("{:04x}".format(1 + len(payload)))
-        mbap_unit_id = bytearray.fromhex("01")  # hardcoded unitId
+        mbap_unit_id = bytearray.fromhex("{:02x}".format(self.logger_config.modbus_id)) # modbus ID
 
         return mbap_tx_id + mbap_protocol_id + mbap_payload_length + mbap_unit_id + payload
 

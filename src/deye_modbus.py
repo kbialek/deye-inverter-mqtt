@@ -27,9 +27,10 @@ class DeyeModbus:
     Inspired by https://github.com/jlopez77/DeyeInverter
     """
 
-    def __init__(self, connector: DeyeConnector):
+    def __init__(self, connector: DeyeConnector, modbus_id: int = 1):
         self.__log = logging.getLogger(DeyeModbus.__name__)
         self.connector = connector
+        self.modbus_id = modbus_id
 
     def read_registers(self, first_reg: int, last_reg: int) -> dict[int, bytearray]:
         """Reads multiple modbus holding registers
@@ -111,7 +112,7 @@ class DeyeModbus:
 
     def __build_modbus_read_holding_registers_request_frame(self, first_reg: int, last_reg: int) -> bytearray:
         reg_count = last_reg - first_reg + 1
-        return bytearray.fromhex("0103{:04x}{:04x}".format(first_reg, reg_count))
+        return bytearray.fromhex("{:02x}03{:04x}{:04x}".format(self.modbus_id, first_reg, reg_count))
 
     def __parse_modbus_read_holding_registers_response(
         self, frame: bytes, first_reg: int, last_reg: int
@@ -140,7 +141,8 @@ class DeyeModbus:
     def __build_modbus_write_holding_register_request_frame(
         self, reg_address: int, reg_values: list[bytearray]
     ) -> bytearray:
-        result = bytearray.fromhex("0110{:04x}{:04x}{:02x}".format(reg_address, len(reg_values), len(reg_values) * 2))
+        result = bytearray.fromhex("{:02x}10{:04x}{:04x}{:02x}".format(
+            self.modbus_id, reg_address, len(reg_values), len(reg_values) * 2))
         for v in reg_values:
             self.__log.debug(f"Extending request frame with {v.hex()}")
             result.extend(v)
