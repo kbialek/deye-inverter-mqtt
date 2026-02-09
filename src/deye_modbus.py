@@ -1,3 +1,4 @@
+
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -23,13 +24,21 @@ from deye_connector import DeyeConnector
 
 
 class DeyeModbus:
-    """Simplified Modbus over TCP implementation that works with Deye Solar inverter.
+    """Simplified Modbus implementation that works with Deye Solar inverter.
     Inspired by https://github.com/jlopez77/DeyeInverter
+
+    Notes:
+    - modbus_id=0 is commonly "broadcast" in RTU (often no response).
+    - For Modbus/TCP some gateways accept unit-id 0.
     """
 
     def __init__(self, connector: DeyeConnector, modbus_id: int = 1):
         self.__log = logging.getLogger(DeyeModbus.__name__)
         self.connector = connector
+
+        # Allow 0..247 (0 may behave as broadcast depending on device/transport)
+        if modbus_id < 0 or modbus_id > 247:
+            raise ValueError(f"Invalid modbus_id {modbus_id}. Must be between 0 and 247")
         self.modbus_id = modbus_id
 
     def read_registers(self, first_reg: int, last_reg: int) -> dict[int, bytearray]:
@@ -123,6 +132,7 @@ class DeyeModbus:
         if len(frame) < expected_frame_data_len + 2:  # 2 bytes for crc
             self.__log.error("Modbus frame is too short")
             return registers
+
         actual_crc = int.from_bytes(frame[expected_frame_data_len : expected_frame_data_len + 2], "little")
         expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
         if actual_crc != expected_crc:
@@ -130,6 +140,7 @@ class DeyeModbus:
                 "Modbus frame crc is not valid. Expected {:04x}, got {:04x}".format(expected_crc, actual_crc)
             )
             return registers
+
         a = 0
         while a < reg_count:
             p1 = 3 + (a * 2)
@@ -141,8 +152,9 @@ class DeyeModbus:
     def __build_modbus_write_holding_register_request_frame(
         self, reg_address: int, reg_values: list[bytearray]
     ) -> bytearray:
-        result = bytearray.fromhex("{:02x}10{:04x}{:04x}{:02x}".format(
-            self.modbus_id, reg_address, len(reg_values), len(reg_values) * 2))
+        result = bytearray.fromhex(
+            "{:02x}10{:04x}{:04x}{:02x}".format(self.modbus_id, reg_address, len(reg_values), len(reg_values) * 2)
+        )
         for v in reg_values:
             self.__log.debug(f"Extending request frame with {v.hex()}")
             result.extend(v)
@@ -158,6 +170,7 @@ class DeyeModbus:
                 f"Wrong response frame length. Expected at least {expected_frame_len} bytes, got {len(frame)}"
             )
             return False
+
         actual_crc = int.from_bytes(frame[expected_frame_data_len : expected_frame_data_len + 2], "little")
         expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
         if actual_crc != expected_crc:
@@ -165,6 +178,7 @@ class DeyeModbus:
                 "Modbus frame crc is not valid. Expected {:04x}, got {:04x}".format(expected_crc, actual_crc)
             )
             return False
+
         returned_address = int.from_bytes(frame[2:4], "big")
         returned_count = int.from_bytes(frame[4:6], "big")
         if returned_address != reg_address:

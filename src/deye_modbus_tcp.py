@@ -1,3 +1,4 @@
+
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -27,7 +28,7 @@ class DeyeModbusTcp(DeyeConnector):
 
     def __init__(self, logger_config: DeyeLoggerConfig, connector: DeyeConnector):
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeModbusTcp.__name__))
-        self.loggger_config = logger_config
+        self.logger_config = logger_config
         self.connector = connector
         self.__tx_id = 0
 
@@ -42,11 +43,11 @@ class DeyeModbusTcp(DeyeConnector):
         mbap_tx_id = bytearray.fromhex("{:04x}".format(self.__tx_id))
         mbap_protocol_id = bytearray.fromhex("0000")
         mbap_payload_length = bytearray.fromhex("{:04x}".format(1 + len(payload)))
-        mbap_unit_id = bytearray.fromhex("{:02x}".format(self.logger_config.modbus_id)) # modbus ID
+        mbap_unit_id = bytes([modbus_frame[0]])  # <-- derive from request (supports 0 as well)
 
         return mbap_tx_id + mbap_protocol_id + mbap_payload_length + mbap_unit_id + payload
 
-    def __extract_modbus_response_frame(self, mb_fn_code: int, frame: bytes | None) -> bytes | None:
+    def __extract_modbus_response_frame(self, mb_unit_id: int, frame: bytes | None) -> bytes | None:
         if not frame:
             # Error was already logged in `send_request()` function
             return None
@@ -54,8 +55,7 @@ class DeyeModbusTcp(DeyeConnector):
             self.__log.error("Response frame is too short")
             return None
 
-        data_frame = bytearray.fromhex("{:02x}".format(mb_fn_code)) + frame[7:]
+        data_frame = bytes([mb_unit_id]) + frame[7:]
         crc = bytearray.fromhex("{:04x}".format(libscrc.modbus(data_frame)))
         crc.reverse()
-
-        return data_frame + crc
+        return bytearray(data_frame) + crc

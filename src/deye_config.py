@@ -161,9 +161,8 @@ class DeyeMqttConfig:
 class DeyeLoggerConfig:
     """
     Logger is a device that connects the Solar Inverter with the internet.
-
-    Logger is identified by a unique serial number. It is required when communicating
-    with the device.
+    Logger is identified by a unique serial number.
+    It is required when communicating with the device.
     """
 
     def __init__(
@@ -191,6 +190,9 @@ class DeyeLoggerConfig:
             self.port = port
         self.index = index
         self.max_register_range_length = max_register_range_length
+        # Validate Modbus ID range (0-247 are valid, 0 is broadcast)
+        if modbus_id < 0 or modbus_id > 247:
+            raise Exception(f"Invalid Modbus ID {modbus_id}. Must be between 0 and 247")
         self.modbus_id = modbus_id
 
     def logger_adapter(self, logger: logging.Logger):
