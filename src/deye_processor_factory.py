@@ -29,6 +29,7 @@ from deye_solar_sell import DeyeSolarSellEventProcessor
 from deye_sensor import Sensor
 from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_multi_inverter_data_aggregator import DeyeMultiInverterDataAggregator
+from src.deye_set_workmode_processor import DeyeWorkmodeEventProcessor
 
 
 class DeyeProcessorFactory:
@@ -66,6 +67,9 @@ class DeyeProcessorFactory:
         )
         self.__append_processor(
             processors, DeyeSolarSellEventProcessor(logger_config, self.__mqtt_client, sensors, modbus)
+        )
+        self.__append_processor(
+            processors, DeyeWorkmodeEventProcessor(logger_config, self.__mqtt_client, sensors, modbus)
         )
         return processors
 
