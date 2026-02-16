@@ -17,6 +17,8 @@
 
 import sys
 import logging
+import os
+from dotenv import load_dotenv
 
 from deye_cli import main as cli_main
 from deye_daemon import main as daemon_main
@@ -41,8 +43,15 @@ def setupLogging(config: DeyeConfig):
     )
 
 
+def ensure_env():
+    # for debugging under Zed, which does not support loading env vars from file
+    if "DEYE_LOGGER_SERIAL_NUMBER" not in os.environ:
+        load_dotenv("config.env", override=False)
+
+
 def main():
     try:
+        ensure_env()
         setupLogging(DeyeConfig.from_env())
     except Exception as e:
         print(f"Error setting up logging: {e}", file=sys.stderr)

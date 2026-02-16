@@ -1,0 +1,20 @@
+// Project-local debug tasks
+//
+// For more documentation on how to configure debug tasks,
+// see: https://zed.dev/docs/debugger
+[
+  {
+    "label": "Main docker entrypoint",
+    "adapter": "Debugpy",
+    "program": "src/deye_docker_entrypoint.py",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "request": "launch",
+  },
+  {
+    "label": "Python Active File",
+    "adapter": "Debugpy",
+    "program": "$ZED_FILE",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "request": "launch",
+  },
+]
