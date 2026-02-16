@@ -770,6 +770,17 @@ deye_sg04lp3_generator_536 = SingleRegisterSensor(
     groups=["deye_sg04lp3_generator"],
 )
 
+deye_sg04lp3_inverter_145 = SingleRegisterSensor(
+    "Solar sell enabled",
+    145,
+    1,
+    mqtt_topic_suffix="settings/solar_sell",
+    unit="",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg04lp3"],
+)
+
 deye_sg04lp3_sensors = [
     deye_sg04lp3_system_time_62,
     deye_sg04lp3_solar_672,
@@ -820,6 +831,7 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_inverter_635,
     deye_sg04lp3_inverter_540,
     deye_sg04lp3_inverter_541,
+    deye_sg04lp3_inverter_145,
     deye_sg04lp3_time_of_use_146,
     deye_sg04lp3_time_of_use_148,
     deye_sg04lp3_time_of_use_149,
@@ -871,6 +883,7 @@ deye_sg04lp3_register_ranges = [
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=598, last_reg_address=636),
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=644, last_reg_address=653),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=672, last_reg_address=679),
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=145, last_reg_address=145),
     SensorRegisterRange(group="deye_sg04lp3_timeofuse", first_reg_address=146, last_reg_address=177),
     SensorRegisterRange(group="deye_sg04lp3_generator", first_reg_address=661, last_reg_address=667),
 ]
