@@ -789,7 +789,62 @@ deye_sg04lp3_inverter_145 = SingleRegisterSensor(
     145,
     1,
     mqtt_topic_suffix="settings/solar_sell",
-    unit="",
+    unit="Y/N",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg04lp3"],
+)
+
+deye_sg04lp3_inverter_130 = SingleRegisterSensor(
+    "Grid Charge enabled",
+    130,
+    1,
+    mqtt_topic_suffix="settings/battery/grid_charge",
+    unit="Y/N",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg04lp3"],
+)
+
+deye_sg04lp3_inverter_108 = SingleRegisterSensor(
+    "Maximum battery charge current",
+    108,
+    1,
+    mqtt_topic_suffix="settings/battery/maximum_charge_current",
+    unit="A",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg04lp3"],
+)
+
+deye_sg04lp3_inverter_109 = SingleRegisterSensor(
+    "Maximum battery discharge current",
+    109,
+    1,
+    mqtt_topic_suffix="settings/battery/maximum_discharge_current",
+    unit="A",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg04lp3"],
+)
+
+deye_sg04lp3_inverter_128 = SingleRegisterSensor(
+    "Maximum battery_grid charge current",
+    128,
+    1,
+    mqtt_topic_suffix="settings/battery/maximum_grid_charge_current",
+    unit="A",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg04lp3"],
+)
+
+deye_sg04lp3_inverter_143 = SingleRegisterSensor(
+    "Max Solar Sell Power",
+    143,
+    1,
+    mqtt_topic_suffix="settings/solar_sell_max_power",
+    unit="W",
     print_format="{:.0f}",
     signed=False,
     groups=["deye_sg04lp3"],
@@ -845,8 +900,13 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_inverter_635,
     deye_sg04lp3_inverter_540,
     deye_sg04lp3_inverter_541,
-    deye_sg04lp3_inverter_145,
+    deye_sg04lp3_inverter_108,
+    deye_sg04lp3_inverter_109,
+    deye_sg04lp3_inverter_128,
+    deye_sg04lp3_inverter_130,
     deye_sg04lp3_inverter_142,
+    deye_sg04lp3_inverter_143,
+    deye_sg04lp3_inverter_145,
     deye_sg04lp3_time_of_use_146,
     deye_sg04lp3_time_of_use_148,
     deye_sg04lp3_time_of_use_149,
@@ -890,6 +950,12 @@ deye_sg04lp3_sensors = [
 
 deye_sg04lp3_register_ranges = [
     SensorRegisterRange(group="deye_sg04lp3_systemtime", first_reg_address=62, last_reg_address=64),
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=108, last_reg_address=109),
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=128, last_reg_address=128),
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=130, last_reg_address=130),
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=142, last_reg_address=143),
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=145, last_reg_address=145),
+    SensorRegisterRange(group="deye_sg04lp3_timeofuse", first_reg_address=146, last_reg_address=177),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_battery", first_reg_address=514, last_reg_address=558),
@@ -898,8 +964,5 @@ deye_sg04lp3_register_ranges = [
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=598, last_reg_address=636),
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=644, last_reg_address=653),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=672, last_reg_address=679),
-    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=142, last_reg_address=142),
-    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=145, last_reg_address=145),
-    SensorRegisterRange(group="deye_sg04lp3_timeofuse", first_reg_address=146, last_reg_address=177),
     SensorRegisterRange(group="deye_sg04lp3_generator", first_reg_address=661, last_reg_address=667),
 ]
