@@ -770,6 +770,19 @@ deye_sg04lp3_generator_536 = SingleRegisterSensor(
     groups=["deye_sg04lp3_generator"],
 )
 
+# #######  Settings for inverter params ##########
+#
+deye_sg04lp3_inverter_145 = SingleRegisterSensor(
+    "Solar sell enabled",
+    145,
+    1,
+    mqtt_topic_suffix="settings/solar_sell",
+    unit="",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg04lp3_settings"],
+)
+
 deye_sg04lp3_inverter_142 = SingleRegisterSensor(
     "Work Mode",
     142,
@@ -778,32 +791,21 @@ deye_sg04lp3_inverter_142 = SingleRegisterSensor(
     unit="",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg04lp3"],
+    groups=["deye_sg04lp3_settings"],
 )
 """ Selling first: 0
     Zero export to load: 1
     Zero export to CT: 2"""
-
-deye_sg04lp3_inverter_145 = SingleRegisterSensor(
-    "Solar sell enabled",
-    145,
-    1,
-    mqtt_topic_suffix="settings/solar_sell",
-    unit="Y/N",
-    print_format="{:.0f}",
-    signed=False,
-    groups=["deye_sg04lp3"],
-)
 
 deye_sg04lp3_inverter_130 = SingleRegisterSensor(
     "Grid Charge enabled",
     130,
     1,
     mqtt_topic_suffix="settings/battery/grid_charge",
-    unit="Y/N",
+    unit="",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg04lp3"],
+    groups=["deye_sg04lp3_settings"],
 )
 
 deye_sg04lp3_inverter_108 = SingleRegisterSensor(
@@ -814,7 +816,7 @@ deye_sg04lp3_inverter_108 = SingleRegisterSensor(
     unit="A",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg04lp3"],
+    groups=["deye_sg04lp3_settings"],
 )
 
 deye_sg04lp3_inverter_109 = SingleRegisterSensor(
@@ -825,7 +827,7 @@ deye_sg04lp3_inverter_109 = SingleRegisterSensor(
     unit="A",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg04lp3"],
+    groups=["deye_sg04lp3_settings"],
 )
 
 deye_sg04lp3_inverter_128 = SingleRegisterSensor(
@@ -836,7 +838,7 @@ deye_sg04lp3_inverter_128 = SingleRegisterSensor(
     unit="A",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg04lp3"],
+    groups=["deye_sg04lp3_settings"],
 )
 
 deye_sg04lp3_inverter_143 = SingleRegisterSensor(
@@ -847,7 +849,7 @@ deye_sg04lp3_inverter_143 = SingleRegisterSensor(
     unit="W",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg04lp3"],
+    groups=["deye_sg04lp3_settings"],
 )
 
 deye_sg04lp3_sensors = [

@@ -68,7 +68,7 @@ class DeyeWorkmodeEventProcessor(DeyeEventProcessor):
         except Exception as e:
             self.__log.error(f"Couldn't decode Change Mode value: {msg.payload}, {e}")
             return
-        if workmode_value not in (0, 1):
+        if workmode_value not in (0, 1, 2):
             self.__log.error(f"Invalid value for Change Mode setting: {workmode_value}")
             return
         self.__log.debug(f"Setting Change Mode to {workmode_value}")

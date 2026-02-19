@@ -44,7 +44,8 @@ def setupLogging(config: DeyeConfig):
 
 
 def ensure_env():
-    # for debugging under Zed, which does not support loading env vars from file
+    # to support env vars direct load from .env file, usable if passing through OS env. varaibles is not possible
+    # does not override vars already loaded from env
     if "DEYE_LOGGER_SERIAL_NUMBER" not in os.environ:
         load_dotenv("config.env", override=False)
 

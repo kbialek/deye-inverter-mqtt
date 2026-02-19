@@ -29,8 +29,8 @@ from deye_solar_sell import DeyeSolarSellEventProcessor
 from deye_sensor import Sensor
 from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_multi_inverter_data_aggregator import DeyeMultiInverterDataAggregator
-from src.deye_set_batterysettings_processor import DeyeBatterySettingsEventProcessor
-from src.deye_set_workmode_processor import DeyeWorkmodeEventProcessor
+from deye_set_batterysettings_processor import DeyeBatterySettingsEventProcessor
+from deye_set_workmode_processor import DeyeWorkmodeEventProcessor
 
 
 class DeyeProcessorFactory:

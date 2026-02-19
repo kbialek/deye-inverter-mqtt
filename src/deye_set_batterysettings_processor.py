@@ -52,9 +52,6 @@ class DeyeBatterySettingsEventProcessor(DeyeEventProcessor):
         if len(matching_sensors) == 0:
             self.__log.error("BatterySettings sensors not found. Enable appropriate settings metric group.")
             return
-            #elif len(matching_sensors) > 1:
-            #self.__log.error("Too many WorkChange Mode sensors found. Check your metric groups configuration.")
-            #return
         for sensor in matching_sensors:
             reg = sensor.get_registers()[0]
             self.__battery_settings_sensor_reg_addresses_dict[sensor.mqtt_topic_suffix] = reg
