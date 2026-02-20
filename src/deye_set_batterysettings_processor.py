@@ -80,10 +80,9 @@ class DeyeBatterySettingsEventProcessor(DeyeEventProcessor):
         if setting_name == "grid_charge" and setting_value not in (0, 1):
             self.__log.error(f"Invalid value for Battery Setting '{setting_name}': {setting_value}")
             return
-        else:
-            if setting_value < 0 or setting_value > 200: # Most battery settings are 0-200A
-                self.__log.error(f"Invalid value for Battery Setting '{setting_name}': {setting_value}. Expected 0-200.")
-                return
+        elif setting_value < 0 or setting_value > 200:  # other battery settings are currents, range 0-200A
+            self.__log.error(f"Invalid value for Battery Setting '{setting_name}': {setting_value}. Expected 0-200.")
+            return
 
         reg_address = self.__battery_settings_sensor_reg_addresses_dict.get(topic_suffix)
         if not reg_address:

@@ -146,6 +146,10 @@ deye_sg04lp3_battery_586 = SingleRegisterSensor(
     groups=["deye_sg04lp3_battery"],
 )
 
+deye_sg04lp3_grid_607 = SingleRegisterSensor(
+    "Total Internal Power", 607, 1, mqtt_topic_suffix="ac/internal_power", unit="W", signed=True, groups=["deye_sg04lp3"]
+)
+
 deye_sg04lp3_grid_625 = SingleRegisterSensor(
     "Total Grid Power", 625, 1, mqtt_topic_suffix="ac/total_power", unit="W", signed=True, groups=["deye_sg04lp3"]
 )
@@ -777,7 +781,7 @@ deye_sg04lp3_inverter_145 = SingleRegisterSensor(
     145,
     1,
     mqtt_topic_suffix="settings/solar_sell",
-    unit="",
+    unit="Bit {0,1}",
     print_format="{:.0f}",
     signed=False,
     groups=["deye_sg04lp3_settings"],
@@ -802,7 +806,7 @@ deye_sg04lp3_inverter_130 = SingleRegisterSensor(
     130,
     1,
     mqtt_topic_suffix="settings/battery/grid_charge",
-    unit="",
+    unit="Bit {0,1}",
     print_format="{:.0f}",
     signed=False,
     groups=["deye_sg04lp3_settings"],
@@ -878,6 +882,7 @@ deye_sg04lp3_sensors = [
     deye_sg04lp3_grid_604,
     deye_sg04lp3_grid_605,
     deye_sg04lp3_grid_606,
+    deye_sg04lp3_grid_607,
     deye_sg04lp3_grid_616,
     deye_sg04lp3_grid_617,
     deye_sg04lp3_grid_618,
