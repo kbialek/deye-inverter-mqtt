@@ -281,7 +281,7 @@ It is possible to modify selected inverter settings over MQTT.
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | number<sup>(3)<sup> | 0,1,3,4 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
-| workmode | `{MQTT_TOPIC_PREFIX}/settings/workmode/command` | integer | 0,1,2 | `DEYE_FEATURE_WORKMODE` |
+| workmode | `{MQTT_TOPIC_PREFIX}/settings/workmode/command` | number | [0,1,2](#writing-workmode-to-configuration) | `DEYE_FEATURE_WORKMODE` |
 | grid_charge | `{MQTT_TOPIC_PREFIX}/settings/battery/grid_charge/command` | boolean | 0,1 | `DEYE_FEATURE_BATTERY_SETTINGS` |
 | maximum_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_charge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
 | maximum_discharge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_discharge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
@@ -303,7 +303,6 @@ It is possible to modify selected inverter settings over MQTT.
 |   1   | 0    |  `10`  | **2** |
 |   1   | 1    |  `11`  | **3** |
 
-
 #### Writing Time Of Use configuration
 
 Prerequisites:
@@ -321,24 +320,24 @@ Time Of Use configuration is modified using the following workflow:
 
 Prerequisites:
 1. Set `DEYE_FEATURE_BATTERY_SETTINGS` to `true`
-2. Enable time-of-use metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
+2. Enable settings metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
 
 Following parameters are supported:
-  - grid_charge: enable/disable charging battery from grid
-  - maximum_charge_current: in A, depends on battery, for example for 320 Ah battery 160A is 0.5C and max recommended
-  - maximum_discharge_current: in A, usually limited by BMS power, but generally no more than 1C, so for 100Ah battery it's 100A
-  - maximum_grid_charge_current: in A, use it to cap Grid, usually smaller, than maximum_charge_current
+  - `grid_charge` - enable/disable charging battery from grid
+  - `maximum_charge_current` - depends on battery, for example for 320 Ah battery 160A is 0.5C and max recommended
+  - `maximum_discharge_current` - usually limited by BMS power, but generally no more than 1C, so for 100Ah battery it's 100A
+  - `maximum_grid_charge_current` - use it to cap Grid, usually smaller than maximum_charge_current
 
 #### Writing Workmode to configuration
 
 Prerequisites:
 1. Set `DEYE_FEATURE_WORKMODE` to `true`
-2. Enable time-of-use metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
+2. Enable settings metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
 
 There are 3 workmodes in hybrid iverter, mapped to integer value:
-  - Selling first: 0
-  - Zero export to load: 1
-  - Zero export to CT: 2
+  - Selling first: `0`
+  - Zero export to load: `1`
+  - Zero export to CT: `2`
 
 ### Publish on change feature
 
