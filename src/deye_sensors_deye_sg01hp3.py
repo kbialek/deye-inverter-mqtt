@@ -37,7 +37,7 @@ deye_sg01hp3_inverter_145 = SingleRegisterSensor(
     145,
     1,
     mqtt_topic_suffix="settings/solar_sell",
-    unit="",
+    unit="Bit {0,1}",
     print_format="{:.0f}",
     signed=False,
     groups=["deye_sg01hp3_settings"],
