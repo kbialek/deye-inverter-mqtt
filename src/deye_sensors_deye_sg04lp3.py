@@ -972,4 +972,8 @@ deye_sg04lp3_register_ranges = [
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=644, last_reg_address=653),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=672, last_reg_address=679),
     SensorRegisterRange(group="deye_sg04lp3_generator", first_reg_address=661, last_reg_address=667),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=108, last_reg_address=109),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=128, last_reg_address=128),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=130, last_reg_address=130),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=142, last_reg_address=143),
 ]

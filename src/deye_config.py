@@ -305,5 +305,5 @@ class DeyeConfig:
         if DeyeEnv.boolean("DEYE_FEATURE_WORKMODE", False):
             active_processors.append("workmode")
         if DeyeEnv.boolean("DEYE_FEATURE_BATTERY_SETTINGS", False):
-            active_processors.append("battery_settings")    # has to match id of DeyeBatterySettingsEventProcessor
+            active_processors.append("battery_settings")  # has to match id of DeyeBatterySettingsEventProcessor
         return active_processors

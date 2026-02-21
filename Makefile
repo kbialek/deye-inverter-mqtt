@@ -109,6 +109,7 @@ METRIC_GROUPS = \
 	deye_sg04lp3_timeofuse \
 	deye_sg04lp3_generator \
 	deye_sg04lp3_systemtime \
+	deye_sg04lp3_settings \
 	igen_dtsd422 \
 	deye_hybrid \
 	deye_hybrid_battery \
