@@ -147,7 +147,7 @@ deye_sg04lp3_battery_586 = SingleRegisterSensor(
 )
 
 deye_sg04lp3_grid_607 = SingleRegisterSensor(
-    "Total Internal Power", 607, 1, mqtt_topic_suffix="ac/internal_power", unit="W", signed=True, groups=["deye_sg04lp3"]
+    "Total Internal Power", 607, 1, mqtt_topic_suffix="ac/total_internal_power", unit="W", signed=True, groups=["deye_sg04lp3"]
 )
 
 deye_sg04lp3_grid_625 = SingleRegisterSensor(
