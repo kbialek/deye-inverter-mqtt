@@ -173,6 +173,7 @@ All configuration options are controlled through environment variables.
     * `deye_sg04lp3_ups` - sg04lp3 ups
     * `deye_sg04lp3_timeofuse` - sg04lp3 time-of-use settings
     * `deye_sg04lp3_systemtime` - sg04lp3 system time register (required for DEYE_FEATURE_SET_TIME on sg04lp3)
+    * `deye_sg04lp3_settings` - sg04lp3 battery settings mostly, also workmode
     * `deye_sg01hp3` - sg01hp3 inverter
     * `deye_sg01hp3_battery` - sg01hp3 battery
     * `deye_sg01hp3_bms` - sg01hp3 bms
@@ -203,6 +204,8 @@ All configuration options are controlled through environment variables.
 * `DEYE_FEATURE_TIME_OF_USE` - enables Time Of Use feature control over MQTT
 * `DEYE_FEATURE_SOLAR_SELL` - enables Solar Sell control over MQTT
 * `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR` - enables multi-inverter data aggregation and publishing
+* `DEYE_FEATURE_WORKMODE` - enables control hybrid inverter workmode over MQTT: sell, load, load ct
+* `DEYE_FEATURE_BATTERY_SETTINGS` - enables control hybrid inverter params for battercy charge an discharge over MQTT
 * `MQTT_HOST` - MQTT Broker IP address
 * `MQTT_PORT` - MQTT Broker port, , defaults to `1883`
 * `MQTT_USERNAME` - MQTT Broker username for authentication, defaults to `None`
@@ -278,6 +281,11 @@ It is possible to modify selected inverter settings over MQTT.
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | number<sup>(3)<sup> | 0,1,3,4 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
+| workmode | `{MQTT_TOPIC_PREFIX}/settings/workmode/command` | integer | 0,1,2 | `DEYE_FEATURE_WORKMODE` |
+| grid_charge | `{MQTT_TOPIC_PREFIX}/settings/battery/grid_charge/command` | boolean | 0,1 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_charge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_discharge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_discharge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_grid_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_grid_charge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
 
 <sup>(1)</sup> encodes the weekdays setting from Monday (bit 7) ... Sunday (bit 1). Additionally controls whether TimeOfUse feature is enabled or not (bit 0)
 | Bit     |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0    |
@@ -308,6 +316,29 @@ Time Of Use configuration is modified using the following workflow:
 2. You send modifications over `{MQTT_TOPIC_PREFIX}/timeofuse/*/*/command` topics as needed. See the table above for more details about used MQTT topics. These changes are not immediately written to the inverter. They are **buffered** in the service memory instead.
 3. Send `write` command to topic `{MQTT_TOPIC_PREFIX}/timeofuse/control/command`. It will build a new Time Of Use configuration by putting your changes on top of the inverter configuration present in the service memory. Next the entire Time Of Use configuration is sent to the inverter. The modifications are cleared, and you can start over sending new modifications.
 4. Alternatively send `reset` command to purge buffered modifications without writing them to the inverter.
+
+#### Writing Battery charge/discharge params to configuration
+
+Prerequisites:
+1. Set `DEYE_FEATURE_BATTERY_SETTINGS` to `true`
+2. Enable time-of-use metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
+
+Following parameters are supported:
+  - grid_charge: enable/disable charging battery from grid
+  - maximum_charge_current: in A, depends on battery, for example for 320 Ah battery 160A is 0.5C and max recommended
+  - maximum_discharge_current: in A, usually limited by BMS power, but generally no more than 1C, so for 100Ah battery it's 100A
+  - maximum_grid_charge_current: in A, use it to cap Grid, usually smaller, than maximum_charge_current
+
+#### Writing Workmode to configuration
+
+Prerequisites:
+1. Set `DEYE_FEATURE_WORKMODE` to `true`
+2. Enable time-of-use metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
+
+There are 3 workmodes in hybrid iverter, mapped to integer value:
+  - Selling first: 0
+  - Zero export to load: 1
+  - Zero export to CT: 2
 
 ### Publish on change feature
 
