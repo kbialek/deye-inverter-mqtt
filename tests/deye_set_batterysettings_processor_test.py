@@ -30,12 +30,14 @@ REGISTER_MAX_CHARGE_CURRENT = 108
 REGISTER_MAX_DISCHARGE_CURRENT = 109
 REGISTER_MAX_GRID_CHARGE_CURRENT = 128
 
+
 def extract_topic_suffix_side_effect(logger_index, topic):
     prefix = f"deye/{logger_index}/"
     suffix = "/command"
     if topic.startswith(prefix) and topic.endswith(suffix):
-        return topic[len(prefix):-len(suffix)]
+        return topic[len(prefix) : -len(suffix)]
     return None
+
 
 class TestDeyeBatterySettingsEventProcessor(unittest.TestCase):
     def setUp(self):
@@ -127,13 +129,16 @@ class TestDeyeBatterySettingsEventProcessor(unittest.TestCase):
             self.config.index, "settings/battery/+", processor.handle_command
         )
         self.assertIn(
-            self.sensor_grid_charge.mqtt_topic_suffix, processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict
+            self.sensor_grid_charge.mqtt_topic_suffix,
+            processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict,
         )
         self.assertIn(
-            self.sensor_max_charge_current.mqtt_topic_suffix, processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict
+            self.sensor_max_charge_current.mqtt_topic_suffix,
+            processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict,
         )
         self.assertNotIn(
-            self.sensor_other.mqtt_topic_suffix, processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict
+            self.sensor_other.mqtt_topic_suffix,
+            processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict,
         )
 
     @patch("deye_mqtt.DeyeMqttClient")
@@ -227,7 +232,7 @@ class TestDeyeBatterySettingsEventProcessor(unittest.TestCase):
 
         for msg_payload in [b"", b"-5", b"1.2", b"test", b"Enable", b"X"]:
             msg.payload = msg_payload
-            modbus_mock.reset_mock() # Reset mock to ensure previous calls don't affect this iteration
+            modbus_mock.reset_mock()  # Reset mock to ensure previous calls don't affect this iteration
             with patch.object(processor, "_DeyeBatterySettingsEventProcessor__log") as mock_log:
                 processor.handle_command(None, None, msg)
             modbus_mock.write_register_uint.assert_not_called()

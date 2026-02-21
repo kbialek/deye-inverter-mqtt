@@ -18,7 +18,7 @@
 import unittest
 from unittest.mock import patch
 
-#from deye_solar_sell import DeyeSolarSellEventProcessor
+# from deye_solar_sell import DeyeSolarSellEventProcessor
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
 from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig
@@ -26,7 +26,8 @@ from deye_sensor import Sensor, SingleRegisterSensor
 from paho.mqtt.client import Client, MQTTMessage
 from deye_set_workmode_processor import DeyeWorkmodeEventProcessor
 
-REGISTER_WORKMODE=142
+REGISTER_WORKMODE = 142
+
 
 class TestDeyeWorkmodeEventProcessor(unittest.TestCase):
 
@@ -44,7 +45,7 @@ class TestDeyeWorkmodeEventProcessor(unittest.TestCase):
         )
         self.sensor2 = SingleRegisterSensor(
             "Bad sensor?",
-            REGISTER_WORKMODE+1,
+            REGISTER_WORKMODE + 1,
             1,
             mqtt_topic_suffix="settings/workmodee",
             unit="",
@@ -178,9 +179,9 @@ class TestDeyeWorkmodeEventProcessor(unittest.TestCase):
     @patch("deye_mqtt.DeyeMqttClient")
     @patch("deye_modbus.DeyeModbus")
     def test_handle_workmode_write_failure(
-            self,
-            mqtt_client_mock: DeyeMqttClient,
-            modbus_mock: DeyeModbus,
+        self,
+        mqtt_client_mock: DeyeMqttClient,
+        modbus_mock: DeyeModbus,
     ):
         # given
         sensors = [self.sensor1]
