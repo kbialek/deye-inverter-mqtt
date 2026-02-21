@@ -37,7 +37,7 @@ class DeyeBatterySettingsEventProcessor(DeyeEventProcessor):
         self.__logger_config = logger_config
         self.__mqtt_client = mqtt_client
         self.__modbus = modbus
-        self.__battery_settings_topic_suffix = "settings/battery"   # here is one extra segments for specific setting
+        self.__battery_settings_topic_suffix = "settings/battery"  # here is one extra segments for specific setting
         self.__sensors = sensors
         self.__battery_settings_sensor_reg_addresses_dict = {}
 
