@@ -32,6 +32,75 @@ deye_sg01hp3_system_time_62 = DateTimeSensor(
     groups=["deye_sg01hp3_systemtime"],
 )
 
+deye_sg01hp3_inverter_108 = SingleRegisterSensor(
+    "Maximum battery charge current",
+    108,
+    1,
+    mqtt_topic_suffix="settings/battery/maximum_charge_current",
+    unit="A",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg01hp3_settings"],
+)
+
+deye_sg01hp3_inverter_109 = SingleRegisterSensor(
+    "Maximum battery discharge current",
+    109,
+    1,
+    mqtt_topic_suffix="settings/battery/maximum_discharge_current",
+    unit="A",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg01hp3_settings"],
+)
+
+deye_sg01hp3_inverter_128 = SingleRegisterSensor(
+    "Maximum battery_grid charge current",
+    128,
+    1,
+    mqtt_topic_suffix="settings/battery/maximum_grid_charge_current",
+    unit="A",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg01hp3_settings"],
+)
+
+deye_sg01hp3_inverter_130 = SingleRegisterSensor(
+    "Grid Charge enabled",
+    130,
+    1,
+    mqtt_topic_suffix="settings/battery/grid_charge",
+    unit="Bit {0,1}",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg01hp3_settings"],
+)
+
+deye_sg01hp3_inverter_142 = SingleRegisterSensor(
+    "Work Mode",
+    142,
+    1,
+    mqtt_topic_suffix="settings/workmode",
+    unit="",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg01hp3_settings"],
+)
+""" Selling first: 0
+    Zero export to load: 1
+    Zero export to CT: 2"""
+
+deye_sg01hp3_inverter_143 = SingleRegisterSensor(
+    "Max Solar Sell Power",
+    143,
+    10,
+    mqtt_topic_suffix="settings/solar_sell_max_power",
+    unit="W",
+    print_format="{:.0f}",
+    signed=False,
+    groups=["deye_sg01hp3_settings"],
+)
+
 deye_sg01hp3_inverter_145 = SingleRegisterSensor(
     "Solar sell enabled",
     145,
@@ -296,6 +365,16 @@ deye_sg01hp3_grid_606 = SingleRegisterSensor(
     606,
     1,
     mqtt_topic_suffix="ac/l3/ct/internal",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3"],
+)
+
+deye_sg01hp3_grid_607 = SingleRegisterSensor(
+    "Total Internal Power",
+    607,
+    1,
+    mqtt_topic_suffix="ac/total_internal_power",
     unit="W",
     signed=True,
     groups=["deye_sg01hp3"],
@@ -1103,6 +1182,12 @@ deye_sg01hp3_generator_537 = SingleRegisterSensor(
 
 deye_sg01hp3_sensors = [
     deye_sg01hp3_system_time_62,
+    deye_sg01hp3_inverter_108,
+    deye_sg01hp3_inverter_109,
+    deye_sg01hp3_inverter_128,
+    deye_sg01hp3_inverter_130,
+    deye_sg01hp3_inverter_142,
+    deye_sg01hp3_inverter_143,
     deye_sg01hp3_inverter_145,
     deye_sg01hp3_inverter_500,
     deye_sg01hp3_inverter_552,
@@ -1161,6 +1246,7 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_grid_604,
     deye_sg01hp3_grid_605,
     deye_sg01hp3_grid_606,
+    deye_sg01hp3_grid_607,
     deye_sg01hp3_grid_616,
     deye_sg01hp3_grid_617,
     deye_sg01hp3_grid_618,
@@ -1231,6 +1317,10 @@ deye_sg01hp3_sensors = [
 
 deye_sg01hp3_register_ranges = [
     SensorRegisterRange(group="deye_sg01hp3_systemtime", first_reg_address=62, last_reg_address=64),
+    SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=108, last_reg_address=109),
+    SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=128, last_reg_address=128),
+    SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=130, last_reg_address=130),
+    SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=142, last_reg_address=143),
     SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=145, last_reg_address=145),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=500, last_reg_address=500),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=552, last_reg_address=552),

@@ -205,7 +205,7 @@ All configuration options are controlled through environment variables.
 * `DEYE_FEATURE_SOLAR_SELL` - enables Solar Sell control over MQTT
 * `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR` - enables multi-inverter data aggregation and publishing
 * `DEYE_FEATURE_WORKMODE` - enables control hybrid inverter workmode over MQTT: sell, load, load ct
-* `DEYE_FEATURE_BATTERY_SETTINGS` - enables control hybrid inverter params for battercy charge an discharge over MQTT
+* `DEYE_FEATURE_BATTERY_SETTINGS` - enables control hybrid inverter params for battery charge and discharge over MQTT
 * `MQTT_HOST` - MQTT Broker IP address
 * `MQTT_PORT` - MQTT Broker port, , defaults to `1883`
 * `MQTT_USERNAME` - MQTT Broker username for authentication, defaults to `None`

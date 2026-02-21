@@ -25,6 +25,8 @@ from deye_sensor import (
     DoubleRegisterSensor,
     ComputedSumSensor,
     SensorRegisterRange,
+    EnumValueSensor,
+    ComputedBooleanSensor,
     DateTimeSensor,
 )
 
@@ -33,6 +35,33 @@ deye_sg04lp3_system_time_62 = DateTimeSensor(
     62,
     mqtt_topic_suffix="settings/system_time",
     groups=["deye_sg04lp3_systemtime"],
+)
+
+deye_sg04lp3_inverter_500 = EnumValueSensor(
+    "Running status",
+    500,
+    mqtt_topic_suffix="inverter/status",
+    groups=["deye_sg04lp3"],
+    enum_values={0: "standby", 1: "selfcheck", 2: "normal", 3: "alarm", 4: "fault"},
+)
+
+deye_sg04lp3_inverter_552 = SingleRegisterSensor(
+    "AC relays status",
+    552,
+    1,
+    mqtt_topic_suffix="ac/relay_status",
+    unit="",
+    print_format="{:0>2X}",
+    signed=False,
+    groups=["deye_sg04lp3"],
+)
+
+deye_sg04lp3_ongrid_status_sensor = ComputedBooleanSensor(
+    "On-grid",
+    bitarray_sensor=deye_sg04lp3_inverter_552,
+    mask=0x4,
+    mqtt_topic_suffix="ac/ongrid",
+    groups=["deye_sg04lp3"],
 )
 
 deye_sg04lp3_solar_672 = SingleRegisterSensor(
@@ -864,6 +893,8 @@ deye_sg04lp3_inverter_143 = SingleRegisterSensor(
 
 deye_sg04lp3_sensors = [
     deye_sg04lp3_system_time_62,
+    deye_sg04lp3_inverter_500,
+    deye_sg04lp3_inverter_552,
     deye_sg04lp3_solar_672,
     deye_sg04lp3_solar_673,
     deye_sg04lp3_solar_676,
@@ -963,12 +994,14 @@ deye_sg04lp3_sensors = [
 
 deye_sg04lp3_register_ranges = [
     SensorRegisterRange(group="deye_sg04lp3_systemtime", first_reg_address=62, last_reg_address=64),
-    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=108, last_reg_address=109),
-    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=128, last_reg_address=128),
-    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=130, last_reg_address=130),
-    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=142, last_reg_address=143),
-    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=145, last_reg_address=145),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=108, last_reg_address=109),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=128, last_reg_address=128),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=130, last_reg_address=130),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=142, last_reg_address=143),
+    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=145, last_reg_address=145),
     SensorRegisterRange(group="deye_sg04lp3_timeofuse", first_reg_address=146, last_reg_address=177),
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=500, last_reg_address=500),
+    SensorRegisterRange(group="deye_sg04lp3", first_reg_address=552, last_reg_address=552),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg04lp3_battery", first_reg_address=514, last_reg_address=558),
@@ -978,8 +1011,4 @@ deye_sg04lp3_register_ranges = [
     SensorRegisterRange(group="deye_sg04lp3_ups", first_reg_address=644, last_reg_address=653),
     SensorRegisterRange(group="deye_sg04lp3", first_reg_address=672, last_reg_address=679),
     SensorRegisterRange(group="deye_sg04lp3_generator", first_reg_address=661, last_reg_address=667),
-    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=108, last_reg_address=109),
-    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=128, last_reg_address=128),
-    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=130, last_reg_address=130),
-    SensorRegisterRange(group="deye_sg04lp3_settings", first_reg_address=142, last_reg_address=143),
 ]

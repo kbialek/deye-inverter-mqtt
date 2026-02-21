@@ -1,5 +1,7 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
+|Running status|`inverter/status`||500|1f4|U_WORD|1|
+|AC relays status|`ac/relay_status`||552|228|U_WORD|1|
 |PV1 Power|`dc/pv1/power`|W|672|2a0|U_WORD|1|
 |PV2 Power|`dc/pv2/power`|W|673|2a1|U_WORD|1|
 |PV1 Voltage|`dc/pv1/voltage`|V|676|2a4|U_WORD|0.1|
