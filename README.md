@@ -334,7 +334,7 @@ Prerequisites:
 1. Set `DEYE_FEATURE_WORKMODE` to `true`
 2. Enable settings metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
 
-There are 3 workmodes in hybrid iverter, mapped to integer value:
+There are 3 workmodes in hybrid inverter, mapped to integer values:
   - Selling first: `0`
   - Zero export to load: `1`
   - Zero export to CT: `2`
