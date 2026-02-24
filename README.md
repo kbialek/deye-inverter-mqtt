@@ -30,10 +30,10 @@ For LSE-3 Ethernet datalogger use `mbtcp` protocol
 | [Deye Microinverters 300/500/600/800/1000/1300/2000]()                                                          | tcp, at  | [micro](docs/metric_group_micro.md), [settings_micro](docs/metric_group_settings_micro.md), [deye_micro_systemtime](docs/metric_group_deye_micro_systemtime.md)                                                                                                                                                                                                                                                                               |
 | [Deye Microinverters M60/M80/M100](https://deye.com/product/sun-m60-80-100g4-eu-q0/)                            | tcp, at  | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md), [deye_micro_systemtime](docs/metric_group_deye_micro_systemtime.md)                                                                                                                                                                                                                                                                                           |
 | [Deye Microinverters M130/M160/M180/M200/M220](https://deye.com/product/sun-m130-160-180-200-220g4-eu-q0/)      | tcp, at  | [micro](docs/metric_group_micro.md), [settings](docs/metric_group_settings.md), [deye_micro_systemtime](docs/metric_group_deye_micro_systemtime.md)                                                                                                                                                                                                                                                                                           |
-| [Deye SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-eu/)                                           | tcp, at  | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [deye_sg04lp3_timeofuse](docs/metric_group_deye_sg04lp3_timeofuse.md), [deye_sg04lp3_generator](docs/metric_group_deye_sg04lp3_generator.md), [settings](docs/metric_group_settings.md), [deye_sg04lp3_systemtime](docs/metric_group_deye_sg04lp3_systemtime.md)|
+| [Deye SG04LP3](https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-eu/)                                           | tcp, at  | [deye_sg04lp3](docs/metric_group_deye_sg04lp3.md), [deye_sg04lp3_battery](docs/metric_group_deye_sg04lp3_battery.md), [deye_sg04lp3_ups](docs/metric_group_deye_sg04lp3_ups.md), [deye_sg04lp3_timeofuse](docs/metric_group_deye_sg04lp3_timeofuse.md), [deye_sg04lp3_generator](docs/metric_group_deye_sg04lp3_generator.md), [settings](docs/metric_group_settings.md), [deye_sg04lp3_systemtime](docs/metric_group_deye_sg04lp3_systemtime.md), [deye_sg04lp3_settings](docs/metric_group_deye_sg04lp3_settings.md)|
 | [Deye SG01LP1](https://deye.com/product/sun-7-6-8k-sg01lp1-eu/)                                                 | tcp, at  | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_bms](docs/metric_group_deye_hybrid_bms.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                                |
 | [Deye SG02LP1](https://deye.com/product/sun-7-6-8k-sg02lp1-eu-am2/)                                                 | tcp, at  | [deye_sg02lp1](docs/metric_group_deye_sg02lp1.md), [deye_sg02lp1_battery](docs/metric_group_deye_sg02lp1_battery.md), [deye_sg02lp1_bms](docs/metric_group_deye_sg02lp1_bms.md), [deye_sg02lp1_timeofuse](docs/metric_group_deye_sg02lp1_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                                |
-| [Deye SG01HP3](https://deye.com/product/sun-5-6-8-10-12-15-20-25k-sg01hp3-eu-am2/)                              | tcp, at  | [deye_sg01hp3](docs/metric_group_deye_sg01hp3.md), [deye_sg01hp3_battery](docs/metric_group_deye_sg01hp3_battery.md), [deye_sg01hp3_bms](docs/metric_group_deye_sg01hp3_bms.md), [deye_sg01hp3_ups](docs/metric_group_deye_sg01hp3_ups.md), [deye_sg01hp3_generator](docs/metric_group_deye_sg01hp3_generator.md), [settings](docs/metric_group_settings.md), [deye_sg01hp3_systemtime](docs/metric_group_deye_sg01hp3_systemtime.md), [deye_sg01hp3_settings](metric_group_deye_sg01hp3_settings.md)|
+| [Deye SG01HP3](https://deye.com/product/sun-5-6-8-10-12-15-20-25k-sg01hp3-eu-am2/)                              | tcp, at  | [deye_sg01hp3](docs/metric_group_deye_sg01hp3.md), [deye_sg01hp3_battery](docs/metric_group_deye_sg01hp3_battery.md), [deye_sg01hp3_bms](docs/metric_group_deye_sg01hp3_bms.md), [deye_sg01hp3_ups](docs/metric_group_deye_sg01hp3_ups.md), [deye_sg01hp3_generator](docs/metric_group_deye_sg01hp3_generator.md), [settings](docs/metric_group_settings.md), [deye_sg01hp3_systemtime](docs/metric_group_deye_sg01hp3_systemtime.md), [deye_sg01hp3_settings](docs/metric_group_deye_sg01hp3_settings.md)|
 | [Deye SG03LP1](https://deye.com/product/sun-3-6-5-6k-sg03lp1-eu/)                              | tcp, at  | [deye_sg03lp1](docs/metric_group_deye_sg03lp1.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_bms](docs/metric_group_deye_hybrid_bms.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                               
 
 
@@ -173,6 +173,7 @@ All configuration options are controlled through environment variables.
     * `deye_sg04lp3_ups` - sg04lp3 ups
     * `deye_sg04lp3_timeofuse` - sg04lp3 time-of-use settings
     * `deye_sg04lp3_systemtime` - sg04lp3 system time register (required for DEYE_FEATURE_SET_TIME on sg04lp3)
+    * `deye_sg04lp3_settings` - sg04lp3 battery settings mostly, also workmode
     * `deye_sg01hp3` - sg01hp3 inverter
     * `deye_sg01hp3_battery` - sg01hp3 battery
     * `deye_sg01hp3_bms` - sg01hp3 bms
@@ -203,6 +204,8 @@ All configuration options are controlled through environment variables.
 * `DEYE_FEATURE_TIME_OF_USE` - enables Time Of Use feature control over MQTT
 * `DEYE_FEATURE_SOLAR_SELL` - enables Solar Sell control over MQTT
 * `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR` - enables multi-inverter data aggregation and publishing
+* `DEYE_FEATURE_WORKMODE` - enables control hybrid inverter workmode over MQTT: sell, load, load ct
+* `DEYE_FEATURE_BATTERY_SETTINGS` - enables control hybrid inverter params for battery charge and discharge over MQTT
 * `MQTT_HOST` - MQTT Broker IP address
 * `MQTT_PORT` - MQTT Broker port, , defaults to `1883`
 * `MQTT_USERNAME` - MQTT Broker username for authentication, defaults to `None`
@@ -278,6 +281,11 @@ It is possible to modify selected inverter settings over MQTT.
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | number<sup>(3)<sup> | 0,1,3,4 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
+| workmode | `{MQTT_TOPIC_PREFIX}/settings/workmode/command` | number | [0,1,2](#writing-workmode-to-configuration) | `DEYE_FEATURE_WORKMODE` |
+| grid_charge | `{MQTT_TOPIC_PREFIX}/settings/battery/grid_charge/command` | boolean | 0,1 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_charge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_discharge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_discharge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_grid_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_grid_charge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
 
 <sup>(1)</sup> encodes the weekdays setting from Monday (bit 7) ... Sunday (bit 1). Additionally controls whether TimeOfUse feature is enabled or not (bit 0)
 | Bit     |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0    |
@@ -295,7 +303,6 @@ It is possible to modify selected inverter settings over MQTT.
 |   1   | 0    |  `10`  | **2** |
 |   1   | 1    |  `11`  | **3** |
 
-
 #### Writing Time Of Use configuration
 
 Prerequisites:
@@ -308,6 +315,29 @@ Time Of Use configuration is modified using the following workflow:
 2. You send modifications over `{MQTT_TOPIC_PREFIX}/timeofuse/*/*/command` topics as needed. See the table above for more details about used MQTT topics. These changes are not immediately written to the inverter. They are **buffered** in the service memory instead.
 3. Send `write` command to topic `{MQTT_TOPIC_PREFIX}/timeofuse/control/command`. It will build a new Time Of Use configuration by putting your changes on top of the inverter configuration present in the service memory. Next the entire Time Of Use configuration is sent to the inverter. The modifications are cleared, and you can start over sending new modifications.
 4. Alternatively send `reset` command to purge buffered modifications without writing them to the inverter.
+
+#### Writing Battery charge/discharge params to configuration
+
+Prerequisites:
+1. Set `DEYE_FEATURE_BATTERY_SETTINGS` to `true`
+2. Enable settings metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
+
+Following parameters are supported:
+  - `grid_charge` - enable/disable charging battery from grid
+  - `maximum_charge_current` - depends on battery, for example for 320 Ah battery 160A is 0.5C and max recommended
+  - `maximum_discharge_current` - usually limited by BMS power, but generally no more than 1C, so for 100Ah battery it's 100A
+  - `maximum_grid_charge_current` - use it to cap Grid, usually smaller than maximum_charge_current
+
+#### Writing Workmode to configuration
+
+Prerequisites:
+1. Set `DEYE_FEATURE_WORKMODE` to `true`
+2. Enable settings metric group that's appropriate to your inverter model, e.g. `deye_sg04lp3_settings`
+
+There are 3 workmodes in hybrid inverter, mapped to integer values:
+  - Selling first: `0`
+  - Zero export to load: `1`
+  - Zero export to CT: `2`
 
 ### Publish on change feature
 

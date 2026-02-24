@@ -146,6 +146,7 @@ class TestDeyeSolarSellEventProcessor(unittest.TestCase):
 
         for msg_payload in [b"", b"-5", b"1.2", b"100", b"test", b"Enable", b"X"]:
             msg.payload = msg_payload
+            modbus_mock.reset_mock()  # Reset mock to ensure previous calls don't affect this iteration
             with patch.object(processor, "_DeyeSolarSellEventProcessor__log") as mock_log:
                 processor.handle_command(None, None, msg)
             modbus_mock.write_register_uint.assert_not_called()

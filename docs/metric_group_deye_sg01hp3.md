@@ -24,6 +24,7 @@
 |Internal CT L1 Power|`ac/l1/ct/internal`|W|604|25c|S_WORD|1|
 |Internal CT L2 Power|`ac/l2/ct/internal`|W|605|25d|S_WORD|1|
 |Internal CT L3 Power|`ac/l3/ct/internal`|W|606|25e|S_WORD|1|
+|Total Internal Power|`ac/total_internal_power`|W|607|25f|S_WORD|1|
 |External CT L1 Power|`ac/l1/ct/external`|W|616|268|S_WORD|1|
 |External CT L2 Power|`ac/l2/ct/external`|W|617|269|S_WORD|1|
 |External CT L3 Power|`ac/l3/ct/external`|W|618|26a|S_WORD|1|

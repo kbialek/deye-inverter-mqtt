@@ -1,5 +1,7 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
+|Running status|`inverter/status`||500|1f4|U_WORD|1|
+|AC relays status|`ac/relay_status`||552|228|U_WORD|1|
 |PV1 Power|`dc/pv1/power`|W|672|2a0|U_WORD|1|
 |PV2 Power|`dc/pv2/power`|W|673|2a1|U_WORD|1|
 |PV1 Voltage|`dc/pv1/voltage`|V|676|2a4|U_WORD|0.1|
@@ -15,6 +17,7 @@
 |Internal CT L1 Power|`ac/l1/ct/internal`|W|604|25c|S_WORD|1|
 |Internal CT L2 Power|`ac/l2/ct/internal`|W|605|25d|S_WORD|1|
 |Internal CT L3 Power|`ac/l3/ct/internal`|W|606|25e|S_WORD|1|
+|Total Internal Power|`ac/total_internal_power`|W|607|25f|S_WORD|1|
 |External CT L1 Power|`ac/l1/ct/external`|W|616|268|S_WORD|1|
 |External CT L2 Power|`ac/l2/ct/external`|W|617|269|S_WORD|1|
 |External CT L3 Power|`ac/l3/ct/external`|W|618|26a|S_WORD|1|
