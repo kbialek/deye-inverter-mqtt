@@ -365,6 +365,10 @@ This feature allows advanced users to extend the functionality of this project. 
 * Plugin is a Python file placed in `plugins` directory. The filename must begin with `deye_plugin_`
 * The plugin must define a `DeyePlugin` class. See `plugins/deye_plugin_sample.py` for inspiration.
 
+#### Accessing service resources from the plugin
+1. Plugin constructor accepts `DeyePluginContext`, which provides access to `config` object, `mqtt` client, and `logger_context` of type `DeyePluginLoggerContext`.
+2. `DeyePluginLoggerContext` provides access to the `modbus` client instance (of type `DeyeModbus`), that is specific to given logger. This is important when multiple loggers are connected. Keep in ming that the `logger_context` is lazily initialized, and must be accessed from `DeyeEventProcessor.process()` method only.
+
 ### How to start the docker container with custom plugins
 
   Mount your `plugins` dir into the container filesystem
