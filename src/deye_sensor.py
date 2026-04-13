@@ -48,7 +48,7 @@ class Sensor:
         pass
 
     @abstractproperty
-    def groups(self) -> [str]:
+    def groups(self) -> list[str]:
         pass
 
     @abstractproperty
@@ -128,7 +128,7 @@ class DailyResetSensor(Sensor):
         return self.__delegate.print_format
 
     @property
-    def groups(self) -> [str]:
+    def groups(self) -> list[str]:
         return self.__delegate.groups
 
     @property
@@ -197,7 +197,7 @@ class AbstractSensor(Sensor):
         return self.__print_format
 
     @property
-    def groups(self) -> [str]:
+    def groups(self) -> list[str]:
         return self.__groups
 
     @property
@@ -562,7 +562,7 @@ class DateTimeSensor(AbstractSensor):
 
         return retval
 
-    def write_value(self, value: datetime) -> dict[int, bytearray]:
+    def write_value(self, value: datetime) -> dict[int, list[bytes]]:
 
         reg0_value = 256 * (value.year % 100) + value.month
         reg1_value = 256 * value.day + value.hour

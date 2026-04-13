@@ -63,7 +63,7 @@ class DeyePluginLoader:
             except AttributeError:
                 self.__log.warn("Ignoring plugin '%s', because DeyePlugin class is not defined.", plugin_name)
 
-    def get_event_processors(self) -> [DeyeEventProcessor]:
+    def get_event_processors(self) -> list[DeyeEventProcessor]:
         event_processors = []
         for plugin in self.__plugins:
             event_processors.extend(plugin.get_event_processors())

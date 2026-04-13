@@ -45,12 +45,12 @@ class DeyeAtConnector(DeyeConnector):
             self.__reachable = False
             return
 
-    def __send_at_command(self, client_socket: socket, at_command: str) -> None:
+    def __send_at_command(self, client_socket: socket.socket, at_command: bytes) -> None:
         self.__log.debug("Sending AT command: %s", at_command)
         client_socket.sendto(at_command, (self.__logger_config.ip_address, self.__logger_config.port))
         time.sleep(0.1)
 
-    def __receive_at_response(self, client_socket: socket) -> str:
+    def __receive_at_response(self, client_socket: socket.socket) -> bytes | None:
         attempts = 5
         while attempts > 0:
             attempts = attempts - 1
