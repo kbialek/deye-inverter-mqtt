@@ -38,6 +38,9 @@ class FakeSensor(AbstractSensor):
     def is_readiness_check(self):
         return self.__is_readiness_check
 
+    def get_registers(self) -> list[int]:
+        return []
+
 
 class TestInverterState(unittest.TestCase):
     def test_no_last_observation(self):

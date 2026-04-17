@@ -17,49 +17,57 @@
 
 import math
 from datetime import datetime
-from abc import abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 
 
-class Sensor:
+class Sensor(ABC):
     """
     Models solar inverter sensor.
 
     This is an abstract class. Method 'read_value' must be provided by the extending subclass.
     """
 
-    @abstractproperty
+    @property
     def reg_address(self) -> int:
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def name(self) -> str:
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def mqtt_topic_suffix(self) -> str:
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def unit(self) -> str:
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def print_format(self) -> str:
         pass
 
-    @abstractproperty
-    def groups(self) -> [str]:
+    @property
+    @abstractmethod
+    def groups(self) -> list[str]:
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def data_type(self) -> str:
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def scale_factor(self) -> float:
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def is_readiness_check(self) -> bool:
         pass
 
@@ -128,7 +136,7 @@ class DailyResetSensor(Sensor):
         return self.__delegate.print_format
 
     @property
-    def groups(self) -> [str]:
+    def groups(self) -> list[str]:
         return self.__delegate.groups
 
     @property
@@ -171,12 +179,12 @@ class DailyResetSensor(Sensor):
 
 
 class AbstractSensor(Sensor):
-    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:s}", groups=[]):
+    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:s}", *, groups: list[str]):
         self.__name = name
         self.__mqtt_topic_suffix = mqtt_topic_suffix
         self.__unit = unit
         self.__print_format = print_format
-        assert len(groups) > 0, f"Sensor {name} must belong to at least one group"
+        assert groups, f"Sensor {name} must belong to at least one group"
         self.__groups = groups
         self.__is_readiness_check = False
 
@@ -197,7 +205,7 @@ class AbstractSensor(Sensor):
         return self.__print_format
 
     @property
-    def groups(self) -> [str]:
+    def groups(self) -> list[str]:
         return self.__groups
 
     @property
@@ -232,9 +240,10 @@ class SingleRegisterSensor(AbstractSensor):
         mqtt_topic_suffix="",
         unit="",
         print_format="{:0.1f}",
-        groups=[],
+        *,
+        groups: list[str],
     ):
-        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups=groups)
         self.__reg_address = reg_address
         self.__factor = factor
         self.__offset = offset
@@ -285,10 +294,11 @@ class DoubleRegisterSensor(AbstractSensor):
         mqtt_topic_suffix="",
         unit="",
         print_format="{:0.1f}",
-        groups=[],
         low_word_first=True,
+        *,
+        groups: list[str],
     ):
-        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups=groups)
         self.__reg_address = reg_address
         self.__factor = factor
         self.__offset = offset
@@ -386,9 +396,10 @@ class ComputedPowerSensor(AbstractSensor):
         mqtt_topic_suffix="",
         unit="",
         print_format="{:0.1f}",
-        groups=[],
+        *,
+        groups: list[str],
     ):
-        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups=groups)
         self.voltage_sensor = voltage_sensor
         self.current_sensor = current_sensor
 
@@ -410,9 +421,16 @@ class ComputedSumSensor(AbstractSensor):
     """
 
     def __init__(
-        self, name: str, sensors: list[Sensor], mqtt_topic_suffix="", unit="", print_format="{:0.1f}", groups=[]
+        self,
+        name: str,
+        sensors: list[Sensor],
+        mqtt_topic_suffix="",
+        unit="",
+        print_format="{:0.1f}",
+        *,
+        groups: list[str],
     ):
-        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups=groups)
         self.sensors = sensors
 
     def read_value(self, registers: dict[int, bytearray]):
@@ -433,8 +451,8 @@ class AggregatedValueSensor(AbstractSensor):
     Represents value computed as an aggregation in multi-inverter installation
     """
 
-    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:0.1f}", groups=[]):
-        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups)
+    def __init__(self, name: str, mqtt_topic_suffix="", unit="", print_format="{:0.1f}", *, groups: list[str]):
+        super().__init__(name, mqtt_topic_suffix, unit, print_format, groups=groups)
 
     def read_value(self, registers: dict[int, bytearray]):
         raise RuntimeError("Cannot read registers of aggregated sensor")
@@ -457,10 +475,13 @@ class EnumValueSensor(AbstractSensor):
         reg_address: int,
         signed=False,
         mqtt_topic_suffix="",
-        groups=[],
-        enum_values={},
+        *,
+        groups: list[str],
+        enum_values: dict | None = None,
     ):
-        super().__init__(name, mqtt_topic_suffix, "", "", groups)
+        super().__init__(name, mqtt_topic_suffix, "", "", groups=groups)
+        if enum_values is None:
+            enum_values = {}
         self.__reg_address = reg_address
         self.__signed = signed
         self.__enum_values = enum_values
@@ -495,9 +516,10 @@ class ComputedBooleanSensor(AbstractSensor):
         bitarray_sensor: Sensor,
         mask: int,
         mqtt_topic_suffix="",
-        groups=[],
+        *,
+        groups: list[str],
     ):
-        super().__init__(name, mqtt_topic_suffix, "", "", groups)
+        super().__init__(name, mqtt_topic_suffix, "", "", groups=groups)
         self.bitarray_sensor = bitarray_sensor
         self.mask = mask
 
@@ -528,9 +550,10 @@ class DateTimeSensor(AbstractSensor):
         reg_address: int,
         mqtt_topic_suffix="",
         print_format="{:.0f}",
-        groups=[],
+        *,
+        groups: list[str],
     ):
-        super().__init__(name, mqtt_topic_suffix, "", print_format, groups)
+        super().__init__(name, mqtt_topic_suffix, "", print_format, groups=groups)
         self.__reg0_address = reg_address
         self.__reg1_address = reg_address + 1
         self.__reg2_address = reg_address + 2
@@ -562,7 +585,7 @@ class DateTimeSensor(AbstractSensor):
 
         return retval
 
-    def write_value(self, value: datetime) -> dict[int, bytearray]:
+    def write_value(self, value: datetime) -> dict[int, list[bytes]]:
 
         reg0_value = 256 * (value.year % 100) + value.month
         reg1_value = 256 * value.day + value.hour

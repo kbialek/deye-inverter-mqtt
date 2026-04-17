@@ -40,6 +40,9 @@ class FakeSensor(AbstractSensor):
     def read_value(self, registers):
         return self.value
 
+    def get_registers(self) -> list[int]:
+        return []
+
 
 class DeyeSensorTest(unittest.TestCase):
     def test_sum_sensor_returns_sum_when_all_inputs_are_given(self):

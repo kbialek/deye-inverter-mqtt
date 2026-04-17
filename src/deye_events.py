@@ -16,7 +16,7 @@
 # under the License.
 
 import logging
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 from deye_observation import Observation
 
@@ -77,7 +77,7 @@ class DeyeLoggerStatusEvent(DeyeEvent):
 
 class DeyeEventList(list):
     """
-    An list of Deye Events
+    A list of Deye Events
     """
 
     def __init__(self, events: list[DeyeEvent] | None = None, logger_index: int = 0):
@@ -121,7 +121,7 @@ class DeyeEventList(list):
         Returns
         -------
         bool
-            True if both lists are containing the same events with same values
+            True if both lists contain the same events with same values
         """
         if self.logger_index != events.logger_index:
             return False
@@ -132,7 +132,7 @@ class DeyeEventList(list):
         return set_a == set_b
 
 
-class DeyeEventProcessor:
+class DeyeEventProcessor(ABC):
     """
     Processors "do something" with the events collected from the inverter.
     """
@@ -156,8 +156,7 @@ class DeyeEventProcessor:
         """
         return ""
 
-    @abstractmethod
-    def process(self, events: DeyeEventList):
+    def process(self, events: DeyeEventList) -> None:
         """
         Processes events representing changes of metric values
         """

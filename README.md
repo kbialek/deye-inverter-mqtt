@@ -283,9 +283,9 @@ It is possible to modify selected inverter settings over MQTT.
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
 | workmode | `{MQTT_TOPIC_PREFIX}/settings/workmode/command` | number | [0,1,2](#writing-workmode-to-configuration) | `DEYE_FEATURE_WORKMODE` |
 | grid_charge | `{MQTT_TOPIC_PREFIX}/settings/battery/grid_charge/command` | boolean | 0,1 | `DEYE_FEATURE_BATTERY_SETTINGS` |
-| maximum_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_charge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
-| maximum_discharge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_discharge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
-| maximum_grid_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_grid_charge_current/command` | A | 0-200 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_charge_current/command` | A | 0-240 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_discharge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_discharge_current/command` | A | 0-240 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_grid_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_grid_charge_current/command` | A | 0-240 | `DEYE_FEATURE_BATTERY_SETTINGS` |
 
 <sup>(1)</sup> encodes the weekdays setting from Monday (bit 7) ... Sunday (bit 1). Additionally controls whether TimeOfUse feature is enabled or not (bit 0)
 | Bit     |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0    |

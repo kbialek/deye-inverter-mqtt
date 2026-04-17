@@ -31,6 +31,9 @@ class FakeSensor(AbstractSensor):
     def read_value(self, registers):
         return self.value
 
+    def get_registers(self) -> list[int]:
+        return []
+
 
 class TestDeyeEventList(unittest.TestCase):
     def test_get_status_event(self):

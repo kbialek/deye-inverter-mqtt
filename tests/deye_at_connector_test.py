@@ -36,7 +36,7 @@ class DeyeAtConnectorTest(unittest.TestCase):
         )
 
         # when
-        modbus_response = DeyeAtConnector.extract_modbus_respose(at_cmd_response)
+        modbus_response = DeyeAtConnector.extract_modbus_response(at_cmd_response)
 
         # then
         assert modbus_response == bytearray.fromhex(
@@ -61,7 +61,7 @@ class DeyeAtConnectorTest(unittest.TestCase):
         )
 
         # when
-        modbus_response = DeyeAtConnector.extract_modbus_respose(at_cmd_response)
+        modbus_response = DeyeAtConnector.extract_modbus_response(at_cmd_response)
 
         # then
         assert modbus_response == bytearray.fromhex(
