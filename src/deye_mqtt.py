@@ -41,7 +41,7 @@ class DeyeMqttClient:
             reconnect_on_failure=True,
             clean_session=True
         )
-        self.__mqtt_client.enable_logger() # Keep this for paho's internal logging
+        self.__mqtt_client.enable_logger()  # Keep this for paho's internal logging
         if config.mqtt.tls.enabled:
             if config.mqtt.tls.insecure:
                 self.__mqtt_client.tls_set(cert_reqs=ssl.CERT_NONE)
@@ -67,11 +67,13 @@ class DeyeMqttClient:
         self.__mqtt_timeout = 3  # seconds for publish wait
         self.__publish_lock = threading.RLock()
         self.__command_handlers = {}
-        self.__pending_subscriptions = [] # Queue for subscriptions that need to be made after connection
-        self.__connection_successful = False # Flag to track actual successful connection
+        self.__pending_subscriptions = []  # Queue for subscriptions that need to be made after connection
+        self.__connection_successful = False  # Flag to track actual successful connection
 
     def subscribe(self, topic: str, callback):
-        """ Queues a subscription. The actual subscription will be made once a connection is successfully established. """
+        """Queues a subscription.
+        The actual subscription will be made once a connection is successfully established.
+        """
         self.__log.debug("Queuing subscription for topic: %s", topic)
         self.__pending_subscriptions.append((topic, callback))
         # If already connected and successful, attempt to subscribe immediately
@@ -85,29 +87,34 @@ class DeyeMqttClient:
         if result != paho.MQTT_ERR_SUCCESS:
             self.__log.error("Failed to subscribe to topic %s. Return code: %s", topic, result)
         else:
-            self.__mqtt_client.message_callback_add(topic, callback) # Add specific topic callback
+            self.__mqtt_client.message_callback_add(topic, callback)  # Add specific topic callback
 
     def connect(self) -> bool:
-        """  Attempts to connect to the MQTT broker. Returns True if connection is established, False otherwise.  """
+        """Attempts to connect to the MQTT broker.
+        Returns True if connection is established, False otherwise.
+        """
         if self.__mqtt_client.is_connected() and self.__connection_successful:
             self.__log.debug("MQTT client is already successfully connected.")
             return True
         elif self.__mqtt_client.is_connected() and not self.__connection_successful:
-            self.__log.warning("MQTT client appears connected but reported a previous connection failure. Reconnecting.")
-            self.disconnect() # Force a clean disconnect to re-attempt connection
+            self.__log.warning(
+                "MQTT client appears connected but reported a previous connection failure. "
+                "Reconnecting."
+            )
+            self.disconnect()  # Force a clean disconnect to re-attempt connection
         self.__log.info("Attempting to connect to MQTT Broker at %s:%d...", self.__config.host, self.__config.port)
         try:
             self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
-            self.__mqtt_client.loop_start() # Start network loop
+            self.__mqtt_client.loop_start()  # Start network loop
             # Wait for connection to establish or fail
             start_time = time.time()
             # Maximum wait time for connection attempt
-            connection_timeout = 10 # seconds
+            connection_timeout = 10  # seconds
             while not self.__mqtt_client.is_connected():
                 if time.time() - start_time > connection_timeout:
                     self.__log.error("Connection attempt timed out after %d seconds.", connection_timeout)
                     return False
-                time.sleep(0.1) # Small delay to prevent busy-waiting
+                time.sleep(0.1)  # Small delay to prevent busy-waiting
             # After the loop, check the success flag set by __on_connect
             if self.__connection_successful:
                 self.__log.info("MQTT connection established.")
@@ -120,7 +127,11 @@ class DeyeMqttClient:
                 self.__log.error("MQTT connection failed (check logs for details).")
                 return False
         except ConnectionRefusedError:
-            self.__log.error("Connection refused. Make sure the MQTT broker is running at %s:%d.", self.__config.host, self.__config.port)
+            self.__log.error(
+                "Connection refused. Make sure the MQTT broker is running at %s:%d.",
+                self.__config.host,
+                self.__config.port
+            )
             return False
         except OSError as e:
             self.__log.error("OS error during MQTT connection to %s:%d: %s", self.__config.host, self.__config.port, e)
@@ -130,13 +141,16 @@ class DeyeMqttClient:
             return False
 
     def __on_connect(self, client, userdata, flags, rc) -> None:
-        """ Callback function for when the client connects to the MQTT broker.
-        Handles different return codes to provide specific error messages. """
-        self.__connection_successful = False # Reset flag for each connect attempt
+        """Callback function for when the client connects to the MQTT broker.
+        Handles different return codes to provide specific error messages.
+        """
+        self.__connection_successful = False  # Reset flag for each connect attempt
         if rc == 0:
             self.__connection_successful = True
             self.__log.info(
-                "Successfully connected to MQTT Broker located at %s:%d", self.__config.host, self.__config.port
+                "Successfully connected to MQTT Broker located at %s:%d",
+                self.__config.host,
+                self.__config.port
             )
             # Publish online status
             self.__mqtt_client.publish(self.__status_topic, "online", retain=True, qos=1)
@@ -160,68 +174,72 @@ class DeyeMqttClient:
         if not self.__connection_successful:
             self.__log.warning("MQTT connection failed. Attempting to reconnect...")
 
-    def __on_disconnect(self, client, userdata, rc, properties=None) -> None: # v2 callback signature
-        """ Callback function for when the client disconnects from the MQTT broker (VERSION2 API). """
-        self.__connection_successful = False # Connection lost
+    def __on_disconnect(self, client, userdata, rc, properties=None) -> None:  # v2 callback signature
+        """Callback function for when the client disconnects from the MQTT broker (VERSION2 API)."""
+        self.__connection_successful = False  # Connection lost
         if rc != 0:
-            self.__log.warning(f"Disconnected from MQTT Broker unexpectedly. Reason code: {rc}")
+            self.__log.warning(
+                f"Disconnected from MQTT Broker unexpectedly. Reason code: {rc}"
+            )
         else:
             self.__log.info("Disconnected from MQTT Broker gracefully.")
         # The loop_start() method should handle reconnections automatically.
 
-    def __on_disconnect_legacy(self, client, userdata, rc) -> None: # Legacy callback signature
-        """ Callback function for when the client disconnects from the MQTT broker (Legacy API). """
-        self.__connection_successful = False # Connection lost
+    def __on_disconnect_legacy(self, client, userdata, rc) -> None:  # Legacy callback signature
+        """Callback function for when the client disconnects from the MQTT broker (Legacy API)."""
+        self.__connection_successful = False  # Connection lost
         if rc != 0:
-            self.__log.warning(f"Disconnected from MQTT Broker unexpectedly. Reason code: {rc}")
+            self.__log.warning(
+                f"Disconnected from MQTT Broker unexpectedly. Reason code: {rc}"
+            )
         else:
             self.__log.info("Disconnected from MQTT Broker gracefully.")
         # The loop_start() method should handle reconnections automatically.
-
 
     def _process_pending_subscriptions(self):
-        """ Processes any subscriptions that were queued while the client was disconnected.
-        This is called automatically when a successful connection is made. """
+        """Processes any subscriptions that were queued while the client was disconnected.
+        This is called automatically when a successful connection is made.
+        """
         if self.__pending_subscriptions:
-            self.__log.debug("Processing %d pending subscriptions.", len(self.__pending_subscriptions))
-            # Iterate over a copy of the list to avoid issues if subscribe is called again recursively
+            self.__log.debug(
+                "Processing %d pending subscriptions.",
+                len(self.__pending_subscriptions)
+            )
             subscriptions = self.__mqtt_client.get_subscriptions()
             for topic, callback in list(self.__pending_subscriptions):
                 # Check if it's already subscribed to prevent duplicates if connection is unstable
-                if topic not in subscriptions: # This is a simplification, paho doesn't directly expose this easily.
-                                                                       # Relying on the logic that pending list is cleaned up.
+                if topic not in subscriptions:  # paho doesn't expose this easily
                     self._perform_subscription(topic, callback)
-                    # Remove from pending if successful, or keep if there was an error.
-                    # For now, we'll clear the whole list if all attempts succeed.
+            # Remove from pending if successful, or keep if there was an error.
+            # For now, we'll clear the whole list if all attempts succeed.
             # Clear pending subscriptions after attempting to process them
             # If _perform_subscription fails for some, they will be re-queued on next connect.
             self.__pending_subscriptions.clear()
 
-
     def __resubscribe_command_handlers(self):
-        """ Resubscribes to all command topics when a connection is established. """
-        # Iterate over a snapshot to avoid "dictionary changed size during iteration"
+        """Resubscribes to all command topics when a connection is established."""
         for mqtt_topic, handler_method in list(self.__command_handlers.items()):
             self.__log.debug("Resubscribing to command topic: %s", mqtt_topic)
-            # Command handlers are critical, so we resubscribe directly.
             self._perform_subscription(mqtt_topic, handler_method)
 
     def disconnect(self):
         self.__log.info("Disconnecting from MQTT Broker...")
         if self.__mqtt_client.is_connected():
             self.__mqtt_client.disconnect()
-        self.__mqtt_client.loop_stop() # Stop the network loop
+        self.__mqtt_client.loop_stop()  # Stop the network loop
         self.__log.info("MQTT client stopped and disconnected.")
 
     def publish(self, mqtt_topic: str, value: str):
-        """  Publishes a message to the given MQTT topic.
-        Handles connection and potential publishing errors. """
-        # Ensure we are actually connected and the connection was successful
+        """Publishes a message to the given MQTT topic.
+        Handles connection and potential publishing errors.
+        Ensure we are actually connected and the connection was successful
+        """
         if not self.__connection_successful:
-            self.__log.warning("Cannot publish message to '%s': Not connected to MQTT broker.", mqtt_topic)
-            # Optionally, try to connect here, but it's better to let the main loop handle reconnections.
-            # self.connect() # Uncommenting this might cause recursive connect calls if not careful.
-            return # Exit if not connected
+            self.__log.warning(
+                "Cannot publish message to '%s': Not connected to MQTT broker.",
+                mqtt_topic
+            )
+            return  # Exit if not connected
         try:
             self.__publish_lock.acquire()
             self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
@@ -252,7 +270,6 @@ class DeyeMqttClient:
         finally:
             self.__publish_lock.release()
 
-
     def __build_topic_name(self, logger_topic_prefix: str, topic_suffix: str) -> str:
         """Internal helper to construct a full MQTT topic."""
         if logger_topic_prefix:
@@ -281,11 +298,13 @@ class DeyeMqttClient:
             except DeyeMqttPublishError as e:
                 self.__log.error("Failed to publish observation for %s: %s", observation.sensor.name, e.message)
         else:
-            self.__log.debug("No MQTT topic suffix configured for sensor '%s', skipping publish.", observation.sensor.name)
-
+            self.__log.debug(
+                "No MQTT topic suffix configured for sensor '%s', skipping publish.",
+                observation.sensor.name
+            )
 
     def publish_logger_status(self, is_online: bool, logger_index: int):
-        """ Publishes the online/offline status of a logger to its status topic. """
+        """Publishes the online/offline status of a logger to its status topic."""
         mqtt_topic = self.build_topic_name(logger_index, self.__config.logger_status_topic)
         value = "online" if is_online else "offline"
         try:
@@ -317,24 +336,24 @@ class DeyeMqttClient:
         except Exception as e:
             self.__log.error("Error processing received message on topic '%s': %s", msg.topic, e)
 
-
     def setup_deye_data_subscription(self, deye_data_topic: str):
-        """ Sets up the subscription for Deye inverter data messages.
-        The actual subscription is queued and performed upon successful connection. """
-        # The topic might be absolute or relative to topic_prefix.
-        # If it doesn't start with '/', assume it's relative and prepend topic_prefix.
+        """Sets up the subscription for Deye inverter data messages.
+        The actual subscription is queued and performed upon successful connection.
+        The topic might be absolute or relative to topic_prefix.
+        If it doesn't start with '/', assume it's relative and prepend topic_prefix.
+        """
         if not deye_data_topic.startswith('/'):
             full_topic = f"{self.__config.topic_prefix}/{deye_data_topic}"
         else:
-            full_topic = deye_data_topic # Assume it's an absolute topic
+            full_topic = deye_data_topic  # Assume it's an absolute topic
         # Use a lambda to pass the client and any necessary context to the callback
         # The subscription itself is queued by the 'subscribe' method.
         self.subscribe(full_topic, lambda client, userdata, msg: self.__process_deye_data(client, userdata, msg))
 
-
     def extract_command_topic_suffix(self, logger_index: int, topic: str) -> str | None:
-        """ Extracts the command suffix from an incoming MQTT topic, if it matches the expected pattern.
-        Returns the extracted suffix or None if the topic does not match.   """
+        """Extracts the command suffix from an incoming MQTT topic, if it matches the expected pattern.
+        Returns the extracted suffix or None if the topic does not match.
+        """
         logger_topic_prefix = self.__map_logger_index_to_topic_prefix(logger_index)
         prefix = f"{self.__config.topic_prefix}/"
         if logger_topic_prefix:
