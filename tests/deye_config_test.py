@@ -15,9 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import os
 import unittest
 
-from deye_config import DeyeEnv
+from deye_config import DeyeConfig, DeyeEnv, DeyeMqttConfig
 
 
 class DeyeConfigTest(unittest.TestCase):
@@ -66,3 +67,27 @@ class DeyeConfigTest(unittest.TestCase):
             self.fail()
         except KeyError as e:
             pass
+
+    def test_boolean_raises_typeerror_for_non_bool_value(self):
+        """Test TypeError when boolean env var is neither 'true' nor 'false' (lines 42-45)."""
+        os.environ["TEST_BOOL_VAR"] = "yes"
+        try:
+            DeyeEnv.boolean("TEST_BOOL_VAR")
+            self.fail()
+        except TypeError as e:
+            assert "not a valid boolean" in str(e)
+        finally:
+            del os.environ["TEST_BOOL_VAR"]
+
+    def test_mqtt_config_username_password_return_none_for_empty_strings(self):
+        """Test DeyeMqttConfig property getters returning None for empty strings (lines 97, 101)."""
+        cfg = DeyeMqttConfig(
+            host="localhost", port=1883, username="", password="", topic_prefix="deye"
+        )
+        self.assertIsNone(cfg.username)
+        self.assertIsNone(cfg.password)
+
+    def test_active_processors_includes_mqtt_publisher_by_default(self):
+        """Test feature flag paths: mqtt_publisher is included by default (lines 181-213)."""
+        processors = DeyeConfig._DeyeConfig__read_active_processors()
+        self.assertIn("mqtt_publisher", processors)
