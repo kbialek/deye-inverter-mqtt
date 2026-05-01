@@ -107,3 +107,127 @@ class TestDeyeTimeOfUseService:
 
         # then
         assert sut.modifications[sensor_time_1] == "0600"
+
+    def test_handle_control_command_reset_clears_modifications(
+        self, logger_config_mock, mqtt_client_mock, mqtt_config_mock, modbus_mock
+    ):
+        """Test control command 'reset' clears modifications (line 64 — NOT covered by existing tests)."""
+        # given
+        mqtt_client_mock.subscribe_command_handler.return_value = None
+        mqtt_config_mock.topic_prefix = "deye"
+        sensors = [sensor_time_1, sensor_time_2]
+        sut = DeyeTimeOfUseService(logger_config_mock, mqtt_client_mock, sensors, modbus_mock)
+        sut.initialize()
+
+        # and: set modifications via handle_command
+        msg = MQTTMessage(1, b"deye/timeofuse/time/1/command")
+        msg.payload = b"0600"
+        sut.handle_command(None, None, msg)
+        assert sut.modifications  # modifications exist
+
+        # when: send reset command
+        reset_msg = MQTTMessage(1, b"deye/timeofuse/control")
+        reset_msg.payload = b"reset"
+        sut.handle_control_command(None, None, reset_msg)
+
+        # then
+        assert not sut.modifications  # cleared
+
+    def test_write_config_early_return_when_no_read_state(
+        self, logger_config_mock, mqtt_client_mock, modbus_mock
+    ):
+        """Test write_config returns early when read_state is empty (line 44)."""
+        # given
+        sensors = [sensor_time_1]
+        sut = DeyeTimeOfUseService(logger_config_mock, mqtt_client_mock, sensors, modbus_mock)
+        mqtt_client_mock.subscribe_command_handler.return_value = None
+        sut.initialize()
+        # set a modification but do NOT call process() → read_state is empty
+        sut.modifications[sensor_time_1] = "0600"
+
+        # when
+        sut.write_config(dry_run=False)
+
+        # then: modbus should NOT be called because read_state is empty
+        assert not modbus_mock.write_registers.called
+
+    def test_handle_control_command_dry_write_no_modbus_call(
+        self, logger_config_mock, mqtt_client_mock, modbus_mock
+    ):
+        """Test control command 'dry-write' does NOT call modbus (line 47)."""
+        # given
+        sensors = [sensor_time_1, sensor_time_2]
+        sut = DeyeTimeOfUseService(logger_config_mock, mqtt_client_mock, sensors, modbus_mock)
+
+        # build read_state via process()
+        now = datetime.now()
+        observations = [
+            Observation(sensor_time_1, now, 500),
+            Observation(sensor_time_2, now, 700),
+        ]
+        sut.process(DeyeEventList([DeyeObservationEvent(o) for o in observations]))
+        sut.modifications[sensor_time_1] = "0600"
+
+        # when: send dry-write command
+        dry_msg = MQTTMessage(1, b"deye/timeofuse/control")
+        dry_msg.payload = b"dry-write"
+        sut.handle_control_command(None, None, dry_msg)
+
+        # then: modbus should NOT be called (dry run)
+        assert not modbus_mock.write_registers.called
+
+    def test_handle_control_command_write_sends_modbus_single_batch(
+        self, logger_config_mock, mqtt_client_mock, modbus_mock
+    ):
+        """Test control command 'write' sends modbus write for consecutive registers (lines 51, 80–88)."""
+        # given
+        sensors = [sensor_time_1, sensor_time_2]
+        sut = DeyeTimeOfUseService(logger_config_mock, mqtt_client_mock, sensors, modbus_mock)
+
+        now = datetime.now()
+        observations = [
+            Observation(sensor_time_1, now, 500),
+            Observation(sensor_time_2, now, 700),
+        ]
+        sut.process(DeyeEventList([DeyeObservationEvent(o) for o in observations]))
+        # set modifications on consecutive registers (148, 149)
+        sut.modifications[sensor_time_1] = "0600"
+        sut.modifications[sensor_time_2] = "0700"
+
+        # when: send write command
+        write_msg = MQTTMessage(1, b"deye/timeofuse/control")
+        write_msg.payload = b"write"
+        sut.handle_control_command(None, None, write_msg)
+
+        # then: modbus.write_registers should have been called once
+        assert modbus_mock.write_registers.call_count == 1
+        call_args = modbus_mock.write_registers.call_args
+        assert call_args[0][0] == 148  # first register address (consecutive batch)
+
+    def test_handle_control_command_write_handles_gaps_in_registers(
+        self, logger_config_mock, mqtt_client_mock, modbus_mock
+    ):
+        """Test control command 'write' handles gaps in register addresses (lines 71–77)."""
+        # given
+        sensors = [sensor_time_1, sensor_time_3]  # registers 148 and 150 (gap at 149)
+        sut = DeyeTimeOfUseService(logger_config_mock, mqtt_client_mock, sensors, modbus_mock)
+
+        now = datetime.now()
+        observations = [
+            Observation(sensor_time_1, now, 500),
+            Observation(sensor_time_3, now, 1000),
+        ]
+        sut.process(DeyeEventList([DeyeObservationEvent(o) for o in observations]))
+        sut.modifications[sensor_time_1] = "0600"
+        sut.modifications[sensor_time_3] = "1500"
+
+        # when: send write command
+        write_msg = MQTTMessage(1, b"deye/timeofuse/control")
+        write_msg.payload = b"write"
+        sut.handle_control_command(None, None, write_msg)
+
+        # then: modbus.write_registers should be called twice (148 alone, 150 alone — gap at 149)
+        assert modbus_mock.write_registers.call_count == 2
+        call_args_list = modbus_mock.write_registers.call_args_list
+        assert call_args_list[0][0][0] == 148  # first batch starts at 148
+        assert call_args_list[1][0][0] == 150  # second batch starts at 150
