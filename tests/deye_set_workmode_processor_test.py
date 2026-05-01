@@ -15,10 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
+import pytest
 from unittest.mock import patch
 
-# from deye_solar_sell import DeyeSolarSellEventProcessor
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
 from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig
@@ -29,9 +28,9 @@ from deye_set_workmode_processor import DeyeWorkmodeEventProcessor
 REGISTER_WORKMODE = 142
 
 
-class TestDeyeWorkmodeEventProcessor(unittest.TestCase):
-
-    def setUp(self):
+class TestDeyeWorkmodeEventProcessor:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = DeyeLoggerConfig(1234567890, "127.0.0.1", 8899)
         self.sensor1 = SingleRegisterSensor(
             "Workmode set",

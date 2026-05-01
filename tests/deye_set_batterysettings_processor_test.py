@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
+import pytest
 from unittest.mock import patch
 
 from deye_modbus import DeyeModbus
@@ -39,8 +39,9 @@ def extract_topic_suffix_side_effect(logger_index, topic):
     return None
 
 
-class TestDeyeBatterySettingsEventProcessor(unittest.TestCase):
-    def setUp(self):
+class TestDeyeBatterySettingsEventProcessor:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = DeyeLoggerConfig(1234567890, "127.0.0.1", 8899)
         self.sensor_grid_charge = SingleRegisterSensor(
             "Grid Charge Enable",
@@ -128,17 +129,17 @@ class TestDeyeBatterySettingsEventProcessor(unittest.TestCase):
         mqtt_client_mock.subscribe_command_handler.assert_called_once_with(
             self.config.index, "settings/battery/+", processor.handle_command
         )
-        self.assertIn(
-            self.sensor_grid_charge.mqtt_topic_suffix,
-            processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict,
+        assert (
+            self.sensor_grid_charge.mqtt_topic_suffix
+            in processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict
         )
-        self.assertIn(
-            self.sensor_max_charge_current.mqtt_topic_suffix,
-            processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict,
+        assert (
+            self.sensor_max_charge_current.mqtt_topic_suffix
+            in processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict
         )
-        self.assertNotIn(
-            self.sensor_other.mqtt_topic_suffix,
-            processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict,
+        assert (
+            self.sensor_other.mqtt_topic_suffix
+            not in processor._DeyeBatterySettingsEventProcessor__battery_settings_sensor_reg_addresses_dict
         )
 
     @patch("deye_mqtt.DeyeMqttClient")

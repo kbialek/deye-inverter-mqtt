@@ -15,11 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
 import os
 import time
 from datetime import datetime
 import paho.mqtt.client as paho
+import pytest
 
 from deye_observation import Observation
 from deye_sensors import string_dc_power_sensor
@@ -33,9 +33,8 @@ log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(stream=sys.stdout, format=log_format, level=logging.DEBUG)
 
 
-class DeyeMqttClientIntegrationTest(unittest.TestCase):
+class TestDeyeMqttClient:
     mqtt_broker_port = 9883
-    mosquitto_pid = None
 
     def __start_broker(self):
         self.mosquitto_pid = os.spawnl(
@@ -69,7 +68,8 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         )
         self.test_mqtt_client.connect("localhost", port=self.mqtt_broker_port)
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.received_messages = []
         self.config = DeyeConfig(
             logger_configs=DeyeLoggerConfig("123456", "192.168.0.1", 9090),
@@ -98,7 +98,8 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
 
         self.test_mqtt_client.on_message = on_message
 
-    def tearDown(self):
+        yield
+
         self.test_mqtt_client.disconnect()
         self.__stop_broker()
 
@@ -127,12 +128,12 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         mqtt.disconnect()
 
         # then
-        self.assertEqual(len(self.received_messages), 1)
+        assert len(self.received_messages) == 1
 
         # and
         received_message = self.received_messages[0]
-        self.assertEqual(received_message.topic, "deye/dc/total_power")
-        self.assertEqual(received_message.payload, b"1.2")
+        assert received_message.topic == "deye/dc/total_power"
+        assert received_message.payload == b"1.2"
 
     def test_reconnect_on_broker_restart(self):
         # given
@@ -163,12 +164,12 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         mqtt.disconnect()
 
         # then
-        self.assertEqual(len(self.received_messages), 1)
+        assert len(self.received_messages) == 1
 
         # and
         received_message = self.received_messages[0]
-        self.assertEqual(received_message.topic, "deye/dc/total_power")
-        self.assertEqual(received_message.payload, b"1.2")
+        assert received_message.topic == "deye/dc/total_power"
+        assert received_message.payload == b"1.2"
 
     def test_resend_availability_status_on_reconnect(self):
         # given
@@ -185,12 +186,12 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         time.sleep(3)
 
         # then
-        self.assertEqual(len(self.received_messages), 1)
+        assert len(self.received_messages) == 1
 
         # and
         received_message = self.received_messages[0]
-        self.assertEqual(received_message.topic, "deye/status")
-        self.assertEqual(received_message.payload, b"online")
+        assert received_message.topic == "deye/status"
+        assert received_message.payload == b"online"
         self.received_messages.clear()
 
         # and
@@ -211,12 +212,12 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         mqtt.publish_observation(observation, 0)
 
         # then
-        self.assertEqual(len(self.received_messages), 1)
+        assert len(self.received_messages) == 1
 
         # and
         received_message = self.received_messages[0]
-        self.assertEqual(received_message.topic, "deye/status")
-        self.assertEqual(received_message.payload, b"online")
+        assert received_message.topic == "deye/status"
+        assert received_message.payload == b"online"
 
         # and
         self.test_mqtt_client.loop_stop()
@@ -251,12 +252,12 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         mqtt.disconnect()
 
         # then
-        self.assertEqual(len(self.received_messages), 1)
+        assert len(self.received_messages) == 1
 
         # and
         received_message = self.received_messages[0]
-        self.assertEqual(received_message.topic, "deye/dc/total_power")
-        self.assertEqual(received_message.payload, b"1.2")
+        assert received_message.topic == "deye/dc/total_power"
+        assert received_message.payload == b"1.2"
 
     def test_publish_message_with_tls(self):
         # given
@@ -283,13 +284,9 @@ class DeyeMqttClientIntegrationTest(unittest.TestCase):
         mqtt.disconnect()
 
         # then
-        self.assertEqual(len(self.received_messages), 1)
+        assert len(self.received_messages) == 1
 
         # and
         received_message = self.received_messages[0]
-        self.assertEqual(received_message.topic, "deye/dc/total_power")
-        self.assertEqual(received_message.payload, b"1.2")
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert received_message.topic == "deye/dc/total_power"
+        assert received_message.payload == b"1.2"

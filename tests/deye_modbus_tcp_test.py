@@ -16,7 +16,7 @@
 # under the License.
 
 import libscrc
-import unittest
+import pytest
 from unittest.mock import patch
 
 from deye_config import DeyeConfig, DeyeLoggerConfig
@@ -24,15 +24,17 @@ from deye_modbus import DeyeModbus
 from deye_modbus_tcp import DeyeModbusTcp
 
 
-class DeyeModbusTcpTest(unittest.TestCase):
-    def _compute_crc_bytes(self, frame: bytearray) -> bytearray:
+class TestDeyeModbusTcp:
+    @pytest.fixture(autouse=True)
+    def setup_config(self):
+        self.config = DeyeLoggerConfig(1234567890, "192.168.1.1", 8899)
+
+    @staticmethod
+    def _compute_crc_bytes(frame: bytearray) -> bytearray:
         """Compute and return the CRC bytes in little-endian format (matching Modbus TCP wire format)."""
         crc = bytearray.fromhex("{:04x}".format(libscrc.modbus(frame)))
         crc.reverse()
         return crc
-
-    def setUp(self):
-        self.config = DeyeLoggerConfig(1234567890, "192.168.1.1", 8899)
 
     @patch("deye_connector.DeyeConnector")
     def test_read_register_0x01(self, connector):
@@ -44,9 +46,9 @@ class DeyeModbusTcpTest(unittest.TestCase):
         reg_values = sut.read_registers(1, 1)
 
         # then
-        self.assertEqual(len(reg_values), 1)
-        self.assertTrue(1 in reg_values)
-        self.assertEqual(reg_values[1].hex(), "000a")
+        assert len(reg_values) == 1
+        assert 1 in reg_values
+        assert reg_values[1].hex() == "000a"
 
     @patch("deye_connector.DeyeConnector")
     def test_read_registers_0x02_0x03(self, connector):
@@ -58,11 +60,11 @@ class DeyeModbusTcpTest(unittest.TestCase):
         reg_values = sut.read_registers(2, 3)
 
         # then
-        self.assertEqual(len(reg_values), 2)
-        self.assertTrue(2 in reg_values)
-        self.assertTrue(3 in reg_values)
-        self.assertEqual(reg_values[2].hex(), "000a")
-        self.assertEqual(reg_values[3].hex(), "000b")
+        assert len(reg_values) == 2
+        assert 2 in reg_values
+        assert 3 in reg_values
+        assert reg_values[2].hex() == "000a"
+        assert reg_values[3].hex() == "000b"
 
         # and
         connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000601" + "0300020002"))
@@ -77,7 +79,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         success = sut.write_register(0x12, bytearray.fromhex("A3D4"))
 
         # then
-        self.assertTrue(success)
+        assert success is True
         connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000901" + "100012000102a3d4"))
 
     @patch("deye_connector.DeyeConnector")
@@ -90,7 +92,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         success = sut.write_register_uint(0x12, 0xA3D4)
 
         # then
-        self.assertTrue(success)
+        assert success is True
         connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000901" + "100012000102a3d4"))
 
     @patch("deye_connector.DeyeConnector")
@@ -104,7 +106,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         success = sut.write_registers_uint(0x12, [0x00FF, 0xA3D4])
 
         # then
-        self.assertTrue(success)
+        assert success is True
         connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000B01" + "10001200020400ffa3d4"))
 
     @patch("deye_connector.DeyeConnector")
@@ -145,7 +147,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         reg_values = sut.read_registers(1, 5)
 
         # then
-        self.assertEqual(reg_values, {})
+        assert reg_values == {}
 
     @patch("deye_connector.DeyeConnector")
     def test_read_registers_short_frame_returns_empty(self, connector):
@@ -162,7 +164,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         reg_values = sut.read_registers(1, 5)
 
         # then
-        self.assertEqual(reg_values, {})
+        assert reg_values == {}
 
     @patch("deye_connector.DeyeConnector")
     def test_read_registers_too_short_parsed_frame_returns_empty(self, connector):
@@ -185,7 +187,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         reg_values = sut.read_registers(1, 1)
 
         # then
-        self.assertEqual(reg_values, {})
+        assert reg_values == {}
 
     @patch("deye_connector.DeyeConnector")
     def test_read_registers_crc_mismatch_returns_empty(self, connector):
@@ -207,7 +209,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         reg_values = sut.read_registers(1, 1)
 
         # then
-        self.assertEqual(reg_values, {})
+        assert reg_values == {}
 
     @patch("deye_connector.DeyeConnector")
     def test_write_register_connector_none_returns_false(self, connector):
@@ -223,7 +225,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         success = sut.write_register(0x12, bytearray.fromhex("00ff"))
 
         # then
-        self.assertFalse(success)
+        assert success is False
 
     @patch("deye_connector.DeyeConnector")
     def test_write_register_short_frame_returns_false(self, connector):
@@ -242,7 +244,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         success = sut.write_register(0x12, bytearray.fromhex("00ff"))
 
         # then
-        self.assertFalse(success)
+        assert success is False
 
     @patch("deye_connector.DeyeConnector")
     def test_write_register_crc_mismatch_returns_false(self, connector):
@@ -264,7 +266,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         success = sut.write_register(0x12, bytearray.fromhex("00ff"))
 
         # then
-        self.assertFalse(success)
+        assert success is False
 
     @patch("deye_connector.DeyeConnector")
     def test_write_register_address_mismatch_returns_false(self, connector):
@@ -285,7 +287,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
         success = sut.write_register(0x12, bytearray.fromhex("00ff"))
 
         # then
-        self.assertFalse(success)
+        assert success is False
 
     @patch("deye_connector.DeyeConnector")
     def test_write_register_count_mismatch_returns_false(self, connector):
@@ -304,8 +306,4 @@ class DeyeModbusTcpTest(unittest.TestCase):
         success = sut.write_register(0x12, bytearray.fromhex("00ff"))
 
         # then
-        self.assertFalse(success)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert success is False

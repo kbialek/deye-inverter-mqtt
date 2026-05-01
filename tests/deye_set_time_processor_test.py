@@ -15,8 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
-from unittest.mock import patch
+import pytest
+from unittest.mock import patch, ANY
 
 from deye_set_time_processor import DeyeSetTimeProcessor
 from deye_events import DeyeEventList, DeyeLoggerStatusEvent
@@ -27,8 +27,9 @@ datetime_sensor_1 = deye_sensors_deye_sg01hp3.deye_sg01hp3_system_time_62
 datetime_sensor_2 = deye_sensors_deye_sg01hp3.deye_sg01hp3_system_time_62
 
 
-class DeyeSetTimeProcessorTest(unittest.TestCase):
-    def setUp(self):
+class TestDeyeSetTimeProcessor:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = DeyeLoggerConfig(1234567890, "192.168.1.1", 8899)
 
     @patch("deye_modbus.DeyeModbus")
@@ -42,7 +43,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
             processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
-        modbus.write_registers_uint.assert_any_call(22, unittest.mock.ANY)
+        modbus.write_registers_uint.assert_any_call(22, ANY)
         mock_log.warning.assert_called_with(
             "Couldn't determine the DateTimeSensor object. Using registers 22-24. "
             "If setting of the time fails, please ensure there's a DateTimeSensor "
@@ -50,7 +51,7 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         )
 
         # and
-        self.assertTrue(processor.last_status)
+        assert processor.last_status
 
     @patch("deye_modbus.DeyeModbus")
     def test_keep_stored_status_set_to_offline__when_modbus_write_fails_and_no_datetime_sensors_defined(self, modbus):
@@ -66,11 +67,11 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
             processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
-        modbus.write_registers_uint.assert_any_call(22, unittest.mock.ANY)
+        modbus.write_registers_uint.assert_any_call(22, ANY)
         mock_log.warning.assert_called()
 
         # and
-        self.assertFalse(processor.last_status)
+        assert not processor.last_status
 
     @patch("deye_modbus.DeyeModbus")
     def test_set_time__when_logger_is_becoming_online_and_datetime_sensor_defined(self, modbus):
@@ -82,11 +83,11 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
-        modbus.write_registers.assert_any_call(datetime_sensor_1.get_registers()[0], unittest.mock.ANY)
+        modbus.write_registers.assert_any_call(datetime_sensor_1.get_registers()[0], ANY)
         modbus.write_registers_uint.assert_not_called()
 
         # and
-        self.assertTrue(processor.last_status)
+        assert processor.last_status
 
     @patch("deye_modbus.DeyeModbus")
     def test_keep_stored_status_set_to_offline__when_modbus_write_fails_and_datetime_sensor_defined(self, modbus):
@@ -102,12 +103,12 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
             processor.process(DeyeEventList([DeyeLoggerStatusEvent(True)]))
 
         # then
-        modbus.write_registers.assert_any_call(datetime_sensor_1.get_registers()[0], unittest.mock.ANY)
+        modbus.write_registers.assert_any_call(datetime_sensor_1.get_registers()[0], ANY)
         modbus.write_registers_uint.assert_not_called()
         mock_log.warning.assert_called_with("Failed to set logger time")
 
         # and
-        self.assertFalse(processor.last_status)
+        assert not processor.last_status
 
     @patch("deye_modbus.DeyeModbus")
     def test_set_time__when_logger_is_becoming_online_and_multiple_datetime_sensors_defined(self, modbus):
@@ -125,4 +126,4 @@ class DeyeSetTimeProcessorTest(unittest.TestCase):
         mock_log.warning.assert_called()
 
         # and
-        self.assertFalse(processor.last_status)
+        assert not processor.last_status

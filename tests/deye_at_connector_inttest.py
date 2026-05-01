@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
 import os
 import time
 
@@ -23,7 +22,7 @@ from deye_config import DeyeConfig
 from deye_at_connector import DeyeAtConnector
 
 
-class DeyeAtConnectorIntegrationTest(unittest.TestCase):
+class DeyeAtConnectorIntegrationTest:
     def test_connectivity(self):
         # given
         deye_config = DeyeConfig.from_env()
