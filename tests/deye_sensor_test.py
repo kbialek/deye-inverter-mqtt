@@ -416,6 +416,26 @@ class DeyeSensorTest(unittest.TestCase):
         # then
         self.assertEqual(result, None)
 
+    def test_format_value_uses_custom_print_format(self):
+        # given
+        sut = SingleRegisterSensor("test", 0x00, 1.0, signed=False, print_format="{:d}", groups=["string"])
+
+        # when
+        result = sut.format_value(42)
+
+        # then
+        self.assertEqual(result, "42")
+
+    def test_format_value_default_format(self):
+        # given
+        sut = SingleRegisterSensor("test", 0x00, 1.0, signed=False, groups=["string"])
+
+        # when
+        result = sut.format_value(3.14)
+
+        # then
+        self.assertEqual(result, "3.1")
+
 
 if __name__ == "__main__":
     unittest.main()
