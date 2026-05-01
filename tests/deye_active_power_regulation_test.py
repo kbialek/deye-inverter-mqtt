@@ -15,6 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import logging
+
 import pytest
 
 from deye_active_power_regulation import DeyeActivePowerRegulationEventProcessor
@@ -44,7 +46,11 @@ class TestDeyeActivePowerRegulationEventProcessor:
     @staticmethod
     @pytest.fixture
     def config_mock(mocker) -> DeyeLoggerConfig:
-        return mocker.Mock(spec=DeyeLoggerConfig)
+        real_logger = mocker.Mock(spec=DeyeLoggerConfig)
+        # Return a real LoggerAdapter wrapping the module's logger so caplog can capture output
+        target = logging.getLogger(DeyeActivePowerRegulationEventProcessor.__name__)
+        real_logger.logger_adapter.return_value = logging.LoggerAdapter(target, {})
+        return real_logger
 
     @staticmethod
     @pytest.fixture
@@ -113,3 +119,24 @@ class TestDeyeActivePowerRegulationEventProcessor:
 
         # then
         assert not modbus_mock.write_register_uint.called
+
+    def test_handle_invalid_value_does_not_raise_exception_no_modbus_call(
+        self,
+        config_mock: DeyeLoggerConfig,
+        mqtt_client_mock: DeyeMqttClient,
+        modbus_mock: DeyeModbus,
+        sensors: [Sensor],
+        caplog,
+    ):
+        # given
+        sut = DeyeActivePowerRegulationEventProcessor(config_mock, mqtt_client_mock, sensors, modbus_mock)
+
+        # and — payload that triggers ValueError (line 51) when float() is called
+        msg = MQTTMessage()
+        msg.payload = "not_a_number"
+
+        # when/then — should handle gracefully: no exception raised, no modbus call
+        sut.handle_command(None, None, msg)
+        assert not modbus_mock.write_register.called
+
+
