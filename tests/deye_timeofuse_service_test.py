@@ -133,9 +133,7 @@ class TestDeyeTimeOfUseService:
         # then
         assert not sut.modifications  # cleared
 
-    def test_write_config_early_return_when_no_read_state(
-        self, logger_config_mock, mqtt_client_mock, modbus_mock
-    ):
+    def test_write_config_early_return_when_no_read_state(self, logger_config_mock, mqtt_client_mock, modbus_mock):
         """Test write_config returns early when read_state is empty (line 44)."""
         # given
         sensors = [sensor_time_1]
@@ -151,9 +149,7 @@ class TestDeyeTimeOfUseService:
         # then: modbus should NOT be called because read_state is empty
         assert not modbus_mock.write_registers.called
 
-    def test_handle_control_command_dry_write_no_modbus_call(
-        self, logger_config_mock, mqtt_client_mock, modbus_mock
-    ):
+    def test_handle_control_command_dry_write_no_modbus_call(self, logger_config_mock, mqtt_client_mock, modbus_mock):
         """Test control command 'dry-write' does NOT call modbus (line 47)."""
         # given
         sensors = [sensor_time_1, sensor_time_2]

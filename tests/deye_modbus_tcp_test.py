@@ -105,9 +105,7 @@ class DeyeModbusTcpTest(unittest.TestCase):
 
         # then
         self.assertTrue(success)
-        connector.send_request.assert_called_once_with(
-            bytearray.fromhex("00010000000B01" + "10001200020400ffa3d4")
-        )
+        connector.send_request.assert_called_once_with(bytearray.fromhex("00010000000B01" + "10001200020400ffa3d4"))
 
     @patch("deye_connector.DeyeConnector")
     def test_subsequent_requests_have_distinct_tx_id(self, connector):

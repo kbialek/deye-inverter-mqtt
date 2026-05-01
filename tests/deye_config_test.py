@@ -81,9 +81,7 @@ class DeyeConfigTest(unittest.TestCase):
 
     def test_mqtt_config_username_password_return_none_for_empty_strings(self):
         """Test DeyeMqttConfig property getters returning None for empty strings (lines 97, 101)."""
-        cfg = DeyeMqttConfig(
-            host="localhost", port=1883, username="", password="", topic_prefix="deye"
-        )
+        cfg = DeyeMqttConfig(host="localhost", port=1883, username="", password="", topic_prefix="deye")
         self.assertIsNone(cfg.username)
         self.assertIsNone(cfg.password)
 

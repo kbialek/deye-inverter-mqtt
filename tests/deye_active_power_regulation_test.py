@@ -138,5 +138,3 @@ class TestDeyeActivePowerRegulationEventProcessor:
         # when/then — should handle gracefully: no exception raised, no modbus call
         sut.handle_command(None, None, msg)
         assert not modbus_mock.write_register.called
-
-
