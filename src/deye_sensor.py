@@ -29,54 +29,54 @@ class Sensor(ABC):
 
     @property
     def reg_address(self) -> int:
-        pass
+        pass  # pragma: no cover
 
     @property
     @abstractmethod
     def name(self) -> str:
-        pass
+        pass  # pragma: no cover
 
     @property
     @abstractmethod
     def mqtt_topic_suffix(self) -> str:
-        pass
+        pass  # pragma: no cover
 
     @property
     @abstractmethod
     def unit(self) -> str:
-        pass
+        pass  # pragma: no cover
 
     @property
     @abstractmethod
     def print_format(self) -> str:
-        pass
+        pass  # pragma: no cover
 
     @property
     @abstractmethod
     def groups(self) -> list[str]:
-        pass
+        pass  # pragma: no cover
 
     @property
     @abstractmethod
     def data_type(self) -> str:
-        pass
+        pass  # pragma: no cover
 
     @property
     @abstractmethod
     def scale_factor(self) -> float:
-        pass
+        pass  # pragma: no cover
 
     @property
     @abstractmethod
     def is_readiness_check(self) -> bool:
-        pass
+        pass  # pragma: no cover
 
     @abstractmethod
     def read_value(self, registers: dict[int, bytearray]):
         """
         Reads sensor value from Modbus registers
         """
-        pass
+        pass  # pragma: no cover
 
     def write_value(self, value: str) -> dict[int, bytearray]:
         """

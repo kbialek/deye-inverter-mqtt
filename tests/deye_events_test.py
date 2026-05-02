@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
 from datetime import datetime
 
 from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent
@@ -35,31 +34,31 @@ class FakeSensor(AbstractSensor):
         return []
 
 
-class TestDeyeEventList(unittest.TestCase):
+class TestDeyeEventList:
     def test_get_status_event(self):
         # Test case when no status event is present in the list
         events_list = DeyeEventList()
-        self.assertIsNone(events_list.get_status())
+        assert events_list.get_status() is None
 
         # Test case when a status event is present in the list
         events_list = DeyeEventList()
         status_event = DeyeLoggerStatusEvent(online=True)
         events_list.append(status_event)
         events_list.append(DeyeObservationEvent(Observation(FakeSensor("Sensor1", 1.1), datetime.now(), 42)))
-        self.assertEqual(events_list.get_status(), status_event.online)
+        assert events_list.get_status() == status_event.online
 
     def test_is_offline(self):
         # Test case when no status event is present in the list
         events_list = DeyeEventList()
-        self.assertFalse(events_list.is_offline())
+        assert not events_list.is_offline()
 
         # Test case when a status event is present and it is online
         events_list = DeyeEventList([DeyeLoggerStatusEvent(online=True)])
-        self.assertFalse(events_list.is_offline())
+        assert not events_list.is_offline()
 
         # Test case when a status event is present and it is offline
         events_list = DeyeEventList([DeyeLoggerStatusEvent(online=False)])
-        self.assertTrue(events_list.is_offline())
+        assert events_list.is_offline()
 
     def test_compare_observation_events_same(self):
         # Test case when the lists are the same, but order changed
@@ -79,7 +78,7 @@ class TestDeyeEventList(unittest.TestCase):
                 DeyeObservationEvent(Observation(test_sensor_1, datetime.now(), 42.1)),
             ]
         )
-        self.assertTrue(events_a.compare_observation_events(events_b))
+        assert events_a.compare_observation_events(events_b)
 
     def test_compare_observation_events_different(self):
         # Test case when the lists are different
@@ -99,14 +98,14 @@ class TestDeyeEventList(unittest.TestCase):
                 DeyeObservationEvent(Observation(test_sensor_2, datetime.now(), 123)),
             ]
         )
-        self.assertFalse(events_a.compare_observation_events(events_b))
+        assert not events_a.compare_observation_events(events_b)
 
     def test_compare_events_different_logger_index(self):
         events_a = DeyeEventList(logger_index=1)
         events_b = DeyeEventList(logger_index=2)
-        self.assertFalse(events_a.compare_observation_events(events_b))
+        assert not events_a.compare_observation_events(events_b)
 
     def test_compare_events_same_logger_index(self):
         events_a = DeyeEventList(logger_index=2)
         events_b = DeyeEventList(logger_index=2)
-        self.assertTrue(events_a.compare_observation_events(events_b))
+        assert events_a.compare_observation_events(events_b)
