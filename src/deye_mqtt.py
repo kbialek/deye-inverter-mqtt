@@ -63,6 +63,7 @@ class DeyeMqttClient:
         self.__mqtt_timeout = 3  # seconds
         self.__publish_lock = threading.RLock()
         self.__command_handlers = {}
+        self.__loop_started = False
 
     def subscribe(self, topic: str, callback):
         self.connect()
@@ -77,8 +78,10 @@ class DeyeMqttClient:
         if self.__mqtt_client.is_connected():
             return True
         try:
-            self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
-            self.__mqtt_client.loop_start()
+            if not self.__loop_started:
+                self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
+                self.__mqtt_client.loop_start()
+                self.__loop_started = True
             while not self.__mqtt_client.is_connected():
                 time.sleep(1)
             return True
