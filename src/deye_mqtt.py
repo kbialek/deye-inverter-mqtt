@@ -64,6 +64,8 @@ class DeyeMqttClient:
         self.__publish_lock = threading.RLock()
         self.__command_handlers = {}
         self.__loop_started = False
+        # reconnect promptly after a broker restart.
+        self.__mqtt_client.reconnect_delay_set(min_delay=1, max_delay=2)
 
     def subscribe(self, topic: str, callback):
         self.connect()
