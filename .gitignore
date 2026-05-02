@@ -2,6 +2,7 @@ config.env
 config.json.default
 certs/
 .vscode
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -138,3 +139,9 @@ data/
 
 requirements.txt
 requirements-dev.txt
+
+# Graphify outputs
+graphify-out/
+graph.json
+graph_detailed.json
+GRAPH_REPORT.md
