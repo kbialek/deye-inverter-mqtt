@@ -18,7 +18,7 @@
 import os
 import pytest
 
-from deye_config import DeyeConfig, DeyeEnv, DeyeMqttConfig
+from deye_config import DeyeConfig, DeyeEnv, DeyeMqttConfig, DeyeLoggerConfig
 
 
 class TestDeyeConfig:
@@ -79,3 +79,11 @@ class TestDeyeConfig:
         """Test feature flag paths: mqtt_publisher is included by default (lines 181-213)."""
         processors = DeyeConfig._DeyeConfig__read_active_processors()
         assert "mqtt_publisher" in processors
+
+    def test_logger_config_serial_number_negative_raises(self):
+        with pytest.raises(ValueError):
+            DeyeLoggerConfig(-1, "192.168.1.1", 8899)
+
+    def test_logger_config_serial_number_too_large_raises(self):
+        with pytest.raises(ValueError):
+            DeyeLoggerConfig(0x10000000000, "192.168.1.1", 8899)
