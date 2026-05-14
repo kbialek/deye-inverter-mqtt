@@ -50,7 +50,7 @@ class DeyeSolarSellEventProcessor(DeyeEventProcessor):
     def initialize(self):
         matching_sensors = [s for s in self.__sensors if s.mqtt_topic_suffix == self.__solar_sell_topic_suffix]
         if len(matching_sensors) == 0:
-            self.__log.error("Solar sell sensor not found. Enable appropriate settings metric group.")
+            self.__log.info("Solar sell sensor not found. Enable appropriate settings metric group.")
             return
         elif len(matching_sensors) > 1:
             self.__log.error("Too many solar sell sensors found. Check your metric groups configuration.")
