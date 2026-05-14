@@ -180,7 +180,7 @@ class DeyeLoggerConfig:
         self.serial_number = serial_number
         self.ip_address = ip_address
         if protocol not in ["tcp", "at", "mbtcp"]:
-            raise Exception(f"Unsupported protocol {protocol}")
+            raise ValueError(f"Unsupported protocol {protocol}")
         self.protocol = protocol
         if port == 0 and protocol == "tcp":
             self.port = 8899
