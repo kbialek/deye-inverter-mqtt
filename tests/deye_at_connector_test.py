@@ -15,12 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
 
 from deye_at_connector import DeyeAtConnector
 
 
-class DeyeAtConnectorTest(unittest.TestCase):
+class TestDeyeAtConnector:
     def test_extract_modbus_frame_with_trailing_zeros(self):
         # given
         at_cmd_response = (

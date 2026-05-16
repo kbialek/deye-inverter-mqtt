@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
+import pytest
 from datetime import datetime
 from deye_sensor import (
     Sensor,
@@ -44,7 +44,7 @@ class FakeSensor(AbstractSensor):
         return []
 
 
-class DeyeSensorTest(unittest.TestCase):
+class TestDeyeSensor:
     def test_sum_sensor_returns_sum_when_all_inputs_are_given(self):
         # given
         test_sensor1 = FakeSensor("ts1", 1.1)
@@ -57,7 +57,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value([])
 
         # then
-        self.assertAlmostEqual(result, 3.3)
+        assert result == pytest.approx(3.3)
 
     def test_sum_sensor_returns_none_when_any_input_is_none(self):
         # given
@@ -71,7 +71,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value([])
 
         # then
-        self.assertIsNone(result)
+        assert result is None
 
     def test_single_reg_sensor_unsigned(self):
         # given
@@ -84,7 +84,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, 0x0102)
+        assert result == 0x0102
 
     def test_single_reg_sensor_signed(self):
         # given
@@ -97,7 +97,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, -2)
+        assert result == -2
 
     def test_double_reg_sensor_unsigned(self):
         # given
@@ -110,7 +110,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, 0x03040102)
+        assert result == 0x03040102
 
     def test_double_reg_sensor_signed(self):
         # given
@@ -123,7 +123,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, -2)
+        assert result == -2
 
     def test_double_reg_sensor_unsigned_high_word_first(self):
         # given
@@ -136,7 +136,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, 0x01020304)
+        assert result == 0x01020304
 
     def test_signed_magnitude_single_register_signed(self):
         # given
@@ -149,7 +149,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, -784)
+        assert result == -784
 
     def test_signed_magnitude_single_register_unsigned(self):
         # given
@@ -162,7 +162,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, 784)
+        assert result == 784
 
     def test_signed_magnitude_double_register_signed(self):
         # given
@@ -175,7 +175,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, -257)
+        assert result == -257
 
     def test_signed_magnitude_double_register_unsigned(self):
         # given
@@ -188,7 +188,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, 257)
+        assert result == 257
 
     def test_single_reg_sensor_write_unsigned(self):
         # given
@@ -198,7 +198,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.write_value("1234")
 
         # then
-        self.assertEqual(result, {0: bytearray.fromhex("04d2")})
+        assert result == {0: bytearray.fromhex("04d2")}
 
     def test_single_reg_sensor_write_signed(self):
         # given
@@ -208,7 +208,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.write_value("-1234")
 
         # then
-        self.assertEqual(result, {0: bytearray.fromhex("fb2e")})
+        assert result == {0: bytearray.fromhex("fb2e")}
 
     def test_split_long_register_range(self):
         # given
@@ -218,13 +218,13 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.split(21)
 
         # then
-        self.assertEqual(len(result), 2)
-        self.assertEqual(result[0].length, 21)
-        self.assertEqual(result[0].first_reg_address, 10)
-        self.assertEqual(result[0].last_reg_address, 30)
-        self.assertEqual(result[1].length, 20)
-        self.assertEqual(result[1].first_reg_address, 31)
-        self.assertEqual(result[1].last_reg_address, 50)
+        assert len(result) == 2
+        assert result[0].length == 21
+        assert result[0].first_reg_address == 10
+        assert result[0].last_reg_address == 30
+        assert result[1].length == 20
+        assert result[1].first_reg_address == 31
+        assert result[1].last_reg_address == 50
 
     def test_split_short_register_range(self):
         # given
@@ -234,10 +234,10 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.split(45)
 
         # then
-        self.assertEqual(len(result), 1)
-        self.assertEqual(result[0].length, 41)
-        self.assertEqual(result[0].first_reg_address, 10)
-        self.assertEqual(result[0].last_reg_address, 50)
+        assert len(result) == 1
+        assert result[0].length == 41
+        assert result[0].first_reg_address == 10
+        assert result[0].last_reg_address == 50
 
     def test_prep_register_ranges(self):
         # when
@@ -253,36 +253,36 @@ class DeyeSensorTest(unittest.TestCase):
         )
 
         # then
-        self.assertEqual(len(sut.ranges), 4)
-        self.assertEqual(sut.ranges[0].group, {"a"})
-        self.assertEqual(sut.ranges[0].first_reg_address, 1)
-        self.assertEqual(sut.ranges[0].last_reg_address, 10)
-        self.assertEqual(sut.ranges[1].group, {"b"})
-        self.assertEqual(sut.ranges[1].first_reg_address, 20)
-        self.assertEqual(sut.ranges[1].last_reg_address, 34)
-        self.assertEqual(sut.ranges[2].group, {"b"})
-        self.assertEqual(sut.ranges[2].first_reg_address, 35)
-        self.assertEqual(sut.ranges[2].last_reg_address, 40)
-        self.assertEqual(sut.ranges[3].group, {"c"})
-        self.assertEqual(sut.ranges[3].first_reg_address, 60)
-        self.assertEqual(sut.ranges[3].last_reg_address, 70)
+        assert len(sut.ranges) == 4
+        assert sut.ranges[0].group == {"a"}
+        assert sut.ranges[0].first_reg_address == 1
+        assert sut.ranges[0].last_reg_address == 10
+        assert sut.ranges[1].group == {"b"}
+        assert sut.ranges[1].first_reg_address == 20
+        assert sut.ranges[1].last_reg_address == 34
+        assert sut.ranges[2].group == {"b"}
+        assert sut.ranges[2].first_reg_address == 35
+        assert sut.ranges[2].last_reg_address == 40
+        assert sut.ranges[3].group == {"c"}
+        assert sut.ranges[3].first_reg_address == 60
+        assert sut.ranges[3].last_reg_address == 70
 
     def test_registry_range_single_group_name(self):
         # given
         sut = SensorRegisterRange("a", 1, 2)
 
         # expect
-        self.assertTrue(sut.in_any_group({"a"}))
-        self.assertFalse(sut.in_any_group({"b"}))
+        assert sut.in_any_group({"a"}) is True
+        assert sut.in_any_group({"b"}) is False
 
     def test_registry_range_multiple_groups_names(self):
         # given
         sut = SensorRegisterRange({"a", "b"}, 1, 2)
 
         # expect
-        self.assertTrue(sut.in_any_group({"a"}))
-        self.assertTrue(sut.in_any_group({"b"}))
-        self.assertFalse(sut.in_any_group({"c"}))
+        assert sut.in_any_group({"a"}) is True
+        assert sut.in_any_group({"b"}) is True
+        assert sut.in_any_group({"c"}) is False
 
     def test_reset_sensor_passthrough(self):
         # given
@@ -295,7 +295,7 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, 0x0102)
+        assert result == 0x0102
 
     def test_boolean_sensor_returns_true_when_mask_matches(self):
         # given
@@ -363,14 +363,14 @@ class DeyeSensorTest(unittest.TestCase):
         result8 = sut8.read_value([])
 
         # then
-        self.assertEqual(result1, False)
-        self.assertEqual(result2, False)
-        self.assertEqual(result3, True)
-        self.assertEqual(result4, False)
-        self.assertEqual(result5, True)
-        self.assertEqual(result6, False)
-        self.assertEqual(result7, False)
-        self.assertEqual(result8, True)
+        assert result1 is False
+        assert result2 is False
+        assert result3 is True
+        assert result4 is False
+        assert result5 is True
+        assert result6 is False
+        assert result7 is False
+        assert result8 is True
 
     def test_datetime_sensor(self):
         # given
@@ -395,8 +395,8 @@ class DeyeSensorTest(unittest.TestCase):
         result2 = sut.write_value(now)
 
         # then
-        self.assertEqual(result1, now.timestamp())
-        self.assertEqual(result2, {22: [reg0_value, reg1_value, reg2_value]})
+        assert result1 == now.timestamp()
+        assert result2 == {22: [reg0_value, reg1_value, reg2_value]}
 
     def test_datetime_sensor_wrong_input(self):
         # given
@@ -414,8 +414,24 @@ class DeyeSensorTest(unittest.TestCase):
         result = sut.read_value(registers)
 
         # then
-        self.assertEqual(result, None)
+        assert result is None
 
+    def test_format_value_uses_custom_print_format(self):
+        # given
+        sut = SingleRegisterSensor("test", 0x00, 1.0, signed=False, print_format="{:d}", groups=["string"])
 
-if __name__ == "__main__":
-    unittest.main()
+        # when
+        result = sut.format_value(42)
+
+        # then
+        assert result == "42"
+
+    def test_format_value_default_format(self):
+        # given
+        sut = SingleRegisterSensor("test", 0x00, 1.0, signed=False, groups=["string"])
+
+        # when
+        result = sut.format_value(3.14)
+
+        # then
+        assert result == "3.1"

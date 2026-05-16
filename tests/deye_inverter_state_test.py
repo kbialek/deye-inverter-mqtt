@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
 from datetime import datetime
 from unittest.mock import MagicMock, patch
 
@@ -42,7 +41,7 @@ class FakeSensor(AbstractSensor):
         return []
 
 
-class TestInverterState(unittest.TestCase):
+class TestInverterState:
     def test_no_last_observation(self):
         # Create the InverterState instance with a mock configuration
         config_mock = MagicMock()
@@ -56,7 +55,7 @@ class TestInverterState(unittest.TestCase):
         observation_2 = DeyeObservationEvent(Observation(FakeSensor("Humidity", 1.1), datetime.now(), 63.5))
         status_event_online = DeyeLoggerStatusEvent(online=True)
         events_new = DeyeEventList([status_event_online, observation_1, observation_2])
-        self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
+        assert inverter_state._DeyeInverterState__is_device_observation_changed(events_new)
 
     def test_is_device_offline(self):
         # Create the InverterState instance with a mock configuration
@@ -75,7 +74,7 @@ class TestInverterState(unittest.TestCase):
             [status_event_online, observation_1, observation_2]
         )
         events_new = DeyeEventList([status_event_offline])
-        self.assertFalse(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
+        assert not inverter_state._DeyeInverterState__is_device_observation_changed(events_new)
 
     @patch("time.time")
     def test_is_events_unchanged(self, time):
@@ -102,7 +101,7 @@ class TestInverterState(unittest.TestCase):
         inverter_state.__last_observations = DeyeEventList([status_event_online, observation_1, observation_2])
         events_new = DeyeEventList([status_event_online, observation_1, observation_2])
         inverter_state._DeyeInverterState__event_updated = initial_time - 300  # 5 minutes ago
-        self.assertFalse(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
+        assert not inverter_state._DeyeInverterState__is_device_observation_changed(events_new)
 
     @patch("time.time")
     def test_is_events_unchanged_expired(self, time):
@@ -128,7 +127,7 @@ class TestInverterState(unittest.TestCase):
         # Received events are the same as the last published one and time expired
         events_new = DeyeEventList([status_event_online, observation_1, observation_2])
         inverter_state._DeyeInverterState__event_updated = initial_time - 600  # 10 minutes ago
-        self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
+        assert inverter_state._DeyeInverterState__is_device_observation_changed(events_new)
 
     def test_is_events_changed(self):
         # Create the InverterState instance with a mock configuration
@@ -154,7 +153,7 @@ class TestInverterState(unittest.TestCase):
                 DeyeObservationEvent(Observation(FakeSensor("Humidity", 1.1), datetime.now(), 63.0)),
             ]
         )
-        self.assertTrue(inverter_state._DeyeInverterState__is_device_observation_changed(events_new))
+        assert inverter_state._DeyeInverterState__is_device_observation_changed(events_new)
 
     def test_readiness_test_success(self):
         # given: create processor

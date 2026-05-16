@@ -69,6 +69,7 @@ class DeyeMqttClient:
         self.__command_handlers = {}
         self.__pending_subscriptions = []  # Queue for subscriptions that need to be made after connection
         self.__connection_successful = False  # Flag to track actual successful connection
+        self.__loop_started = False
 
     def subscribe(self, topic: str, callback):
         """Queues a subscription.
@@ -110,6 +111,10 @@ class DeyeMqttClient:
             start_time = time.time()
             # Maximum wait time for connection attempt
             connection_timeout = 10  # seconds
+            if not self.__loop_started:
+                self.__mqtt_client.connect(self.__config.host, self.__config.port, keepalive=60)
+                self.__mqtt_client.loop_start()
+                self.__loop_started = True
             while not self.__mqtt_client.is_connected():
                 if time.time() - start_time > connection_timeout:
                     self.__log.error("Connection attempt timed out after %d seconds.", connection_timeout)

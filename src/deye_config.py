@@ -305,6 +305,8 @@ class DeyeConfig:
             active_processors.append("multi_inverter_data_aggregator")
         if DeyeEnv.boolean("DEYE_FEATURE_SOLAR_SELL", False):
             active_processors.append("solar_sell")
+        if DeyeEnv.boolean("DEYE_FEATURE_SOLAR_SELL_MAX_POWER", False):
+            active_processors.append("solar_sell_max_power")
         if DeyeEnv.boolean("DEYE_FEATURE_WORKMODE", False):
             active_processors.append("workmode")
         if DeyeEnv.boolean("DEYE_FEATURE_BATTERY_SETTINGS", False):
