@@ -26,6 +26,7 @@ from deye_set_time_processor import DeyeSetTimeProcessor
 from deye_timeofuse_service import DeyeTimeOfUseService
 from deye_active_power_regulation import DeyeActivePowerRegulationEventProcessor
 from deye_solar_sell import DeyeSolarSellEventProcessor
+from deye_solar_sell_max_power import DeyeSolarSellMaxPowerEventProcessor
 from deye_sensor import Sensor
 from deye_plugin_loader import DeyePluginContext, DeyePluginLoader
 from deye_multi_inverter_data_aggregator import DeyeMultiInverterDataAggregator
@@ -71,6 +72,9 @@ class DeyeProcessorFactory:
         )
         self.__append_processor(
             processors, DeyeSolarSellEventProcessor(logger_config, self.__mqtt_client, sensors, modbus)
+        )
+        self.__append_processor(
+            processors, DeyeSolarSellMaxPowerEventProcessor(logger_config, self.__mqtt_client, sensors, modbus)
         )
         self.__append_processor(
             processors, DeyeWorkmodeEventProcessor(logger_config, self.__mqtt_client, sensors, modbus)

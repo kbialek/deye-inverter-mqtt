@@ -203,6 +203,7 @@ All configuration options are controlled through environment variables.
 * `DEYE_FEATURE_ACTIVE_POWER_REGULATION` - enables active power regulation control over MQTT command topic
 * `DEYE_FEATURE_TIME_OF_USE` - enables Time Of Use feature control over MQTT
 * `DEYE_FEATURE_SOLAR_SELL` - enables Solar Sell control over MQTT
+* `DEYE_FEATURE_SOLAR_SELL_MAX_POWER` - enables Solar Sell Max Power control over MQTT
 * `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR` - enables multi-inverter data aggregation and publishing
 * `DEYE_FEATURE_WORKMODE` - enables control hybrid inverter workmode over MQTT: sell, load, load ct
 * `DEYE_FEATURE_BATTERY_SETTINGS` - enables control hybrid inverter params for battery charge and discharge over MQTT
@@ -274,6 +275,7 @@ It is possible to modify selected inverter settings over MQTT.
 | ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
 | active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |    0-120    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
 | solar sell | `{MQTT_TOPIC_PREFIX}/settings/solar_sell/command` | boolean | 0,1 | `DEYE_FEATURE_SOLAR_SELL` |
+| solar sell max power | `{MQTT_TOPIC_PREFIX}/settings/solar_sell_max_power/command` | W | 0-12000 | `DEYE_FEATURE_SOLAR_SELL_MAX_POWER` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/selling` | number<sup>(1)</sup> | 0-255 |`DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time | 0000 - 2359 | `DEYE_FEATURE_TIME_OF_USE` |
 | time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - max power<sup>(2)</sup> | `DEYE_FEATURE_TIME_OF_USE` |
