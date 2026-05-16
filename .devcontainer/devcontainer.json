@@ -1,0 +1,12 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers-extra/features/uv": {},
+        "ghcr.io/devcontainers/features/node": {},
+        "ghcr.io/devcontainers/features/python": {}
+    },
+    "postCreateCommand": "bash .devcontainer/install.sh",
+    "mounts": [
+        "source=${localEnv:HOME}/.pi,target=/home/vscode/.pi,type=bind"
+    ]
+}

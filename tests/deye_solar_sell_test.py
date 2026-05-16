@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
+import pytest
 from unittest.mock import patch
 
 from deye_solar_sell import DeyeSolarSellEventProcessor
@@ -26,9 +26,9 @@ from deye_sensor import Sensor, SingleRegisterSensor
 from paho.mqtt.client import Client, MQTTMessage
 
 
-class TestDeyeSolarSellEventProcessor(unittest.TestCase):
-
-    def setUp(self):
+class TestDeyeSolarSellEventProcessor:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = DeyeLoggerConfig(1234567890, "127.0.0.1", 8899)
         self.sensor1 = SingleRegisterSensor(
             "Solar sell enabled",

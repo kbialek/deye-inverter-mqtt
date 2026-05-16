@@ -1,6 +1,6 @@
 [project]
 name = "deye-inverter-mqtt"
-version = "2026.02.2"
+version = "2026.04.1"
 description = "Reads Deye solar inverter metrics using Modbus over TCP and publishes them over MQTT."
 authors = [
     { name = "Krzysztof Białek", email = "kbialek@users.noreply.github.com" }
