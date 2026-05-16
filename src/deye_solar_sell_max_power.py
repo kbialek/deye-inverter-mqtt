@@ -31,7 +31,7 @@ class DeyeSolarSellMaxPowerEventProcessor(DeyeEventProcessor):
     """
 
     def __init__(
-        self, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient, sensors: [Sensor], modbus: DeyeModbus
+        self, logger_config: DeyeLoggerConfig, mqtt_client: DeyeMqttClient, sensors: list[Sensor], modbus: DeyeModbus
     ):
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeSolarSellMaxPowerEventProcessor.__name__))
         self.__logger_config = logger_config
@@ -67,7 +67,7 @@ class DeyeSolarSellMaxPowerEventProcessor(DeyeEventProcessor):
             return
         try:
             solar_sell_max_power = int(msg.payload.decode("utf-8").strip())
-        except Exception as e:
+        except ValueError as e:
             self.__log.error(f"Couldn't decode solar sell max power value: {msg.payload}, {e}")
             return
         if solar_sell_max_power < 0 or solar_sell_max_power > 12000:
