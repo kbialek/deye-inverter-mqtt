@@ -42,6 +42,9 @@ class DeyeModbus:
             dict[int, bytearray]: Map of register values, where the register address is the map key,
             and register value is the map value
         """
+        if first_reg > last_reg:
+            self.__log.error("first_reg (%d) must be <= last_reg (%d)", first_reg, last_reg)
+            return {}
         modbus_frame = self.__build_modbus_read_holding_registers_request_frame(first_reg, last_reg)
         modbus_crc = bytearray.fromhex("{:04x}".format(libscrc.modbus(modbus_frame)))
         modbus_crc.reverse()

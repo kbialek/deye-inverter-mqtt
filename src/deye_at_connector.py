@@ -99,8 +99,9 @@ class DeyeAtConnector(DeyeConnector):
             if not at_response or at_response.startswith(b"+ok=no data"):
                 return modbus_response
             if at_response.startswith(b"+ok="):
-                modbus_response = DeyeAtConnector.extract_modbus_response(at_response)
-                self.__log.debug("Extracted Modbus response %s", modbus_response.hex())
+                modbus_response = self.extract_modbus_response(at_response)
+                if modbus_response is not None:
+                    self.__log.debug("Extracted Modbus response %s", modbus_response.hex())
 
             self.__deauthenticate(client_socket)
         except Exception:
@@ -110,9 +111,20 @@ class DeyeAtConnector(DeyeConnector):
 
         return modbus_response
 
-    @staticmethod
-    def extract_modbus_response(at_cmd_response: bytes) -> bytes:
-        extracted_modus_response = at_cmd_response.replace(b"\x10", b"")[4:-4].decode("utf-8")
-        if len(extracted_modus_response) > 4 and extracted_modus_response[-4:] == "0000":
-            extracted_modus_response = extracted_modus_response[0:-4]
-        return bytearray.fromhex(extracted_modus_response)
+    def extract_modbus_response(self, at_cmd_response: bytes) -> bytes | None:
+        try:
+            # strip AT protocol escape byte \x10 (DLE/Data Link Escape)
+            raw = at_cmd_response.replace(b"\x10", b"")[4:-4].decode("ascii")
+        except UnicodeDecodeError:
+            self.__log.error("AT response contains non-ASCII data: %s", at_cmd_response.hex())
+            return None
+        if len(raw) > 4 and raw[-4:] == "0000":
+            raw = raw[:-4]
+        if len(raw) % 2 != 0:
+            self.__log.error("AT response has odd-length hex string: %s", raw)
+            return None
+        try:
+            return bytearray.fromhex(raw)
+        except ValueError:
+            self.__log.error("AT response contains invalid hex data: %s", raw)
+            return None

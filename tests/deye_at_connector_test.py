@@ -16,11 +16,20 @@
 # under the License.
 
 
+import logging
+
+import pytest
+
 from deye_at_connector import DeyeAtConnector
+from deye_config import DeyeLoggerConfig
+
+@pytest.fixture(scope="module")
+def connector():
+    return DeyeAtConnector(DeyeLoggerConfig(123456, "192.168.0.1", 9090))
 
 
 class TestDeyeAtConnector:
-    def test_extract_modbus_frame_with_trailing_zeros(self):
+    def test_extract_modbus_frame_with_trailing_zeros(self, connector):
         # given
         at_cmd_response = (
             b"+ok=01\x1003\x1072\x1001\x1008\x1000\x1000\x1002\x1094\x106C\x106B\x1000"
@@ -35,7 +44,7 @@ class TestDeyeAtConnector:
         )
 
         # when
-        modbus_response = DeyeAtConnector.extract_modbus_response(at_cmd_response)
+        modbus_response = connector.extract_modbus_response(at_cmd_response)
 
         # then
         assert modbus_response == bytearray.fromhex(
@@ -44,7 +53,33 @@ class TestDeyeAtConnector:
             "00000000000000000000000000000EFB00160015000100000000000000005745"
         )
 
-    def test_extract_modbus_frame_without_trailing_zeros(self):
+    @pytest.mark.parametrize(
+        "at_cmd_response,expected_log",
+        [
+            pytest.param(
+                b"+ok=\xff\x10ab\r\n\r\n",
+                f"AT response contains non-ASCII data: {b'+ok=\xff\x10ab\r\n\r\n'.hex()}",
+                id="non_ascii_bytes",
+            ),
+            pytest.param(
+                b"+ok=abc\r\n\r\n",
+                "AT response has odd-length hex string: abc",
+                id="odd_length_hex",
+            ),
+            pytest.param(
+                b"+ok=zzzz\r\n\r\n",
+                "AT response contains invalid hex data: zzzz",
+                id="invalid_hex_chars",
+            ),
+        ],
+    )
+    def test_extract_modbus_response_returns_none(self, connector, at_cmd_response, expected_log, caplog):
+        with caplog.at_level(logging.ERROR):
+            result = connector.extract_modbus_response(at_cmd_response)
+        assert result is None
+        assert caplog.records[0].getMessage() == expected_log
+
+    def test_extract_modbus_frame_without_trailing_zeros(self, connector):
         # given
         at_cmd_response = (
             b"+ok=01\x1003\x1072\x1000\x101D\x1000\x1000\x1000\x1000\x100F\x10F2\x1000"
@@ -60,7 +95,7 @@ class TestDeyeAtConnector:
         )
 
         # when
-        modbus_response = DeyeAtConnector.extract_modbus_response(at_cmd_response)
+        modbus_response = connector.extract_modbus_response(at_cmd_response)
 
         # then
         assert modbus_response == bytearray.fromhex(

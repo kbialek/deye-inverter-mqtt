@@ -185,6 +185,14 @@ class TestDeyeModbusTcpCustom:
         assert caplog.records[0].getMessage() == "Unknown response error code. Error frame: 0100"
 
     @patch("deye_connector.DeyeConnector")
+    def test_read_registers_inverted_range_returns_empty(self, connector, caplog):
+        sut = DeyeModbus(DeyeModbusTcpCustom(self.config, connector))
+        with caplog.at_level("WARNING"):
+            result = sut.read_registers(5, 2)
+        assert result == {}
+        assert "first_reg" in caplog.records[0].getMessage()
+
+    @patch("deye_connector.DeyeConnector")
     def test_at_protocol_detected(self, connector, caplog):
         # given
         sut = DeyeModbus(DeyeModbusTcpCustom(self.config, connector))

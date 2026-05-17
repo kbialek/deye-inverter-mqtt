@@ -39,4 +39,4 @@ class DeyeConnectorFactory:
             log.info("Creating Modbus/AT Logger connector")
             return DeyeAtConnector(logger_config)
         else:
-            raise Exception(f"Unsupported logger protocol {protocol}")
+            raise ValueError(f"Unsupported logger protocol {protocol}")

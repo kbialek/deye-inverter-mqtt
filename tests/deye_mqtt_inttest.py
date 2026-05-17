@@ -82,11 +82,11 @@ class TestDeyeMqttClient:
     def setup(self):
         self.received_messages = []
         self.config = DeyeConfig(
-            logger_configs=DeyeLoggerConfig("123456", "192.168.0.1", 9090),
+            logger_configs=DeyeLoggerConfig(123456, "192.168.0.1", 9090),
             mqtt=DeyeMqttConfig("localhost", self.mqtt_broker_port, "", "", "deye"),
         )
         self.config_with_tls = DeyeConfig(
-            logger_configs=DeyeLoggerConfig("123456", "192.168.0.1", 9090),
+            logger_configs=DeyeLoggerConfig(123456, "192.168.0.1", 9090),
             mqtt=DeyeMqttConfig(
                 "localhost",
                 self.mqtt_broker_port,

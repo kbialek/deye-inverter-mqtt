@@ -163,6 +163,9 @@ class DeyeLoggerConfig:
     with the device.
     """
 
+    MIN_SERIAL_NUMBER = 0
+    MAX_SERIAL_NUMBER = 0xFFFFFFFFFF
+
     def __init__(
         self,
         serial_number: int,
@@ -172,10 +175,12 @@ class DeyeLoggerConfig:
         protocol: str = "tcp",
         max_register_range_length: int = 256,
     ):
+        if not (self.MIN_SERIAL_NUMBER <= serial_number <= self.MAX_SERIAL_NUMBER):
+            raise ValueError(f"Serial number out of range: {serial_number}")
         self.serial_number = serial_number
         self.ip_address = ip_address
         if protocol not in ["tcp", "at", "mbtcp"]:
-            raise Exception(f"Unsupported protocol {protocol}")
+            raise ValueError(f"Unsupported protocol {protocol}")
         self.protocol = protocol
         if port == 0 and protocol == "tcp":
             self.port = 8899
