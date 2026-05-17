@@ -16,7 +16,6 @@
 # under the License.
 
 import os
-import ssl
 import sys
 import logging
 
@@ -82,14 +81,12 @@ class DeyeMqttTlsConfig:
         ca_cert_path: str = "",
         client_cert_path: str = "",
         client_key_path: str = "",
-        tls_version=ssl.PROTOCOL_TLSv1_2,
         insecure=False,
     ):
         self.enabled = enabled
         self.__ca_cert_path = ca_cert_path
         self.__client_cert_path = client_cert_path
         self.__client_key_path = client_key_path
-        ssl.TLSVersion = tls_version
         self.insecure = insecure
 
     @property
