@@ -52,7 +52,7 @@ class DeyeBatterySettingsEventProcessor(DeyeEventProcessor):
             s for s in self.__sensors if s.mqtt_topic_suffix.startswith(self.__battery_settings_topic_suffix)
         ]
         if not matching_sensors:
-            self.__log.warning("BatterySettings sensors not found. Enable appropriate settings metric group.")
+            self.__log.info("BatterySettings sensors not found. Enable appropriate settings metric group.")
             return
         for sensor in matching_sensors:
             reg = sensor.get_registers()[0]
