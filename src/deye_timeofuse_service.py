@@ -88,6 +88,9 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
         self.__write_registers(reg_map, dry_run)
 
     def __write_registers(self, reg_map: dict[int, bytearray], dry_run: bool) -> None:
+        if not reg_map:
+            self.__log.error("Register map is empty, nothing to write")
+            return
         first_reg_addr = min(reg_map)
         last_reg_addr = max(reg_map)
         reg_data = []
