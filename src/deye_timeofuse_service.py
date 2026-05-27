@@ -105,7 +105,8 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
             elif reg_data:
                 self.__log.info(f"Write time-of-use config registers: {batch_reg_addr}: {reg_data}")
                 if not dry_run:
-                    self.__modbus.write_registers(batch_reg_addr, reg_data)
+                    if not self.__modbus.write_registers(batch_reg_addr, reg_data):
+                        self.__log.error("Failed to write time-of-use config registers at %d", batch_reg_addr)
                 batch_reg_addr = 0
                 reg_data.clear()
 

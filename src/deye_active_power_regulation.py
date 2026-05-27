@@ -82,4 +82,5 @@ class DeyeActivePowerRegulationEventProcessor(DeyeEventProcessor):
             self.__log.error("Sensor returned no register mapping for value %f", active_power_regulation_factor)
             return
         reg_addr, reg_value = reg_map.popitem()
-        self.__modbus.write_register(reg_addr, reg_value)
+        if not self.__modbus.write_register(reg_addr, reg_value):
+            self.__log.error("Failed to set active power regulation to %f", active_power_regulation_factor)
