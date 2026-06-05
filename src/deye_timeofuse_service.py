@@ -88,6 +88,9 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
         self.__write_registers(reg_map, dry_run)
 
     def __write_registers(self, reg_map: dict[int, bytearray], dry_run: bool) -> None:
+        if not reg_map:
+            self.__log.error("Register map is empty, nothing to write")
+            return
         first_reg_addr = min(reg_map)
         last_reg_addr = max(reg_map)
         reg_data = []
@@ -102,7 +105,8 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
             elif reg_data:
                 self.__log.info(f"Write time-of-use config registers: {batch_reg_addr}: {reg_data}")
                 if not dry_run:
-                    self.__modbus.write_registers(batch_reg_addr, reg_data)
+                    if not self.__modbus.write_registers(batch_reg_addr, reg_data):
+                        self.__log.error("Failed to write time-of-use config registers at %d", batch_reg_addr)
                 batch_reg_addr = 0
                 reg_data.clear()
 

@@ -318,6 +318,7 @@ deye_sg01hp3_battery2_596 = SingleRegisterSensor(
     "Battery2 Temperature",
     596,
     0.1,
+    offset=-100.0,
     mqtt_topic_suffix="battery/2/temperature",
     unit="°C",
     signed=True,

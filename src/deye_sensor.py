@@ -184,7 +184,8 @@ class AbstractSensor(Sensor):
         self.__mqtt_topic_suffix = mqtt_topic_suffix
         self.__unit = unit
         self.__print_format = print_format
-        assert groups, f"Sensor {name} must belong to at least one group"
+        if not groups:
+            raise ValueError(f"Sensor {name} must belong to at least one group")
         self.__groups = groups
         self.__is_readiness_check = False
 
