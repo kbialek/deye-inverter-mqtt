@@ -76,7 +76,11 @@ class DeyeSetTimeProcessor(DeyeEventProcessor):
         self.__last_update_ts = now
         write_status = False
         if len(self.__sensors) == 1:
-            reg_addr, reg_value = self.__sensors[0].write_value(now).popitem()
+            reg_map = self.__sensors[0].write_value(now)
+            if not reg_map:
+                self.__log.error("Sensor returned no register mapping for current time")
+                return False
+            reg_addr, reg_value = reg_map.popitem()
             write_status = self.__modbus.write_registers(reg_addr, reg_value)
         else:
             if len(self.__sensors) == 0:
