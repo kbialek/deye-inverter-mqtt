@@ -309,7 +309,7 @@ class DoubleRegisterSensor(AbstractSensor):
         self.__second_reg_address = second_reg_address
 
     def read_value(self, registers: dict[int, bytearray]):
-        if self.__second_reg_address != None:
+        if self.__second_reg_address is not None:
             low_word_reg_address = self.__reg_address if self.__low_word_first else self.__second_reg_address
             high_word_reg_address = self.__second_reg_address if self.__low_word_first else self.__reg_address
         else:
