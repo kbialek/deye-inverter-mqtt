@@ -298,6 +298,7 @@ class DoubleRegisterSensor(AbstractSensor):
         low_word_first=True,
         *,
         groups: list[str],
+        second_reg_address: int = None,
     ):
         super().__init__(name, mqtt_topic_suffix, unit, print_format, groups=groups)
         self.__reg_address = reg_address
@@ -305,10 +306,15 @@ class DoubleRegisterSensor(AbstractSensor):
         self.__offset = offset
         self.__signed = signed
         self.__low_word_first = low_word_first
+        self.__second_reg_address = second_reg_address
 
     def read_value(self, registers: dict[int, bytearray]):
-        low_word_reg_address = self.__reg_address + (0 if self.__low_word_first else 1)
-        high_word_reg_address = self.__reg_address + (1 if self.__low_word_first else 0)
+        if self.__second_reg_address != None:
+            low_word_reg_address = self.__reg_address if self.__low_word_first else self.__second_reg_address
+            high_word_reg_address = self.__second_reg_address if self.__low_word_first else self.__reg_address
+        else:
+            low_word_reg_address = self.__reg_address + (0 if self.__low_word_first else 1)
+            high_word_reg_address = self.__reg_address + (1 if self.__low_word_first else 0)
         if low_word_reg_address in registers and high_word_reg_address in registers:
             low_word = registers[low_word_reg_address]
             high_word = registers[high_word_reg_address]

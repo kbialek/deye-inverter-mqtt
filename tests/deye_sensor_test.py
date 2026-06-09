@@ -138,6 +138,32 @@ class TestDeyeSensor:
         # then
         assert result == 0x01020304
 
+    def test_double_reg_sensor_non_adjacent(self):
+        # given
+        sut = DoubleRegisterSensor("test", 0, 1, signed=False, groups=["string"], second_reg_address=2)
+
+        # and
+        registers = {0: bytearray.fromhex("0102"), 1: bytearray.fromhex("0304"), 2: bytearray.fromhex("0506")}
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        assert result == 0x05060102
+
+    def test_double_reg_sensor_non_adjacent_high_word_first(self):
+        # given
+        sut = DoubleRegisterSensor("test", 0, 1, signed=False, groups=["string"], second_reg_address=2, low_word_first=False)
+
+        # and
+        registers = {0: bytearray.fromhex("0102"), 1: bytearray.fromhex("0304"), 2: bytearray.fromhex("0506")}
+
+        # when
+        result = sut.read_value(registers)
+
+        # then
+        assert result == 0x01020506
+
     def test_signed_magnitude_single_register_signed(self):
         # given
         sut = SignedMagnitudeSingleRegisterSensor("test", 0x00, 1, groups=["igen_dtsd422"])
