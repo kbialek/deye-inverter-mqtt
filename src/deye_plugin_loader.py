@@ -21,15 +21,32 @@ import logging
 import sys
 import os
 
-from deye_config import DeyeConfig
+from deye_config import DeyeConfig, DeyeLoggerConfig
 from deye_mqtt import DeyeMqttClient
 from deye_events import DeyeEventProcessor
+from deye_modbus import DeyeModbus
+
+
+class DeyePluginLoggerContext:
+    def __init__(self, logger_config: DeyeLoggerConfig, modbus: DeyeModbus):
+        self.logger_config = logger_config
+        self.modbus = modbus
 
 
 class DeyePluginContext:
     def __init__(self, config: DeyeConfig, mqtt_client: DeyeMqttClient):
         self.config = config
         self.mqtt_client = mqtt_client
+        self.logger_context: dict(int, DeyePluginLoggerContext) = {}
+
+    def register_logger_context(self, logger_context: DeyePluginLoggerContext) -> None:
+        self.logger_context[logger_context.logger_config.index] = logger_context
+
+    def get_logger_context(self, logger_index: int) -> DeyePluginLoggerContext:
+        if logger_index in self.logger_context:
+            return self.logger_context[logger_index]
+        else:
+            raise KeyError(f'Logger context not registered for logger index {logger_index}')
 
 
 class DeyePluginLoader:

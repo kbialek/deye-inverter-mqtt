@@ -22,6 +22,9 @@ from deye_events import DeyeEventProcessor, DeyeEventList, DeyeObservationEvent
 class DeyeSamplePublisher(DeyeEventProcessor):
     """An example of custom DeyeEventProcessor implementation
     """
+    def __init__(self , plugin_context: DeyePluginContext):
+        self.plugin_context = plugin_context
+
     def get_id(self):
         return "sample_publisher"
 
@@ -36,6 +39,8 @@ class DeyeSamplePublisher(DeyeEventProcessor):
                         "value": observation_event.observation.value,
                     }
                 )
+        logger_context = self.plugin_context.get_logger_context(events.logger_index)
+        print(f"Accessing logger modbus {logger_context.modbus}")
 
 
 class DeyePlugin:
@@ -49,9 +54,9 @@ class DeyePlugin:
         Args:
             plugin_context (DeyePluginContext): provides access to core service components, e.g. config
         """
-        self.publisher = DeyeSamplePublisher()
+        self.plugin_context = plugin_context
 
     def get_event_processors(self) -> [DeyeEventProcessor]:
         """Provides a list of custom event processors 
         """
-        return [self.publisher]
+        return [DeyeSamplePublisher(self.plugin_context)]
