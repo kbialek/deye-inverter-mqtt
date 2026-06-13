@@ -234,6 +234,7 @@ deye_sg02lp1_grid_78 = DoubleRegisterSensor(
     unit="kWh",
     signed=False,
     groups=["deye_sg02lp1"],
+    second_reg_address=80,
 )
 
 deye_sg02lp1_grid_77 = SingleRegisterSensor(
