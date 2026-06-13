@@ -323,7 +323,10 @@ class DoubleRegisterSensor(AbstractSensor):
             return None
 
     def get_registers(self) -> list[int]:
-        return [self.__reg_address, self.__reg_address + 1]
+        if self.__second_reg_address is not None:
+            return [self.__reg_address, self.__second_reg_address]
+        else:
+            return [self.__reg_address, self.__reg_address + 1]
 
     def reset_daily(self) -> DailyResetSensor:
         return DailyResetSensor(self)

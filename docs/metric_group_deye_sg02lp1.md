@@ -20,7 +20,7 @@
 |External CT L1 Power|`ac/l1/ct/external`|W|170|aa|S_WORD|1|
 |External CT L2 Power|`ac/l2/ct/external`|W|171|ab|S_WORD|1|
 |Daily Energy Bought|`ac/daily_energy_bought`|kWh|76|4c|U_WORD|0.1|
-|Total Energy Bought|`ac/total_energy_bought`|kWh|78,79|4e,4f|U_DWORD (LW,HW)|0.1|
+|Total Energy Bought|`ac/total_energy_bought`|kWh|78,80|4e,50|U_DWORD (LW,HW)|0.1|
 |Daily Energy Sold|`ac/daily_energy_sold`|kWh|77|4d|U_WORD|0.1|
 |Total Energy Sold|`ac/total_energy_sold`|kWh|81,82|51,52|U_DWORD (LW,HW)|0.1|
 |Total Power|`ac/total_power`|W|175|af|S_WORD|1|
