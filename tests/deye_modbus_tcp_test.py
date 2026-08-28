@@ -15,12 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import libscrc
 import pytest
 from unittest.mock import patch
 
 from deye_config import DeyeConfig, DeyeLoggerConfig
 from deye_modbus import DeyeModbus
+from deye_modbus_crc import modbus_crc_bytes
 from deye_modbus_tcp import DeyeModbusTcp
 
 
@@ -32,9 +32,7 @@ class TestDeyeModbusTcp:
     @staticmethod
     def _compute_crc_bytes(frame: bytearray) -> bytearray:
         """Compute and return the CRC bytes in little-endian format (matching Modbus TCP wire format)."""
-        crc = bytearray.fromhex("{:04x}".format(libscrc.modbus(frame)))
-        crc.reverse()
-        return crc
+        return modbus_crc_bytes(frame)
 
     @patch("deye_connector.DeyeConnector")
     def test_read_register_0x01(self, connector):

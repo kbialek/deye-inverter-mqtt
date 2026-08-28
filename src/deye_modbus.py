@@ -17,9 +17,8 @@
 
 import logging
 
-import libscrc
-
 from deye_connector import DeyeConnector
+from deye_modbus_crc import modbus_crc, modbus_crc_bytes
 
 
 class DeyeModbus:
@@ -46,10 +45,7 @@ class DeyeModbus:
             self.__log.error("first_reg (%d) must be <= last_reg (%d)", first_reg, last_reg)
             return {}
         modbus_frame = self.__build_modbus_read_holding_registers_request_frame(first_reg, last_reg)
-        modbus_crc = bytearray.fromhex("{:04x}".format(libscrc.modbus(modbus_frame)))
-        modbus_crc.reverse()
-
-        modbus_resp_frame = self.connector.send_request(modbus_frame + modbus_crc)
+        modbus_resp_frame = self.connector.send_request(modbus_frame + modbus_crc_bytes(modbus_frame))
         if modbus_resp_frame is None:
             return {}
         return self.__parse_modbus_read_holding_registers_response(modbus_resp_frame, first_reg, last_reg)
@@ -104,10 +100,7 @@ class DeyeModbus:
         """
 
         modbus_frame = self.__build_modbus_write_holding_register_request_frame(reg_address, reg_values)
-        modbus_crc = bytearray.fromhex("{:04x}".format(libscrc.modbus(modbus_frame)))
-        modbus_crc.reverse()
-
-        modbus_resp_frame = self.connector.send_request(modbus_frame + modbus_crc)
+        modbus_resp_frame = self.connector.send_request(modbus_frame + modbus_crc_bytes(modbus_frame))
         if modbus_resp_frame is None:
             return False
         return self.__parse_modbus_write_holding_register_response(modbus_resp_frame, reg_address, reg_values)
@@ -126,7 +119,7 @@ class DeyeModbus:
             self.__log.error("Modbus frame is too short")
             return registers
         actual_crc = int.from_bytes(frame[expected_frame_data_len : expected_frame_data_len + 2], "little")
-        expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
+        expected_crc = modbus_crc(frame[0:expected_frame_data_len])
         if actual_crc != expected_crc:
             self.__log.error(
                 "Modbus frame crc is not valid. Expected {:04x}, got {:04x}".format(expected_crc, actual_crc)
@@ -160,7 +153,7 @@ class DeyeModbus:
             )
             return False
         actual_crc = int.from_bytes(frame[expected_frame_data_len : expected_frame_data_len + 2], "little")
-        expected_crc = libscrc.modbus(frame[0:expected_frame_data_len])
+        expected_crc = modbus_crc(frame[0:expected_frame_data_len])
         if actual_crc != expected_crc:
             self.__log.error(
                 "Modbus frame crc is not valid. Expected {:04x}, got {:04x}".format(expected_crc, actual_crc)
