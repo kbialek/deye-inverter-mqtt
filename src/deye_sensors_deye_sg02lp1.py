@@ -666,7 +666,14 @@ deye_sg02lp1_bms_318 = SingleRegisterSensor(
 )
 
 deye_sg02lp1_bms_319 = SingleRegisterSensor(
-    "BMS1 Temp", 319, 0.1, mqtt_topic_suffix="bms/1/temp", unit="°C", signed=False, groups=["deye_sg02lp1_bms"]
+    "BMS1 Temp",
+    319,
+    0.1,
+    offset=-100.0,
+    mqtt_topic_suffix="bms/1/temp",
+    unit="°C",
+    signed=False,
+    groups=["deye_sg02lp1_bms"],
 )
 
 deye_sg02lp1_sensors = [
