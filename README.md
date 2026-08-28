@@ -271,23 +271,23 @@ The service can optionally read inverter settings. This feature may be useful wh
 ### Writing inverter settings
 It is possible to modify selected inverter settings over MQTT.
 
-| Setting                 |                             Topic                              | Unit | Value range | Feature flag                           |
-| ----------------------- | :------------------------------------------------------------: | ---- | :---------: | -------------------------------------- |
-| active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |    0-120    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
-| solar sell | `{MQTT_TOPIC_PREFIX}/settings/solar_sell/command` | boolean | 0,1 | `DEYE_FEATURE_SOLAR_SELL` |
-| solar sell max power | `{MQTT_TOPIC_PREFIX}/settings/solar_sell_max_power/command` | W | 0-12000 | `DEYE_FEATURE_SOLAR_SELL_MAX_POWER` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/selling` | number<sup>(1)</sup> | 0-255 |`DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time | 0000 - 2359 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W | 0 - max power<sup>(2)</sup> | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/voltage/(1-6)/command` | V | 0.00 - 63.00 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % | 0 - 100 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | number<sup>(3)<sup> | 0,1,3,4 | `DEYE_FEATURE_TIME_OF_USE` |
-| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string | write, reset | `DEYE_FEATURE_TIME_OF_USE` |
+| Setting                 |                             Topic                              | Unit |                 Value range                 | Feature flag                           |
+| ----------------------- | :------------------------------------------------------------: | ---- |:-------------------------------------------:| -------------------------------------- |
+| active power regulation | `{MQTT_TOPIC_PREFIX}/settings/active_power_regulation/command` | %    |                    0-120                    | `DEYE_FEATURE_ACTIVE_POWER_REGULATION` |
+| solar sell | `{MQTT_TOPIC_PREFIX}/settings/solar_sell/command` | boolean |                     0,1                     | `DEYE_FEATURE_SOLAR_SELL` |
+| solar sell max power | `{MQTT_TOPIC_PREFIX}/settings/solar_sell_max_power/command` | W |                   0-12000                   | `DEYE_FEATURE_SOLAR_SELL_MAX_POWER` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/selling` | number<sup>(1)</sup> |                    0-255                    |`DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/time/(1-6)/command` | time |                 0000 - 2359                 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/power/(1-6)/command` | W |         0 - max power<sup>(2)</sup>         | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/voltage/(1-6)/command` | V |                0.00 - 63.00                 | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/soc/(1-6)/command` | % |                   0 - 100                   | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/enabled/(1-6)/command` | number<sup>(3)</sup> |                  see below                  | `DEYE_FEATURE_TIME_OF_USE` |
+| time of use | `{MQTT_TOPIC_PREFIX}/timeofuse/control/command` | string |                write, reset                 | `DEYE_FEATURE_TIME_OF_USE` |
 | workmode | `{MQTT_TOPIC_PREFIX}/settings/workmode/command` | number | [0,1,2](#writing-workmode-to-configuration) | `DEYE_FEATURE_WORKMODE` |
-| grid_charge | `{MQTT_TOPIC_PREFIX}/settings/battery/grid_charge/command` | boolean | 0,1 | `DEYE_FEATURE_BATTERY_SETTINGS` |
-| maximum_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_charge_current/command` | A | 0-240 | `DEYE_FEATURE_BATTERY_SETTINGS` |
-| maximum_discharge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_discharge_current/command` | A | 0-240 | `DEYE_FEATURE_BATTERY_SETTINGS` |
-| maximum_grid_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_grid_charge_current/command` | A | 0-240 | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| grid_charge | `{MQTT_TOPIC_PREFIX}/settings/battery/grid_charge/command` | boolean |                     0,1                     | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_charge_current/command` | A |                    0-240                    | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_discharge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_discharge_current/command` | A |                    0-240                    | `DEYE_FEATURE_BATTERY_SETTINGS` |
+| maximum_grid_charge_current | `{MQTT_TOPIC_PREFIX}/settings/battery/maximum_grid_charge_current/command` | A |                    0-240                    | `DEYE_FEATURE_BATTERY_SETTINGS` |
 
 <sup>(1)</sup> encodes the weekdays setting from Monday (bit 7) ... Sunday (bit 1). Additionally controls whether TimeOfUse feature is enabled or not (bit 0)
 | Bit     |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0    |
@@ -304,6 +304,8 @@ It is possible to modify selected inverter settings over MQTT.
 |   0   | 1    |  `01`  | **1** |
 |   1   | 0    |  `10`  | **2** |
 |   1   | 1    |  `11`  | **3** |
+
+Additionally, bit 5 (value `32`) may control selling (confirmed on `deye_sg01hp3`), so values are ORed flags: 1 - grid, 2 - gen, 32 - sell (e.g. `33` = grid + sell, sell only is `32`) — see [kbialek/deye-inverter-mqtt#311](https://github.com/kbialek/deye-inverter-mqtt/issues/311)
 
 #### Writing Time Of Use configuration
 
