@@ -159,7 +159,7 @@ wheels = [
 
 [[package]]
 name = "deye-inverter-mqtt"
-version = "2026.6.1"
+version = "2026.8.1"
 source = { editable = "." }
 dependencies = [
     { name = "paho-mqtt" },
