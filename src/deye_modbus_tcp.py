@@ -16,10 +16,10 @@
 # under the License.
 
 import logging
-import libscrc
 
 from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
+from deye_modbus_crc import modbus_crc_bytes
 
 
 class DeyeModbusTcp(DeyeConnector):
@@ -55,7 +55,4 @@ class DeyeModbusTcp(DeyeConnector):
             return None
 
         data_frame = bytearray.fromhex("{:02x}".format(mb_fn_code)) + frame[7:]
-        crc = bytearray.fromhex("{:04x}".format(libscrc.modbus(data_frame)))
-        crc.reverse()
-
-        return data_frame + crc
+        return data_frame + modbus_crc_bytes(data_frame)
