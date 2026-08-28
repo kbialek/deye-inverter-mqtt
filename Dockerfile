@@ -19,7 +19,6 @@ ARG base_image_tag=3-alpine
 FROM python:${base_image_tag} AS builder
 
 WORKDIR /build
-RUN apk add gcc alpine-sdk
 COPY requirements.txt ./
 RUN pip install --no-cache-dir --target . -r requirements.txt
 
