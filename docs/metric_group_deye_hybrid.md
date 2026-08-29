@@ -20,7 +20,7 @@
 |Total Energy Bought|`ac/total_energy_bought`|kWh|78,79|4e,4f|U_DWORD (LW,HW)|0.1|
 |Daily Energy Sold|`ac/daily_energy_sold`|kWh|77|4d|U_WORD|0.1|
 |Total Energy Sold|`ac/total_energy_sold`|kWh|81,82|51,52|U_DWORD (LW,HW)|0.1|
-|Total Power|`ac/total_power`|W|175|af|S_WORD|1|
+|Inverter L3 Power|`ac/l3/power`|W|175|af|S_WORD|1|
 |Current L1|`ac/l1/current`|A|164|a4|S_WORD|0.01|
 |Current L2|`ac/l2/current`|A|165|a5|S_WORD|0.01|
 |Inverter L1 Power|`ac/l1/power`|W|173|ad|S_WORD|1|
