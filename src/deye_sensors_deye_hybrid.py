@@ -240,10 +240,6 @@ deye_hybrid_inverter_174 = SingleRegisterSensor(
     "Inverter L2 Power", 174, 1, mqtt_topic_suffix="ac/l2/power", unit="W", signed=True, groups=["deye_hybrid"]
 )
 
-deye_hybrid_inverter_175 = SingleRegisterSensor(
-    "Inverter L3 Power", 175, 1, mqtt_topic_suffix="ac/l3/power", unit="W", signed=True, groups=["deye_hybrid"]
-)
-
 deye_hybrid_inverter_192 = SingleRegisterSensor(
     "Load Frequency", 192, 0.01, mqtt_topic_suffix="ac/frequency", unit="Hz", signed=False, groups=["deye_hybrid"]
 )
