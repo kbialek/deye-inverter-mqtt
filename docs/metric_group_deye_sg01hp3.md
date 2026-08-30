@@ -1,8 +1,7 @@
 |Metric|MQTT topic suffix|Unit|Modbus address (dec)|Modbus address (hex)|Modbus data type|Scale factor|
 |---|---|:-:|:-:|:-:|:-:|:-:|
-|Running status|`inverter/status`|N/A (0: standby, 1: selfcheck, 2: normal, 3: alarm, 4: fault)|500|1f4|U_WORD|1|
-|AC relays status|`ac/relay_status`|bit array supposedly storing states of AC relays|552|228|U_WORD|1|
-|On-grid|`ac/ongrid`|True/False|552 (bit no. 2)|228 (bit no. 2)|n/a|1|
+|Running status|`inverter/status`||500|1f4|U_WORD|1|
+|AC relays status|`ac/relay_status`||552|228|U_WORD|1|
 |PV1 Power|`dc/pv1/power`|W|672|2a0|U_WORD|10|
 |PV2 Power|`dc/pv2/power`|W|673|2a1|U_WORD|10|
 |PV3 Power|`dc/pv3/power`|W|674|2a2|U_WORD|10|
@@ -32,6 +31,7 @@
 |Total Energy Bought|`ac/total_energy_bought`|kWh|522,523|20a,20b|U_DWORD (LW,HW)|0.1|
 |Daily Energy Sold|`ac/daily_energy_sold`|kWh|521|209|U_WORD|0.1|
 |Total Energy Sold|`ac/total_energy_sold`|kWh|524,525|20c,20d|U_DWORD (LW,HW)|0.1|
+|On-grid|`ac/ongrid`||computed|computed|n/a|1|
 |Current L1|`ac/l1/current`|A|630|276|S_WORD|0.01|
 |Current L2|`ac/l2/current`|A|631|277|S_WORD|0.01|
 |Current L3|`ac/l3/current`|A|632|278|S_WORD|0.01|
