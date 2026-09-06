@@ -614,7 +614,7 @@ deye_sg02lp1_time_of_use_267 = SingleRegisterSensor(
 )
 
 deye_sg02lp1_bms_312 = SingleRegisterSensor(
-    "BMS1 Charging Voltage",
+    "BMS1 Charge End Voltage",
     312,
     0.01,
     mqtt_topic_suffix="bms/1/charging_voltage",
@@ -624,7 +624,7 @@ deye_sg02lp1_bms_312 = SingleRegisterSensor(
 )
 
 deye_sg02lp1_bms_313 = SingleRegisterSensor(
-    "BMS1 Discharge Voltage",
+    "BMS1 Discharge End Voltage",
     313,
     0.01,
     mqtt_topic_suffix="bms/1/discharge_voltage",
