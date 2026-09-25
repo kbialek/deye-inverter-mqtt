@@ -29,7 +29,7 @@ deye_sg01hp3_system_time_62 = DateTimeSensor(
     "System time",
     62,
     mqtt_topic_suffix="settings/system_time",
-    groups=["deye_sg01hp3_systemtime"],
+    groups=["deye_sg01hp3_systemtime", "deye_sg01hp3_fw1098plus_systemtime"],
 )
 
 deye_sg01hp3_inverter_108 = SingleRegisterSensor(
@@ -40,7 +40,7 @@ deye_sg01hp3_inverter_108 = SingleRegisterSensor(
     unit="A",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg01hp3_settings"],
+    groups=["deye_sg01hp3_settings", "deye_sg01hp3_fw1098plus_settings"],
 )
 
 deye_sg01hp3_inverter_109 = SingleRegisterSensor(
@@ -51,7 +51,7 @@ deye_sg01hp3_inverter_109 = SingleRegisterSensor(
     unit="A",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg01hp3_settings"],
+    groups=["deye_sg01hp3_settings", "deye_sg01hp3_fw1098plus_settings"],
 )
 
 deye_sg01hp3_inverter_128 = SingleRegisterSensor(
@@ -62,7 +62,7 @@ deye_sg01hp3_inverter_128 = SingleRegisterSensor(
     unit="A",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg01hp3_settings"],
+    groups=["deye_sg01hp3_settings", "deye_sg01hp3_fw1098plus_settings"],
 )
 
 deye_sg01hp3_inverter_130 = SingleRegisterSensor(
@@ -73,7 +73,7 @@ deye_sg01hp3_inverter_130 = SingleRegisterSensor(
     unit="Bit {0,1}",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg01hp3_settings"],
+    groups=["deye_sg01hp3_settings", "deye_sg01hp3_fw1098plus_settings"],
 )
 
 deye_sg01hp3_inverter_142 = SingleRegisterSensor(
@@ -84,7 +84,7 @@ deye_sg01hp3_inverter_142 = SingleRegisterSensor(
     unit="",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg01hp3_settings"],
+    groups=["deye_sg01hp3_settings", "deye_sg01hp3_fw1098plus_settings"],
 )
 """ Selling first: 0
     Zero export to load: 1
@@ -98,7 +98,7 @@ deye_sg01hp3_inverter_143 = SingleRegisterSensor(
     unit="W",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg01hp3_settings"],
+    groups=["deye_sg01hp3_settings", "deye_sg01hp3_fw1098plus_settings"],
 )
 
 deye_sg01hp3_inverter_145 = SingleRegisterSensor(
@@ -109,14 +109,14 @@ deye_sg01hp3_inverter_145 = SingleRegisterSensor(
     unit="Bit {0,1}",
     print_format="{:.0f}",
     signed=False,
-    groups=["deye_sg01hp3_settings"],
+    groups=["deye_sg01hp3_settings", "deye_sg01hp3_fw1098plus_settings"],
 )
 
 deye_sg01hp3_inverter_500 = EnumValueSensor(
     "Running status",
     500,
     mqtt_topic_suffix="inverter/status",
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
     enum_values={0: "standby", 1: "selfcheck", 2: "normal", 3: "alarm", 4: "fault"},
 )
 
@@ -128,7 +128,7 @@ deye_sg01hp3_inverter_552 = SingleRegisterSensor(
     unit="",
     print_format="{:0>2X}",
     signed=False,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_ongrid_status_sensor = ComputedBooleanSensor(
@@ -136,63 +136,155 @@ deye_sg01hp3_ongrid_status_sensor = ComputedBooleanSensor(
     bitarray_sensor=deye_sg01hp3_inverter_552,
     mask=0x4,
     mqtt_topic_suffix="ac/ongrid",
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_672 = SingleRegisterSensor(
-    "PV1 Power", 672, 10, mqtt_topic_suffix="dc/pv1/power", unit="W", signed=False, groups=["deye_sg01hp3"]
+    "PV1 Power",
+    672,
+    10,
+    mqtt_topic_suffix="dc/pv1/power",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_673 = SingleRegisterSensor(
-    "PV2 Power", 673, 10, mqtt_topic_suffix="dc/pv2/power", unit="W", signed=False, groups=["deye_sg01hp3"]
+    "PV2 Power",
+    673,
+    10,
+    mqtt_topic_suffix="dc/pv2/power",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_674 = SingleRegisterSensor(
-    "PV3 Power", 674, 10, mqtt_topic_suffix="dc/pv3/power", unit="W", signed=False, groups=["deye_sg01hp3"]
+    "PV3 Power",
+    674,
+    10,
+    mqtt_topic_suffix="dc/pv3/power",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_675 = SingleRegisterSensor(
-    "PV4 Power", 675, 10, mqtt_topic_suffix="dc/pv4/power", unit="W", signed=False, groups=["deye_sg01hp3"]
+    "PV4 Power",
+    675,
+    10,
+    mqtt_topic_suffix="dc/pv4/power",
+    unit="W",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_676 = SingleRegisterSensor(
-    "PV1 Voltage", 676, 0.1, mqtt_topic_suffix="dc/pv1/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "PV1 Voltage",
+    676,
+    0.1,
+    mqtt_topic_suffix="dc/pv1/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_678 = SingleRegisterSensor(
-    "PV2 Voltage", 678, 0.1, mqtt_topic_suffix="dc/pv2/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "PV2 Voltage",
+    678,
+    0.1,
+    mqtt_topic_suffix="dc/pv2/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_680 = SingleRegisterSensor(
-    "PV3 Voltage", 680, 0.1, mqtt_topic_suffix="dc/pv3/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "PV3 Voltage",
+    680,
+    0.1,
+    mqtt_topic_suffix="dc/pv3/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_682 = SingleRegisterSensor(
-    "PV4 Voltage", 682, 0.1, mqtt_topic_suffix="dc/pv4/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "PV4 Voltage",
+    682,
+    0.1,
+    mqtt_topic_suffix="dc/pv4/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_677 = SingleRegisterSensor(
-    "PV1 Current", 677, 0.1, mqtt_topic_suffix="dc/pv1/current", unit="A", signed=False, groups=["deye_sg01hp3"]
+    "PV1 Current",
+    677,
+    0.1,
+    mqtt_topic_suffix="dc/pv1/current",
+    unit="A",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_679 = SingleRegisterSensor(
-    "PV2 Current", 679, 0.1, mqtt_topic_suffix="dc/pv2/current", unit="A", signed=False, groups=["deye_sg01hp3"]
+    "PV2 Current",
+    679,
+    0.1,
+    mqtt_topic_suffix="dc/pv2/current",
+    unit="A",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_681 = SingleRegisterSensor(
-    "PV3 Current", 681, 0.1, mqtt_topic_suffix="dc/pv3/current", unit="A", signed=False, groups=["deye_sg01hp3"]
+    "PV3 Current",
+    681,
+    0.1,
+    mqtt_topic_suffix="dc/pv3/current",
+    unit="A",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_683 = SingleRegisterSensor(
-    "PV4 Current", 683, 0.1, mqtt_topic_suffix="dc/pv4/current", unit="A", signed=False, groups=["deye_sg01hp3"]
+    "PV4 Current",
+    683,
+    0.1,
+    mqtt_topic_suffix="dc/pv4/current",
+    unit="A",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_solar_529 = SingleRegisterSensor(
     "Daily Production", 529, 0.1, mqtt_topic_suffix="day_energy", unit="kWh", signed=False, groups=["deye_sg01hp3"]
 )
 
+deye_sg01hp3_solar_529_fw1098plus = SingleRegisterSensor(
+    "Daily Production",
+    529,
+    1,
+    mqtt_topic_suffix="day_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus"],
+)
+
 deye_sg01hp3_solar_534 = DoubleRegisterSensor(
     "Total Production", 534, 0.1, mqtt_topic_suffix="total_energy", unit="kWh", signed=False, groups=["deye_sg01hp3"]
+)
+
+deye_sg01hp3_solar_534_fw1098plus = DoubleRegisterSensor(
+    "Total Production",
+    534,
+    1,
+    mqtt_topic_suffix="total_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_battery_514 = SingleRegisterSensor(
@@ -205,6 +297,16 @@ deye_sg01hp3_battery_514 = SingleRegisterSensor(
     groups=["deye_sg01hp3_battery"],
 )
 
+deye_sg01hp3_battery_514_fw1098plus = SingleRegisterSensor(
+    "Daily Battery Charge",
+    514,
+    1,
+    mqtt_topic_suffix="battery/daily_charge",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus_battery"],
+)
+
 deye_sg01hp3_battery_515 = SingleRegisterSensor(
     "Daily Battery Discharge",
     515,
@@ -213,6 +315,16 @@ deye_sg01hp3_battery_515 = SingleRegisterSensor(
     unit="kWh",
     signed=False,
     groups=["deye_sg01hp3_battery"],
+)
+
+deye_sg01hp3_battery_515_fw1098plus = SingleRegisterSensor(
+    "Daily Battery Discharge",
+    515,
+    1,
+    mqtt_topic_suffix="battery/daily_discharge",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery_516 = DoubleRegisterSensor(
@@ -225,6 +337,16 @@ deye_sg01hp3_battery_516 = DoubleRegisterSensor(
     groups=["deye_sg01hp3_battery"],
 )
 
+deye_sg01hp3_battery_516_fw1098plus = DoubleRegisterSensor(
+    "Total Battery Charge",
+    516,
+    1,
+    mqtt_topic_suffix="battery/total_charge",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus_battery"],
+)
+
 deye_sg01hp3_battery_518 = DoubleRegisterSensor(
     "Total Battery Discharge",
     518,
@@ -235,6 +357,16 @@ deye_sg01hp3_battery_518 = DoubleRegisterSensor(
     groups=["deye_sg01hp3_battery"],
 )
 
+deye_sg01hp3_battery_518_fw1098plus = DoubleRegisterSensor(
+    "Total Battery Discharge",
+    518,
+    1,
+    mqtt_topic_suffix="battery/total_discharge",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus_battery"],
+)
+
 deye_sg01hp3_battery1_590 = SingleRegisterSensor(
     "Battery1 Power",
     590,
@@ -242,7 +374,7 @@ deye_sg01hp3_battery1_590 = SingleRegisterSensor(
     mqtt_topic_suffix="battery/1/power",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3_battery"],
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery1_587 = SingleRegisterSensor(
@@ -252,11 +384,17 @@ deye_sg01hp3_battery1_587 = SingleRegisterSensor(
     mqtt_topic_suffix="battery/1/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_battery"],
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery1_588 = SingleRegisterSensor(
-    "Battery1 SOC", 588, 1, mqtt_topic_suffix="battery/1/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
+    "Battery1 SOC",
+    588,
+    1,
+    mqtt_topic_suffix="battery/1/soc",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery1_591 = SingleRegisterSensor(
@@ -266,7 +404,7 @@ deye_sg01hp3_battery1_591 = SingleRegisterSensor(
     mqtt_topic_suffix="battery/1/current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_battery"],
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery1_586 = SingleRegisterSensor(
@@ -277,11 +415,17 @@ deye_sg01hp3_battery1_586 = SingleRegisterSensor(
     mqtt_topic_suffix="battery/1/temperature",
     unit="°C",
     signed=False,
-    groups=["deye_sg01hp3_battery"],
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery2_589 = SingleRegisterSensor(
-    "Battery2 SOC", 589, 1, mqtt_topic_suffix="battery/2/soc", unit="%", signed=False, groups=["deye_sg01hp3_battery"]
+    "Battery2 SOC",
+    589,
+    1,
+    mqtt_topic_suffix="battery/2/soc",
+    unit="%",
+    signed=False,
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery2_593 = SingleRegisterSensor(
@@ -291,7 +435,7 @@ deye_sg01hp3_battery2_593 = SingleRegisterSensor(
     mqtt_topic_suffix="battery/2/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_battery"],
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery2_594 = SingleRegisterSensor(
@@ -301,7 +445,7 @@ deye_sg01hp3_battery2_594 = SingleRegisterSensor(
     mqtt_topic_suffix="battery/2/current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_battery"],
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery2_595 = SingleRegisterSensor(
@@ -311,7 +455,7 @@ deye_sg01hp3_battery2_595 = SingleRegisterSensor(
     mqtt_topic_suffix="battery/2/power",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3_battery"],
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_battery2_596 = SingleRegisterSensor(
@@ -322,23 +466,47 @@ deye_sg01hp3_battery2_596 = SingleRegisterSensor(
     mqtt_topic_suffix="battery/2/temperature",
     unit="°C",
     signed=True,
-    groups=["deye_sg01hp3_battery"],
+    groups=["deye_sg01hp3_battery", "deye_sg01hp3_fw1098plus_battery"],
 )
 
 deye_sg01hp3_grid_625 = SingleRegisterSensor(
-    "Total Grid Power", 625, 1, mqtt_topic_suffix="ac/total_power", unit="W", signed=True, groups=["deye_sg01hp3"]
+    "Total Grid Power",
+    625,
+    1,
+    mqtt_topic_suffix="ac/total_power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_598 = SingleRegisterSensor(
-    "Grid Voltage L1", 598, 0.1, mqtt_topic_suffix="ac/l1/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "Grid Voltage L1",
+    598,
+    0.1,
+    mqtt_topic_suffix="ac/l1/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_599 = SingleRegisterSensor(
-    "Grid Voltage L2", 599, 0.1, mqtt_topic_suffix="ac/l2/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "Grid Voltage L2",
+    599,
+    0.1,
+    mqtt_topic_suffix="ac/l2/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_600 = SingleRegisterSensor(
-    "Grid Voltage L3", 600, 0.1, mqtt_topic_suffix="ac/l3/voltage", unit="V", signed=False, groups=["deye_sg01hp3"]
+    "Grid Voltage L3",
+    600,
+    0.1,
+    mqtt_topic_suffix="ac/l3/voltage",
+    unit="V",
+    signed=False,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_604 = SingleRegisterSensor(
@@ -348,7 +516,7 @@ deye_sg01hp3_grid_604 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/l1/ct/internal",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_605 = SingleRegisterSensor(
@@ -358,7 +526,7 @@ deye_sg01hp3_grid_605 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/l2/ct/internal",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_606 = SingleRegisterSensor(
@@ -368,7 +536,7 @@ deye_sg01hp3_grid_606 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/l3/ct/internal",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_607 = SingleRegisterSensor(
@@ -378,7 +546,7 @@ deye_sg01hp3_grid_607 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/total_internal_power",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_616 = SingleRegisterSensor(
@@ -388,7 +556,7 @@ deye_sg01hp3_grid_616 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/l1/ct/external",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_617 = SingleRegisterSensor(
@@ -398,7 +566,7 @@ deye_sg01hp3_grid_617 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/l2/ct/external",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_618 = SingleRegisterSensor(
@@ -408,7 +576,7 @@ deye_sg01hp3_grid_618 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/l3/ct/external",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_520 = SingleRegisterSensor(
@@ -421,6 +589,16 @@ deye_sg01hp3_grid_520 = SingleRegisterSensor(
     groups=["deye_sg01hp3"],
 )
 
+deye_sg01hp3_grid_520_fw1098plus = SingleRegisterSensor(
+    "Daily Energy Bought",
+    520,
+    1,
+    mqtt_topic_suffix="ac/daily_energy_bought",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus"],
+)
+
 deye_sg01hp3_grid_522 = DoubleRegisterSensor(
     "Total Energy Bought",
     522,
@@ -429,6 +607,16 @@ deye_sg01hp3_grid_522 = DoubleRegisterSensor(
     unit="kWh",
     signed=False,
     groups=["deye_sg01hp3"],
+)
+
+deye_sg01hp3_grid_522_fw1098plus = DoubleRegisterSensor(
+    "Total Energy Bought",
+    522,
+    1,
+    mqtt_topic_suffix="ac/total_energy_bought",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_grid_521 = SingleRegisterSensor(
@@ -441,6 +629,16 @@ deye_sg01hp3_grid_521 = SingleRegisterSensor(
     groups=["deye_sg01hp3"],
 )
 
+deye_sg01hp3_grid_521_fw1098plus = SingleRegisterSensor(
+    "Daily Energy Sold",
+    521,
+    1,
+    mqtt_topic_suffix="ac/daily_energy_sold",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus"],
+)
+
 deye_sg01hp3_grid_524 = DoubleRegisterSensor(
     "Total Energy Sold",
     524,
@@ -451,6 +649,16 @@ deye_sg01hp3_grid_524 = DoubleRegisterSensor(
     groups=["deye_sg01hp3"],
 )
 
+deye_sg01hp3_grid_524_fw1098plus = DoubleRegisterSensor(
+    "Total Energy Sold",
+    524,
+    1,
+    mqtt_topic_suffix="ac/total_energy_sold",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus"],
+)
+
 deye_sg01hp3_upload_653 = SingleRegisterSensor(
     "Total Load Power",
     653,
@@ -458,19 +666,37 @@ deye_sg01hp3_upload_653 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/ups/total_power",
     unit="W",
     signed=False,
-    groups=["deye_sg01hp3_ups"],
+    groups=["deye_sg01hp3_ups", "deye_sg01hp3_fw1098plus_ups"],
 )
 
 deye_sg01hp3_upload_650 = SingleRegisterSensor(
-    "Load L1 Power", 650, 1, mqtt_topic_suffix="ac/ups/l1/power", unit="W", signed=True, groups=["deye_sg01hp3_ups"]
+    "Load L1 Power",
+    650,
+    1,
+    mqtt_topic_suffix="ac/ups/l1/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_ups", "deye_sg01hp3_fw1098plus_ups"],
 )
 
 deye_sg01hp3_upload_651 = SingleRegisterSensor(
-    "Load L2 Power", 651, 1, mqtt_topic_suffix="ac/ups/l2/power", unit="W", signed=True, groups=["deye_sg01hp3_ups"]
+    "Load L2 Power",
+    651,
+    1,
+    mqtt_topic_suffix="ac/ups/l2/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_ups", "deye_sg01hp3_fw1098plus_ups"],
 )
 
 deye_sg01hp3_upload_652 = SingleRegisterSensor(
-    "Load L3 Power", 652, 1, mqtt_topic_suffix="ac/ups/l3/power", unit="W", signed=True, groups=["deye_sg01hp3_ups"]
+    "Load L3 Power",
+    652,
+    1,
+    mqtt_topic_suffix="ac/ups/l3/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3_ups", "deye_sg01hp3_fw1098plus_ups"],
 )
 
 deye_sg01hp3_upload_644 = SingleRegisterSensor(
@@ -480,7 +706,7 @@ deye_sg01hp3_upload_644 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/ups/l1/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_ups"],
+    groups=["deye_sg01hp3_ups", "deye_sg01hp3_fw1098plus_ups"],
 )
 
 deye_sg01hp3_upload_645 = SingleRegisterSensor(
@@ -490,7 +716,7 @@ deye_sg01hp3_upload_645 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/ups/l2/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_ups"],
+    groups=["deye_sg01hp3_ups", "deye_sg01hp3_fw1098plus_ups"],
 )
 
 deye_sg01hp3_upload_646 = SingleRegisterSensor(
@@ -500,7 +726,7 @@ deye_sg01hp3_upload_646 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/ups/l3/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_ups"],
+    groups=["deye_sg01hp3_ups", "deye_sg01hp3_fw1098plus_ups"],
 )
 
 deye_sg01hp3_upload_526 = SingleRegisterSensor(
@@ -513,6 +739,16 @@ deye_sg01hp3_upload_526 = SingleRegisterSensor(
     groups=["deye_sg01hp3_ups"],
 )
 
+deye_sg01hp3_upload_526_fw1098plus = SingleRegisterSensor(
+    "Daily Load Consumption",
+    526,
+    1,
+    mqtt_topic_suffix="ac/ups/daily_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus_ups"],
+)
+
 deye_sg01hp3_upload_527 = DoubleRegisterSensor(
     "Total Load Consumption",
     527,
@@ -523,28 +759,74 @@ deye_sg01hp3_upload_527 = DoubleRegisterSensor(
     groups=["deye_sg01hp3_ups"],
 )
 
+deye_sg01hp3_upload_527_fw1098plus = DoubleRegisterSensor(
+    "Total Load Consumption",
+    527,
+    1,
+    mqtt_topic_suffix="ac/ups/total_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus_ups"],
+)
+
 deye_sg01hp3_inverter_630 = SingleRegisterSensor(
-    "Current L1", 630, 0.01, mqtt_topic_suffix="ac/l1/current", unit="A", signed=True, groups=["deye_sg01hp3"]
+    "Current L1",
+    630,
+    0.01,
+    mqtt_topic_suffix="ac/l1/current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_inverter_631 = SingleRegisterSensor(
-    "Current L2", 631, 0.01, mqtt_topic_suffix="ac/l2/current", unit="A", signed=True, groups=["deye_sg01hp3"]
+    "Current L2",
+    631,
+    0.01,
+    mqtt_topic_suffix="ac/l2/current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_inverter_632 = SingleRegisterSensor(
-    "Current L3", 632, 0.01, mqtt_topic_suffix="ac/l3/current", unit="A", signed=True, groups=["deye_sg01hp3"]
+    "Current L3",
+    632,
+    0.01,
+    mqtt_topic_suffix="ac/l3/current",
+    unit="A",
+    signed=True,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_inverter_633 = SingleRegisterSensor(
-    "Inverter L1 Power", 633, 1, mqtt_topic_suffix="ac/l1/power", unit="W", signed=True, groups=["deye_sg01hp3"]
+    "Inverter L1 Power",
+    633,
+    1,
+    mqtt_topic_suffix="ac/l1/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_inverter_634 = SingleRegisterSensor(
-    "Inverter L2 Power", 634, 1, mqtt_topic_suffix="ac/l2/power", unit="W", signed=True, groups=["deye_sg01hp3"]
+    "Inverter L2 Power",
+    634,
+    1,
+    mqtt_topic_suffix="ac/l2/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_inverter_635 = SingleRegisterSensor(
-    "Inverter L3 Power", 635, 1, mqtt_topic_suffix="ac/l3/power", unit="W", signed=True, groups=["deye_sg01hp3"]
+    "Inverter L3 Power",
+    635,
+    1,
+    mqtt_topic_suffix="ac/l3/power",
+    unit="W",
+    signed=True,
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_inverter_540 = SingleRegisterSensor(
@@ -555,7 +837,7 @@ deye_sg01hp3_inverter_540 = SingleRegisterSensor(
     mqtt_topic_suffix="radiator_temp",
     unit="°C",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_inverter_541 = SingleRegisterSensor(
@@ -566,7 +848,7 @@ deye_sg01hp3_inverter_541 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/temperature",
     unit="°C",
     signed=True,
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 deye_sg01hp3_bms1_210 = SingleRegisterSensor(
@@ -576,7 +858,7 @@ deye_sg01hp3_bms1_210 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/charging_voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_211 = SingleRegisterSensor(
@@ -586,7 +868,7 @@ deye_sg01hp3_bms1_211 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/discharge_voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_212 = SingleRegisterSensor(
@@ -596,7 +878,7 @@ deye_sg01hp3_bms1_212 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/charge_current_limit",
     unit="A",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_213 = SingleRegisterSensor(
@@ -606,7 +888,7 @@ deye_sg01hp3_bms1_213 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/discharge_current_limit",
     unit="A",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_214 = SingleRegisterSensor(
@@ -616,7 +898,7 @@ deye_sg01hp3_bms1_214 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/soc",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_215 = SingleRegisterSensor(
@@ -626,7 +908,7 @@ deye_sg01hp3_bms1_215 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_216 = SingleRegisterSensor(
@@ -636,7 +918,7 @@ deye_sg01hp3_bms1_216 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_217 = SingleRegisterSensor(
@@ -647,7 +929,7 @@ deye_sg01hp3_bms1_217 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/temp",
     unit="°C",
     signed=True,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_218 = SingleRegisterSensor(
@@ -657,7 +939,7 @@ deye_sg01hp3_bms1_218 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/charging_max_current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms1_219 = SingleRegisterSensor(
@@ -667,7 +949,7 @@ deye_sg01hp3_bms1_219 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/1/discharge_max_current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_241 = SingleRegisterSensor(
@@ -677,7 +959,7 @@ deye_sg01hp3_bms2_241 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/charging_voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_242 = SingleRegisterSensor(
@@ -687,7 +969,7 @@ deye_sg01hp3_bms2_242 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/discharge_voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_243 = SingleRegisterSensor(
@@ -697,7 +979,7 @@ deye_sg01hp3_bms2_243 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/charge_current_limit",
     unit="A",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_244 = SingleRegisterSensor(
@@ -707,7 +989,7 @@ deye_sg01hp3_bms2_244 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/discharge_current_limit",
     unit="A",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_245 = SingleRegisterSensor(
@@ -717,7 +999,7 @@ deye_sg01hp3_bms2_245 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/soc",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_246 = SingleRegisterSensor(
@@ -727,7 +1009,7 @@ deye_sg01hp3_bms2_246 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_247 = SingleRegisterSensor(
@@ -737,7 +1019,7 @@ deye_sg01hp3_bms2_247 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_248 = SingleRegisterSensor(
@@ -748,7 +1030,7 @@ deye_sg01hp3_bms2_248 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/temp",
     unit="°C",
     signed=True,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_249 = SingleRegisterSensor(
@@ -758,7 +1040,7 @@ deye_sg01hp3_bms2_249 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/charging_max_current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 deye_sg01hp3_bms2_250 = SingleRegisterSensor(
@@ -768,7 +1050,7 @@ deye_sg01hp3_bms2_250 = SingleRegisterSensor(
     mqtt_topic_suffix="bms/2/discharge_max_current",
     unit="A",
     signed=True,
-    groups=["deye_sg01hp3_bms"],
+    groups=["deye_sg01hp3_bms", "deye_sg01hp3_fw1098plus_bms"],
 )
 
 total_pv_power_sensor = ComputedSumSensor(
@@ -776,7 +1058,7 @@ total_pv_power_sensor = ComputedSumSensor(
     [deye_sg01hp3_solar_672, deye_sg01hp3_solar_673, deye_sg01hp3_solar_674, deye_sg01hp3_solar_675],
     mqtt_topic_suffix="dc/total_power",
     unit="W",
-    groups=["deye_sg01hp3"],
+    groups=["deye_sg01hp3", "deye_sg01hp3_fw1098plus"],
 )
 
 
@@ -787,7 +1069,7 @@ deye_sg01hp3_time_of_use_146 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/selling",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_148 = SingleRegisterSensor(
@@ -797,7 +1079,7 @@ deye_sg01hp3_time_of_use_148 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/time/1",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_149 = SingleRegisterSensor(
@@ -807,7 +1089,7 @@ deye_sg01hp3_time_of_use_149 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/time/2",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_150 = SingleRegisterSensor(
@@ -817,7 +1099,7 @@ deye_sg01hp3_time_of_use_150 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/time/3",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_151 = SingleRegisterSensor(
@@ -827,7 +1109,7 @@ deye_sg01hp3_time_of_use_151 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/time/4",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_152 = SingleRegisterSensor(
@@ -837,7 +1119,7 @@ deye_sg01hp3_time_of_use_152 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/time/5",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_153 = SingleRegisterSensor(
@@ -847,7 +1129,7 @@ deye_sg01hp3_time_of_use_153 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/time/6",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_154 = SingleRegisterSensor(
@@ -857,7 +1139,7 @@ deye_sg01hp3_time_of_use_154 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/power/1",
     unit="W",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_155 = SingleRegisterSensor(
@@ -867,7 +1149,7 @@ deye_sg01hp3_time_of_use_155 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/power/2",
     unit="W",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_156 = SingleRegisterSensor(
@@ -877,7 +1159,7 @@ deye_sg01hp3_time_of_use_156 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/power/3",
     unit="W",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_157 = SingleRegisterSensor(
@@ -887,7 +1169,7 @@ deye_sg01hp3_time_of_use_157 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/power/4",
     unit="W",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_158 = SingleRegisterSensor(
@@ -897,7 +1179,7 @@ deye_sg01hp3_time_of_use_158 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/power/5",
     unit="W",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_159 = SingleRegisterSensor(
@@ -907,7 +1189,7 @@ deye_sg01hp3_time_of_use_159 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/power/6",
     unit="W",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_160 = SingleRegisterSensor(
@@ -917,7 +1199,7 @@ deye_sg01hp3_time_of_use_160 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/voltage/1",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_161 = SingleRegisterSensor(
@@ -927,7 +1209,7 @@ deye_sg01hp3_time_of_use_161 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/voltage/2",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_162 = SingleRegisterSensor(
@@ -937,7 +1219,7 @@ deye_sg01hp3_time_of_use_162 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/voltage/3",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_163 = SingleRegisterSensor(
@@ -947,7 +1229,7 @@ deye_sg01hp3_time_of_use_163 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/voltage/4",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_164 = SingleRegisterSensor(
@@ -957,7 +1239,7 @@ deye_sg01hp3_time_of_use_164 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/voltage/5",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_165 = SingleRegisterSensor(
@@ -967,7 +1249,7 @@ deye_sg01hp3_time_of_use_165 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/voltage/6",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_166 = SingleRegisterSensor(
@@ -977,7 +1259,7 @@ deye_sg01hp3_time_of_use_166 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/soc/1",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_167 = SingleRegisterSensor(
@@ -987,7 +1269,7 @@ deye_sg01hp3_time_of_use_167 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/soc/2",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_168 = SingleRegisterSensor(
@@ -997,7 +1279,7 @@ deye_sg01hp3_time_of_use_168 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/soc/3",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_169 = SingleRegisterSensor(
@@ -1007,7 +1289,7 @@ deye_sg01hp3_time_of_use_169 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/soc/4",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_170 = SingleRegisterSensor(
@@ -1017,7 +1299,7 @@ deye_sg01hp3_time_of_use_170 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/soc/5",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_171 = SingleRegisterSensor(
@@ -1027,7 +1309,7 @@ deye_sg01hp3_time_of_use_171 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/soc/6",
     unit="%",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_172 = SingleRegisterSensor(
@@ -1037,7 +1319,7 @@ deye_sg01hp3_time_of_use_172 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/enabled/1",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_173 = SingleRegisterSensor(
@@ -1047,7 +1329,7 @@ deye_sg01hp3_time_of_use_173 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/enabled/2",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_174 = SingleRegisterSensor(
@@ -1057,7 +1339,7 @@ deye_sg01hp3_time_of_use_174 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/enabled/3",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_175 = SingleRegisterSensor(
@@ -1067,7 +1349,7 @@ deye_sg01hp3_time_of_use_175 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/enabled/4",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_176 = SingleRegisterSensor(
@@ -1077,7 +1359,7 @@ deye_sg01hp3_time_of_use_176 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/enabled/5",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 deye_sg01hp3_time_of_use_177 = SingleRegisterSensor(
@@ -1087,7 +1369,7 @@ deye_sg01hp3_time_of_use_177 = SingleRegisterSensor(
     mqtt_topic_suffix="timeofuse/enabled/6",
     unit="",
     signed=False,
-    groups=["deye_sg01hp3_timeofuse"],
+    groups=["deye_sg01hp3_timeofuse", "deye_sg01hp3_fw1098plus_timeofuse"],
 )
 
 
@@ -1098,7 +1380,7 @@ deye_sg01hp3_generator_661 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/generator/l1/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_generator"],
+    groups=["deye_sg01hp3_generator", "deye_sg01hp3_fw1098plus_generator"],
 )
 
 deye_sg01hp3_generator_662 = SingleRegisterSensor(
@@ -1108,7 +1390,7 @@ deye_sg01hp3_generator_662 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/generator/l2/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_generator"],
+    groups=["deye_sg01hp3_generator", "deye_sg01hp3_fw1098plus_generator"],
 )
 
 deye_sg01hp3_generator_663 = SingleRegisterSensor(
@@ -1118,7 +1400,7 @@ deye_sg01hp3_generator_663 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/generator/l3/voltage",
     unit="V",
     signed=False,
-    groups=["deye_sg01hp3_generator"],
+    groups=["deye_sg01hp3_generator", "deye_sg01hp3_fw1098plus_generator"],
 )
 
 deye_sg01hp3_generator_664 = SingleRegisterSensor(
@@ -1128,7 +1410,7 @@ deye_sg01hp3_generator_664 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/generator/l1/power",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3_generator"],
+    groups=["deye_sg01hp3_generator", "deye_sg01hp3_fw1098plus_generator"],
 )
 
 deye_sg01hp3_generator_665 = SingleRegisterSensor(
@@ -1138,7 +1420,7 @@ deye_sg01hp3_generator_665 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/generator/l2/power",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3_generator"],
+    groups=["deye_sg01hp3_generator", "deye_sg01hp3_fw1098plus_generator"],
 )
 
 deye_sg01hp3_generator_666 = SingleRegisterSensor(
@@ -1148,7 +1430,7 @@ deye_sg01hp3_generator_666 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/generator/l3/power",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3_generator"],
+    groups=["deye_sg01hp3_generator", "deye_sg01hp3_fw1098plus_generator"],
 )
 
 deye_sg01hp3_generator_667 = SingleRegisterSensor(
@@ -1158,7 +1440,7 @@ deye_sg01hp3_generator_667 = SingleRegisterSensor(
     mqtt_topic_suffix="ac/generator/total_power",
     unit="W",
     signed=True,
-    groups=["deye_sg01hp3_generator"],
+    groups=["deye_sg01hp3_generator", "deye_sg01hp3_fw1098plus_generator"],
 )
 
 deye_sg01hp3_generator_536 = SingleRegisterSensor(
@@ -1171,6 +1453,16 @@ deye_sg01hp3_generator_536 = SingleRegisterSensor(
     groups=["deye_sg01hp3_generator"],
 )
 
+deye_sg01hp3_generator_536_fw1098plus = SingleRegisterSensor(
+    "Daily Generator Production",
+    536,
+    1,
+    mqtt_topic_suffix="ac/generator/daily_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus_generator"],
+)
+
 deye_sg01hp3_generator_537 = SingleRegisterSensor(
     "Total Generator Production",
     537,
@@ -1179,6 +1471,16 @@ deye_sg01hp3_generator_537 = SingleRegisterSensor(
     unit="kWh",
     signed=False,
     groups=["deye_sg01hp3_generator"],
+)
+
+deye_sg01hp3_generator_537_fw1098plus = SingleRegisterSensor(
+    "Total Generator Production",
+    537,
+    1,
+    mqtt_topic_suffix="ac/generator/total_energy",
+    unit="kWh",
+    signed=False,
+    groups=["deye_sg01hp3_fw1098plus_generator"],
 )
 
 deye_sg01hp3_sensors = [
@@ -1192,44 +1494,31 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_inverter_145,
     deye_sg01hp3_inverter_500,
     deye_sg01hp3_inverter_552,
+    deye_sg01hp3_ongrid_status_sensor,
     deye_sg01hp3_solar_672,
     deye_sg01hp3_solar_673,
     deye_sg01hp3_solar_674,
     deye_sg01hp3_solar_675,
     deye_sg01hp3_solar_676,
-    deye_sg01hp3_solar_677,
     deye_sg01hp3_solar_678,
-    deye_sg01hp3_solar_679,
     deye_sg01hp3_solar_680,
-    deye_sg01hp3_solar_681,
     deye_sg01hp3_solar_682,
+    deye_sg01hp3_solar_677,
+    deye_sg01hp3_solar_679,
+    deye_sg01hp3_solar_681,
     deye_sg01hp3_solar_683,
     deye_sg01hp3_solar_529,
+    deye_sg01hp3_solar_529_fw1098plus,
     deye_sg01hp3_solar_534,
-    deye_sg01hp3_bms1_210,
-    deye_sg01hp3_bms1_211,
-    deye_sg01hp3_bms1_212,
-    deye_sg01hp3_bms1_213,
-    deye_sg01hp3_bms1_214,
-    deye_sg01hp3_bms1_215,
-    deye_sg01hp3_bms1_216,
-    deye_sg01hp3_bms1_217,
-    deye_sg01hp3_bms1_218,
-    deye_sg01hp3_bms1_219,
-    deye_sg01hp3_bms2_241,
-    deye_sg01hp3_bms2_242,
-    deye_sg01hp3_bms2_243,
-    deye_sg01hp3_bms2_244,
-    deye_sg01hp3_bms2_245,
-    deye_sg01hp3_bms2_246,
-    deye_sg01hp3_bms2_247,
-    deye_sg01hp3_bms2_248,
-    deye_sg01hp3_bms2_249,
-    deye_sg01hp3_bms2_250,
+    deye_sg01hp3_solar_534_fw1098plus,
     deye_sg01hp3_battery_514,
+    deye_sg01hp3_battery_514_fw1098plus,
     deye_sg01hp3_battery_515,
+    deye_sg01hp3_battery_515_fw1098plus,
     deye_sg01hp3_battery_516,
+    deye_sg01hp3_battery_516_fw1098plus,
     deye_sg01hp3_battery_518,
+    deye_sg01hp3_battery_518_fw1098plus,
     deye_sg01hp3_battery1_590,
     deye_sg01hp3_battery1_587,
     deye_sg01hp3_battery1_588,
@@ -1252,10 +1541,13 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_grid_617,
     deye_sg01hp3_grid_618,
     deye_sg01hp3_grid_520,
+    deye_sg01hp3_grid_520_fw1098plus,
     deye_sg01hp3_grid_522,
+    deye_sg01hp3_grid_522_fw1098plus,
     deye_sg01hp3_grid_521,
+    deye_sg01hp3_grid_521_fw1098plus,
     deye_sg01hp3_grid_524,
-    deye_sg01hp3_ongrid_status_sensor,
+    deye_sg01hp3_grid_524_fw1098plus,
     deye_sg01hp3_upload_653,
     deye_sg01hp3_upload_650,
     deye_sg01hp3_upload_651,
@@ -1264,7 +1556,9 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_upload_645,
     deye_sg01hp3_upload_646,
     deye_sg01hp3_upload_526,
+    deye_sg01hp3_upload_526_fw1098plus,
     deye_sg01hp3_upload_527,
+    deye_sg01hp3_upload_527_fw1098plus,
     deye_sg01hp3_inverter_630,
     deye_sg01hp3_inverter_631,
     deye_sg01hp3_inverter_632,
@@ -1273,6 +1567,26 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_inverter_635,
     deye_sg01hp3_inverter_540,
     deye_sg01hp3_inverter_541,
+    deye_sg01hp3_bms1_210,
+    deye_sg01hp3_bms1_211,
+    deye_sg01hp3_bms1_212,
+    deye_sg01hp3_bms1_213,
+    deye_sg01hp3_bms1_214,
+    deye_sg01hp3_bms1_215,
+    deye_sg01hp3_bms1_216,
+    deye_sg01hp3_bms1_217,
+    deye_sg01hp3_bms1_218,
+    deye_sg01hp3_bms1_219,
+    deye_sg01hp3_bms2_241,
+    deye_sg01hp3_bms2_242,
+    deye_sg01hp3_bms2_243,
+    deye_sg01hp3_bms2_244,
+    deye_sg01hp3_bms2_245,
+    deye_sg01hp3_bms2_246,
+    deye_sg01hp3_bms2_247,
+    deye_sg01hp3_bms2_248,
+    deye_sg01hp3_bms2_249,
+    deye_sg01hp3_bms2_250,
     total_pv_power_sensor,
     deye_sg01hp3_time_of_use_146,
     deye_sg01hp3_time_of_use_148,
@@ -1313,28 +1627,50 @@ deye_sg01hp3_sensors = [
     deye_sg01hp3_generator_666,
     deye_sg01hp3_generator_667,
     deye_sg01hp3_generator_536,
+    deye_sg01hp3_generator_536_fw1098plus,
     deye_sg01hp3_generator_537,
+    deye_sg01hp3_generator_537_fw1098plus,
 ]
 
 deye_sg01hp3_register_ranges = [
     SensorRegisterRange(group="deye_sg01hp3_systemtime", first_reg_address=62, last_reg_address=64),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_systemtime", first_reg_address=62, last_reg_address=64),
     SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=108, last_reg_address=109),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_settings", first_reg_address=108, last_reg_address=109),
     SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=128, last_reg_address=128),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_settings", first_reg_address=128, last_reg_address=128),
     SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=130, last_reg_address=130),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_settings", first_reg_address=130, last_reg_address=130),
     SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=142, last_reg_address=143),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_settings", first_reg_address=142, last_reg_address=143),
     SensorRegisterRange(group="deye_sg01hp3_settings", first_reg_address=145, last_reg_address=145),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_settings", first_reg_address=145, last_reg_address=145),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=500, last_reg_address=500),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus", first_reg_address=500, last_reg_address=500),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=552, last_reg_address=552),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus", first_reg_address=552, last_reg_address=552),
     SensorRegisterRange(group="deye_sg01hp3_ups", first_reg_address=514, last_reg_address=558),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_ups", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=514, last_reg_address=558),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3_battery", first_reg_address=514, last_reg_address=558),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_battery", first_reg_address=514, last_reg_address=558),
     SensorRegisterRange(group="deye_sg01hp3_battery", first_reg_address=586, last_reg_address=596),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_battery", first_reg_address=586, last_reg_address=596),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=598, last_reg_address=636),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus", first_reg_address=598, last_reg_address=636),
     SensorRegisterRange(group="deye_sg01hp3_ups", first_reg_address=644, last_reg_address=653),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_ups", first_reg_address=644, last_reg_address=653),
     SensorRegisterRange(group="deye_sg01hp3", first_reg_address=672, last_reg_address=683),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus", first_reg_address=672, last_reg_address=683),
     SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=210, last_reg_address=219),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_bms", first_reg_address=210, last_reg_address=219),
     SensorRegisterRange(group="deye_sg01hp3_bms", first_reg_address=241, last_reg_address=250),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_bms", first_reg_address=241, last_reg_address=250),
     SensorRegisterRange(group="deye_sg01hp3_timeofuse", first_reg_address=146, last_reg_address=177),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_timeofuse", first_reg_address=146, last_reg_address=177),
     SensorRegisterRange(group="deye_sg01hp3_generator", first_reg_address=661, last_reg_address=667),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_generator", first_reg_address=661, last_reg_address=667),
     SensorRegisterRange(group="deye_sg01hp3_generator", first_reg_address=536, last_reg_address=537),
+    SensorRegisterRange(group="deye_sg01hp3_fw1098plus_generator", first_reg_address=536, last_reg_address=537),
 ]
