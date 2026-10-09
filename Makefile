@@ -126,9 +126,18 @@ METRIC_GROUPS = \
 	deye_sg01hp3_battery \
 	deye_sg01hp3_ups \
 	deye_sg01hp3_bms \
+	deye_sg01hp3_generator \
 	deye_sg01hp3_timeofuse \
 	deye_sg01hp3_systemtime \
 	deye_sg01hp3_settings \
+	deye_sg01hp3_fw1098plus \
+	deye_sg01hp3_fw1098plus_battery \
+	deye_sg01hp3_fw1098plus_bms \
+	deye_sg01hp3_fw1098plus_generator \
+	deye_sg01hp3_fw1098plus_settings \
+	deye_sg01hp3_fw1098plus_systemtime \
+	deye_sg01hp3_fw1098plus_timeofuse \
+	deye_sg01hp3_fw1098plus_ups \
 	aggregated
 GENERATE_DOCS_TARGETS = $(addprefix generate-docs-, $(METRIC_GROUPS))
 $(GENERATE_DOCS_TARGETS): generate-docs-%:

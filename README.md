@@ -34,6 +34,7 @@ For LSE-3 Ethernet datalogger use `mbtcp` protocol
 | [Deye SG01LP1](https://deye.com/product/sun-7-6-8k-sg01lp1-eu/)                                                 | tcp, at  | [deye_hybrid](docs/metric_group_deye_hybrid.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_bms](docs/metric_group_deye_hybrid_bms.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                                |
 | [Deye SG02LP1](https://deye.com/product/sun-7-6-8k-sg02lp1-eu-am2/)                                                 | tcp, at  | [deye_sg02lp1](docs/metric_group_deye_sg02lp1.md), [deye_sg02lp1_battery](docs/metric_group_deye_sg02lp1_battery.md), [deye_sg02lp1_bms](docs/metric_group_deye_sg02lp1_bms.md), [deye_sg02lp1_timeofuse](docs/metric_group_deye_sg02lp1_timeofuse.md), [settings](docs/metric_group_settings.md)                                                                                |
 | [Deye SG01HP3](https://deye.com/product/sun-5-6-8-10-12-15-20-25k-sg01hp3-eu-am2/)                              | tcp, at  | [deye_sg01hp3](docs/metric_group_deye_sg01hp3.md), [deye_sg01hp3_battery](docs/metric_group_deye_sg01hp3_battery.md), [deye_sg01hp3_bms](docs/metric_group_deye_sg01hp3_bms.md), [deye_sg01hp3_ups](docs/metric_group_deye_sg01hp3_ups.md), [deye_sg01hp3_generator](docs/metric_group_deye_sg01hp3_generator.md), [settings](docs/metric_group_settings.md), [deye_sg01hp3_systemtime](docs/metric_group_deye_sg01hp3_systemtime.md), [deye_sg01hp3_settings](docs/metric_group_deye_sg01hp3_settings.md)|
+| [Deye SG01HP3](https://deye.com/product/sun-5-6-8-10-12-15-20-25k-sg01hp3-eu-am2/) with firmware version 1098 and above | tcp, at  | [deye_sg01hp3_fw1098plus](docs/metric_group_deye_sg01hp3_fw1098plus.md), [deye_sg01hp3_fw1098plus_battery](docs/metric_group_deye_sg01hp3_fw1098plus_battery.md), [deye_sg01hp3_fw1098plus_bms](docs/metric_group_deye_sg01hp3_fw1098plus_bms.md), [deye_sg01hp3_fw1098plus_ups](docs/metric_group_deye_sg01hp3_fw1098plus_ups.md), [deye_sg01hp3_fw1098plus_generator](docs/metric_group_deye_sg01hp3_fw1098plus_generator.md), [settings](docs/metric_group_settings.md), [deye_sg01hp3_fw1098plus_systemtime](docs/metric_group_deye_sg01hp3_fw1098plus_systemtime.md), [deye_sg01hp3_fw1098plus_settings](docs/metric_group_deye_sg01hp3_fw1098plus_settings.md)|
 | [Deye SG03LP1](https://deye.com/product/sun-3-6-5-6k-sg03lp1-eu/)                              | tcp, at  | [deye_sg03lp1](docs/metric_group_deye_sg03lp1.md), [deye_hybrid_battery](docs/metric_group_deye_hybrid_battery.md), [deye_hybrid_bms](docs/metric_group_deye_hybrid_bms.md), [deye_hybrid_timeofuse](docs/metric_group_deye_hybrid_timeofuse.md), [settings](docs/metric_group_settings.md)                               
 
 
@@ -174,14 +175,14 @@ All configuration options are controlled through environment variables.
     * `deye_sg04lp3_timeofuse` - sg04lp3 time-of-use settings
     * `deye_sg04lp3_systemtime` - sg04lp3 system time register (required for DEYE_FEATURE_SET_TIME on sg04lp3)
     * `deye_sg04lp3_settings` - sg04lp3 battery settings mostly, also workmode
-    * `deye_sg01hp3` - sg01hp3 inverter
-    * `deye_sg01hp3_battery` - sg01hp3 battery
-    * `deye_sg01hp3_bms` - sg01hp3 bms
-    * `deye_sg01hp3_ups` - sg01hp3 ups
-    * `deye_sg01hp3_generator` - tracks generation power and energy for each phase (1/2/3) and total (also works with Microinverter mode)
-    * `deye_sg01hp3_timeofuse` - sg01hp3 time-of-use settings
-    * `deye_sg01hp3_systemtime` - sg01hp3 system time register (required for DEYE_FEATURE_SET_TIME on sg01hp3)
-    * `deye_sg01hp3_settings` - sg01hp3-specific settings
+    * `deye_sg01hp3` or `deye_sg01hp3_fw1098plus` - sg01hp3 inverter (groups with `_fw1098plus` are intended for sg01hp3 inverters with firware version >= 1098 - see section [SG01HP3 firware version >= 1098](#sg01hp3-firware-version--1098) below)
+    * `deye_sg01hp3_battery` or `deye_sg01hp3_fw1098plus_battery` - sg01hp3 battery
+    * `deye_sg01hp3_bms` or `deye_sg01hp3_fw1098plus_bms` - sg01hp3 bms
+    * `deye_sg01hp3_ups` or `deye_sg01hp3_fw1098plus_ups` - sg01hp3 ups
+    * `deye_sg01hp3_generator` or `deye_sg01hp3_fw1098plus_generator` - tracks generation power and energy for each phase (1/2/3) and total (also works with Microinverter mode)
+    * `deye_sg01hp3_timeofuse` or `deye_sg01hp3_fw1098plus_timeofuse` - sg01hp3 time-of-use settings
+    * `deye_sg01hp3_systemtime` or `deye_sg01hp3_fw1098plus_systemtime` - sg01hp3 system time register (required for DEYE_FEATURE_SET_TIME on sg01hp3)
+    * `deye_sg01hp3_settings` or `deye_sg01hp3_fw1098plus_settings` - sg01hp3-specific settings
     * `igen_dtsd422`- dtsd422 smart meter
     * `settings` - inverter settings, all types except micro
     * `settings_micro` - inverter settings for micro inverters
@@ -222,6 +223,18 @@ All configuration options are controlled through environment variables.
 * `PLUGINS_DIR` - Path to a directory containing custom plugins extending the functionality of the service
 * `PLUGINS_ENABLED` - A list of plugin names that will be loaded when successfully discovered in `PLUGINS_DIR`, defaults to `[]`
 * `DEYE_SET_TIME_TIMEZONE` - Time zone (from the zoneinfo database), like Europe/Tallinn
+
+### SG01HP3 firware version >= 1098
+In firmware version 1098 for SG01HP3-EU-AM2, Deye has changed the register precision for accumulated kWh sensors (daily and total energy registers). The precision was lowered by dropping the decimals (in older firmware the energy meters incremented by 0.1 kWh, in 1098 and newer they increment by whole 1 kWh). The resolution is lower but the maximum possible values are higher.
+
+Firmware 1098 and newer requires different metric groups with accordingly adjusted scaling factors (multiplied by 10).
+
+If you use metric groups dedicated for older firmware versions with 1098+, your "kWh" sensors will report values divided by 10.
+
+#### How to check the version of the firmware?
+Go to the "Device Info" screen and search for "MAIN", for example "MAIN: Ver 3002-1098-1E08" means firmware 1098.
+#### Which metric groups to use for firmware 1098 and higher?
+Use metric groups that contain `sg01hp3_fw1098plus` instead of just `sg01hp3` in their names.
 
 ## ➕ Additional features
 ### Additional MQTT topics
