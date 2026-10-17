@@ -665,7 +665,7 @@ deye_sg01hp3_upload_653 = SingleRegisterSensor(
     1,
     mqtt_topic_suffix="ac/ups/total_power",
     unit="W",
-    signed=False,
+    signed=True,
     groups=["deye_sg01hp3_ups", "deye_sg01hp3_fw1098plus_ups"],
 )
 
