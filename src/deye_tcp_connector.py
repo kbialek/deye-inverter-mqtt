@@ -17,6 +17,7 @@
 
 import logging
 import socket
+import threading
 
 from deye_connector import DeyeConnector
 from deye_config import DeyeLoggerConfig
@@ -27,8 +28,15 @@ class DeyeTcpConnector(DeyeConnector):
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeTcpConnector.__name__))
         self.__logger_config = logger_config
         self.__reachable = True
+        # Polling and MQTT commands share this connector for one inverter.
+        # Keep the socket exchange, including close, inside the same lock.
+        self.__request_lock = threading.Lock()
 
     def send_request(self, req_frame) -> bytes | None:
+        with self.__request_lock:
+            return self.__send_request(req_frame)
+
+    def __send_request(self, req_frame) -> bytes | None:
         try:
             client_socket = socket.create_connection(
                 (self.__logger_config.ip_address, self.__logger_config.port), timeout=10
@@ -44,27 +52,28 @@ class DeyeTcpConnector(DeyeConnector):
             self.__reachable = False
             return
 
-        self.__log.debug("Request frame: %s", req_frame.hex())
-        client_socket.sendall(req_frame)
+        with client_socket:
+            self.__log.debug("Request frame: %s", req_frame.hex())
+            client_socket.sendall(req_frame)
 
-        attempts = 5
-        while attempts > 0:
-            attempts = attempts - 1
-            try:
-                data = client_socket.recv(1024)
-                if data:
-                    self.__log.debug("Received response frame in %s. attempt: %s", 5 - attempts, data.hex())
-                    return data
-                self.__log.warning("No data received")
-            except socket.timeout:
-                self.__log.debug("Connection response timeout")
-                if attempts == 0:
-                    self.__log.warning("Too many connection timeouts")
-            except OSError as e:
-                self.__log.error("Connection error: %s: %s", self.__logger_config.ip_address, e)
-                return
-            except Exception:
-                self.__log.exception("Unknown connection error")
-                return
+            attempts = 5
+            while attempts > 0:
+                attempts = attempts - 1
+                try:
+                    data = client_socket.recv(1024)
+                    if data:
+                        self.__log.debug("Received response frame in %s. attempt: %s", 5 - attempts, data.hex())
+                        return data
+                    self.__log.warning("No data received")
+                except socket.timeout:
+                    self.__log.debug("Connection response timeout")
+                    if attempts == 0:
+                        self.__log.warning("Too many connection timeouts")
+                except OSError as e:
+                    self.__log.error("Connection error: %s: %s", self.__logger_config.ip_address, e)
+                    return
+                except Exception:
+                    self.__log.exception("Unknown connection error")
+                    return
 
         return
