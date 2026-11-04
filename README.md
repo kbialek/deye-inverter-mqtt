@@ -405,6 +405,14 @@ By using this tool you accept this risk, and you take full responsibility for th
     ```
     where `<reg_address>` is register address (decimal)
 
+* To read a range of registers, e.g. to compare the settings of two inverters or to find a register, execute:
+    ```
+    docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt r <first_reg_address> <last_reg_address>
+    ```
+    The range is read in chunks of `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` registers. Each register is printed on its own line
+    as `<reg_address>`, decimal value and hex value, separated by tabs. Chunks the inverter does not answer are reported
+    and skipped.
+
 * To write register value execute:
     ```
     docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt w <reg_address> <reg_value>

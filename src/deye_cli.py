@@ -22,6 +22,11 @@ from deye_config import DeyeConfig
 from deye_connector_factory import DeyeConnectorFactory
 from deye_modbus import DeyeModbus
 
+REGISTER_ADDRESS_MIN = 0
+REGISTER_ADDRESS_MAX = 0xFFFF
+# Modbus allows at most 125 holding registers in one read response (byte count is a single byte)
+MODBUS_MAX_READ_REGISTERS = 125
+
 
 class DeyeCli:
     def __init__(self, config: DeyeConfig):
@@ -42,12 +47,18 @@ class DeyeCli:
 
         command = args[0]
         if command == "r":
-            self.read_register(modbus, args[1:])
+            self.read_register(modbus, args[1:], logger_config.max_register_range_length)
         elif command == "w":
             self.write_register(modbus, args[1:])
 
-    def read_register(self, modbus, args):
-        reg_address = int(args[0])
+    def read_register(self, modbus, args, max_range_length: int):
+        if not args:
+            self.__log.error("Register address is required")
+            sys.exit(1)
+        reg_address = self.__parse_register_address(args[0])
+        if len(args) > 1:
+            self.read_register_range(modbus, reg_address, self.__parse_register_address(args[1]), max_range_length)
+            return
         registers = modbus.read_registers(reg_address, reg_address)
         if registers is None:
             self.__log.error("Error: no registers read")
@@ -60,6 +71,48 @@ class DeyeCli:
         low_byte = reg_bytes[1]
         high_byte = reg_bytes[0]
         self.__log.info(f"int: {reg_value_int}, l: {low_byte}, h: {high_byte}")
+
+    def read_register_range(self, modbus, first_reg: int, last_reg: int, max_range_length: int):
+        """Reads registers first_reg..last_reg in chunks of max_range_length (at most MODBUS_MAX_READ_REGISTERS)
+        and prints one line per register.
+
+        A chunk that cannot be read is reported and skipped, so a scan across unknown address ranges continues.
+        Exits with status 1 only when no register could be read at all.
+        """
+        if first_reg > last_reg:
+            self.__log.error(f"First register {first_reg} must not be greater than last register {last_reg}")
+            sys.exit(1)
+        chunk_length = max(1, min(max_range_length, MODBUS_MAX_READ_REGISTERS))
+        read_count = 0
+        failed_chunks = 0
+        for chunk_first in range(first_reg, last_reg + 1, chunk_length):
+            chunk_last = min(chunk_first + chunk_length - 1, last_reg)
+            registers = modbus.read_registers(chunk_first, chunk_last)
+            if not registers:
+                self.__log.warning(f"Registers {chunk_first}-{chunk_last} not read")
+                failed_chunks += 1
+                continue
+            for reg_address in range(chunk_first, chunk_last + 1):
+                if reg_address in registers:
+                    reg_value_int = int.from_bytes(registers[reg_address], "big")
+                    print(f"{reg_address}\t{reg_value_int}\t0x{reg_value_int:04x}")
+                    read_count += 1
+        self.__log.info(f"Read {read_count} of {last_reg - first_reg + 1} registers, {failed_chunks} chunk(s) not read")
+        if read_count == 0:
+            sys.exit(1)
+
+    def __parse_register_address(self, arg: str) -> int:
+        try:
+            reg_address = int(arg)
+        except ValueError:
+            self.__log.error(f"Invalid register address: {arg}")
+            sys.exit(1)
+        if reg_address < REGISTER_ADDRESS_MIN or reg_address > REGISTER_ADDRESS_MAX:
+            self.__log.error(
+                f"Register address {reg_address} out of range {REGISTER_ADDRESS_MIN}-{REGISTER_ADDRESS_MAX}"
+            )
+            sys.exit(1)
+        return reg_address
 
     def write_register(self, modbus, args):
         if len(args) < 2:
