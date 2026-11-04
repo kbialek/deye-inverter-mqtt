@@ -305,3 +305,33 @@ class TestDeyeModbusTcp:
 
         # then
         assert success is False
+
+    @pytest.mark.parametrize("modbus_id", [0x00, 0x01, 0xF7])
+    @patch("deye_connector.DeyeConnector")
+    def test_read_registers_uses_modbus_id_as_unit_id(self, connector, modbus_id):
+        # given
+        unit_id = "{:02x}".format(modbus_id)
+        sut = DeyeModbus(DeyeModbusTcp(self.config, connector), modbus_id)
+        connector.send_request.return_value = bytearray.fromhex("000100000007" + unit_id + "0304000a000b")
+
+        # when
+        reg_values = sut.read_registers(2, 3)
+
+        # then
+        connector.send_request.assert_called_once_with(bytearray.fromhex("000100000006" + unit_id + "0300020002"))
+        assert reg_values == {2: bytearray.fromhex("000a"), 3: bytearray.fromhex("000b")}
+
+    @pytest.mark.parametrize("modbus_id", [0x00, 0x01, 0xF7])
+    @patch("deye_connector.DeyeConnector")
+    def test_write_registers_uses_modbus_id_as_unit_id(self, connector, modbus_id):
+        # given
+        unit_id = "{:02x}".format(modbus_id)
+        sut = DeyeModbus(DeyeModbusTcp(self.config, connector), modbus_id)
+        connector.send_request.return_value = bytearray.fromhex("000100000006" + unit_id + "1000120001")
+
+        # when
+        success = sut.write_register_uint(0x12, 0xA3D4)
+
+        # then
+        connector.send_request.assert_called_once_with(bytearray.fromhex("000100000009" + unit_id + "100012000102a3d4"))
+        assert success is True

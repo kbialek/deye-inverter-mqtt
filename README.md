@@ -198,6 +198,7 @@ All configuration options are controlled through environment variables.
   *  `at` for proprietary Deye Modbus/AT
   *  `mbtcp` for standard Modbus/TCP
 * `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` or `DEYE_LOGGER_{N}_MAX_REG_RANGE_LENGTH`- controls maximum number of registers to be read in a single Modbus registers read operation, defaults to 256
+* `DEYE_LOGGER_MODBUS_ID` or `DEYE_LOGGER_{N}_MODBUS_ID` - Modbus device address (unit ID) of the inverter, optional, defaults to `1`, must be in the range `0..247`. It is sent in every Modbus request for all protocols (for `mbtcp` as the unit identifier). See [Multiple inverters behind one Modbus gateway](#multiple-inverters-behind-one-modbus-gateway)
 * `DEYE_FEATURE_MQTT_PUBLISHER` - controls, if the service will publish metrics over mqtt, defaults to `true`
 * `DEYE_FEATURE_SET_TIME` - when set to `true`, the service will automatically set the inverter/logger time, defaults to `false`
 * `DEYE_SET_TIME_INTERVAL` - how often to adjust the inverter/logger time (in seconds), defaults to `300`, i.e. every 5 minutes
@@ -263,6 +264,7 @@ DEYE_LOGGER_{N}_SERIAL_NUMBER=0123456789
 DEYE_LOGGER_{N}_PROTOCOL=at
 DEYE_LOGGER_{N}_PORT=48899
 DEYE_LOGGER_{N}_MAX_REG_RANGE_LENGTH_PORT=256
+DEYE_LOGGER_{N}_MODBUS_ID=1
 ```
 Replace `{N}` with logger index. All loggers in the range of 1 to `DEYE_LOGGER_COUNT` must be configured.
 
@@ -271,6 +273,29 @@ All other configuration options, in particular the metric groups, are shared by 
 Each logger gets its own MQTT topic prefix `{MQTT_TOPIC_PREFIX}/{N}`
 
 Additionally, you can enable multi-inverter data aggregation. Set `DEYE_FEATURE_MULTI_INVERTER_DATA_AGGREGATOR=true` to compute and report `Aggregated daily energy` and `Aggregated AC active power` for the entire fleet. See [aggregated metrics](docs/metric_group_aggregated.md)
+
+### Multiple inverters behind one Modbus gateway
+Several inverters connected to one RS485 bus can be read through a single RS485-to-Ethernet Modbus gateway.
+Give each inverter a unique Modbus address in its settings, then configure each inverter as a separate logger that points to the gateway, and set its address with `DEYE_LOGGER_{N}_MODBUS_ID`:
+```
+DEYE_LOGGER_COUNT=2
+
+DEYE_LOGGER_1_IP_ADDRESS=192.168.1.50
+DEYE_LOGGER_1_SERIAL_NUMBER=1234567890
+DEYE_LOGGER_1_PROTOCOL=mbtcp
+DEYE_LOGGER_1_MODBUS_ID=1
+
+DEYE_LOGGER_2_IP_ADDRESS=192.168.1.50
+DEYE_LOGGER_2_SERIAL_NUMBER=1234567891
+DEYE_LOGGER_2_PROTOCOL=mbtcp
+DEYE_LOGGER_2_MODBUS_ID=2
+```
+The serial number is required, but it is not sent to the inverter when the `mbtcp` protocol is used.
+Some inverters answer only on Modbus unit ID `0`; use `DEYE_LOGGER_{N}_MODBUS_ID=0` for them.
+Unit ID `0` is the Modbus broadcast address, so use it only when the inverter is the only device on its RS485 bus: other devices on the bus may also apply register writes sent to it.
+
+Within one service instance, requests to `tcp` and `mbtcp` loggers that share the same IP address and port are sent one at a time, so the gateway never gets overlapping requests.
+If one of the inverters does not answer, requests to the other inverters behind the same gateway wait until its request times out.
 
 ### Automatically set logger/inverter time
 Monitors current logger status and sets the time at the logger/inverter once the connection to it can be established and adjusts it periodically, every `DEYE_SET_TIME_INTERVAL` seconds.

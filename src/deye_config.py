@@ -165,6 +165,9 @@ class DeyeLoggerConfig:
 
     MIN_SERIAL_NUMBER = 0
     MAX_SERIAL_NUMBER = 0xFFFFFFFFFF
+    MIN_MODBUS_ID = 0
+    MAX_MODBUS_ID = 247
+    DEFAULT_MODBUS_ID = 1
 
     def __init__(
         self,
@@ -174,6 +177,7 @@ class DeyeLoggerConfig:
         index: int = 0,
         protocol: str = "tcp",
         max_register_range_length: int = 256,
+        modbus_id: int = DEFAULT_MODBUS_ID,
     ):
         if not (self.MIN_SERIAL_NUMBER <= serial_number <= self.MAX_SERIAL_NUMBER):
             raise ValueError(f"Serial number out of range: {serial_number}")
@@ -192,6 +196,11 @@ class DeyeLoggerConfig:
             self.port = port
         self.index = index
         self.max_register_range_length = max_register_range_length
+        if not (self.MIN_MODBUS_ID <= modbus_id <= self.MAX_MODBUS_ID):
+            raise ValueError(
+                f"Modbus ID out of range: {modbus_id}. Must be between {self.MIN_MODBUS_ID} and {self.MAX_MODBUS_ID}"
+            )
+        self.modbus_id = modbus_id
 
     def logger_adapter(self, logger: logging.Logger):
         return ParameterizedLogger(logger, self.index)
@@ -208,6 +217,7 @@ class DeyeLoggerConfig:
             port=DeyeEnv.integer("DEYE_LOGGER_PORT", 0),
             protocol=DeyeEnv.string("DEYE_LOGGER_PROTOCOL", "tcp"),
             max_register_range_length=DeyeEnv.integer("DEYE_LOGGER_MAX_REG_RANGE_LENGTH", 256),
+            modbus_id=DeyeEnv.integer("DEYE_LOGGER_MODBUS_ID", DeyeLoggerConfig.DEFAULT_MODBUS_ID),
         )
 
     @staticmethod
@@ -219,6 +229,7 @@ class DeyeLoggerConfig:
             index=index,
             protocol=DeyeEnv.string(f"DEYE_LOGGER_{index}_PROTOCOL", "tcp"),
             max_register_range_length=DeyeEnv.integer(f"DEYE_LOGGER_{index}_MAX_REG_RANGE_LENGTH", 256),
+            modbus_id=DeyeEnv.integer(f"DEYE_LOGGER_{index}_MODBUS_ID", DeyeLoggerConfig.DEFAULT_MODBUS_ID),
         )
 
 

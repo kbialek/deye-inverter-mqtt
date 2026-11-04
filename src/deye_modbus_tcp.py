@@ -42,11 +42,11 @@ class DeyeModbusTcp(DeyeConnector):
         mbap_tx_id = bytearray.fromhex("{:04x}".format(self.__tx_id))
         mbap_protocol_id = bytearray.fromhex("0000")
         mbap_payload_length = bytearray.fromhex("{:04x}".format(1 + len(payload)))
-        mbap_unit_id = bytearray.fromhex("01")  # hardcoded unitId
+        mbap_unit_id = modbus_frame[0:1]  # Modbus/TCP unit id is the Modbus RTU device address
 
         return mbap_tx_id + mbap_protocol_id + mbap_payload_length + mbap_unit_id + payload
 
-    def __extract_modbus_response_frame(self, mb_fn_code: int, frame: bytes | None) -> bytes | None:
+    def __extract_modbus_response_frame(self, mb_unit_id: int, frame: bytes | None) -> bytes | None:
         if not frame:
             # Error was already logged in `send_request()` function
             return None
@@ -54,5 +54,5 @@ class DeyeModbusTcp(DeyeConnector):
             self.__log.error("Response frame is too short")
             return None
 
-        data_frame = bytearray.fromhex("{:02x}".format(mb_fn_code)) + frame[7:]
+        data_frame = bytearray.fromhex("{:02x}".format(mb_unit_id)) + frame[7:]
         return data_frame + modbus_crc_bytes(data_frame)

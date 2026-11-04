@@ -43,7 +43,7 @@ class Config:
 def response(request, wrong_read=False):
     if request[1] == 3 or wrong_read:
         count = 110 if wrong_read else int.from_bytes(request[4:6], "big")
-        body = bytes([1, 3, count * 2]) + b"\x00\x2a" * count
+        body = bytes([request[0], 3, count * 2]) + b"\x00\x2a" * count
     else:
         body = request[:6]
     modbus = body + modbus_crc(body).to_bytes(2, "little")
@@ -217,6 +217,36 @@ def test_independent_inverters_can_exchange_concurrently():
         finally:
             a.release.set()
         assert len(first.result(timeout=3)) == 2
+
+
+def test_loggers_sharing_one_endpoint_do_not_exchange_concurrently():
+    # Two inverters with different Modbus IDs behind one gateway: two loggers, same IP address and port.
+    peer = Peer(hold=True, cross=True)
+    one = DeyeModbus(DeyeModbusTcpCustom(Config(), tcp.DeyeTcpConnector(Config())), 1)
+    two = DeyeModbus(DeyeModbusTcpCustom(Config(), tcp.DeyeTcpConnector(Config())), 2)
+    began = threading.Event()
+
+    def contender():
+        began.set()
+        return two.read_registers(3, 4)
+
+    with patch.object(tcp.socket, "create_connection", peer.connect), ThreadPoolExecutor(2) as pool:
+        first = pool.submit(one.read_registers, 3, 112)
+        try:
+            assert peer.entered.wait(2)
+            second = pool.submit(contender)
+            assert began.wait(2)
+            assert not peer.second_open.wait(0.1), "Loggers sharing one endpoint exchanged concurrently"
+        finally:
+            peer.release.set()
+        results = [first.result(timeout=3), second.result(timeout=3)]
+
+    assert peer.maximum == 1
+    assert not peer.crossed
+    assert [request[0] for request in peer.requests] == [1, 2]
+    assert len(results[0]) == 110
+    assert len(results[1]) == 2
+    assert all(s.close_calls == 1 for s in peer.sockets)
 
 
 def test_socket_closes_before_the_next_exchange():

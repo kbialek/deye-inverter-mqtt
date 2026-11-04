@@ -22,15 +22,25 @@ import threading
 from deye_connector import DeyeConnector
 from deye_config import DeyeLoggerConfig
 
+_endpoint_locks: dict[tuple[str, int], threading.Lock] = {}
+_endpoint_locks_guard = threading.Lock()
+
+
+def _endpoint_lock(ip_address: str, port: int) -> threading.Lock:
+    """Returns the lock shared by all connectors talking to the given TCP endpoint"""
+    with _endpoint_locks_guard:
+        return _endpoint_locks.setdefault((ip_address, port), threading.Lock())
+
 
 class DeyeTcpConnector(DeyeConnector):
     def __init__(self, logger_config: DeyeLoggerConfig) -> None:
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeTcpConnector.__name__))
         self.__logger_config = logger_config
         self.__reachable = True
-        # Polling and MQTT commands share this connector for one inverter.
-        # Keep the socket exchange, including close, inside the same lock.
-        self.__request_lock = threading.Lock()
+        # Polling and MQTT commands share this connector for one inverter, and several loggers
+        # may share one endpoint (e.g. inverters with different Modbus IDs behind one Modbus gateway).
+        # Keep the socket exchange, including close, inside the same lock for the endpoint.
+        self.__request_lock = _endpoint_lock(logger_config.ip_address, logger_config.port)
 
     def send_request(self, req_frame) -> bytes | None:
         with self.__request_lock:
