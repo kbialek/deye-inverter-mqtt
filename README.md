@@ -411,7 +411,11 @@ By using this tool you accept this risk, and you take full responsibility for th
     ```
     The range is read in chunks of `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` registers. Each register is printed on its own line
     as `<reg_address>`, decimal value and hex value, separated by tabs. Chunks the inverter does not answer are reported
-    and skipped.
+    and skipped. To save all registers of a hybrid inverter to a file, e.g. before changing settings (`LOG_STREAM=STDERR`
+    keeps log lines out of the file):
+    ```
+    docker run --rm --env-file config.env -e LOG_STREAM=STDERR ghcr.io/kbialek/deye-inverter-mqtt r 0 799 > registers.txt
+    ```
 
 * To write register value execute:
     ```
