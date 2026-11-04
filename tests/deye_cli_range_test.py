@@ -20,6 +20,7 @@ import pytest
 from unittest.mock import MagicMock, call, patch
 
 from deye_cli import DeyeCli
+from deye_sensor import DoubleRegisterSensor, SingleRegisterSensor
 
 
 def registers_of(first_reg: int, last_reg: int) -> dict[int, bytearray]:
@@ -32,9 +33,12 @@ class TestDeyeCli:
         self.config = MagicMock()
         self.config.logger.ip_address = "127.0.0.1"
         self.config.logger.max_register_range_length = 4
+        self.config.metric_groups = []
         self.cli = DeyeCli(self.config)
         self.modbus = MagicMock()
         self.modbus.read_registers.side_effect = registers_of
+        with patch("deye_cli.sensor_list", []):
+            yield
 
     def test_single_register_read_keeps_output(self, caplog):
         # given
@@ -57,8 +61,8 @@ class TestDeyeCli:
         assert self.modbus.read_registers.call_args_list == [call(0, 3), call(4, 7), call(8, 9)]
         lines = capsys.readouterr().out.splitlines()
         assert len(lines) == 10
-        assert lines[0] == "0\t0\t0x0000"
-        assert lines[9] == "9\t9\t0x0009"
+        assert lines[0] == "0\t0 (0x0000)"
+        assert lines[9] == "9\t9 (0x0009)"
 
     def test_range_read_continues_after_failed_chunk(self, capsys, caplog):
         # given
@@ -98,6 +102,63 @@ class TestDeyeCli:
 
         # then
         assert self.modbus.read_registers.call_args_list == [call(0, 124), call(125, 249), call(250, 299)]
+
+    def test_range_read_describes_registers_with_active_metric_groups(self, capsys):
+        # given
+        self.config.metric_groups = ["test"]
+        voltage = SingleRegisterSensor(
+            "Shutdown voltage", 2, 0.01, mqtt_topic_suffix="a", unit="V", print_format="{:0.2f}", groups=["test"]
+        )
+        other_group = SingleRegisterSensor("Other group", 3, 1, mqtt_topic_suffix="b", unit="W", groups=["other"])
+        self.modbus.read_registers.side_effect = lambda first, last: {
+            r: bytearray((4650 if r == 2 else r).to_bytes(2, "big")) for r in range(first, last + 1)
+        }
+
+        # when
+        with patch("deye_cli.sensor_list", [voltage, other_group]):
+            self.cli.read_register(self.modbus, ["0", "3"], 4)
+
+        # then
+        lines = capsys.readouterr().out.splitlines()
+        assert lines[2] == "2\t4650 (0x122a)\tShutdown voltage: 46.50 V"
+        assert lines[3] == "3\t3 (0x0003)"
+
+    def test_range_read_decodes_double_register_sensor_across_chunks(self, capsys):
+        # given
+        self.config.metric_groups = ["test"]
+        energy = DoubleRegisterSensor(
+            "Total energy", 3, 0.1, mqtt_topic_suffix="c", unit="kWh", print_format="{:0.1f}", groups=["test"]
+        )
+        words = {3: 0x0001, 4: 0x0002}  # low word first: 0x0002_0001 = 131073 -> 13107.3 kWh
+        self.modbus.read_registers.side_effect = lambda first, last: {
+            r: bytearray(words.get(r, 0).to_bytes(2, "big")) for r in range(first, last + 1)
+        }
+
+        # when
+        with patch("deye_cli.sensor_list", [energy]):
+            self.cli.read_register(self.modbus, ["0", "7"], 4)
+
+        # then
+        assert self.modbus.read_registers.call_args_list == [call(0, 3), call(4, 7)]
+        lines = capsys.readouterr().out.splitlines()
+        assert lines[3] == "3\t1 (0x0001)\tTotal energy: 13107.3 kWh"
+        assert lines[4] == "4\t2 (0x0002)"
+
+    def test_range_read_skips_sensor_that_cannot_be_decoded(self, capsys):
+        # given
+        self.config.metric_groups = ["test"]
+        broken = MagicMock()
+        broken.get_registers.return_value = [1]
+        broken.in_any_group.return_value = True
+        broken.read_value.side_effect = ValueError("bad value")
+
+        # when
+        with patch("deye_cli.sensor_list", [broken]):
+            self.cli.read_register(self.modbus, ["0", "3"], 4)
+
+        # then
+        lines = capsys.readouterr().out.splitlines()
+        assert lines == ["0\t0 (0x0000)", "1\t1 (0x0001)", "2\t2 (0x0002)", "3\t3 (0x0003)"]
 
     @pytest.mark.parametrize("args", [["9", "0"], ["-1"], ["65536"], ["0", "65536"], ["abc"], []])
     def test_invalid_addresses_are_rejected(self, args):

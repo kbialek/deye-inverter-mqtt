@@ -21,6 +21,7 @@ import logging
 from deye_config import DeyeConfig
 from deye_connector_factory import DeyeConnectorFactory
 from deye_modbus import DeyeModbus
+from deye_sensors import sensor_list
 
 REGISTER_ADDRESS_MIN = 0
 REGISTER_ADDRESS_MAX = 0xFFFF
@@ -74,7 +75,8 @@ class DeyeCli:
 
     def read_register_range(self, modbus, first_reg: int, last_reg: int, max_range_length: int):
         """Reads registers first_reg..last_reg in chunks of max_range_length (at most MODBUS_MAX_READ_REGISTERS)
-        and prints one line per register.
+        and prints one line per register: address, value with its hex form, and the name and decoded value of
+        the sensors of the configured metric groups that start at this register.
 
         A chunk that cannot be read is reported and skipped, so a scan across unknown address ranges continues.
         Exits with status 1 only when no register could be read at all.
@@ -83,7 +85,7 @@ class DeyeCli:
             self.__log.error(f"First register {first_reg} must not be greater than last register {last_reg}")
             sys.exit(1)
         chunk_length = max(1, min(max_range_length, MODBUS_MAX_READ_REGISTERS))
-        read_count = 0
+        values: dict[int, bytearray] = {}
         failed_chunks = 0
         for chunk_first in range(first_reg, last_reg + 1, chunk_length):
             chunk_last = min(chunk_first + chunk_length - 1, last_reg)
@@ -92,14 +94,46 @@ class DeyeCli:
                 self.__log.warning(f"Registers {chunk_first}-{chunk_last} not read")
                 failed_chunks += 1
                 continue
-            for reg_address in range(chunk_first, chunk_last + 1):
-                if reg_address in registers:
-                    reg_value_int = int.from_bytes(registers[reg_address], "big")
-                    print(f"{reg_address}\t{reg_value_int}\t0x{reg_value_int:04x}")
-                    read_count += 1
-        self.__log.info(f"Read {read_count} of {last_reg - first_reg + 1} registers, {failed_chunks} chunk(s) not read")
-        if read_count == 0:
+            values.update({r: v for r, v in registers.items() if chunk_first <= r <= chunk_last})
+        descriptions = self.__describe_registers(values)
+        for reg_address in sorted(values):
+            reg_value_int = int.from_bytes(values[reg_address], "big")
+            line = f"{reg_address}\t{reg_value_int} (0x{reg_value_int:04x})"
+            if reg_address in descriptions:
+                line += "\t" + "; ".join(descriptions[reg_address])
+            print(line)
+        self.__log.info(
+            f"Read {len(values)} of {last_reg - first_reg + 1} registers, {failed_chunks} chunk(s) not read"
+        )
+        if not values:
             sys.exit(1)
+
+    def __describe_registers(self, registers: dict[int, bytearray]) -> dict[int, list[str]]:
+        """Decodes the read registers with the sensors of the configured metric groups (DEYE_METRIC_GROUPS).
+
+        Returns "<sensor name>: <value> <unit>" texts keyed by the first register of each sensor whose registers
+        were all read.
+        """
+        active_groups = set(self.__config.metric_groups)
+        descriptions: dict[int, list[str]] = {}
+        for sensor in sensor_list:
+            sensor_registers = sensor.get_registers()
+            if not sensor_registers or not sensor.in_any_group(active_groups):
+                continue
+            if not all(r in registers for r in sensor_registers):
+                continue
+            try:
+                value = sensor.read_value(registers)
+                if value is None:
+                    continue
+                text = f"{sensor.name}: {sensor.format_value(value)}"
+            except Exception as e:
+                self.__log.debug(f"Cannot decode sensor {sensor.name}: {e}")
+                continue
+            if sensor.unit:
+                text += f" {sensor.unit}"
+            descriptions.setdefault(sensor_registers[0], []).append(text)
+        return descriptions
 
     def __parse_register_address(self, arg: str) -> int:
         try:
