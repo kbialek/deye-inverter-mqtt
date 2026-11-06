@@ -17,16 +17,21 @@
 
 import sys
 import logging
+from datetime import datetime
 
 from deye_config import DeyeConfig
 from deye_connector_factory import DeyeConnectorFactory
 from deye_modbus import DeyeModbus
+from deye_sensor import DateTimeSensor
 from deye_sensors import sensor_list
 
-REGISTER_ADDRESS_MIN = 0
-REGISTER_ADDRESS_MAX = 0xFFFF
+UINT16_MAX = 0xFFFF
 # Modbus allows at most 125 holding registers in one read response (byte count is a single byte)
 MODBUS_MAX_READ_REGISTERS = 125
+# A range read logs its progress after every this many chunks
+PROGRESS_EVERY_CHUNKS = 10
+# Exit status after Ctrl-C, as in a shell (128 + SIGINT)
+EXIT_INTERRUPTED = 130
 
 
 class DeyeCli:
@@ -52,13 +57,17 @@ class DeyeCli:
         elif command == "w":
             self.write_register(modbus, args[1:])
 
-    def read_register(self, modbus, args, max_range_length: int):
+    def read_register(self, modbus, args, max_range_length: int = MODBUS_MAX_READ_REGISTERS):
         if not args:
             self.__log.error("Register address is required")
             sys.exit(1)
-        reg_address = self.__parse_register_address(args[0])
+        if len(args) > 2:
+            self.__log.error(f"Too many arguments: {' '.join(args)}. Usage: r <reg_address> [<last_reg_address>]")
+            sys.exit(1)
+        reg_address = self.__parse_uint16(args[0], "register address")
         if len(args) > 1:
-            self.read_register_range(modbus, reg_address, self.__parse_register_address(args[1]), max_range_length)
+            last_reg = self.__parse_uint16(args[1], "register address")
+            self.read_register_range(modbus, reg_address, last_reg, max_range_length)
             return
         registers = modbus.read_registers(reg_address, reg_address)
         if registers is None:
@@ -79,22 +88,36 @@ class DeyeCli:
         the sensors of the configured metric groups that start at this register.
 
         A chunk that cannot be read is reported and skipped, so a scan across unknown address ranges continues.
-        Exits with status 1 only when no register could be read at all.
+        Progress is logged every PROGRESS_EVERY_CHUNKS chunks. Ctrl-C stops reading and prints the registers read
+        so far. Exits with status 1 when no register could be read at all, and EXIT_INTERRUPTED after Ctrl-C.
         """
         if first_reg > last_reg:
             self.__log.error(f"First register {first_reg} must not be greater than last register {last_reg}")
             sys.exit(1)
         chunk_length = max(1, min(max_range_length, MODBUS_MAX_READ_REGISTERS))
+        register_count = last_reg - first_reg + 1
         values: dict[int, bytearray] = {}
         failed_chunks = 0
-        for chunk_first in range(first_reg, last_reg + 1, chunk_length):
-            chunk_last = min(chunk_first + chunk_length - 1, last_reg)
-            registers = modbus.read_registers(chunk_first, chunk_last)
-            if not registers:
-                self.__log.warning(f"Registers {chunk_first}-{chunk_last} not read")
-                failed_chunks += 1
-                continue
-            values.update({r: v for r, v in registers.items() if chunk_first <= r <= chunk_last})
+        interrupted = False
+        chunk_first = chunk_last = first_reg
+        try:
+            for chunk_number, chunk_first in enumerate(range(first_reg, last_reg + 1, chunk_length), start=1):
+                chunk_last = min(chunk_first + chunk_length - 1, last_reg)
+                registers = modbus.read_registers(chunk_first, chunk_last)
+                if registers:
+                    values.update({r: v for r, v in registers.items() if chunk_first <= r <= chunk_last})
+                else:
+                    self.__log.warning(f"Registers {chunk_first}-{chunk_last} not read")
+                    failed_chunks += 1
+                if chunk_number % PROGRESS_EVERY_CHUNKS == 0 and chunk_last < last_reg:
+                    self.__log.info(
+                        f"Read {len(values)} of {register_count} registers so far (up to register {chunk_last})"
+                    )
+        except KeyboardInterrupt:
+            interrupted = True
+            self.__log.warning(
+                f"Interrupted while reading registers {chunk_first}-{chunk_last}, printing the registers read so far"
+            )
         descriptions = self.__describe_registers(values)
         for reg_address in sorted(values):
             reg_value_int = int.from_bytes(values[reg_address], "big")
@@ -102,9 +125,9 @@ class DeyeCli:
             if reg_address in descriptions:
                 line += "\t" + "; ".join(descriptions[reg_address])
             print(line)
-        self.__log.info(
-            f"Read {len(values)} of {last_reg - first_reg + 1} registers, {failed_chunks} chunk(s) not read"
-        )
+        self.__log.info(f"Read {len(values)} of {register_count} registers, {failed_chunks} chunk(s) not read")
+        if interrupted:
+            sys.exit(EXIT_INTERRUPTED)
         if not values:
             sys.exit(1)
 
@@ -112,7 +135,7 @@ class DeyeCli:
         """Decodes the read registers with the sensors of the configured metric groups (DEYE_METRIC_GROUPS).
 
         Returns "<sensor name>: <value> <unit>" texts keyed by the first register of each sensor whose registers
-        were all read.
+        were all read. Date and time sensors are shown as ISO date and time.
         """
         active_groups = set(self.__config.metric_groups)
         descriptions: dict[int, list[str]] = {}
@@ -126,7 +149,12 @@ class DeyeCli:
                 value = sensor.read_value(registers)
                 if value is None:
                     continue
-                text = f"{sensor.name}: {sensor.format_value(value)}"
+                if isinstance(sensor, DateTimeSensor):
+                    # read_value() returns the inverter's local date and time as a timestamp of this host's time
+                    # zone, so converting back with the same time zone restores the inverter's date and time
+                    text = f"{sensor.name}: {datetime.fromtimestamp(value).isoformat(sep=' ')}"
+                else:
+                    text = f"{sensor.name}: {sensor.format_value(value)}"
             except Exception as e:
                 self.__log.debug(f"Cannot decode sensor {sensor.name}: {e}")
                 continue
@@ -135,25 +163,26 @@ class DeyeCli:
             descriptions.setdefault(sensor_registers[0], []).append(text)
         return descriptions
 
-    def __parse_register_address(self, arg: str) -> int:
+    def __parse_uint16(self, arg: str, what: str) -> int:
         try:
-            reg_address = int(arg)
+            value = int(arg)
         except ValueError:
-            self.__log.error(f"Invalid register address: {arg}")
+            self.__log.error(f"Invalid {what}: {arg}")
             sys.exit(1)
-        if reg_address < REGISTER_ADDRESS_MIN or reg_address > REGISTER_ADDRESS_MAX:
-            self.__log.error(
-                f"Register address {reg_address} out of range {REGISTER_ADDRESS_MIN}-{REGISTER_ADDRESS_MAX}"
-            )
+        if value < 0 or value > UINT16_MAX:
+            self.__log.error(f"{what.capitalize()} {value} out of range 0-{UINT16_MAX}")
             sys.exit(1)
-        return reg_address
+        return value
 
     def write_register(self, modbus, args):
         if len(args) < 2:
             self.__log.error("Not enough arguments")
             sys.exit(1)
-        reg_address = int(args[0])
-        reg_value = int(args[1])
+        if len(args) > 2:
+            self.__log.error(f"Too many arguments: {' '.join(args)}. Usage: w <reg_address> <reg_value>")
+            sys.exit(1)
+        reg_address = self.__parse_uint16(args[0], "register address")
+        reg_value = self.__parse_uint16(args[1], "register value")
         if modbus.write_register_uint(reg_address, reg_value):
             self.__log.info("Ok")
         else:
