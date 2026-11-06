@@ -22,6 +22,9 @@ import threading
 from deye_connector import DeyeConnector
 from deye_config import DeyeLoggerConfig
 
+# One lock per (ip, port), shared by every connector talking to that endpoint. Entries are never removed on
+# purpose: the endpoints come from the logger config, so the set is small and fixed for the life of the
+# process, and dropping a lock while a connector still holds it would let two exchanges overlap.
 _endpoint_locks: dict[tuple[str, int], threading.Lock] = {}
 _endpoint_locks_guard = threading.Lock()
 

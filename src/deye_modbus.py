@@ -17,9 +17,13 @@
 
 import logging
 
-from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
 from deye_modbus_crc import modbus_crc, modbus_crc_bytes
+
+# Modbus device address (unit ID) range. 0 is the broadcast address, but some Deye inverters answer on it.
+MIN_MODBUS_ID = 0
+MAX_MODBUS_ID = 247
+DEFAULT_MODBUS_ID = 1
 
 
 class DeyeModbus:
@@ -27,12 +31,19 @@ class DeyeModbus:
     Inspired by https://github.com/jlopez77/DeyeInverter
     """
 
-    def __init__(self, connector: DeyeConnector, modbus_id: int = DeyeLoggerConfig.DEFAULT_MODBUS_ID):
+    def __init__(self, connector: DeyeConnector, modbus_id: int = DEFAULT_MODBUS_ID):
         """
         Args:
             connector (DeyeConnector): The connector used to exchange Modbus frames with the logger
             modbus_id (int): Modbus device address (unit ID) of the inverter, 0..247
+
+        Raises:
+            ValueError: When modbus_id is outside 0..247
         """
+        if not (MIN_MODBUS_ID <= modbus_id <= MAX_MODBUS_ID):
+            raise ValueError(
+                f"Modbus ID out of range: {modbus_id}. Must be between {MIN_MODBUS_ID} and {MAX_MODBUS_ID}"
+            )
         self.__log = logging.getLogger(DeyeModbus.__name__)
         self.connector = connector
         self.modbus_id = modbus_id

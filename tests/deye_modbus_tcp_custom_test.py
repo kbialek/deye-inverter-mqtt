@@ -280,3 +280,9 @@ class TestDeyeModbusTcpCustom:
         # then
         connector.send_request.assert_called_once_with(bytearray.fromhex(request_frame))
         assert success is True
+
+    @pytest.mark.parametrize("modbus_id", [-1, 248, 255])
+    @patch("deye_connector.DeyeConnector")
+    def test_modbus_id_out_of_range_raises(self, connector, modbus_id):
+        with pytest.raises(ValueError, match=f"Modbus ID out of range: {modbus_id}. Must be between 0 and 247"):
+            DeyeModbus(DeyeModbusTcpCustom(self.config, connector), modbus_id)

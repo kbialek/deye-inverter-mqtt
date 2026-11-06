@@ -145,6 +145,23 @@ class FakeSocket:
             self.peer.active.pop(self.number, None)
 
 
+class WatchedLock:
+    """Endpoint lock that signals when a caller finds it taken and has to wait."""
+
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.contended = threading.Event()
+
+    def __enter__(self):
+        if not self.lock.acquire(blocking=False):
+            self.contended.set()
+            self.lock.acquire()
+        return self
+
+    def __exit__(self, *exc):
+        self.lock.release()
+
+
 def client(config=None):
     cfg = config or Config()
     connector = tcp.DeyeTcpConnector(cfg)
@@ -219,24 +236,23 @@ def test_independent_inverters_can_exchange_concurrently():
         assert len(first.result(timeout=3)) == 2
 
 
-def test_loggers_sharing_one_endpoint_do_not_exchange_concurrently():
+def test_loggers_sharing_one_endpoint_do_not_exchange_concurrently(monkeypatch):
     # Two inverters with different Modbus IDs behind one gateway: two loggers, same IP address and port.
+    lock = WatchedLock()
+    monkeypatch.setitem(tcp._endpoint_locks, (Config.ip_address, Config.port), lock)
     peer = Peer(hold=True, cross=True)
     one = DeyeModbus(DeyeModbusTcpCustom(Config(), tcp.DeyeTcpConnector(Config())), 1)
     two = DeyeModbus(DeyeModbusTcpCustom(Config(), tcp.DeyeTcpConnector(Config())), 2)
-    began = threading.Event()
-
-    def contender():
-        began.set()
-        return two.read_registers(3, 4)
 
     with patch.object(tcp.socket, "create_connection", peer.connect), ThreadPoolExecutor(2) as pool:
         first = pool.submit(one.read_registers, 3, 112)
         try:
             assert peer.entered.wait(2)
-            second = pool.submit(contender)
-            assert began.wait(2)
-            assert not peer.second_open.wait(0.1), "Loggers sharing one endpoint exchanged concurrently"
+            second = pool.submit(two.read_registers, 3, 4)
+            # Wait until the second logger is actually blocked on the shared endpoint lock instead of
+            # waiting a fixed time for a connection that must not happen (no timing window on slow CI).
+            assert lock.contended.wait(2), "Second logger did not wait for the shared endpoint lock"
+            assert not peer.second_open.is_set(), "Loggers sharing one endpoint exchanged concurrently"
         finally:
             peer.release.set()
         results = [first.result(timeout=3), second.result(timeout=3)]

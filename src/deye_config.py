@@ -19,6 +19,8 @@ import os
 import sys
 import logging
 
+import deye_modbus
+
 LOG_DEST_STDOUT = "STDOUT"
 LOG_DEST_STDERR = "STDERR"
 
@@ -165,9 +167,9 @@ class DeyeLoggerConfig:
 
     MIN_SERIAL_NUMBER = 0
     MAX_SERIAL_NUMBER = 0xFFFFFFFFFF
-    MIN_MODBUS_ID = 0
-    MAX_MODBUS_ID = 247
-    DEFAULT_MODBUS_ID = 1
+    MIN_MODBUS_ID = deye_modbus.MIN_MODBUS_ID
+    MAX_MODBUS_ID = deye_modbus.MAX_MODBUS_ID
+    DEFAULT_MODBUS_ID = deye_modbus.DEFAULT_MODBUS_ID
 
     def __init__(
         self,
