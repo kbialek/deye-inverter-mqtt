@@ -210,3 +210,79 @@ class TestDeyeModbusTcpCustom:
             "Set 'DEYE_LOGGER_PROTOCOL=at' and remove DEYE_LOGGER_PORT from your config"
         )
         assert caplog.records[0].getMessage() == expected
+
+    @pytest.mark.parametrize(
+        "modbus_id,request_frame,response_frame",
+        [
+            (
+                0x00,
+                "a5170010450000d2029649020000000000000000000000000000000300020002641aa615",
+                "000304000a000b8b36",
+            ),
+            (
+                0x01,
+                "a5170010450000d202964902000000000000000000000000000001030002000265cb5915",
+                "010304000a000b9bf6",
+            ),
+            (
+                0xF7,
+                "a5170010450000d2029649020000000000000000000000000000f70300020002715ded15",
+                "f70304000a000b0df9",
+            ),
+        ],
+    )
+    @patch("deye_connector.DeyeConnector")
+    def test_read_registers_with_modbus_id(self, connector, modbus_id, request_frame, response_frame):
+        # given
+        sut = DeyeModbus(DeyeModbusTcpCustom(self.config, connector), modbus_id)
+        connector.send_request.return_value = bytearray.fromhex(
+            "a5000000000000000000000000000000000000000000000000" + response_frame + "0015"
+        )
+
+        # when
+        reg_values = sut.read_registers(2, 3)
+
+        # then
+        connector.send_request.assert_called_once_with(bytearray.fromhex(request_frame))
+        assert reg_values == {2: bytearray.fromhex("000a"), 3: bytearray.fromhex("000b")}
+
+    @pytest.mark.parametrize(
+        "modbus_id,request_frame,response_frame",
+        [
+            (
+                0x00,
+                "a51a0010450000d202964902000000000000000000000000000000100012000102a3d4d01dad15",
+                "001000120001a01d",
+            ),
+            (
+                0x01,
+                "a51a0010450000d202964902000000000000000000000000000001100012000102a3d4dd8d2b15",
+                "011000120001a1cc",
+            ),
+            (
+                0xF7,
+                "a51a0010450000d2029649020000000000000000000000000000f7100012000102a3d4f229d215",
+                "f71000120001b55a",
+            ),
+        ],
+    )
+    @patch("deye_connector.DeyeConnector")
+    def test_write_register_with_modbus_id(self, connector, modbus_id, request_frame, response_frame):
+        # given
+        sut = DeyeModbus(DeyeModbusTcpCustom(self.config, connector), modbus_id)
+        connector.send_request.return_value = bytearray.fromhex(
+            "a5000000000000000000000000000000000000000000000000" + response_frame + "0015"
+        )
+
+        # when
+        success = sut.write_register_uint(0x12, 0xA3D4)
+
+        # then
+        connector.send_request.assert_called_once_with(bytearray.fromhex(request_frame))
+        assert success is True
+
+    @pytest.mark.parametrize("modbus_id", [-1, 248, 255])
+    @patch("deye_connector.DeyeConnector")
+    def test_modbus_id_out_of_range_raises(self, connector, modbus_id):
+        with pytest.raises(ValueError, match=f"Modbus ID out of range: {modbus_id}. Must be between 0 and 247"):
+            DeyeModbus(DeyeModbusTcpCustom(self.config, connector), modbus_id)

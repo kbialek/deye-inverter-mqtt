@@ -49,7 +49,7 @@ class DeyeCli:
         self.__log.info(f"Connecting to logger at IP {logger_config.ip_address}")
 
         connector = DeyeConnectorFactory().create_connector(logger_config)
-        modbus = DeyeModbus(connector)
+        modbus = DeyeModbus(connector, logger_config.modbus_id)
 
         command = args[0]
         if command == "r":

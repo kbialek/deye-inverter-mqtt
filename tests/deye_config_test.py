@@ -87,3 +87,59 @@ class TestDeyeConfig:
     def test_logger_config_serial_number_too_large_raises(self):
         with pytest.raises(ValueError):
             DeyeLoggerConfig(0x10000000000, "192.168.1.1", 8899)
+
+    def test_logger_config_modbus_id_defaults_to_1(self):
+        assert DeyeLoggerConfig(1234567890, "192.168.1.1", 8899).modbus_id == 1
+
+    @pytest.mark.parametrize("modbus_id", [0, 1, 247])
+    def test_logger_config_accepts_modbus_id_in_range(self, modbus_id):
+        assert DeyeLoggerConfig(1234567890, "192.168.1.1", 502, modbus_id=modbus_id).modbus_id == modbus_id
+
+    @pytest.mark.parametrize("modbus_id", [-1, 248, 255])
+    def test_logger_config_modbus_id_out_of_range_raises(self, modbus_id):
+        with pytest.raises(ValueError, match=f"Modbus ID out of range: {modbus_id}. Must be between 0 and 247"):
+            DeyeLoggerConfig(1234567890, "192.168.1.1", 502, modbus_id=modbus_id)
+
+    @pytest.mark.parametrize("value,expected", [(None, 1), ("0", 0), ("1", 1), ("247", 247)])
+    def test_logger_config_from_env_reads_modbus_id(self, monkeypatch, value, expected):
+        monkeypatch.setenv("DEYE_LOGGER_SERIAL_NUMBER", "1234567890")
+        monkeypatch.setenv("DEYE_LOGGER_IP_ADDRESS", "192.168.1.50")
+        monkeypatch.setenv("DEYE_LOGGER_PROTOCOL", "mbtcp")
+        if value is None:
+            monkeypatch.delenv("DEYE_LOGGER_MODBUS_ID", raising=False)
+        else:
+            monkeypatch.setenv("DEYE_LOGGER_MODBUS_ID", value)
+
+        assert DeyeLoggerConfig.from_env().modbus_id == expected
+
+    def test_logger_config_from_env_indexed_reads_modbus_id_per_logger(self, monkeypatch):
+        for index, modbus_id in [(1, "0"), (2, "2"), (3, None)]:
+            monkeypatch.setenv(f"DEYE_LOGGER_{index}_SERIAL_NUMBER", "1234567890")
+            monkeypatch.setenv(f"DEYE_LOGGER_{index}_IP_ADDRESS", "192.168.1.50")
+            monkeypatch.setenv(f"DEYE_LOGGER_{index}_PROTOCOL", "mbtcp")
+            if modbus_id is None:
+                monkeypatch.delenv(f"DEYE_LOGGER_{index}_MODBUS_ID", raising=False)
+            else:
+                monkeypatch.setenv(f"DEYE_LOGGER_{index}_MODBUS_ID", modbus_id)
+
+        assert [DeyeLoggerConfig.from_env_indexed(i).modbus_id for i in (1, 2, 3)] == [0, 2, 1]
+
+    def test_logger_config_from_env_rejects_non_integer_modbus_id(self, monkeypatch):
+        monkeypatch.setenv("DEYE_LOGGER_SERIAL_NUMBER", "1234567890")
+        monkeypatch.setenv("DEYE_LOGGER_IP_ADDRESS", "192.168.1.50")
+        monkeypatch.setenv("DEYE_LOGGER_MODBUS_ID", "one")
+
+        with pytest.raises(TypeError, match="'DEYE_LOGGER_MODBUS_ID' is not a valid integer"):
+            DeyeLoggerConfig.from_env()
+
+    def test_config_from_env_exits_with_clear_message_on_invalid_modbus_id(self, monkeypatch, capsys):
+        monkeypatch.delenv("DEYE_LOGGER_COUNT", raising=False)
+        monkeypatch.setenv("DEYE_LOGGER_SERIAL_NUMBER", "1234567890")
+        monkeypatch.setenv("DEYE_LOGGER_IP_ADDRESS", "192.168.1.50")
+        monkeypatch.setenv("DEYE_LOGGER_MODBUS_ID", "248")
+        monkeypatch.setenv("MQTT_HOST", "localhost")
+
+        with pytest.raises(SystemExit):
+            DeyeConfig.from_env()
+
+        assert "Modbus ID out of range: 248. Must be between 0 and 247" in capsys.readouterr().out

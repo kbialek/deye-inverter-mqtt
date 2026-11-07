@@ -17,11 +17,15 @@
 
 
 import logging
+from types import SimpleNamespace
 
 import pytest
 
+import deye_at_connector
 from deye_at_connector import DeyeAtConnector
 from deye_config import DeyeLoggerConfig
+from deye_modbus import DeyeModbus
+
 
 @pytest.fixture(scope="module")
 def connector():
@@ -103,3 +107,77 @@ class TestDeyeAtConnector:
             "000000001388000000000000000000000000016800000000000012E8000000000000000000"
             "00000000000000000000000000000000000000000000000000000000EA000700FA0007000000000000000058AB"
         )
+
+
+class FakeUdpSocket:
+    def __init__(self, modbus_response: str):
+        self.sent = []
+        self.replies = [
+            b"192.168.1.50,ACCF23000000,HF-A11ASSISTHREAD",
+            b"+ok=" + modbus_response.upper().encode("ascii") + b"\r\n\r\n",
+        ]
+
+    def settimeout(self, timeout):
+        pass
+
+    def sendto(self, data, address):
+        self.sent.append(data)
+
+    def recv(self, size):
+        return self.replies.pop(0)
+
+    def close(self):
+        pass
+
+
+class TestDeyeAtConnectorModbusId:
+    @pytest.fixture
+    def udp_socket(self, monkeypatch):
+        monkeypatch.setattr(deye_at_connector, "time", SimpleNamespace(sleep=lambda seconds: None))
+
+        def install(modbus_response):
+            sock = FakeUdpSocket(modbus_response)
+            monkeypatch.setattr(deye_at_connector.socket, "socket", lambda family, kind: sock)
+            return sock
+
+        return install
+
+    @pytest.mark.parametrize(
+        "modbus_id,request_frame,response_frame",
+        [
+            (0x00, "000300020002641a", "000304000a000b8b36"),
+            (0x01, "01030002000265cb", "010304000a000b9bf6"),
+            (0xF7, "f70300020002715d", "f70304000a000b0df9"),
+        ],
+    )
+    def test_read_registers_with_modbus_id(self, udp_socket, modbus_id, request_frame, response_frame):
+        # given
+        sock = udp_socket(response_frame)
+        sut = DeyeModbus(DeyeAtConnector(DeyeLoggerConfig(1234567890, "192.168.1.50", 0, protocol="at")), modbus_id)
+
+        # when
+        reg_values = sut.read_registers(2, 3)
+
+        # then
+        assert f"AT+INVDATA=8,{request_frame}\n".encode("ascii") in sock.sent
+        assert reg_values == {2: bytearray.fromhex("000a"), 3: bytearray.fromhex("000b")}
+
+    @pytest.mark.parametrize(
+        "modbus_id,request_frame,response_frame",
+        [
+            (0x00, "00100012000102a3d4d01d", "001000120001a01d"),
+            (0x01, "01100012000102a3d4dd8d", "011000120001a1cc"),
+            (0xF7, "f7100012000102a3d4f229", "f71000120001b55a"),
+        ],
+    )
+    def test_write_register_with_modbus_id(self, udp_socket, modbus_id, request_frame, response_frame):
+        # given
+        sock = udp_socket(response_frame)
+        sut = DeyeModbus(DeyeAtConnector(DeyeLoggerConfig(1234567890, "192.168.1.50", 0, protocol="at")), modbus_id)
+
+        # when
+        success = sut.write_register_uint(0x12, 0xA3D4)
+
+        # then
+        assert f"AT+INVDATA=11,{request_frame}\n".encode("ascii") in sock.sent
+        assert success is True
