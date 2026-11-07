@@ -405,11 +405,36 @@ By using this tool you accept this risk, and you take full responsibility for th
     ```
     where `<reg_address>` is register address (decimal)
 
+* To read a range of registers, e.g. to compare the settings of two inverters or to find a register, execute:
+    ```
+    docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt r <first_reg_address> <last_reg_address>
+    ```
+    Each register is printed on its own line, with tabs between the columns: `<reg_address>`, the decimal value with
+    the hex value in brackets and, if a sensor of the metric groups in `DEYE_METRIC_GROUPS` starts at this register, the
+    sensor name with the decoded value and unit, e.g. `108 150 (0x0096) Maximum battery charge current: 150 A`.
+    Registers without such a sensor, and all registers when `DEYE_METRIC_GROUPS` is empty, show the raw value only.
+    To name as many registers as possible, list all metric groups of your inverter model, even groups the daemon does
+    not use.
+
+    The range is read in chunks of `DEYE_LOGGER_MAX_REG_RANGE_LENGTH` registers, at most 125 (the Modbus limit for one
+    read). A chunk the inverter does not answer is reported and skipped as a whole, including its readable registers.
+    To narrow it down, read that range again with a smaller chunk, e.g. `-e DEYE_LOGGER_MAX_REG_RANGE_LENGTH=1`.
+    Progress is logged every 10 chunks. The register lines are printed after the last chunk; Ctrl-C stops the read,
+    prints the registers read so far and exits with status 130.
+
+    To save all registers of a three-phase low-voltage hybrid (SG04LP3) to a file, e.g. before changing settings
+    (`LOG_STREAM=STDERR` keeps log lines out of the file):
+    ```
+    docker run --rm --env-file config.env -e LOG_STREAM=STDERR \
+      -e DEYE_METRIC_GROUPS=deye_sg04lp3,deye_sg04lp3_battery,deye_sg04lp3_settings,deye_sg04lp3_timeofuse \
+      ghcr.io/kbialek/deye-inverter-mqtt r 0 799 > registers.txt
+    ```
+
 * To write register value execute:
     ```
     docker run --rm --env-file config.env ghcr.io/kbialek/deye-inverter-mqtt w <reg_address> <reg_value>
     ```
-    where `<reg_address>` is register address (decimal), and <reg_value> is a value to set (decimal)
+    where `<reg_address>` is register address (decimal), and `<reg_value>` is a value to set (decimal, 0-65535; a negative value of a signed register as its two's complement, e.g. `65436` for -100)
 
 ## 👀 Other related projects and resources
 * https://github.com/StephanJoubert/home_assistant_solarman
