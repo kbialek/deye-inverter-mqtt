@@ -75,6 +75,15 @@ class TestDeyeConfig:
         assert cfg.username is None
         assert cfg.password is None
 
+    @pytest.mark.parametrize("value,expected", [(None, False), ("true", True), ("false", False)])
+    def test_mqtt_config_from_env_reads_retain(self, monkeypatch, value, expected):
+        monkeypatch.setenv("MQTT_HOST", "localhost")
+        if value is None:
+            monkeypatch.delenv("MQTT_RETAIN", raising=False)
+        else:
+            monkeypatch.setenv("MQTT_RETAIN", value)
+        assert DeyeMqttConfig.from_env().retain == expected
+
     def test_active_processors_includes_mqtt_publisher_by_default(self):
         """Test feature flag paths: mqtt_publisher is included by default (lines 181-213)."""
         processors = DeyeConfig._DeyeConfig__read_active_processors()

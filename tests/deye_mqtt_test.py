@@ -64,3 +64,34 @@ class TestDeyeMqttClient:
 
         # then
         assert result == "foo"
+
+    @staticmethod
+    def __mock_paho_client(sut, mocker):
+        paho_client_mock = mocker.Mock()
+        setattr(sut, "_DeyeMqttClient__mqtt_client", paho_client_mock)
+        mocker.patch.object(sut, "connect", return_value=True)
+        return paho_client_mock
+
+    def test_publish_does_not_retain_by_default(self, config_mock, mqtt_config_mock, mocker):
+        # given
+        mqtt_config_mock.retain = False
+        sut = DeyeMqttClient(config_mock)
+        paho_client_mock = self.__mock_paho_client(sut, mocker)
+
+        # when
+        sut.publish("topic", "value")
+
+        # then
+        paho_client_mock.publish.assert_called_once_with("topic", "value", qos=1, retain=False)
+
+    def test_publish_retains_when_mqtt_retain_enabled(self, config_mock, mqtt_config_mock, mocker):
+        # given
+        mqtt_config_mock.retain = True
+        sut = DeyeMqttClient(config_mock)
+        paho_client_mock = self.__mock_paho_client(sut, mocker)
+
+        # when
+        sut.publish("topic", "value")
+
+        # then
+        paho_client_mock.publish.assert_called_once_with("topic", "value", qos=1, retain=True)
