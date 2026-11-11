@@ -113,7 +113,7 @@ class DeyeMqttClient:
             self.__publish_lock.acquire()
             self.__log.debug("Publishing message. topic: '%s', value: '%s'", mqtt_topic, value)
             self.connect()
-            info = self.__mqtt_client.publish(mqtt_topic, value, qos=1)
+            info = self.__mqtt_client.publish(mqtt_topic, value, qos=1, retain=self.__config.retain)
             info.wait_for_publish(self.__mqtt_timeout)
         except ValueError as e:
             raise DeyeMqttPublishError(f"MQTT outgoing queue is full: {str(e)}")

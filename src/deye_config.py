@@ -125,6 +125,7 @@ class DeyeMqttConfig:
         availability_topic: str = "status",
         logger_status_topic: str = "logger_status",
         tls=DeyeMqttTlsConfig(),
+        retain: bool = False,
     ):
         self.host = host
         self.port = port
@@ -134,6 +135,7 @@ class DeyeMqttConfig:
         self.availability_topic = availability_topic
         self.logger_status_topic = logger_status_topic
         self.tls = tls
+        self.retain = retain
 
     @property
     def username(self) -> str | None:
@@ -154,6 +156,7 @@ class DeyeMqttConfig:
             availability_topic=DeyeEnv.string("MQTT_AVAILABILITY_TOPIC", "status"),
             logger_status_topic=DeyeEnv.string("MQTT_LOGGER_STATUS_TOPIC", "logger_status"),
             tls=DeyeMqttTlsConfig.from_env(),
+            retain=DeyeEnv.boolean("MQTT_RETAIN", False),
         )
 
 

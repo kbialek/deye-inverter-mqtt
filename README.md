@@ -216,6 +216,7 @@ All configuration options are controlled through environment variables.
 * `MQTT_TOPIC_PREFIX` - mqtt topic prefix used for all inverter metrics, defaults to `deye`
 * `MQTT_AVAILABILITY_TOPIC` - mqtt availability topic, defaults to `status`
 * `MQTT_LOGGER_STATUS_TOPIC` - logger connectivity status topic, defaults to `logger_status`
+* `MQTT_RETAIN` - when set to `true`, published messages have the MQTT `retain` flag set, so brokers keep the last known value of each topic and deliver it to clients that connect later, defaults to `false`
 * `MQTT_TLS_ENABLED` - enables TLS encryption for the communication with the broker, defaults to `false`
 * `MQTT_TLS_INSECURE` - Set to true in order to skip server certificate verification, defaults to `false`
 * `MQTT_TLS_CA_CERT_PATH` - CA certificate location to be used instead of the system certification authority, defaults to `None`
