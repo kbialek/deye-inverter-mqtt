@@ -32,27 +32,58 @@ from deye_inverter_state import DeyeInverterState
 from deye_events import DeyeObservationEvent, DeyeEventList
 
 
+FAILURE_DELAYS = (5, 10, 20, 30)
+
+
 class IntervalRunner:
-    def __init__(self, logger_config: DeyeLoggerConfig, interval: int, action):
+    def __init__(
+        self,
+        logger_config: DeyeLoggerConfig,
+        interval: int,
+        action,
+        read_requested=None,
+        confirmation_read_requested=None,
+    ):
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeDaemon.__name__))
         self.__interval = interval
         self.__action = action
         self.__stopEvent = threading.Event()
+        self.__read_requested = read_requested if read_requested is not None else threading.Event()
+        self.__confirmation = confirmation_read_requested
         self.__thread = threading.Thread(target=self.__handler)
 
     def __handler(self):
-        nextTime = time.time() + random.randint(0, self.__interval - 1)
-        while not self.__stopEvent.wait(nextTime - time.time()):
-            nextTime = time.time() + self.__interval
-            self.__log.debug("Invoking action")
-            self.__invoke_action()
+        next_time = time.monotonic() + random.uniform(0, max(0, self.__interval - 1))
+        failures = 0
+        while not self.__stopEvent.is_set():
+            self.__read_requested.wait(max(0, next_time - time.monotonic()))
+            if self.__stopEvent.is_set():
+                break
+            priority = self.__confirmation is not None and self.__confirmation.is_set()
+            requested = self.__read_requested.is_set()
+            self.__read_requested.clear()
+            if time.monotonic() < next_time and not (priority or (requested and failures == 0)):
+                continue
+            if self.__invoke_action():
+                failures = 0
+                delay = self.__interval
+            else:
+                failures += 1
+                delay = FAILURE_DELAYS[min(failures - 1, len(FAILURE_DELAYS) - 1)]
+            # No catch-up polls after slow I/O. Generic refreshes during this poll coalesce.
+            next_time = time.monotonic() + delay
+            self.__read_requested.clear()
+            # A write can finish while this acquisition is waiting or publishing. Never lose its readback.
+            if self.__confirmation is not None and self.__confirmation.is_set():
+                self.__read_requested.set()
         self.__log.debug("Invocation loop stopped")
 
     def __invoke_action(self):
         try:
-            self.__action()
+            return self.__action() is not False  # Existing actions returning None remain successful.
         except Exception:
             self.__log.exception("Unexpected error during runner execution")
+            return False
 
     def start(self):
         self.__log.debug("Starting executing the runner at intervals of %s seconds", self.__interval)
@@ -61,6 +92,7 @@ class IntervalRunner:
     def stop(self):
         self.__log.debug("Stopping the runner")
         self.__stopEvent.set()
+        self.__read_requested.set()
 
 
 class DeyeDaemon:
@@ -94,8 +126,22 @@ class DeyeDaemon:
         processors = self.__processor_factory.create_processors(logger_config, modbus, sensors) + [
             self.__multi_inverter_data_aggregator
         ]
-        inverter_state = DeyeInverterState(self.__config, logger_config, reg_ranges, modbus, sensors, processors)
-        return IntervalRunner(logger_config, self.__config.data_read_inverval, inverter_state.read_from_logger)
+        inverter_state = DeyeInverterState(
+            self.__config,
+            logger_config,
+            reg_ranges,
+            modbus,
+            sensors,
+            processors,
+            read_timeout=self.__config.data_read_timeout,
+        )
+        return IntervalRunner(
+            logger_config,
+            self.__config.data_read_inverval,
+            inverter_state.read_from_logger,
+            modbus.read_requested,
+            modbus.confirmation_read_requested,
+        )
 
     def __create_interval_runner_for_aggregators(self) -> IntervalRunner:
         return IntervalRunner(

@@ -255,6 +255,7 @@ class DeyeConfig:
         active_command_handlers: [str] = [],
         plugins_dir: str = "",
         plugins_enabled: [str] = [],
+        data_read_timeout: int = 60,
     ):
         if isinstance(logger_configs, DeyeLoggerConfig):
             self.logger_configs = [logger_configs]
@@ -264,6 +265,9 @@ class DeyeConfig:
         self.log_level = log_level
         self.log_stream = log_stream
         self.data_read_inverval = data_read_inverval
+        if data_read_timeout <= 0:
+            raise ValueError("DEYE_DATA_READ_TIMEOUT must be positive")
+        self.data_read_timeout = data_read_timeout
         self.set_time_interval = set_time_interval
         self.set_time_timezone = set_time_timezone
         self.publish_on_change = publish_on_change
@@ -291,6 +295,7 @@ class DeyeConfig:
                 log_level=DeyeEnv.string("LOG_LEVEL", "INFO"),
                 log_stream=DeyeEnv.string("LOG_STREAM", LOG_DEST_STDOUT),
                 data_read_inverval=DeyeEnv.integer("DEYE_DATA_READ_INTERVAL", 60),
+                data_read_timeout=DeyeEnv.integer("DEYE_DATA_READ_TIMEOUT", 60),
                 set_time_interval=DeyeEnv.integer("DEYE_SET_TIME_INTERVAL", 300),
                 set_time_timezone=DeyeEnv.string("DEYE_SET_TIME_TIMEZONE", "UTC"),
                 publish_on_change=DeyeEnv.boolean("DEYE_PUBLISH_ON_CHANGE", False),

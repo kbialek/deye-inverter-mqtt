@@ -16,14 +16,15 @@
 # under the License.
 
 import pytest
+import threading
 from datetime import datetime
-from paho.mqtt.client import Client, MQTTMessage
+from paho.mqtt.client import MQTTMessage
 
 from deye_timeofuse_service import DeyeTimeOfUseService
 from deye_events import DeyeEventList, DeyeObservationEvent
 from deye_modbus import DeyeModbus
 from deye_mqtt import DeyeMqttClient
-from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig, DeyeMqttTlsConfig
+from deye_config import DeyeConfig, DeyeMqttConfig, DeyeLoggerConfig
 from deye_observation import Observation
 import deye_sensors_deye_sg04lp3
 
@@ -32,11 +33,18 @@ sensor_time_2 = deye_sensors_deye_sg04lp3.deye_sg04lp3_time_of_use_149
 sensor_time_3 = deye_sensors_deye_sg04lp3.deye_sg04lp3_time_of_use_150
 
 
+def wait_writer(service):
+    worker = service._DeyeTimeOfUseService__worker
+    if worker is not None:
+        worker.join(3)
+        assert not worker.is_alive(), "TOU worker failed to finish"
+
+
 class TestDeyeTimeOfUseService:
     @staticmethod
     @pytest.fixture
     def modbus_mock(mocker) -> DeyeModbus:
-        return mocker.Mock(spec=DeyeModbus)
+        return mocker.Mock(spec=DeyeModbus, transaction_lock=threading.RLock())
 
     @staticmethod
     @pytest.fixture
@@ -168,6 +176,7 @@ class TestDeyeTimeOfUseService:
         dry_msg = MQTTMessage(1, b"deye/timeofuse/control")
         dry_msg.payload = b"dry-write"
         sut.handle_control_command(None, None, dry_msg)
+        wait_writer(sut)
 
         # then: modbus should NOT be called (dry run)
         assert not modbus_mock.write_registers.called
@@ -194,6 +203,7 @@ class TestDeyeTimeOfUseService:
         write_msg = MQTTMessage(1, b"deye/timeofuse/control")
         write_msg.payload = b"write"
         sut.handle_control_command(None, None, write_msg)
+        wait_writer(sut)
 
         # then: modbus.write_registers should have been called once
         assert modbus_mock.write_registers.call_count == 1
@@ -221,6 +231,7 @@ class TestDeyeTimeOfUseService:
         write_msg = MQTTMessage(1, b"deye/timeofuse/control")
         write_msg.payload = b"write"
         sut.handle_control_command(None, None, write_msg)
+        wait_writer(sut)
 
         # then: modbus.write_registers should be called twice (148 alone, 150 alone — gap at 149)
         assert modbus_mock.write_registers.call_count == 2

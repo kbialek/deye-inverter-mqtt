@@ -33,6 +33,7 @@ class Config:
     # Synthetic identity used only to encode fixtures, never a real logger.
     ip_address = "inverter-a.invalid"
     port = 8899
+    protocol = "tcp"
     serial_number = 0x10203040
 
     @staticmethod
@@ -103,6 +104,9 @@ class FakeSocket:
     def __exit__(self, *exc):
         self.close()
 
+    def settimeout(self, timeout):
+        assert 0 < timeout <= 10
+
     def sendall(self, packet):
         if self.number == 1 and self.peer.failure == "send_error":
             raise OSError("synthetic send failure")
@@ -152,13 +156,13 @@ class WatchedLock:
         self.lock = threading.Lock()
         self.contended = threading.Event()
 
-    def __enter__(self):
+    def acquire(self, timeout=-1):
         if not self.lock.acquire(blocking=False):
             self.contended.set()
-            self.lock.acquire()
-        return self
+            return self.lock.acquire(timeout=timeout)
+        return True
 
-    def __exit__(self, *exc):
+    def release(self):
         self.lock.release()
 
 
@@ -297,11 +301,7 @@ def test_failed_exchange_releases_resources_and_allows_the_next_request(failure)
     peer = Peer(failure=failure)
     bridge = client()
     with patch.object(tcp.socket, "create_connection", peer.connect):
-        if failure == "send_error":
-            with pytest.raises(OSError, match="synthetic send failure"):
-                bridge.write_register_uint(250, 50)
-        else:
-            assert bridge.write_register_uint(250, 50) is False
+        assert bridge.write_register_uint(250, 50) is False
 
         # Bound the follow-up call even if a future regression leaks the lock.
         results = Queue()
@@ -324,7 +324,7 @@ def test_failed_exchange_releases_resources_and_allows_the_next_request(failure)
     assert all(s.close_calls == 1 for s in peer.sockets)
     assert not peer.active
     if failure in ("timeout", "empty"):
-        assert peer.sockets[0].recv_calls == 5
+        assert peer.sockets[0].recv_calls == 1
     # Receiving an error must not cause a write to be silently submitted again.
     writes = [r for r in peer.requests if r[1] == 16]
     assert len(writes) == (0 if failure in ("connect_error", "send_error") else 1)

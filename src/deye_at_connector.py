@@ -19,6 +19,8 @@ import logging
 import socket
 import time
 
+from deye_io import io_timeout
+
 from deye_config import DeyeLoggerConfig
 from deye_connector import DeyeConnector
 
@@ -31,8 +33,9 @@ class DeyeAtConnector(DeyeConnector):
 
     def __create_socket(self) -> socket.socket | None:
         try:
+            timeout = io_timeout(1)
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            client_socket.settimeout(1)
+            client_socket.settimeout(timeout)
             if not self.__reachable:
                 self.__reachable = True
                 self.__log.info("Re-connected to socket on IP %s", self.__logger_config.ip_address)
@@ -47,14 +50,16 @@ class DeyeAtConnector(DeyeConnector):
 
     def __send_at_command(self, client_socket: socket.socket, at_command: bytes) -> None:
         self.__log.debug("Sending AT command: %s", at_command)
+        client_socket.settimeout(io_timeout(1))
         client_socket.sendto(at_command, (self.__logger_config.ip_address, self.__logger_config.port))
-        time.sleep(0.1)
+        time.sleep(io_timeout(0.1))
 
     def __receive_at_response(self, client_socket: socket.socket) -> bytes | None:
         attempts = 5
         while attempts > 0:
             attempts = attempts - 1
             try:
+                client_socket.settimeout(io_timeout(1))
                 data = client_socket.recv(1024)
                 if data:
                     self.__log.debug("Received AT response in %s. attempt: %s", 5 - attempts, data)
@@ -94,7 +99,7 @@ class DeyeAtConnector(DeyeConnector):
             self.__send_at_command(
                 client_socket, bytes(f"AT+INVDATA={int(len(modbus_frame_str) / 2)},{modbus_frame_str}\n", "ascii")
             )
-            time.sleep(1)
+            time.sleep(io_timeout(1))
             at_response = self.__receive_at_response(client_socket)
             if not at_response or at_response.startswith(b"+ok=no data"):
                 return modbus_response

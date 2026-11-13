@@ -16,6 +16,9 @@
 # under the License.
 
 import logging
+import threading
+
+from deye_io import io_lock
 
 from deye_connector import DeyeConnector
 from deye_modbus_crc import modbus_crc, modbus_crc_bytes
@@ -47,8 +50,20 @@ class DeyeModbus:
         self.__log = logging.getLogger(DeyeModbus.__name__)
         self.connector = connector
         self.modbus_id = modbus_id
+        self.transaction_lock = threading.RLock()
+        self.read_requested = threading.Event()
+        self.confirmation_read_requested = threading.Event()
+
+    def request_read(self, confirmation: bool = False):
+        if confirmation:
+            self.confirmation_read_requested.set()
+        self.read_requested.set()
 
     def read_registers(self, first_reg: int, last_reg: int) -> dict[int, bytearray]:
+        with io_lock(self.transaction_lock):
+            return self.__read_registers(first_reg, last_reg)
+
+    def __read_registers(self, first_reg: int, last_reg: int) -> dict[int, bytearray]:
         """Reads multiple modbus holding registers
 
         Args:
@@ -106,6 +121,10 @@ class DeyeModbus:
         return self.write_registers(reg_address, [v.to_bytes(2, "big", signed=False) for v in reg_values])
 
     def write_registers(self, reg_address: int, reg_values: list[bytearray]) -> bool:
+        with io_lock(self.transaction_lock):
+            return self.__write_registers(reg_address, reg_values)
+
+    def __write_registers(self, reg_address: int, reg_values: list[bytearray]) -> bool:
         """Write multiple modbus holding registers.
 
 

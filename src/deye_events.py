@@ -83,6 +83,9 @@ class DeyeEventList(list):
     def __init__(self, events: list[DeyeEvent] | None = None, logger_index: int = 0):
         self.__log = logging.getLogger(DeyeEventList.__name__)
         self.__logger_index = logger_index
+        # Process-local monotonic timestamps; never persisted or used as wall-clock dates.
+        self.read_started_at: float | None = None
+        self.read_completed_at: float | None = None
         super().__init__(events if events else [])
 
     def __str__(self) -> str:

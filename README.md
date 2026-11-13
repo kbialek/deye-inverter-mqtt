@@ -156,7 +156,8 @@ All configuration options are controlled through environment variables.
 * `LOG_STREAM` - log destination stream, can be any of `STDOUT`, `STDERR`, defaults to `STDOUT`
 * `DEYE_PUBLISH_ON_CHANGE` - when set to `true`, the event data will only be published if it has changed compared to last readings, defaults to `false`
 * `DEYE_PUBLISH_ON_CHANGE_MAX_INTERVAL` - when `DEYE_PUBLISH_ON_CHANGE` is `true`, this variable defines the maximum age of a valid event list in seconds, defaults to 360 seconds
-* `DEYE_DATA_READ_INTERVAL` - interval between subsequent data reads, in seconds, defaults to 60
+* `DEYE_DATA_READ_INTERVAL` - pause after a successful data read completes, in seconds, defaults to 60
+* `DEYE_DATA_READ_TIMEOUT` - total acquisition I/O budget including lock waits and all register blocks, in seconds, defaults to 60; must be positive
 * `DEYE_METRIC_GROUPS` - a comma delimited set of:
     * `string` - string inverter
     * `deye_string_systemtime` - string inverter system time (required for DEYE_FEATURE_SET_TIME on string inverter)
@@ -358,6 +359,15 @@ Time Of Use configuration is modified using the following workflow:
 2. You send modifications over `{MQTT_TOPIC_PREFIX}/timeofuse/*/*/command` topics as needed. See the table above for more details about used MQTT topics. These changes are not immediately written to the inverter. They are **buffered** in the service memory instead.
 3. Send `write` command to topic `{MQTT_TOPIC_PREFIX}/timeofuse/control/command`. It will build a new Time Of Use configuration by putting your changes on top of the inverter configuration present in the service memory. Next the entire Time Of Use configuration is sent to the inverter. The modifications are cleared, and you can start over sending new modifications.
 4. Alternatively send `reset` command to purge buffered modifications without writing them to the inverter.
+
+Send TOU commands with `retain=false`. Retained modification/control messages are ignored to prevent replay on reconnect.
+The MQTT callback schedules writes on a worker with one executing and one replaceable pending request; `reset` also
+clears that pending request, but cannot cancel a write already executing. Each request captures its own modifications.
+A complete read of the configured TOU sensors is required before writing. After any attempted write, including a failed
+or uncertain write, that baseline is invalidated and a physical readback is requested. A queued request without a complete
+baseline is rejected and requests a refresh; it is not automatically replayed later. Existing command topics are unchanged.
+
+See [communication recovery](docs/communication_recovery.md) for deadlines, retry behavior, readback and upgrade notes.
 
 #### Writing Battery charge/discharge params to configuration
 
