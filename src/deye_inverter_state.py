@@ -19,6 +19,8 @@ import datetime
 import logging
 import time
 
+from deye_io import io_budget, io_lock, io_timeout
+
 from deye_config import DeyeConfig, DeyeLoggerConfig
 from deye_events import DeyeEventList, DeyeLoggerStatusEvent, DeyeObservationEvent, DeyeEventProcessor
 from deye_modbus import DeyeModbus
@@ -35,6 +37,7 @@ class DeyeInverterState:
         modbus: DeyeModbus,
         sensors: list[Sensor],
         processors: list[DeyeEventProcessor],
+        read_timeout: float = 60,
     ):
         self.__log = logger_config.logger_adapter(logging.getLogger(DeyeInverterState.__name__))
         self.__config = config
@@ -43,28 +46,65 @@ class DeyeInverterState:
         self.__modbus = modbus
         self.__sensors = sensors
         self.__processors = processors
+        self.__read_timeout = read_timeout
+        self.__needs_publication = True
         self.__last_observations = DeyeEventList(logger_index=logger_config.index)
         self.__event_updated = time.time()
 
-    def read_from_logger(self):
-        self.__log.info("Reading start")
+    def read_from_logger(self) -> bool:
+        started = time.monotonic()
+        read_started = None
         regs = {}
-        for reg_range in self.__reg_ranges.ranges:
-            self.__log.info(f"Reading registers [{reg_range}]")
-            regs |= self.__modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
+        responded = False
+        complete = False
+        force_publish = False
+        try:
+            with io_budget(self.__read_timeout), io_lock(self.__modbus.transaction_lock):
+                read_started = time.monotonic()
+                force_publish = self.__modbus.confirmation_read_requested.is_set()
+                if force_publish:
+                    self.__modbus.confirmation_read_requested.clear()
+                for reg_range in self.__reg_ranges.ranges:
+                    io_timeout(self.__read_timeout)
+                    self.__log.info("Reading registers [%s]", reg_range)
+                    block = self.__modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
+                    responded |= bool(block)
+                    io_timeout(self.__read_timeout)
+                    expected = set(range(reg_range.first_reg_address, reg_range.last_reg_address + 1))
+                    if set(block) != expected:
+                        raise ValueError("Incomplete register block")
+                    regs.update(block)
+                complete = True
+        except (OSError, ValueError) as exc:
+            self.__log.warning("Acquisition incomplete: %s", exc)
+            regs.clear()
+        completed = time.monotonic()
         events = DeyeEventList(logger_index=self.__logger_config.index)
-        events.append(DeyeLoggerStatusEvent(len(regs) > 0))
-        observation_events = self.__get_observations_from_reg_values(regs)
-        data_is_ready = self.__is_data_ready(observation_events)
-        self.__log.debug(f"Data readiness check result: {data_is_ready}")
-        if data_is_ready:
-            events += observation_events
-        if not self.__config.publish_on_change or self.__is_device_observation_changed(events):
+        events.read_started_at = read_started
+        events.read_completed_at = completed
+        events.append(DeyeLoggerStatusEvent(responded))
+        observations = self.__get_observations_from_reg_values(regs) if complete else []
+        ready = complete and self.__is_data_ready(observations)
+        if ready:
+            events += observations
+        if not ready:
+            self.__needs_publication = True
+        # Failures, first recovery and post-write readback must reach processors, even with unchanged values.
+        if (
+            not ready
+            or force_publish
+            or self.__needs_publication
+            or not self.__config.publish_on_change
+            or self.__is_device_observation_changed(events)
+        ):
             for processor in self.__processors:
                 processor.process(events)
-        else:
-            self.__log.info("No changes found in received data, or the logger is offline, skipping")
-        self.__log.info("Reading completed")
+            if ready:
+                self.__needs_publication = False
+                self.__last_observations = events
+                self.__event_updated = time.time()
+        self.__log.info("Acquisition complete=%s ready=%s duration=%.3fs", complete, ready, completed - started)
+        return ready
 
     def __get_observations_from_reg_values(self, regs: dict[int, bytearray]) -> list[DeyeObservationEvent]:
         timestamp = datetime.datetime.now()
@@ -111,6 +151,6 @@ class DeyeInverterState:
             event.observation for event in observation_events if event.observation.sensor.is_readiness_check
         ]
         self.__log.debug(f"Data readiness observations: {readiness_check_observations}")
-        if not readiness_check_observations:
-            return True
-        return len([o for o in readiness_check_observations if o.value != 0]) == len(readiness_check_observations)
+        expected = {sensor for sensor in self.__sensors if sensor.is_readiness_check}
+        actual = {observation.sensor for observation in readiness_check_observations}
+        return expected == actual and all(o.value != 0 for o in readiness_check_observations)

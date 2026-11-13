@@ -18,6 +18,9 @@
 import logging
 import socket
 import threading
+import time
+
+from deye_io import IoBudgetExpired, io_lock, io_timeout
 
 from deye_connector import DeyeConnector
 from deye_config import DeyeLoggerConfig
@@ -46,47 +49,74 @@ class DeyeTcpConnector(DeyeConnector):
         self.__request_lock = _endpoint_lock(logger_config.ip_address, logger_config.port)
 
     def send_request(self, req_frame) -> bytes | None:
-        with self.__request_lock:
-            return self.__send_request(req_frame)
+        started = time.monotonic()
+        try:
+            with io_lock(self.__request_lock, maximum=10):
+                return self.__send_request(req_frame)
+        except (OSError, ValueError):
+            self.__log.warning("TCP exchange failed after %.3fs", time.monotonic() - started, exc_info=True)
+            return None
 
     def __send_request(self, req_frame) -> bytes | None:
         try:
             client_socket = socket.create_connection(
-                (self.__logger_config.ip_address, self.__logger_config.port), timeout=10
+                (self.__logger_config.ip_address, self.__logger_config.port), timeout=io_timeout(10)
             )
             if not self.__reachable:
                 self.__reachable = True
                 self.__log.info("Re-connected to socket on IP %s", self.__logger_config.ip_address)
         except OSError as e:
-            if self.__reachable:
-                self.__log.warning("Could not open socket on IP %s: %s", self.__logger_config.ip_address, e)
-            else:
-                self.__log.debug("Could not open socket on IP %s: %s", self.__logger_config.ip_address, e)
+            log = self.__log.warning if self.__reachable else self.__log.debug
+            log("Could not open socket on IP %s: %s", self.__logger_config.ip_address, e)
             self.__reachable = False
-            return
+            return None
 
         with client_socket:
+            client_socket.settimeout(io_timeout(10))
             self.__log.debug("Request frame: %s", req_frame.hex())
+            # Send once. A missing acknowledgement does not make a write safe to repeat.
             client_socket.sendall(req_frame)
-
-            attempts = 5
-            while attempts > 0:
-                attempts = attempts - 1
+            response_deadline = time.monotonic() + 10
+            data = bytearray()
+            while True:
+                remaining = response_deadline - time.monotonic()
+                if remaining <= 0:
+                    raise IoBudgetExpired("TCP response deadline expired")
+                client_socket.settimeout(io_timeout(remaining))
                 try:
-                    data = client_socket.recv(1024)
-                    if data:
-                        self.__log.debug("Received response frame in %s. attempt: %s", 5 - attempts, data.hex())
-                        return data
-                    self.__log.warning("No data received")
-                except socket.timeout:
-                    self.__log.debug("Connection response timeout")
-                    if attempts == 0:
-                        self.__log.warning("Too many connection timeouts")
-                except OSError as e:
-                    self.__log.error("Connection error: %s: %s", self.__logger_config.ip_address, e)
-                    return
+                    fragment = client_socket.recv(1024)
+                except OSError:
+                    raise
                 except Exception:
                     self.__log.exception("Unknown connection error")
-                    return
+                    return None
+                if not fragment:
+                    self.__log.warning("Connection closed before a complete response")
+                    return None
+                data.extend(fragment)
+                expected = self.__response_length(data)
+                if expected is None:
+                    continue
+                if len(data) > expected:
+                    raise ValueError("TCP response exceeds its declared frame length")
+                if len(data) == expected:
+                    self.__log.debug("Received response frame: %s", data.hex())
+                    return bytes(data)
 
-        return
+    def __response_length(self, data: bytearray) -> int | None:
+        if self.__logger_config.protocol == "mbtcp":
+            if len(data) < 6:
+                return None
+            length = int.from_bytes(data[4:6], "big") + 6
+            if not 8 <= length <= 260:
+                raise ValueError("Invalid Modbus/TCP response length")
+            return length
+        if data[0] != 0xA5:
+            # Preserve the protocol adapter's diagnostics for AT or other invalid replies.
+            return len(data)
+        if len(data) < 3:
+            return None
+        length = int.from_bytes(data[1:3], "little") + 13
+        if not 13 <= length <= 4096:
+            raise ValueError("Invalid logger response length")
+        return length
