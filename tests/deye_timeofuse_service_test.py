@@ -36,7 +36,11 @@ class TestDeyeTimeOfUseService:
     @staticmethod
     @pytest.fixture
     def modbus_mock(mocker) -> DeyeModbus:
-        return mocker.Mock(spec=DeyeModbus)
+        import threading
+
+        bus = mocker.Mock(spec=DeyeModbus)
+        bus.transaction_lock = threading.RLock()
+        return bus
 
     @staticmethod
     @pytest.fixture

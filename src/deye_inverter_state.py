@@ -49,9 +49,29 @@ class DeyeInverterState:
     def read_from_logger(self):
         self.__log.info("Reading start")
         regs = {}
-        for reg_range in self.__reg_ranges.ranges:
-            self.__log.info(f"Reading registers [{reg_range}]")
-            regs |= self.__modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
+        started = time.time()
+        complete = False
+        with self.__modbus.transaction_lock:
+            try:
+                complete = True
+                for reg_range in self.__reg_ranges.ranges:
+                    control = self.__modbus.local_control
+                    if control is not None and control.off_pending():
+                        complete = False
+                        break
+                    self.__log.info(f"Reading registers [{reg_range}]")
+                    block = self.__modbus.read_registers(reg_range.first_reg_address, reg_range.last_reg_address)
+                    complete = complete and set(block) == set(
+                        range(reg_range.first_reg_address, reg_range.last_reg_address + 1)
+                    )
+                    regs |= block
+            except Exception:
+                complete = False
+                raise
+            finally:
+                control = self.__modbus.local_control
+                if control is not None:
+                    control.record_frame(regs, started, time.time(), None if complete else "incomplete_acquisition")
         events = DeyeEventList(logger_index=self.__logger_config.index)
         events.append(DeyeLoggerStatusEvent(len(regs) > 0))
         observation_events = self.__get_observations_from_reg_values(regs)

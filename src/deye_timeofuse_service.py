@@ -77,15 +77,18 @@ class DeyeTimeOfUseService(DeyeEventProcessor):
             self.__log.info("TimeOfUse modifications cleared")
 
     def write_config(self, dry_run: bool):
-        if not self.__read_state:
-            self.__log.warning("Time-of-use state not yet read from the inverter. Cannot apply config modifications.")
-            return
-        write_state = self.__read_state | self.__modifications
-        self.__modifications = {}
-        reg_map: dict[int, bytearray] = {}
-        for sensor in write_state:
-            reg_map |= sensor.write_value(write_state[sensor])
-        self.__write_registers(reg_map, dry_run)
+        with self.__modbus.transaction_lock:
+            if not self.__read_state:
+                self.__log.warning(
+                    "Time-of-use state not yet read from the inverter. Cannot apply config modifications."
+                )
+                return
+            write_state = self.__read_state | self.__modifications
+            self.__modifications = {}
+            reg_map: dict[int, bytearray] = {}
+            for sensor in write_state:
+                reg_map |= sensor.write_value(write_state[sensor])
+            self.__write_registers(reg_map, dry_run)
 
     def __write_registers(self, reg_map: dict[int, bytearray], dry_run: bool) -> None:
         if not reg_map:

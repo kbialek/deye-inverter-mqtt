@@ -471,5 +471,13 @@ By using this tool you accept this risk, and you take full responsibility for th
 * https://github.com/MichaluxPL/Sofar_LSW3
 * https://github.com/s10l/deye-logger-at-cmd
 
+## Transactional local control
+
+The optional [SG03LP1 transactional MQTT controller](docs/transactional_control.md)
+adds grid-charge ON/OFF, grid-charge current and work-mode commands with durable
+IDs, deadlines, configuration checks and physical register readback. It shares
+the existing logger connection and bus lock with polling and Time of Use.
+The feature and real writes are disabled by default.
+
 ## Development
 Read [CONTRIBUTING.md](./CONTRIBUTING.md)

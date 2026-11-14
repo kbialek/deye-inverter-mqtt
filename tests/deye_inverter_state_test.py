@@ -166,6 +166,7 @@ class TestInverterState:
 
         # and
         modbus: DeyeModbus = MagicMock()
+        modbus.local_control = None
 
         # and
         reg_ranges = SensorRegisterRanges([], [], 0)
@@ -200,6 +201,7 @@ class TestInverterState:
 
         # and
         modbus: DeyeModbus = MagicMock()
+        modbus.local_control = None
 
         # and
         reg_ranges = SensorRegisterRanges([], [], 0)
