@@ -16,9 +16,21 @@
 # under the License.
 
 import logging
+import threading
+from functools import wraps
 
 from deye_connector import DeyeConnector
 from deye_modbus_crc import modbus_crc, modbus_crc_bytes
+
+
+def control_serialized(method):
+    @wraps(method)
+    def locked(self, *args, **kwargs):
+        with self.transaction_lock:
+            return method(self, *args, **kwargs)
+
+    return locked
+
 
 # Modbus device address (unit ID) range. 0 is the broadcast address, but some Deye inverters answer on it.
 MIN_MODBUS_ID = 0
@@ -47,7 +59,10 @@ class DeyeModbus:
         self.__log = logging.getLogger(DeyeModbus.__name__)
         self.connector = connector
         self.modbus_id = modbus_id
+        self.transaction_lock = threading.RLock()
+        self.local_control = None
 
+    @control_serialized
     def read_registers(self, first_reg: int, last_reg: int) -> dict[int, bytearray]:
         """Reads multiple modbus holding registers
 
@@ -105,6 +120,7 @@ class DeyeModbus:
         """
         return self.write_registers(reg_address, [v.to_bytes(2, "big", signed=False) for v in reg_values])
 
+    @control_serialized
     def write_registers(self, reg_address: int, reg_values: list[bytearray]) -> bool:
         """Write multiple modbus holding registers.
 

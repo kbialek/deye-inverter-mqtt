@@ -161,6 +161,20 @@ class DeyeMqttClient:
             return None
 
     def subscribe_command_handler(self, logger_index: int, mqtt_topic_suffix: str, handler_method):
-        mqtt_topic = self.build_topic_name(logger_index, f"{mqtt_topic_suffix}/command")
+        self.subscribe_exact_handler(logger_index, f"{mqtt_topic_suffix}/command", handler_method)
+
+    def subscribe_exact_handler(self, logger_index: int, topic_suffix: str, handler_method):
+        mqtt_topic = self.build_topic_name(logger_index, topic_suffix)
         self.__command_handlers[mqtt_topic] = handler_method
         self.subscribe(mqtt_topic, handler_method)
+
+    def publish_control(self, logger_index: int, topic_suffix: str, value: str) -> bool:
+        # No reconnect waits and no global retain setting on control messages.
+        if not self.__mqtt_client.is_connected():
+            return False
+        try:
+            topic = self.build_topic_name(logger_index, topic_suffix)
+            info = self.__mqtt_client.publish(topic, value, qos=1, retain=False)
+            return info.rc == paho.MQTT_ERR_SUCCESS
+        except (ValueError, RuntimeError, OSError):
+            return False

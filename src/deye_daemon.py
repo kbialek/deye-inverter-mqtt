@@ -72,6 +72,7 @@ class DeyeDaemon:
             "https://github.com/kbialek/deye-inverter-mqtt/issues/41"
         )
 
+        self.__local_controls = []
         self.__mqtt_client = DeyeMqttClient(self.__config)
         self.__processor_factory = DeyeProcessorFactory(self.__config, self.__mqtt_client)
         self.__multi_inverter_data_aggregator = self.__processor_factory.create_multi_inverter_data_aggregator()
@@ -90,6 +91,13 @@ class DeyeDaemon:
             self.__config.metric_groups,
             max_range_length=logger_config.max_register_range_length,
         )
+
+        from deye_control_processor import create_control
+
+        control = create_control(self.__config, logger_config, self.__mqtt_client, modbus)
+        if control is not None:
+            modbus.local_control = control
+            self.__local_controls.append(control)
 
         processors = self.__processor_factory.create_processors(logger_config, modbus, sensors) + [
             self.__multi_inverter_data_aggregator
@@ -116,6 +124,8 @@ class DeyeDaemon:
     def stop(self, _signum, _frame):
         for interval_runner in self.__interval_runners:
             interval_runner.stop()
+        for control in self.__local_controls:
+            control.close()
 
 
 def main():
